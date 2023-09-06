@@ -2,7 +2,9 @@ package com.example.turistaapp.home.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -41,15 +43,7 @@ fun HomeScreen() {
             FloatingScreen()
         },
     ) {
-        Box(Modifier.fillMaxSize()) {
-            MainContent()
-            Icon(
-                painterResource(id = R.drawable.fullscreen)
-                , contentDescription = "Fullscreen",
-                modifier = Modifier.align(Alignment.TopEnd).size(48.dp),
-                tint = Color.Black
-            )
-        }
+        MainContent()
     }
 }
 
@@ -91,7 +85,26 @@ fun BottomBarScreen() {
 
 @Composable
 private fun MainContent() {
-    GoogleMapScreen()
+    Box(Modifier.fillMaxSize()) {
+        GoogleMapScreen()
+
+        Column(
+            modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
+        ) {
+            Icon(
+                painterResource(id = R.drawable.fullscreen), contentDescription = "Fullscreen",
+                modifier = Modifier
+                    .size(48.dp),
+                tint = Color.Black
+            )
+            Icon(
+                painterResource(id = R.drawable.tune), contentDescription = "Filter",
+                modifier = Modifier
+                    .size(48.dp),
+                tint = Color.Black
+            )
+        }
+    }
 }
 
 @Preview
