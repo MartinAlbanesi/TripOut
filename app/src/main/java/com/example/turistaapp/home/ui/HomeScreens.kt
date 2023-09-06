@@ -1,7 +1,9 @@
 package com.example.turistaapp.home.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -15,11 +17,14 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.turistaapp.Greeting
+import androidx.compose.ui.unit.dp
 import com.example.turistaapp.R
+import com.example.turistaapp.map.ui.GoogleMapScreen
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -36,7 +41,15 @@ fun HomeScreen() {
             FloatingScreen()
         },
     ) {
-
+        Box(Modifier.fillMaxSize()) {
+            MainContent()
+            Icon(
+                painterResource(id = R.drawable.fullscreen)
+                , contentDescription = "Fullscreen",
+                modifier = Modifier.align(Alignment.TopEnd).size(48.dp),
+                tint = Color.Black
+            )
+        }
     }
 }
 
@@ -76,9 +89,14 @@ fun BottomBarScreen() {
     }
 }
 
+@Composable
+private fun MainContent() {
+    GoogleMapScreen()
+}
+
 @Preview
 @Composable
-fun HomeScreenPrev() {
+private fun HomeScreenPrev() {
     TuristaAppTheme {
         // A surface container using the 'background' color from the theme
         Surface(
