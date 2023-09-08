@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -18,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,26 +88,37 @@ fun BottomBarScreen() {
 
 @Composable
 private fun MainContent() {
-    Box(Modifier.fillMaxSize()) {
-        GoogleMapScreen()
+    LazyColumn(){
+        item {
+            Box(Modifier.fillMaxSize()) {
+                GoogleMapScreen()
 
-        Column(
-            modifier = Modifier.align(Alignment.TopEnd).padding(8.dp)
-        ) {
-            Icon(
-                painterResource(id = R.drawable.fullscreen), contentDescription = "Fullscreen",
-                modifier = Modifier
-                    .size(48.dp),
-                tint = Color.Black
-            )
-            Icon(
-                painterResource(id = R.drawable.tune), contentDescription = "Filter",
-                modifier = Modifier
-                    .size(48.dp),
-                tint = Color.Black
-            )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.fullscreen), contentDescription = "Fullscreen",
+                        modifier = Modifier
+                            .size(48.dp),
+                        tint = Color.Black
+                    )
+                    Icon(
+                        painterResource(id = R.drawable.tune), contentDescription = "Filter",
+                        modifier = Modifier
+                            .size(48.dp),
+                        tint = Color.Black
+                    )
+                }
+            }
+        }
+        item {
+            //ListRecomendados() ARIEL NAPPIO
         }
     }
+
+
 }
 
 @Preview
@@ -119,5 +133,4 @@ private fun HomeScreenPrev() {
             HomeScreen()
         }
     }
-
 }
