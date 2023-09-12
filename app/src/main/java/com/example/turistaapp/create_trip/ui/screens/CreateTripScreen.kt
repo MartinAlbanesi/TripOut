@@ -1,6 +1,8 @@
-package com.example.turistaapp.create_trip.ui
+package com.example.turistaapp.create_trip.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -28,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.turistaapp.R
+import com.example.turistaapp.create_trip.ui.screens.components.TripForm
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -87,7 +91,15 @@ fun TopAppBarScreen() {
 
 @Composable
 fun ScrollContent(innerPadding: PaddingValues) {
-    Text(text = "Hello World!", textAlign = TextAlign.Center, modifier = Modifier.padding(innerPadding))
+    Column(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start
+    ) {
+        TripForm()
+    }
 }
 
 @Composable
