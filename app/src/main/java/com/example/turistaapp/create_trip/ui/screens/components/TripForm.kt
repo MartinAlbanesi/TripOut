@@ -53,7 +53,12 @@ fun TripForm() {
     var stops by remember { mutableStateOf(TextFieldValue()) }
     var preferredTransport by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
-    val focusRequester = remember { FocusRequester() }
+    val originFocusRequester = remember { FocusRequester() }
+    val destinationFocusRequester = remember { FocusRequester() }
+    val membersFocusRequester = remember { FocusRequester() }
+    val stopsFocusRequester = remember { FocusRequester() }
+    val preferredTransportFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
 
     Column(
         modifier = Modifier
@@ -65,7 +70,7 @@ fun TripForm() {
             label = "Nombre del Viaje",
             textValue = tripName,
             onValueChange = { tripName = it },
-            focusRequester = focusRequester,
+            focusRequester = originFocusRequester,
             imeAction = ImeAction.Next
         )
 
@@ -74,14 +79,14 @@ fun TripForm() {
             label = "Origen",
             textValue = origin,
             onValueChange = { origin = it },
-            focusRequester = focusRequester,
+            focusRequester = destinationFocusRequester,
             imeAction = ImeAction.Next
         )
         TextInputField(
             label = "Destino",
             textValue = destination,
             onValueChange = { destination = it },
-            focusRequester = focusRequester,
+            focusRequester = membersFocusRequester,
             imeAction = ImeAction.Next
         )
 
@@ -99,7 +104,7 @@ fun TripForm() {
             label = "Integrantes",
             textValue = members,
             onValueChange = { members = it },
-            focusRequester = focusRequester,
+            focusRequester = stopsFocusRequester,
             imeAction = ImeAction.Next
         )
 
@@ -108,7 +113,7 @@ fun TripForm() {
             label = "Paradas",
             textValue = stops,
             onValueChange = { stops = it },
-            focusRequester = focusRequester,
+            focusRequester = preferredTransportFocusRequester,
             imeAction = ImeAction.Next
         )
 
@@ -117,7 +122,7 @@ fun TripForm() {
             label = "Transporte Preferido",
             textValue = preferredTransport,
             onValueChange = { preferredTransport = it },
-            focusRequester = focusRequester,
+            focusRequester = descriptionFocusRequester,
             imeAction = ImeAction.Next
         )
 
@@ -126,7 +131,7 @@ fun TripForm() {
             label = "Descripción (Opcional)",
             textValue = description,
             onValueChange = { description = it },
-            focusRequester = focusRequester,
+            focusRequester = descriptionFocusRequester,
             imeAction = ImeAction.Done
         )
 
@@ -146,7 +151,7 @@ fun TripForm() {
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputField(
     label: String,
@@ -156,7 +161,6 @@ fun TextInputField(
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -170,14 +174,6 @@ fun TextInputField(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = imeAction,
                 keyboardType = keyboardType
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusRequester.requestFocus()
-                },
-                onDone = {
-                    keyboardController?.hide()
-                }
             ),
             modifier = Modifier
                 .fillMaxWidth()
