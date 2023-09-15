@@ -32,7 +32,7 @@ fun MapScreen(
     ) {
 
         GoogleMap(
-            uiSettings = mapUiSettings
+            uiSettings = mapUiSettings,
         )
 
         //Barra Superior
