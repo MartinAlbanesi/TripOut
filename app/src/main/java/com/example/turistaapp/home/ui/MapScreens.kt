@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,30 +51,37 @@ fun MapScreen(
                 color = Color.Black,
                 fontSize = 24.sp
             )
-            IconButton(
-                onClick = { /*TODO*/ },
+            IconForMap(
+                painter = R.drawable.tune,
                 modifier = Modifier
-                    .size(24.dp)
                     .align(CenterVertically)
-                    .weight(1f),
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.fullscreen), contentDescription = "Fullscreen",
-                    tint = Color.Black
-                )
-            }
-            IconButton(
-                onClick = { /*TODO*/ },
+                    .weight(1f)
+            ) {}
+            IconForMap(
+                painter = R.drawable.fullscreen,
                 modifier = Modifier
-                    .size(24.dp)
                     .align(CenterVertically)
-                    .weight(1f),
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.tune), contentDescription = "Filter",
-                    tint = Color.Black
-                )
-            }
+                    .weight(1f)
+            ) {}
         }
+    }
+}
+
+@Composable
+private fun IconForMap(
+    painter: Int,
+    contentDescription : String = "",
+    modifier: Modifier = Modifier,
+    onClickButton : () -> Unit
+) {
+    IconButton(
+        onClick = { onClickButton },
+        modifier = modifier.size(24.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = painter),
+            contentDescription = contentDescription,
+            tint = Color.Black
+        )
     }
 }
