@@ -1,7 +1,6 @@
 package com.example.turistaapp.create_trip.ui.screens.create_trip.components
 
 import android.app.DatePickerDialog
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,19 +14,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +58,6 @@ fun TripForm() {
     val originFocusRequester = remember { FocusRequester() }
     val destinationFocusRequester = remember { FocusRequester() }
     val membersFocusRequester = remember { FocusRequester() }
-    val stopsFocusRequester = remember { FocusRequester() }
     val preferredTransportFocusRequester = remember { FocusRequester() }
     val descriptionFocusRequester = remember { FocusRequester() }
 
@@ -99,13 +101,7 @@ fun TripForm() {
         )
 
         // Lista de Integrantes
-        TextInputField(
-            label = "Integrantes",
-            textValue = members,
-            onValueChange = { members = it },
-            focusRequester = stopsFocusRequester,
-            imeAction = ImeAction.Next
-        )
+        AddMemberList()
 
         // Lista de Paradas
         TextInputField(
@@ -116,14 +112,6 @@ fun TripForm() {
             imeAction = ImeAction.Next
         )
 
-        // Transporte Preferido
-        /*TextInputField(
-            label = "Transporte Preferido",
-            textValue = preferredTransport,
-            onValueChange = { preferredTransport = it },
-            focusRequester = descriptionFocusRequester,
-            imeAction = ImeAction.Next
-        )*/
         ExposedDropdownMenuBoxInput(
             label = "Transporte"
         )
@@ -281,6 +269,94 @@ fun ExposedDropdownMenuBoxInput(label: String) {
                     }
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddMemberList() {
+    var name by remember { mutableStateOf("") }
+    val names = remember { mutableStateListOf<String>() }
+
+    var isDialogOpen by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        // Fila con botón de agregar y lista de nombres
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Botón para abrir el cuadro de diálogo
+            IconButton(
+                onClick = { isDialogOpen = true },
+                modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
+
+            // Lista horizontal de nombres
+            LazyRow(
+                modifier = Modifier
+                    .weight(1f) // Para que la lista ocupe el espacio restante
+                    .padding(start = 16.dp)
+            ) {
+                items(names) { name ->
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .padding(8.dp)
+                    )
+                }
+            }
+        }
+
+        // Cuadro de diálogo para ingresar el nombre
+        if (isDialogOpen) {
+            AlertDialog(
+                onDismissRequest = {
+                    isDialogOpen = false
+                    name = ""
+                },
+                title = { Text("Agregar Nombre") },
+                text = {
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            if (name.isNotBlank()) {
+                                names.add(name)
+                                name = ""
+                                isDialogOpen = false
+                            }
+                        }
+                    ) {
+                        Text("Aceptar")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            isDialogOpen = false
+                            name = ""
+                        }
+                    ) {
+                        Text("Cancelar")
+                    }
+                }
+            )
         }
     }
 }
