@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
@@ -31,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.turistaapp.R
@@ -62,21 +60,19 @@ fun HomeScreen(paddingValues: PaddingValues) {
 
         //Lo que va dentro del BottomSheet
         sheetContent = {
-            Box(Modifier.padding(paddingValues)) {
-                Card() {
-                    Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
-                    LazyRow(modifier = Modifier.padding(4.dp)) {
-                        items(10) {
-                            TripItem(
-                                image = painterResource(id = R.drawable.ic_launcher_background),
-                                modifier = Modifier
-                                    .clickable {
-                                        showDialog = true
-                                    }
-                                    .size(150.dp, 250.dp)
-                                    .padding(4.dp),
-                            )
-                        }
+            Card(Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
+                Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
+                LazyRow(modifier = Modifier.padding(4.dp)) {
+                    items(10) {
+                        TripItem(
+                            image = painterResource(id = R.drawable.ic_launcher_background),
+                            modifier = Modifier
+                                .clickable {
+                                    showDialog = true
+                                }
+                                .size(150.dp, 250.dp)
+                                .padding(4.dp),
+                        )
                     }
                 }
             }
@@ -98,6 +94,12 @@ fun HomeScreen(paddingValues: PaddingValues) {
         )
     }
 }
+
+/**
+ * TripItem es un item que se muestra en el BottomSheet
+ * @param image: Painter
+ * @param modifier: Modifier
+ */
 
 @Composable
 fun /*<T>*/ TripItem(
@@ -163,16 +165,23 @@ fun TripDialog(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    Column(Modifier.fillMaxSize().padding(16.dp)) {
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)) {
                         Text(text = title)
                         Text(text = km)
                         Image(
                             image, contentDescription = null,
-                            modifier = Modifier.fillMaxSize().weight(5f)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(5f)
                         )
                         Button(
                             onClick = { onConfirm() },
-                            modifier = Modifier.fillMaxWidth().align(CenterHorizontally)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(CenterHorizontally)
                         ) {
                             Text(text = "Confirmar Viaje")
                         }

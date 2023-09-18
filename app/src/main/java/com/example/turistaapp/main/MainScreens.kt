@@ -3,35 +3,46 @@ package com.example.turistaapp.main
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.utils.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(homeViewModel: HomeViewModel) {
+fun MainScreen(mainViewModel: MainViewModel) {
 
     val navController = rememberNavController()
-    val index by homeViewModel.indexSelect.observeAsState(1)
+    val index by mainViewModel.indexSelect.observeAsState(1)
+    val title by mainViewModel.titleAppBar.observeAsState("Home")
 
     Scaffold(
+        topBar = {
+            TopBarScreen(
+                title = title
+            )
+        },
         bottomBar = {
             BottomBarScreen(
                 index,
                 navController,
-                changeIndex = { homeViewModel.setIndex(it) }
+                changeIndex = { mainViewModel.setIndex(it) }
             )
         },
         floatingActionButton = {
@@ -40,6 +51,33 @@ fun MainScreen(homeViewModel: HomeViewModel) {
     ) { paddingValues ->
         NavHostScreen(navController = navController, paddingValues)
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBarScreen(
+    title: String,
+    iconsNavigation: ImageVector = Icons.Outlined.ArrowBack,
+    iconsAction: List<ImageVector> = emptyList(),
+) {
+
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = iconsNavigation, contentDescription = null)
+            }
+        },
+        actions = {
+            iconsAction.forEach { icon ->
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(imageVector = icon, contentDescription = null)
+                }
+            }
+        }
+    )
 }
 
 @Composable
