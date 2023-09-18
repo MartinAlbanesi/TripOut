@@ -3,6 +3,7 @@ package com.example.turistaapp.main
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.FloatingActionButton
@@ -13,10 +14,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.turistaapp.R
 import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.utils.Routes
 
@@ -56,7 +55,9 @@ fun BottomBarScreen(
     navController: NavHostController = rememberNavController(),
     changeIndex: (Int) -> Unit
 ) {
+
     NavigationBar {
+
         NavigationBarItem(
             selected = index == 1,
             onClick = {
@@ -64,7 +65,7 @@ fun BottomBarScreen(
                 changeIndex(1)
             },
             icon = {
-                Icon(imageVector = Icons.Outlined.Home, contentDescription = "Home")
+                Icon(Icons.Outlined.Home, contentDescription = "Home")
             }
         )
         NavigationBarItem(
@@ -74,7 +75,7 @@ fun BottomBarScreen(
                 changeIndex(2)
             },
             icon = {
-                Icon(painter = painterResource(id = R.drawable.car), contentDescription = "Viajes")
+                Icon(Icons.Outlined.DirectionsCar, contentDescription = "Viajes")
             }
         )
 
@@ -85,7 +86,7 @@ fun BottomBarScreen(
                 changeIndex(3)
             },
             icon = {
-                Icon(imageVector = Icons.Outlined.Settings, contentDescription = "Configuraciones")
+                Icon(Icons.Outlined.Settings, contentDescription = "Configuraciones")
             }
         )
 

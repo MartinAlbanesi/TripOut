@@ -1,8 +1,10 @@
 package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -50,14 +52,18 @@ fun HomeScreen(paddingValues: PaddingValues) {
 
         //Lo que va dentro del BottomSheet
         sheetContent = {
-            Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
-            Card() {
-                LazyRow(modifier = Modifier.padding(4.dp)) {
-                    items(10) {
-                        TripItem(
-                            image = painterResource(id = R.drawable.ic_launcher_background),
-                            modifier = Modifier.size(150.dp, 300.dp).padding(4.dp)
-                        )
+            Box(Modifier.padding(paddingValues)) {
+                Card() {
+                Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
+                    LazyRow(modifier = Modifier.padding(4.dp)) {
+                        items(10) {
+                            TripItem(
+                                image = painterResource(id = R.drawable.ic_launcher_background),
+                                modifier = Modifier
+                                    .size(150.dp, 250.dp)
+                                    .padding(4.dp)
+                            )
+                        }
                     }
                 }
             }

@@ -12,12 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.turistaapp.home.ui.HomeViewModel
+import com.example.turistaapp.main.BottomBarIcon
 import com.example.turistaapp.main.MainScreen
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(homeViewModel =homeViewModel)
+                    MainScreen(homeViewModel = homeViewModel)
                 }
             }
         }

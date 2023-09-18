@@ -78,4 +78,7 @@ dependencies {
     //livedata compose
     implementation ("androidx.compose.runtime:runtime-livedata:1.3.1")
     //testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+    //Material extend icons
+    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
 }
