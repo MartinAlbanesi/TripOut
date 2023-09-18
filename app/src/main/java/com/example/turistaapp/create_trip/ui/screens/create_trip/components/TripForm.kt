@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -64,7 +66,7 @@ fun TripForm() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
     ) {
         // Nombre del Viaje
         TextInputField(
@@ -100,18 +102,6 @@ fun TripForm() {
             label = "Hasta"
         )
 
-        // Lista de Integrantes
-        AddMemberList()
-
-        // Lista de Paradas
-        TextInputField(
-            label = "Paradas",
-            textValue = stops,
-            onValueChange = { stops = it },
-            focusRequester = preferredTransportFocusRequester,
-            imeAction = ImeAction.Next
-        )
-
         ExposedDropdownMenuBoxInput(
             label = "Transporte"
         )
@@ -123,6 +113,18 @@ fun TripForm() {
             onValueChange = { description = it },
             focusRequester = descriptionFocusRequester,
             imeAction = ImeAction.Done
+        )
+
+        // Lista de Integrantes
+        AddMemberList()
+
+        // Lista de Paradas
+        TextInputField(
+            label = "Paradas",
+            textValue = stops,
+            onValueChange = { stops = it },
+            focusRequester = preferredTransportFocusRequester,
+            imeAction = ImeAction.Next
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -140,7 +142,6 @@ fun TripForm() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputField(
     label: String,
@@ -150,29 +151,25 @@ fun TextInputField(
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
-
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = textValue,
-            onValueChange = {
-                onValueChange(it)
-            },
-            label = { Text(label) },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = imeAction,
-                keyboardType = keyboardType
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .focusRequester(focusRequester)
-        )
-    }
+    OutlinedTextField(
+        value = textValue,
+        singleLine = true,
+        maxLines = 1,
+        onValueChange = {
+            onValueChange(it)
+        },
+        label = { Text(label) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = imeAction,
+            keyboardType = keyboardType
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+    )
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateInputField(label: String) {
     var date by remember {
@@ -201,8 +198,7 @@ fun DateInputField(label: String) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -217,7 +213,6 @@ fun DateInputField(label: String) {
                         contentDescription = "Date Picker",
                         modifier = Modifier
                             .size(60.dp)
-                            .padding(4.dp)
                             .clickable {
                                 datePicker.show()
                             }
@@ -229,6 +224,7 @@ fun DateInputField(label: String) {
 
         }
     }
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -241,24 +237,28 @@ fun ExposedDropdownMenuBoxInput(label: String) {
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { isExpanded = it },
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
     ) {
         OutlinedTextField(
             value = transport,
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
-            placeholder = { Text("Selecciona un transporte")},
+            placeholder = { Text("Selecciona un transporte") },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-            modifier = Modifier.menuAnchor().fillMaxWidth()
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth()
         )
 
         ExposedDropdownMenu(
             expanded = isExpanded,
-            onDismissRequest = { isExpanded = false }
+            onDismissRequest = { isExpanded = false },
+            modifier = Modifier.fillMaxWidth()
         ) {
             transportList.forEach { item ->
                 DropdownMenuItem(
@@ -271,9 +271,9 @@ fun ExposedDropdownMenuBoxInput(label: String) {
             }
         }
     }
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMemberList() {
     var name by remember { mutableStateOf("") }
@@ -281,84 +281,77 @@ fun AddMemberList() {
 
     var isDialogOpen by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    // Fila con botón de agregar y lista de nombres
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // Fila con botón de agregar y lista de nombres
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        // Botón para abrir el cuadro de diálogo
+        IconButton(
+            onClick = { isDialogOpen = true },
+            modifier = Modifier.background(MaterialTheme.colorScheme.primary)
         ) {
-            // Botón para abrir el cuadro de diálogo
-            IconButton(
-                onClick = { isDialogOpen = true },
-                modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = null)
-            }
-
-            // Lista horizontal de nombres
-            LazyRow(
-                modifier = Modifier
-                    .weight(1f) // Para que la lista ocupe el espacio restante
-                    .padding(start = 16.dp)
-            ) {
-                items(names) { name ->
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(8.dp)
-                    )
-                }
-            }
+            Icon(imageVector = Icons.Default.Add, contentDescription = null)
         }
 
-        // Cuadro de diálogo para ingresar el nombre
-        if (isDialogOpen) {
-            AlertDialog(
-                onDismissRequest = {
-                    isDialogOpen = false
-                    name = ""
-                },
-                title = { Text("Agregar Nombre") },
-                text = {
-                    OutlinedTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            if (name.isNotBlank()) {
-                                names.add(name)
-                                name = ""
-                                isDialogOpen = false
-                            }
-                        }
-                    ) {
-                        Text("Aceptar")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            isDialogOpen = false
-                            name = ""
-                        }
-                    ) {
-                        Text("Cancelar")
-                    }
-                }
-            )
+        Spacer(modifier = Modifier.size(8.dp))
+        // Lista horizontal de nombres
+        LazyRow {
+            items(names) { name ->
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .wrapContentHeight(Alignment.CenterVertically)
+                )
+            }
         }
     }
+
+    // Cuadro de diálogo para ingresar el nombre
+    if (isDialogOpen) {
+        AlertDialog(
+            onDismissRequest = {
+                isDialogOpen = false
+                name = ""
+            },
+            title = { Text("Agregar Nombre") },
+            text = {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (name.isNotBlank()) {
+                            names.add(name)
+                            name = ""
+                            isDialogOpen = false
+                        }
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        isDialogOpen = false
+                        name = ""
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
 
