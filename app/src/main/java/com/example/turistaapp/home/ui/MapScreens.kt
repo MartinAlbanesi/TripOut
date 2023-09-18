@@ -14,18 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.turistaapp.R
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 
 @Composable
 fun MapScreen(
     mapUiSettings: MapUiSettings,
+    cameraPositionState: CameraPositionState,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -34,6 +35,7 @@ fun MapScreen(
 
         GoogleMap(
             uiSettings = mapUiSettings,
+            cameraPositionState = cameraPositionState
         )
 
         //Barra Superior

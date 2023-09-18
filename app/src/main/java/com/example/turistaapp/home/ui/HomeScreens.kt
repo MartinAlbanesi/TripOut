@@ -33,7 +33,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.turistaapp.R
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +48,12 @@ fun HomeScreen(paddingValues: PaddingValues) {
                 zoomControlsEnabled = false
             )
         )
+    }
+
+    val unlam = LatLng(-34.67112967722258, -58.56390981764954)
+
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(unlam, 14f)
     }
 
     var showDialog by remember {
@@ -80,6 +89,7 @@ fun HomeScreen(paddingValues: PaddingValues) {
     ) {
         MapScreen(
             mapUiSettings,
+            cameraPositionState,
             Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
