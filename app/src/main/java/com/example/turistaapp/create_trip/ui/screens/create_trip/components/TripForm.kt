@@ -1,8 +1,6 @@
 package com.example.turistaapp.create_trip.ui.screens.create_trip.components
 
 import android.app.DatePickerDialog
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,54 +12,49 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripForm() {
+    //Nombre del Viaje
     var tripName by remember { mutableStateOf(TextFieldValue()) }
+    //Origen y Destino
     var origin by remember { mutableStateOf(TextFieldValue()) }
     var destination by remember { mutableStateOf(TextFieldValue()) }
-    var members = remember { mutableStateListOf<String>("hola","mundo","aaaaaaaaaaaaaaaaaaaaaa") }
+    //Fechas
+    val calendar = Calendar.getInstance()
+    var startDate by remember { mutableStateOf(calendar.timeInMillis) }
+    var endDate by remember { mutableStateOf(calendar.timeInMillis) }
+    val dateRangePickerState = rememberDateRangePickerState(
+        initialSelectedStartDateMillis = startDate,
+        initialSelectedEndDateMillis = endDate
+    )
+    var showDateRangePickerDialog by remember { mutableStateOf(false) }
+    //Members
+    var members = remember { mutableStateListOf<String>() }
+    //Paradas
     var stops = remember { mutableStateListOf<String>() }
+    //Transporte
     val transports by remember {
         mutableStateOf(
             listOf(
@@ -73,7 +66,11 @@ fun TripForm() {
             )
         )
     }
+    var isExpanded by remember { mutableStateOf(false) }
+    var transport by remember { mutableStateOf("") }
+    //Descripción
     var description by remember { mutableStateOf(TextFieldValue()) }
+    //Focus Requesters
     val originFocusRequester = remember { FocusRequester() }
     val destinationFocusRequester = remember { FocusRequester() }
     val membersFocusRequester = remember { FocusRequester() }
@@ -93,6 +90,8 @@ fun TripForm() {
             imeAction = ImeAction.Next
         )
 
+        Spacer(modifier = Modifier.size(4.dp))
+
         // Origen y Destino
         TextInputField(
             label = "Origen",
@@ -101,6 +100,9 @@ fun TripForm() {
             focusRequester = destinationFocusRequester,
             imeAction = ImeAction.Next
         )
+
+        Spacer(modifier = Modifier.size(4.dp))
+
         TextInputField(
             label = "Destino",
             textValue = destination,
@@ -109,20 +111,37 @@ fun TripForm() {
             imeAction = ImeAction.Next
         )
 
-        // Fechas
-        DateInputField(
-            label = "Desde"
+        Spacer(modifier = Modifier.size(4.dp))
+
+        //Fechas
+        DateRangePickerInput(
+            label = "Fechas",
+            startDate = startDate,
+            endDate = endDate,
+            dateRangePickerState = dateRangePickerState,
+            showDateRangePicker = showDateRangePickerDialog,
+            onDismiss = { showDateRangePickerDialog = false },
+            onConfirm = {
+                showDateRangePickerDialog = false
+                startDate = dateRangePickerState.selectedStartDateMillis?: startDate
+                endDate = dateRangePickerState.selectedEndDateMillis?: endDate
+            },
+            onClickable = { showDateRangePickerDialog = true }
         )
 
-        DateInputField(
-            label = "Hasta"
-        )
+        Spacer(modifier = Modifier.size(4.dp))
 
         // Transporte
         ExposedDropdownMenuBoxInput(
             label = "Transporte",
-            values = transports
+            values = transports,
+            isExpanded = isExpanded,
+            transport = transport,
+            onExpanded = { isExpanded = it },
+            onClickable = { transport = it }
         )
+
+        Spacer(modifier = Modifier.size(4.dp))
 
         // Descripción Opcional
         TextInputField(
@@ -133,11 +152,15 @@ fun TripForm() {
             imeAction = ImeAction.Done
         )
 
+        Spacer(modifier = Modifier.size(4.dp))
+
         // Lista de Integrantes
         AddList(
             label = "Miembros",
             values = members
         )
+
+        Spacer(modifier = Modifier.size(4.dp))
 
         // Lista de Paradas
         AddList(
@@ -145,8 +168,9 @@ fun TripForm() {
             values = stops
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.size(8.dp))
 
+        // Botón para guardar
         Button(
             onClick = {
                 // Realiza aquí la acción deseada cuando se presiona el botón.
@@ -159,244 +183,6 @@ fun TripForm() {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TextInputField(
-    label: String,
-    textValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    focusRequester: FocusRequester,
-    imeAction: ImeAction,
-    keyboardType: KeyboardType = KeyboardType.Text
-) {
-    OutlinedTextField(
-        value = textValue,
-        singleLine = true,
-        maxLines = 1,
-        onValueChange = {
-            onValueChange(it)
-        },
-        label = { Text(label) },
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = imeAction,
-            keyboardType = keyboardType
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
-        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = Color.LightGray
-        ),
-    )
-    Spacer(modifier = Modifier.height(4.dp))
-}
-
-@Composable
-fun DateInputField(label: String) {
-    var date by remember {
-        mutableStateOf("")
-    }
-
-    val calendar = Calendar.getInstance()
-
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-    val month = calendar.get(Calendar.MONTH)
-    val year = calendar.get(Calendar.YEAR)
-
-    val datePicker = DatePickerDialog(
-        LocalContext.current,
-        { _, aYear, aMonth, aDayOfMonth ->
-            date = "$aDayOfMonth/${aMonth + 1}/$aYear"
-        }, year, month, day
-    )
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize(Alignment.Center)
-            .clickable {
-                datePicker.show()
-            }
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = date,
-                onValueChange = { date = it },
-                readOnly = true,
-                label = { Text(label) },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.DateRange,
-                        contentDescription = "Date Picker",
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clickable {
-                                datePicker.show()
-                            }
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-
-        }
-    }
-    Spacer(modifier = Modifier.height(4.dp))
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ExposedDropdownMenuBoxInput(
-    label: String,
-    values: List<String>
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var transport by remember { mutableStateOf("") }
-
-    ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = it },
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = transport,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text(label) },
-            placeholder = { Text("Selecciona un transporte") },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-            },
-            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-
-        ExposedDropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = { isExpanded = false },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            values.forEach { item ->
-                DropdownMenuItem(
-                    text = { Text(text = item) },
-                    onClick = {
-                        transport = item
-                        isExpanded = false
-                    }
-                )
-            }
-        }
-    }
-    Spacer(modifier = Modifier.height(4.dp))
-}
-
-@Composable
-fun AddList(
-    label: String,
-    values: MutableList<String>
-) {
-    var name by remember { mutableStateOf("") }
-    var isDialogOpen by remember { mutableStateOf(false) }
-
-    // Fila con botón de agregar y lista de nombres
-    Text(text = label)
-    Spacer(modifier = Modifier.size(4.dp))
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Botón para abrir el cuadro de diálogo
-        IconButton(
-            onClick = { isDialogOpen = true },
-            modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = null)
-        }
-
-        Spacer(modifier = Modifier.size(4.dp))
-        // Lista horizontal de nombres
-        LazyRow {
-            items(values) { name ->
-                Row(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .background(MaterialTheme.colorScheme.secondary)
-                        .wrapContentHeight(Alignment.CenterVertically)
-                ){
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(4.dp)
-                    )
-                    IconButton(
-                        onClick = { values.remove(name) },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-                    ) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
-                    }
-                }
-
-            }
-        }
-    }
-
-    // Cuadro de diálogo para ingresar el nombre
-    if (isDialogOpen) {
-        AlertDialog(
-            onDismissRequest = {
-                isDialogOpen = false
-                name = ""
-            },
-            title = { Text("Agregar $label") },
-            text = {
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    singleLine = true,
-                    maxLines = 1,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        if (name.isNotBlank()) {
-                            values.add(name)
-                            name = ""
-                            isDialogOpen = false
-                        }
-                    }
-                ) {
-                    Text("Aceptar")
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        isDialogOpen = false
-                        name = ""
-                    }
-                ) {
-                    Text("Cancelar")
-                }
-            }
-        )
-    }
-    Spacer(modifier = Modifier.height(4.dp))
-}
-
 
 @Preview
 @Composable
