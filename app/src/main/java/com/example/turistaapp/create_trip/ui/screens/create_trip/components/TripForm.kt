@@ -2,13 +2,13 @@ package com.example.turistaapp.create_trip.ui.screens.create_trip.components
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,12 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -34,10 +38,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
@@ -53,14 +60,23 @@ fun TripForm() {
     var tripName by remember { mutableStateOf(TextFieldValue()) }
     var origin by remember { mutableStateOf(TextFieldValue()) }
     var destination by remember { mutableStateOf(TextFieldValue()) }
-    var members by remember { mutableStateOf(TextFieldValue()) }
-    var stops by remember { mutableStateOf(TextFieldValue()) }
-    var preferredTransport by remember { mutableStateOf(TextFieldValue()) }
+    var members = remember { mutableStateListOf<String>("hola","mundo","aaaaaaaaaaaaaaaaaaaaaa") }
+    var stops = remember { mutableStateListOf<String>() }
+    val transports by remember {
+        mutableStateOf(
+            listOf(
+                "Auto",
+                "Moto",
+                "Transporte Público",
+                "A pie",
+                "Bicicleta"
+            )
+        )
+    }
     var description by remember { mutableStateOf(TextFieldValue()) }
     val originFocusRequester = remember { FocusRequester() }
     val destinationFocusRequester = remember { FocusRequester() }
     val membersFocusRequester = remember { FocusRequester() }
-    val preferredTransportFocusRequester = remember { FocusRequester() }
     val descriptionFocusRequester = remember { FocusRequester() }
 
     Column(
@@ -102,8 +118,10 @@ fun TripForm() {
             label = "Hasta"
         )
 
+        // Transporte
         ExposedDropdownMenuBoxInput(
-            label = "Transporte"
+            label = "Transporte",
+            values = transports
         )
 
         // Descripción Opcional
@@ -116,15 +134,15 @@ fun TripForm() {
         )
 
         // Lista de Integrantes
-        AddMemberList()
+        AddList(
+            label = "Miembros",
+            values = members
+        )
 
         // Lista de Paradas
-        TextInputField(
+        AddList(
             label = "Paradas",
-            textValue = stops,
-            onValueChange = { stops = it },
-            focusRequester = preferredTransportFocusRequester,
-            imeAction = ImeAction.Next
+            values = stops
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -142,6 +160,7 @@ fun TripForm() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputField(
     label: String,
@@ -165,7 +184,11 @@ fun TextInputField(
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(focusRequester)
+            .focusRequester(focusRequester),
+        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = Color.LightGray
+        ),
     )
     Spacer(modifier = Modifier.height(4.dp))
 }
@@ -229,10 +252,12 @@ fun DateInputField(label: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExposedDropdownMenuBoxInput(label: String) {
+fun ExposedDropdownMenuBoxInput(
+    label: String,
+    values: List<String>
+) {
     var isExpanded by remember { mutableStateOf(false) }
     var transport by remember { mutableStateOf("") }
-    val transportList = arrayOf("Auto", "Moto", "Transporte Público", "A pie", "Bicicleta")
 
     ExposedDropdownMenuBox(
         expanded = isExpanded,
@@ -260,7 +285,7 @@ fun ExposedDropdownMenuBoxInput(label: String) {
             onDismissRequest = { isExpanded = false },
             modifier = Modifier.fillMaxWidth()
         ) {
-            transportList.forEach { item ->
+            values.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item) },
                     onClick = {
@@ -275,13 +300,16 @@ fun ExposedDropdownMenuBoxInput(label: String) {
 }
 
 @Composable
-fun AddMemberList() {
+fun AddList(
+    label: String,
+    values: MutableList<String>
+) {
     var name by remember { mutableStateOf("") }
-    val names = remember { mutableStateListOf<String>() }
-
     var isDialogOpen by remember { mutableStateOf(false) }
 
     // Fila con botón de agregar y lista de nombres
+    Text(text = label)
+    Spacer(modifier = Modifier.size(4.dp))
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -295,18 +323,31 @@ fun AddMemberList() {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
         }
 
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(4.dp))
         // Lista horizontal de nombres
         LazyRow {
-            items(names) { name ->
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.bodyMedium,
+            items(values) { name ->
+                Row(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(start = 8.dp)
+                        .background(MaterialTheme.colorScheme.secondary)
                         .wrapContentHeight(Alignment.CenterVertically)
-                )
+                ){
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(4.dp)
+                    )
+                    IconButton(
+                        onClick = { values.remove(name) },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+                    ) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                    }
+                }
+
             }
         }
     }
@@ -318,11 +359,13 @@ fun AddMemberList() {
                 isDialogOpen = false
                 name = ""
             },
-            title = { Text("Agregar Nombre") },
+            title = { Text("Agregar $label") },
             text = {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
+                    singleLine = true,
+                    maxLines = 1,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
@@ -330,7 +373,7 @@ fun AddMemberList() {
                 Button(
                     onClick = {
                         if (name.isNotBlank()) {
-                            names.add(name)
+                            values.add(name)
                             name = ""
                             isDialogOpen = false
                         }
