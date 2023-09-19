@@ -32,6 +32,9 @@ fun MainScreen(mainViewModel: MainViewModel) {
     val index by mainViewModel.indexSelect.observeAsState(1)
     val title by mainViewModel.titleAppBar.observeAsState("Home")
 
+    val showBottomBar by mainViewModel.showBottomBar.observeAsState(true)
+    val showFloatingActionButton by mainViewModel.showFloatingActionButton.observeAsState(true)
+
     Scaffold(
         topBar = {
             TopBarScreen(
@@ -39,14 +42,23 @@ fun MainScreen(mainViewModel: MainViewModel) {
             )
         },
         bottomBar = {
-            BottomBarScreen(
-                index,
-                navController,
-                changeIndex = { mainViewModel.setIndex(it) }
-            )
+            if(showBottomBar){
+                BottomBarScreen(
+                    index,
+                    navController,
+                    changeIndex = { mainViewModel.setIndex(it) }
+                )
+            }
         },
         floatingActionButton = {
-            FloatingScreen {}
+            if(showFloatingActionButton){
+                FloatingScreen {
+                    navController.navigate(Routes.CreateTrip.route)
+                    mainViewModel.setTitle("Crea y Viaja")
+                    mainViewModel.setShowFloatingActionButton(false)
+                    mainViewModel.setShowBottomBar(false)
+                }
+            }
         },
     ) { paddingValues ->
         NavHostScreen(navController = navController, paddingValues)

@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.screens.create_trip.components
+package com.example.turistaapp.create_trip.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row

@@ -12,12 +12,26 @@ class MainViewModel : ViewModel() {
     private val _titleAppBar = MutableLiveData("Home")
     val titleAppBar : LiveData<String> = _titleAppBar
 
+    private val _showBottomBar = MutableLiveData(true)
+    val showBottomBar : LiveData<Boolean> = _showBottomBar
+
+    private val _showFloatingActionButton = MutableLiveData(true)
+    val showFloatingActionButton : LiveData<Boolean> = _showFloatingActionButton
+
     fun setIndex(index : Int){
         _indexSelect.value = index
     }
 
     fun setTitle(title : String){
         _titleAppBar.value = title
+    }
+
+    fun setShowBottomBar(show : Boolean){
+        _showBottomBar.value = show
+    }
+
+    fun setShowFloatingActionButton(show : Boolean){
+        _showFloatingActionButton.value = show
     }
 
 }
