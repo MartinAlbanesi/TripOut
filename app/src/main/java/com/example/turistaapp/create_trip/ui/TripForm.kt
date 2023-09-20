@@ -40,7 +40,7 @@ fun TripForm(innerPadding: PaddingValues) {
         initialSelectedEndDateMillis = endDate
     )
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
-    //Members
+    //Acompañantes
     var members = remember { mutableStateListOf<String>() }
     //Paradas
     var stops = remember { mutableStateListOf<String>() }
@@ -148,7 +148,7 @@ fun TripForm(innerPadding: PaddingValues) {
 
             // Lista de Integrantes
             AddList(
-                label = "Miembros",
+                label = "Acompañantes",
                 values = members
             )
 
@@ -156,7 +156,7 @@ fun TripForm(innerPadding: PaddingValues) {
 
             // Lista de Paradas
             AddList(
-                label = "Paradas",
+                label = "Puntos de Parada",
                 values = stops
             )
 
