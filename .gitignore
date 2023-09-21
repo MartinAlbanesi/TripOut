@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -48,4 +47,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
->>>>>>> a876c655830ffc7ab2f44ecf20e81732eeddda61
