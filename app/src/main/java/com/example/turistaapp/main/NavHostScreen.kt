@@ -16,5 +16,6 @@ fun NavHostScreen(navController: NavHostController, paddingValues: PaddingValues
         composable(Routes.Home.route){ HomeScreen(paddingValues) }
         composable(Routes.CreateTrip.route){ TripForm(innerPadding = paddingValues) }
         composable(Routes.Configuraciones.route){  }
+        composable(Routes.Viajes.route){  }
     }
 }
