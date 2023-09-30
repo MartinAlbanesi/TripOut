@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -85,4 +87,14 @@ dependencies {
 
     //Material extend icons
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+    
+    //Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+
+}
+
+kapt {
+    correctErrorTypes = true
 }
