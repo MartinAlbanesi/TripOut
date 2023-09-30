@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    kotlin("kapt")
+
 }
 
 android {
@@ -85,4 +87,12 @@ dependencies {
 
     //Material extend icons
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+
+    //Room
+    implementation ("androidx.room:room-ktx:2.5.0")
+    kapt ("androidx.room:room-compiler:2.5.0")
+}
+
+kapt {
+    correctErrorTypes = true
 }
