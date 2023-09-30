@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class LocationEntity(
 
     @PrimaryKey(autoGenerate = true)
-    val id: String,
+    val id: Int,
 
     @ColumnInfo(name = "name")
     val name: String,

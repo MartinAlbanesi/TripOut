@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.components
+package com.example.turistaapp.create_trip.ui.screens.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

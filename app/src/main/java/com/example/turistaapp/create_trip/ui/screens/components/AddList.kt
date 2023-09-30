@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.components
+package com.example.turistaapp.create_trip.ui.screens.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AddList(
     label: String,
-    values: MutableList<String>
+    values: List<String>,
+    onAdd: (String) -> Unit,
+    onRemove: (String) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var isDialogOpen by remember { mutableStateOf(false) }
@@ -72,7 +74,7 @@ fun AddList(
                             .padding(4.dp)
                     )
                     IconButton(
-                        onClick = { values.remove(name) },
+                        onClick = { onRemove(name) },
                         modifier = Modifier.background(MaterialTheme.colorScheme.primary)
                     ) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = null)
@@ -104,7 +106,7 @@ fun AddList(
                 Button(
                     onClick = {
                         if (name.isNotBlank()) {
-                            values.add(name)
+                            onRemove(name)
                             name = ""
                             isDialogOpen = false
                         }

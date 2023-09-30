@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.components
+package com.example.turistaapp.create_trip.ui.screens.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +35,7 @@ fun DateRangePickerInput(
     endDate: Long,
     dateRangePickerState: DateRangePickerState,
     showDateRangePicker: Boolean,
-    onDismiss: () -> Unit,
+    onDismiss: (Boolean) -> Unit,
     onConfirm: () -> Unit,
     onClickable: () -> Unit
 ) {
@@ -46,7 +46,7 @@ fun DateRangePickerInput(
     if (showDateRangePicker) {
         DatePickerDialog(
             onDismissRequest = {
-                onDismiss()
+                onDismiss(false)
             },
             confirmButton = {
                 TextButton(onClick = {
@@ -58,7 +58,7 @@ fun DateRangePickerInput(
             },
             dismissButton = {
                 TextButton(onClick = {
-                    onDismiss()
+                    onDismiss(true)
                 }) {
                     Text(text = "Cancel")
                 }
