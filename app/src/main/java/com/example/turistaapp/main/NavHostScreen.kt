@@ -10,6 +10,7 @@ import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.utils.Routes
 
+
 @Composable
 fun NavHostScreen(navController: NavHostController, paddingValues: PaddingValues, createTripViewModel: CreateTripViewModel) {
 

@@ -1,7 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +25,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTripViewModel) {
@@ -53,13 +51,13 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
 
     //Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
-    val valueName by createTripViewModel.valueName.observeAsState("")
-    val isDialogOpen by createTripViewModel.isDialogOpen.observeAsState(false)
-
-
+    val memberName by createTripViewModel.memberName.observeAsState("")
+    val isMemberDialogOpen by createTripViewModel.isMemberDialogOpen.observeAsState(false)
 
     //Paradas
     val stops by createTripViewModel.stops.observeAsState(emptyList())
+    val stopName by createTripViewModel.stopName.observeAsState("")
+    val isStopDialogOpen by createTripViewModel.isStopDialogOpen.observeAsState(false)
 
     //Transporte
     val transports by createTripViewModel.transports.observeAsState(
@@ -95,28 +93,30 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         endDate = endDate,
         dateRangePickerState = dateRangePickerState,
         showDateRangePickerDialog = showDateRangePickerDialog,
-        onShowDateRangePickerDialog = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
+        onDismissDateRangePickerDialog = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
         onConfirmDateRangePickerDialog = {
+            dateRangePickerState.selectedStartDateMillis?.let { createTripViewModel.onStartDateChange(it) }
             dateRangePickerState.selectedEndDateMillis?.let { createTripViewModel.onEndDateChange(it) }
-            dateRangePickerState.selectedStartDateMillis?.let {
-                createTripViewModel.onStartDateChange(
-                    it
-                )
-            }
-            dateRangePickerState.selectedStartDateMillis?.let {
-                createTripViewModel.onEndDateChange(
-                    it
-                )
-            }
+            createTripViewModel.onShowDateRangePickerDialogChange(it)
         },
         members = members,
-        valueName = valueName,
-        isDialogOpen = isDialogOpen,
-        onValueNameChange = { createTripViewModel.onValueNameChange(it) },
-        onDialogOpenChange = { createTripViewModel.onDialogOpenChange(it) },
+        memberName = memberName,
+        isMemberDialogOpen = isMemberDialogOpen,
+        onMemberNameChange = { createTripViewModel.onMemberNameChange(it) },
+        onMemberDialogOpenChange = {
+            createTripViewModel.onMemberDialogOpenChange(it)
+            createTripViewModel.resetMemberNameValue()
+        },
         onAddMember = { createTripViewModel.onAddMember(it) },
         onRemoveMember = { createTripViewModel.onRemoveMember(it) },
         stops = stops,
+        stopName = stopName,
+        isStopDialogOpen = isStopDialogOpen,
+        onStopNameChange = { createTripViewModel.onStopNameChange(it) },
+        onStopDialogOpenChange = {
+            createTripViewModel.onStopDialogOpenChange(it)
+            createTripViewModel.resetStopNameValue()
+        },
         onAddStop = { createTripViewModel.onAddStop(it) },
         onRemoveStop = { createTripViewModel.onRemoveStop(it) },
         transports = transports,
@@ -148,16 +148,20 @@ fun TripFormContent(
     endDate: Long,
     dateRangePickerState: DateRangePickerState,
     showDateRangePickerDialog: Boolean,
-    onShowDateRangePickerDialog: (Boolean) -> Unit,
-    onConfirmDateRangePickerDialog: () -> Unit,
+    onDismissDateRangePickerDialog: (Boolean) -> Unit,
+    onConfirmDateRangePickerDialog: (Boolean) -> Unit,
     members: List<String>,
-    valueName: String,
-    isDialogOpen: Boolean,
-    onValueNameChange: (String) -> Unit,
-    onDialogOpenChange: (Boolean) -> Unit,
+    memberName: String,
+    isMemberDialogOpen: Boolean,
+    onMemberNameChange: (String) -> Unit,
+    onMemberDialogOpenChange: (Boolean) -> Unit,
     onAddMember: (String) -> Unit,
     onRemoveMember: (String) -> Unit,
     stops: List<String>,
+    stopName: String,
+    isStopDialogOpen: Boolean,
+    onStopNameChange: (String) -> Unit,
+    onStopDialogOpenChange: (Boolean) -> Unit,
     onAddStop: (String) -> Unit,
     onRemoveStop: (String) -> Unit,
     transports: List<String>,
@@ -219,9 +223,9 @@ fun TripFormContent(
                 endDate = endDate,
                 dateRangePickerState = dateRangePickerState,
                 showDateRangePicker = showDateRangePickerDialog,
-                onDismiss = onShowDateRangePickerDialog,
-                onConfirm = onConfirmDateRangePickerDialog
-            ) { onShowDateRangePickerDialog(true) }
+                onDismiss = { onDismissDateRangePickerDialog(it) },
+                onConfirm = { onConfirmDateRangePickerDialog(it) }
+            ) { onDismissDateRangePickerDialog(true) }
 
             Spacer(modifier = Modifier.size(4.dp))
 
@@ -251,11 +255,11 @@ fun TripFormContent(
             // Lista de Integrantes
             AddList(
                 label = "Acompañantes",
-                name = valueName,
+                name = memberName,
                 values = members,
-                isDialogOpen = isDialogOpen,
-                onValueNameChange = { onValueNameChange(it) },
-                onDialogOpenChange = { onDialogOpenChange(it) },
+                isDialogOpen = isMemberDialogOpen,
+                onValueNameChange = { onMemberNameChange(it) },
+                onDialogOpenChange = { onMemberDialogOpenChange(it) },
                 onAdd = onAddMember,
                 onRemove = onRemoveMember
             )
@@ -265,11 +269,11 @@ fun TripFormContent(
             // Lista de Paradas
             AddList(
                 label = "Puntos de Parada",
-                name = valueName,
+                name = stopName,
                 values = stops,
-                isDialogOpen = isDialogOpen,
-                onValueNameChange = { onValueNameChange(it)},
-                onDialogOpenChange = { onDialogOpenChange(it) },
+                isDialogOpen = isStopDialogOpen,
+                onValueNameChange = { onStopNameChange(it) },
+                onDialogOpenChange = { onStopDialogOpenChange(it) },
                 onAdd = onAddStop,
                 onRemove = onRemoveStop
             )

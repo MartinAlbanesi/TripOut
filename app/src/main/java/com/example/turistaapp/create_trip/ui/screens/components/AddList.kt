@@ -96,7 +96,7 @@ fun AddList(
             text = {
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { onValueNameChange(name) },
+                    onValueChange = { onValueNameChange(it) },
                     singleLine = true,
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth()

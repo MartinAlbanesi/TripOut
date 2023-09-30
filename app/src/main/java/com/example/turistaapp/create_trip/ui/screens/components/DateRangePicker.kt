@@ -36,7 +36,7 @@ fun DateRangePickerInput(
     dateRangePickerState: DateRangePickerState,
     showDateRangePicker: Boolean,
     onDismiss: (Boolean) -> Unit,
-    onConfirm: () -> Unit,
+    onConfirm: (Boolean) -> Unit,
     onClickable: () -> Unit
 ) {
 
@@ -50,7 +50,7 @@ fun DateRangePickerInput(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    onConfirm()
+                    onConfirm(false)
                 }) {
                     Text(text = "Confirm")
                 }
@@ -58,7 +58,7 @@ fun DateRangePickerInput(
             },
             dismissButton = {
                 TextButton(onClick = {
-                    onDismiss(true)
+                    onDismiss(false)
                 }) {
                     Text(text = "Cancel")
                 }

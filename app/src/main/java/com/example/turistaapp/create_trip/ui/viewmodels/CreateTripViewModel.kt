@@ -1,8 +1,6 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,13 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.data.database.entities.CoordinateEntity
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
-import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -75,18 +71,18 @@ class CreateTripViewModel @Inject constructor(
     private var _members = MutableLiveData(mutableListOf<String>())
     val members: LiveData<MutableList<String>> = _members
 
-    private var _valueName = MutableLiveData("")
-    val valueName: LiveData<String> = _valueName
+    private var _memberName = MutableLiveData("")
+    val memberName: LiveData<String> = _memberName
 
-    private var _isDialogOpen = MutableLiveData(false)
-    val isDialogOpen: LiveData<Boolean> = _isDialogOpen
+    private var _isMemberDialogOpen = MutableLiveData(false)
+    val isMemberDialogOpen: LiveData<Boolean> = _isMemberDialogOpen
 
-    fun onValueNameChange(valueName: String) {
-        _valueName.value = valueName
+    fun onMemberNameChange(memberName: String) {
+        _memberName.value = memberName
     }
 
-    fun onDialogOpenChange(isDialogOpen: Boolean) {
-        _isDialogOpen.value = isDialogOpen
+    fun onMemberDialogOpenChange(isMemberDialogOpen: Boolean) {
+        _isMemberDialogOpen.value = isMemberDialogOpen
     }
 
     fun onAddMember(member: String) {
@@ -97,9 +93,27 @@ class CreateTripViewModel @Inject constructor(
         _members.value?.remove(member)
     }
 
+    fun resetMemberNameValue(){
+        _memberName.value = ""
+    }
+
     //Paradas
     private var _stops = MutableLiveData(mutableListOf<String>())
     val stops: LiveData<MutableList<String>> = _stops
+
+    private var _stopName = MutableLiveData("")
+    val stopName: LiveData<String> = _stopName
+
+    private var _isStopDialogOpen = MutableLiveData(false)
+    val isStopDialogOpen: LiveData<Boolean> = _isStopDialogOpen
+
+    fun onStopNameChange(stopName: String) {
+        _stopName.value = stopName
+    }
+
+    fun onStopDialogOpenChange(isStopDialogOpen: Boolean) {
+        _isStopDialogOpen.value = isStopDialogOpen
+    }
 
     fun onAddStop(stop: String) {
         _stops.value?.add(stop)
@@ -107,6 +121,10 @@ class CreateTripViewModel @Inject constructor(
 
     fun onRemoveStop(stop: String) {
         _stops.value?.remove(stop)
+    }
+
+    fun resetStopNameValue(){
+        _stopName.value = ""
     }
 
     //Transportes
@@ -141,7 +159,7 @@ class CreateTripViewModel @Inject constructor(
     }
 
     //Crear viaje con los datos ingresados
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun onCreateTripClick() {
         val trip = TripModel(
             id = 0,
