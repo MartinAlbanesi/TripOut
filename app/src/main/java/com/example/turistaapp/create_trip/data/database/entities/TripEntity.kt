@@ -20,7 +20,7 @@ data class TripEntity(
     val destination: LocationEntity,
 
     @ColumnInfo(name = "stops")
-    val stops: MutableList<LocationEntity>,
+    val stops: MutableList<LocationEntity>?,
 
     @ColumnInfo(name = "startDate")
     val startDate: String,

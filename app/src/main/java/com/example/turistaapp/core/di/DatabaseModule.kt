@@ -2,7 +2,7 @@ package com.example.turistaapp.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.turistaapp.create_trip.data.database.TripDataBase
+import com.example.turistaapp.core.database.TripDataBase
 import com.example.turistaapp.create_trip.data.database.dao.TripDao
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepositoryImpl

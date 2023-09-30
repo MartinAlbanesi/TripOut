@@ -8,15 +8,15 @@ data class TripModel(
     val name: String,
     val origin: LocationEntity,
     val destination: LocationEntity,
-    val stops: MutableList<LocationEntity>,
     val startDate: String,
     val endDate: String,
-    val members: MutableList<String>?,
     val transport: String,
+    val members: MutableList<String>?,
+    val stops: MutableList<LocationEntity>?,
     val description: String?,
     val author: String,
-    val isFavorite: Boolean,
-    val isFinished: Boolean,
     val images: MutableList<String>?,
-    val comments: MutableList<String>?
+    val comments: MutableList<String>?,
+    val isFavorite: Boolean,
+    val isFinished: Boolean
 )

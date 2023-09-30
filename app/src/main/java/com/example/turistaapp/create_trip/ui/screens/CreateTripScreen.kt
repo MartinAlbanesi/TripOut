@@ -1,5 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +27,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTripViewModel) {
@@ -50,19 +53,17 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
 
     //Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
+    val valueName by createTripViewModel.valueName.observeAsState("")
+    val isDialogOpen by createTripViewModel.isDialogOpen.observeAsState(false)
+
+
 
     //Paradas
     val stops by createTripViewModel.stops.observeAsState(emptyList())
 
     //Transporte
     val transports by createTripViewModel.transports.observeAsState(
-        listOf(
-            "Auto",
-            "Moto",
-            "Transporte Público",
-            "A pie",
-            "Bicicleta"
-        )
+        emptyList()
     )
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
     val transport by createTripViewModel.transport.observeAsState("")
@@ -83,7 +84,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
     )
 
     TripFormContent(
-        innerPadding = innerPadding,
+        innerPadding,
         tripName = tripName,
         onNameChange = { createTripViewModel.onNameChange(it) },
         origin = origin,
@@ -109,6 +110,10 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
             }
         },
         members = members,
+        valueName = valueName,
+        isDialogOpen = isDialogOpen,
+        onValueNameChange = { createTripViewModel.onValueNameChange(it) },
+        onDialogOpenChange = { createTripViewModel.onDialogOpenChange(it) },
         onAddMember = { createTripViewModel.onAddMember(it) },
         onRemoveMember = { createTripViewModel.onRemoveMember(it) },
         stops = stops,
@@ -121,6 +126,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onTransportChange = { createTripViewModel.onTransportChange(it) },
         description = description,
         onDescriptionChange = { createTripViewModel.onDescriptionChange(it) },
+        onCreateTripClick = { createTripViewModel.onCreateTripClick() },
         originFocusRequester = originFocusRequester,
         destinationFocusRequester = destinationFocusRequester,
         membersFocusRequester = membersFocusRequester,
@@ -145,6 +151,10 @@ fun TripFormContent(
     onShowDateRangePickerDialog: (Boolean) -> Unit,
     onConfirmDateRangePickerDialog: () -> Unit,
     members: List<String>,
+    valueName: String,
+    isDialogOpen: Boolean,
+    onValueNameChange: (String) -> Unit,
+    onDialogOpenChange: (Boolean) -> Unit,
     onAddMember: (String) -> Unit,
     onRemoveMember: (String) -> Unit,
     stops: List<String>,
@@ -157,6 +167,7 @@ fun TripFormContent(
     onTransportChange: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
+    onCreateTripClick: () -> Unit,
     originFocusRequester: FocusRequester,
     destinationFocusRequester: FocusRequester,
     membersFocusRequester: FocusRequester,
@@ -240,7 +251,11 @@ fun TripFormContent(
             // Lista de Integrantes
             AddList(
                 label = "Acompañantes",
+                name = valueName,
                 values = members,
+                isDialogOpen = isDialogOpen,
+                onValueNameChange = { onValueNameChange(it) },
+                onDialogOpenChange = { onDialogOpenChange(it) },
                 onAdd = onAddMember,
                 onRemove = onRemoveMember
             )
@@ -250,7 +265,11 @@ fun TripFormContent(
             // Lista de Paradas
             AddList(
                 label = "Puntos de Parada",
+                name = valueName,
                 values = stops,
+                isDialogOpen = isDialogOpen,
+                onValueNameChange = { onValueNameChange(it)},
+                onDialogOpenChange = { onDialogOpenChange(it) },
                 onAdd = onAddStop,
                 onRemove = onRemoveStop
             )
@@ -259,9 +278,7 @@ fun TripFormContent(
 
             // Botón para guardar
             Button(
-                onClick = {
-                    // Realiza aquí la acción deseada cuando se presiona el botón.
-                },
+                onClick = onCreateTripClick,
                 modifier = Modifier
                     .fillMaxWidth()
                 //.align(Alignment.CenterHorizontally)

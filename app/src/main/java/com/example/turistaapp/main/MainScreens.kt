@@ -22,11 +22,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.utils.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(mainViewModel: MainViewModel) {
+fun MainScreen(mainViewModel: MainViewModel, createTripViewModel: CreateTripViewModel) {
 
     val navController = rememberNavController()
     val index by mainViewModel.indexSelect.observeAsState(1)
@@ -61,7 +62,7 @@ fun MainScreen(mainViewModel: MainViewModel) {
             }
         },
     ) { paddingValues ->
-        NavHostScreen(navController = navController, paddingValues)
+        NavHostScreen(navController = navController, paddingValues, createTripViewModel = createTripViewModel)
     }
 }
 
