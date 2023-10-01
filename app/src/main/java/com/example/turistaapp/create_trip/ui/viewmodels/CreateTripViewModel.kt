@@ -192,7 +192,6 @@ class CreateTripViewModel @Inject constructor(
         )
 
         try{
-
             viewModelScope.launch(Dispatchers.IO) {
                 insertTripUseCase.execute(trip)
             }
@@ -225,12 +224,6 @@ class CreateTripViewModel @Inject constructor(
         }
     }
     */
-
-    suspend fun insertTrip(trip: TripModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            insertTripUseCase.execute(trip)
-        }
-    }
 
 
 }
