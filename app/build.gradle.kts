@@ -93,6 +93,13 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+    //Retrofit2
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 
 }
 
