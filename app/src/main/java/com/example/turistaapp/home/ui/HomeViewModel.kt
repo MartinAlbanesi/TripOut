@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.getLocationString
 import com.example.turistaapp.home.data.api.model.LocationApi
-import com.example.turistaapp.home.domain.GetNearbyLocations
+import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getNearbyLocations: GetNearbyLocations
+    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<List<NearbyLocation>>(emptyList())
@@ -27,7 +27,7 @@ class HomeViewModel @Inject constructor(
     }
     fun getNearbyLocations(locationApi : LocationApi) {
         viewModelScope.launch(Dispatchers.IO) {
-            _nearbyLocationsApi.value = getNearbyLocations(getLocationString(locationApi))
+            _nearbyLocationsApi.value = getNearbyLocationsUseCase(getLocationString(locationApi))
 
             _nearbyLocationsApi.value.forEach {
                 Log.i("titi", it.toString())

@@ -4,7 +4,7 @@ import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import javax.inject.Inject
 
-class GetNearbyLocations @Inject constructor(
+class GetNearbyLocationsUseCase @Inject constructor(
     private val nearbySearchLocationRepository: INearbySearchLocationRepository
 ) {
 
