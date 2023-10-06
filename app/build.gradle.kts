@@ -100,6 +100,10 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    //kotlin corrutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    //testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
+
 
 }
 
