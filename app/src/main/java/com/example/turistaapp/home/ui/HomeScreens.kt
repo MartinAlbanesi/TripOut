@@ -1,7 +1,9 @@
 package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,10 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.home.domain.models.NearbyLocation
+import com.example.turistaapp.home.ui.components.SheetContent
 import com.example.turistaapp.home.ui.components.TripDialog
 import com.example.turistaapp.home.ui.components.TripItem
 import com.google.android.gms.maps.model.CameraPosition
@@ -61,29 +66,10 @@ fun HomeScreen(
 
         //Lo que va dentro del BottomSheet
         sheetContent = {
-//            SheetContent(
-//                modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
-//                nearbyLocations = nearbyLocations
-//            )
-            Card(Modifier.padding(bottom = paddingValues.calculateBottomPadding())) {
-
-                Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
-
-//                LazyRow(modifier = Modifier.padding(4.dp)) {
-//                    items(nearbyLocations) {
-//                        TripItem(
-//                            name = it.name,
-//                            image = "https://upload.wikimedia.org/wikipedia/commons/1/14/WEA_Music_Logo.png",
-//                            modifier = Modifier
-//                                .clickable {
-//                                    showDialog = true
-//                                }
-//                                .size(150.dp, 250.dp)
-//                                .padding(4.dp),
-//                        )
-//                    }
-//                }
-            }
+            SheetContent(
+                paddingValues = paddingValues,
+                nearbyLocations = nearbyLocations
+            )
         },
     ) {
         MapScreen(

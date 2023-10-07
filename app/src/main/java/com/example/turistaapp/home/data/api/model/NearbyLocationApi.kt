@@ -20,7 +20,7 @@ data class NearbyLocationApi(
     }
 
     fun getPhoto() : String{
-        return getPhotosFromMap(photoApis?.get(0)?.photoUrl ?: "titititit")
+        return getPhotosFromMap(photoApis?.get(0)?.photoUrl ?: "titi")
     }
 
 

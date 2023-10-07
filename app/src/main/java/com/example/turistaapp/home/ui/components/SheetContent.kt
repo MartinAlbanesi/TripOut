@@ -1,7 +1,10 @@
 package com.example.turistaapp.home.ui.components
 
 import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,9 +15,22 @@ import com.example.turistaapp.home.domain.models.NearbyLocation
 @Composable
 fun SheetContent(
     modifier: Modifier = Modifier,
-    nearbyLocationApis: List<NearbyLocation>
+    paddingValues : PaddingValues,
+    nearbyLocations: List<NearbyLocation>
 ) {
-    Card(modifier = modifier) {
-        Text(text = "Descubre más viajes.", modifier = Modifier.padding(4.dp))
+    Card(Modifier.padding(
+        bottom = paddingValues.calculateBottomPadding(),
+        start = 8.dp, end = 8.dp
+    )) {
+        Text(text = "Descubre más viajes.", modifier = Modifier.padding(8.dp))
+
+        LazyRow(modifier = Modifier.padding(8.dp)) {
+            items(nearbyLocations) {
+                TripItem(
+                    name = it.name,
+                    photoUrl = it.photoUrl
+                )
+            }
+        }
     }
 }

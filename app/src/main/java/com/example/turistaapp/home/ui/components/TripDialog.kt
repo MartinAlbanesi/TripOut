@@ -24,7 +24,7 @@ import androidx.compose.ui.window.Dialog
 @Composable
 fun TripDialog(
     title: String,
-    km: String,
+    km: String = "",
     image: Painter,
     isShow: Boolean,
     onDismiss: () -> Unit,

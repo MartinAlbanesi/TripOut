@@ -23,11 +23,8 @@ fun NavHostScreen(
 
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(emptyList())
 
-    val loc = LocationApi(-34.67113975510375, -58.56181551536259)
-
     NavHost(navController = navController, startDestination = Routes.Home.route){
         composable(Routes.Home.route){
-//            homeViewModel.getNearbyLocations(loc)
             HomeScreen(paddingValues, nearbyLocations)
         }
         composable(Routes.CreateTrip.route){ TripForm(innerPadding = paddingValues) }

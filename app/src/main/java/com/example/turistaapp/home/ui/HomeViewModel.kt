@@ -28,10 +28,6 @@ class HomeViewModel @Inject constructor(
     fun getNearbyLocations(locationApi : LocationApi) {
         viewModelScope.launch(Dispatchers.IO) {
             _nearbyLocationsApi.value = getNearbyLocationsUseCase(getLocationString(locationApi))
-
-            _nearbyLocationsApi.value.forEach {
-                Log.i("titi", it.toString())
-            }
         }
     }
 }
