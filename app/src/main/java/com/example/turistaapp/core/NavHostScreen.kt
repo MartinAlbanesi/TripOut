@@ -8,10 +8,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.TripForm
 import com.example.turistaapp.home.ui.HomeScreen
-import com.example.turistaapp.core.utils.Routes
-import com.example.turistaapp.home.data.api.model.LocationApi
 import com.example.turistaapp.home.ui.HomeViewModel
 
 @Composable
@@ -23,9 +22,16 @@ fun NavHostScreen(
 
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(emptyList())
 
+    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
+
     NavHost(navController = navController, startDestination = Routes.Home.route){
         composable(Routes.Home.route){
-            HomeScreen(paddingValues, nearbyLocations)
+            HomeScreen(
+                paddingValues,
+                nearbyLocations,
+                nearbyLocationSelect,
+                onCardSelection = { homeViewModel.setNearbyLocationSelect(it)}
+            )
         }
         composable(Routes.CreateTrip.route){ TripForm(innerPadding = paddingValues) }
         composable(Routes.Trips.route){  }

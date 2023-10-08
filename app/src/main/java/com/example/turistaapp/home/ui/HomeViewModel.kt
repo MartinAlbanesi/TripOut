@@ -1,6 +1,5 @@
 package com.example.turistaapp.home.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.getLocationString
@@ -22,12 +21,24 @@ class HomeViewModel @Inject constructor(
     private val _nearbyLocationsApi = MutableStateFlow<List<NearbyLocation>>(emptyList())
     val nearbyLocations = _nearbyLocationsApi.asStateFlow()
 
+    private val _nearbyLocationSelect = MutableStateFlow<NearbyLocation?>(null)
+    val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
+
     init {
-        getNearbyLocations(LocationApi(-34.67113975510375, -58.56181551536259))
+        setNearbyLocations(LocationApi(-34.67113975510375, -58.56181551536259))
     }
-    fun getNearbyLocations(locationApi : LocationApi) {
+    fun setNearbyLocations(locationApi : LocationApi) {
         viewModelScope.launch(Dispatchers.IO) {
             _nearbyLocationsApi.value = getNearbyLocationsUseCase(getLocationString(locationApi))
         }
+    }
+
+    private fun getNearbyLocationByName(name: String) : NearbyLocation? {
+        return nearbyLocations.value.find { it.name == name }
+    }
+
+    fun setNearbyLocationSelect(nearbyLocationName: String) {
+        val getNearbyLocation = getNearbyLocationByName(nearbyLocationName)
+        _nearbyLocationSelect.value = getNearbyLocation
     }
 }
