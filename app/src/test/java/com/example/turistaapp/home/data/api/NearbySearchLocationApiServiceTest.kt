@@ -5,7 +5,8 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -13,11 +14,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NearbySearchLocationApiServiceTest {
 
-    lateinit var mockWebServer: MockWebServer
-    lateinit var nearbySearchLocationApiService : NearbySearchLocationApiService
+    private lateinit var mockWebServer: MockWebServer
+    private lateinit var nearbySearchLocationApiService : NearbySearchLocationApiService
+    private lateinit var mockResponse: MockResponse
 
     @Before
     fun setUp() {
+        mockResponse = MockResponse()
         mockWebServer = MockWebServer()
         nearbySearchLocationApiService = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
@@ -26,11 +29,13 @@ class NearbySearchLocationApiServiceTest {
             .create(NearbySearchLocationApiService::class.java)
     }
 
-
+    @After
+    fun tearDown() {
+        mockWebServer.shutdown()
+    }
 
     @Test
     fun searchNearbyPlaces_code200_returnNearbySearchLocationApi() = runTest {
-        val mockResponse = MockResponse()
         val content = Helper.readFileResources("/fake.json")
         mockResponse.setResponseCode(200)
         mockResponse.setBody(content)
@@ -39,13 +44,19 @@ class NearbySearchLocationApiServiceTest {
         val response = nearbySearchLocationApiService.searchNearbyPlaces("")
         mockWebServer.takeRequest()
 
-        Assert.assertEquals(200, response.code())
-        Assert.assertEquals(2, response.body()!!.nearbyLocationApis.size)
-        Assert.assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationApis[0].name)
+        assertEquals(200, response.code())
+        assertEquals(2, response.body()!!.nearbyLocationApis.size)
+        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationApis[0].name)
     }
 
-    @After
-    fun tearDown() {
-        mockWebServer.shutdown()
+    @Test
+    fun searchNearbyPlaces_code400_returnNull() = runTest{
+        mockResponse.setResponseCode(400)
+        mockWebServer.enqueue(mockResponse)
+
+        val response = nearbySearchLocationApiService.searchNearbyPlaces("")
+        mockWebServer.takeRequest()
+        assertEquals(400, response.code())
+        assertNull(response.body())
     }
 }
