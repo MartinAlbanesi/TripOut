@@ -28,62 +28,63 @@ fun TripDialog(
     name: String,
     photoUrl: String,
     rating: Double = 0.0,
-    userRating : Int = 0,
-    direction : String = "",
+    userRating: Int = 0,
+    direction: String = "",
     lat: Double = 0.0,
     lng: Double = 0.0,
-    isShow: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
 ) {
-    if (isShow) {
-        Dialog(onDismissRequest = { onDismiss() }) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+        ) {
+            Card(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Card(
-                    modifier = Modifier.fillMaxSize()
+                Column(
+                    Modifier.padding(8.dp)
                 ) {
-                    Column(
-                        Modifier.padding(8.dp)) {
-                        Text(text = name, modifier = Modifier
+                    Text(
+                        text = name, modifier = Modifier
                             .padding(4.dp)
-                        )
-                        AsyncImage(
-                            model =  photoUrl,
-                            contentDescription = name,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(4.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                        )
-                        Button(
-                            onClick = { onConfirm() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.CenterHorizontally)
-                        ) {
-                            Text(text = "Confirmar Viaje")
-                        }
+                    )
+                    AsyncImage(
+                        model = photoUrl,
+                        contentDescription = name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(4.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                    Button(
+                        onClick = { onConfirm() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Confirmar Viaje")
                     }
                 }
-
-
-                IconButton(
-                    onClick = { onDismiss() },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd))
-                {
-                    Icon(
-                        Icons.Outlined.Cancel,
-                        contentDescription = Icons.Outlined.Cancel.toString(),
-                    )
-                }
-
             }
+
+
+            IconButton(
+                onClick = { onDismiss() },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+            )
+            {
+                Icon(
+                    Icons.Outlined.Cancel,
+                    contentDescription = Icons.Outlined.Cancel.toString(),
+                )
+            }
+
         }
     }
+
 }

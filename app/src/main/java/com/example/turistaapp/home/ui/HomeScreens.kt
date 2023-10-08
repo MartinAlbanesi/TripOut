@@ -25,7 +25,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     nearbyLocations: List<NearbyLocation>,
     nearbyLocationSelect: NearbyLocation?,
-    onCardSelection : (String) -> Unit
+    onCardSelection: (String) -> Unit
 ) {
     val mapUiSettings by remember {
         mutableStateOf(
@@ -76,7 +76,6 @@ fun HomeScreen(
                 TripDialog(
                     name = nearbyLocationSelect.name,
                     photoUrl = nearbyLocationSelect.photoUrl,
-                    isShow = showDialog,
                     onDismiss = { showDialog = false },
                     onConfirm = { showDialog = false }
                 )
