@@ -19,7 +19,6 @@ class NearbySearchLocationApiServiceTest {
     @Before
     fun setUp() {
         mockWebServer = MockWebServer()
-        mockWebServer.start()
         nearbySearchLocationApiService = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
             .addConverterFactory(GsonConverterFactory.create())
