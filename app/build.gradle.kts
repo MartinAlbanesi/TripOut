@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,6 +24,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties()
+        properties.load(FileInputStream(rootProject.file("local.properties")))
+
+        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

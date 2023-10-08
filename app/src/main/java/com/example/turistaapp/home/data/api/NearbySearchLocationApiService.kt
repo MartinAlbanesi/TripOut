@@ -1,5 +1,6 @@
 package com.example.turistaapp.home.data.api
 
+import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,7 +13,7 @@ interface NearbySearchLocationApiService {
         @Query("location") location: String,
         @Query("radius") radius: Int = 5000,
         @Query("type") type: String = "point_of_interest",
-        @Query("key") apiKey: String = "AIzaSyCPj0hmVS-0SKTDWGFNCgPdkQSFuQnD4Ps"
+        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY
     ): Response<NearbySearchLocationApi>
 
 }
