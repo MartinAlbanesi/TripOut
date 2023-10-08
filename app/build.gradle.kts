@@ -107,6 +107,9 @@ dependencies {
     //mockk
     testImplementation ("io.mockk:mockk:1.12.2")
 
+    //Mock web Server
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
 
 }
 
