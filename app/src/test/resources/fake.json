@@ -1,0 +1,109 @@
+{
+  "html_attributions": [],
+  "next_page_token": "ATJ83zg1W4-u0EkA57-fBmuMJ4wXo0c2qwzrFwW3wdz1k4IAOEfTEKSsi-6vyiy1Gm9xOhS7Qpynm971OgeUl2lSdaS0oqe-iansO57QCvEKjqaz31ijScyDnmKLCW9WdvV-tTYe1i_T7I-eAMA51WZXy0xeYJ6FFiQvVfHCtVjRc75JHNK8ALV_T6EvqZnAqR40E7LnFXEqGIyVnzharnc9BkJQjrGHd5qWusndANBHGFO181NQDS8iUTeFiaNO9Ne33vCJSsiFxT_p21b3AQ2QG-6BmDszyoEgTx7mpCDEzgP-a_iNxP_zQGe-q4I10iVT34JxUgSdOEGDE1LMKIjf2sw5tUmdpOibVsrOeHPjG1gqskb9H97aNF-zhO4cF4YFGlSJEk1CVN87IU2DKIu5vPjYV3ZDJ_IrtTGPuRsOdOhVfBa8x3nQAvoOUy6XtrZjFXdhLw",
+  "results": [
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": -34.67075759999999,
+          "lng": -58.5628052
+        },
+        "viewport": {
+          "northeast": {
+            "lat": -34.66942796970849,
+            "lng": -58.5614300697085
+          },
+          "southwest": {
+            "lat": -34.67212593029149,
+            "lng": -58.56412803029151
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/school-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet",
+      "name": "Universidad Nacional de La Matanza",
+      "opening_hours": {
+        "open_now": true
+      },
+      "photos": [
+        {
+          "height": 880,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/103857347021436002155\">Universidad Nacional de La Matanza</a>"
+          ],
+          "photo_reference": "ATJ83zgiHsPdV55_pzcDhFJtGFh7D1Z5d6TDtN5RwR-dDoaTlG3-IE5kaevCnMTruFrTTqvsk3nbiM3Q_NoyenErVw8j72jNWqIhSksR4Ctx1tGHsZd6JlTC4xoDYx1AMhf5anvTsCj9fZwpboRqGRvchvcNzr1Izs3KmKqkORKxJGHrYsaO",
+          "width": 1417
+        }
+      ],
+      "place_id": "ChIJg3DvwyzGvJUR5a1fQn8QZ4g",
+      "plus_code": {
+        "compound_code": "8CHP+MV San Justo, Provincia de Buenos Aires, Argentina",
+        "global_code": "48Q38CHP+MV"
+      },
+      "rating": 4.8,
+      "reference": "ChIJg3DvwyzGvJUR5a1fQn8QZ4g",
+      "scope": "GOOGLE",
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "user_ratings_total": 7281,
+      "vicinity": "Florencio Varela 1903, San Justo"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": -34.67075759999999,
+          "lng": -58.5628052
+        },
+        "viewport": {
+          "northeast": {
+            "lat": -34.66942796970849,
+            "lng": -58.5614300697085
+          },
+          "southwest": {
+            "lat": -34.67212593029149,
+            "lng": -58.56412803029151
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/school-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/school_pinlet",
+      "name": "Universidad Nacional de La Matanza",
+      "opening_hours": {
+        "open_now": true
+      },
+      "photos": [
+        {
+          "height": 880,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/103857347021436002155\">Universidad Nacional de La Matanza</a>"
+          ],
+          "photo_reference": "ATJ83zgiHsPdV55_pzcDhFJtGFh7D1Z5d6TDtN5RwR-dDoaTlG3-IE5kaevCnMTruFrTTqvsk3nbiM3Q_NoyenErVw8j72jNWqIhSksR4Ctx1tGHsZd6JlTC4xoDYx1AMhf5anvTsCj9fZwpboRqGRvchvcNzr1Izs3KmKqkORKxJGHrYsaO",
+          "width": 1417
+        }
+      ],
+      "place_id": "ChIJg3DvwyzGvJUR5a1fQn8QZ4g",
+      "plus_code": {
+        "compound_code": "8CHP+MV San Justo, Provincia de Buenos Aires, Argentina",
+        "global_code": "48Q38CHP+MV"
+      },
+      "rating": 4.8,
+      "reference": "ChIJg3DvwyzGvJUR5a1fQn8QZ4g",
+      "scope": "GOOGLE",
+      "types": [
+        "university",
+        "point_of_interest",
+        "establishment"
+      ],
+      "user_ratings_total": 7281,
+      "vicinity": "Florencio Varela 1903, San Justo"
+    }
+  ],
+  "status": "OK"
+}

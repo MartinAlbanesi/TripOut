@@ -1,4 +1,4 @@
-package com.example.turistaapp.fake.home.domain
+package com.example.turistaapp.home.fake
 
 import com.example.turistaapp.home.domain.models.NearbyLocation
 

@@ -1,6 +1,6 @@
 package com.example.turistaapp.home.domain
 
-import com.example.turistaapp.fake.home.domain.FakeDataStore
+import com.example.turistaapp.home.fake.FakeDataStore
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
