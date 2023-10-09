@@ -1,8 +1,26 @@
 package com.example.turistaapp.home.fake
 
+import com.example.turistaapp.home.data.api.model.GeometryApi
+import com.example.turistaapp.home.data.api.model.LocationApi
+import com.example.turistaapp.home.data.api.model.NearbyLocationApi
+import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
 import com.example.turistaapp.home.domain.models.NearbyLocation
 
 object FakeDataStore {
+
+    val fakeNearbyLocationApi = NearbySearchLocationApi(
+        nearbyLocationApis = listOf(
+            NearbyLocationApi(
+                geometryApi = GeometryApi(LocationApi(0.0, 0.0)),
+                name = "name1",
+                photoApis = null,
+                rating = 0.0,
+                userRatings = 0,
+                direction = "direction"
+            )
+        )
+    )
+
 
     val fakeNearbyLocations = listOf(
         NearbyLocation(

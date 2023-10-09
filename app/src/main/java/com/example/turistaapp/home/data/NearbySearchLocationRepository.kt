@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 interface INearbySearchLocationRepository {
 
-    suspend fun getNearbyLocation(location: String): List<NearbyLocation>
+    suspend fun getNearbyLocation(location: String): List<NearbyLocation>?
 
 }
 
@@ -16,7 +16,7 @@ class NearbySearchLocationRepository @Inject constructor(
 
     override suspend fun getNearbyLocation(
         location: String
-    ): List<NearbyLocation> {
+    ): List<NearbyLocation>? {
 
         val api = nearbySearchLocationApiService.searchNearbyPlaces(location)
 
@@ -32,9 +32,9 @@ class NearbySearchLocationRepository @Inject constructor(
                     lng = it.getLng()
                 )
             }
-            return nearbyLocations ?: emptyList()
+            return nearbyLocations
         }
-        return emptyList()
+        return null
     }
 
 }
