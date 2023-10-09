@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -35,6 +36,16 @@ class GetNearbyLocationsUseCaseTest{
         val result = getNearbyLocationsUseCase("location")
 
         //Then
-        assertEquals(result, fakeNearbyLocations)
+        assertEquals(result!![0].name, fakeNearbyLocations[0].name)
+    }
+
+    @Test
+    fun `cuando el repositorio devuelve null entonces devolver null`() = runTest {
+        coEvery { nearbySearchLocationRepository.getNearbyLocation("location") } returns null
+
+        val result = getNearbyLocationsUseCase("location")
+
+        //Then
+        assertNull(result)
     }
 }

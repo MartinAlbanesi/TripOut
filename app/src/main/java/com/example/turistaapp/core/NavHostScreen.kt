@@ -20,7 +20,7 @@ fun NavHostScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
 
-    val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(emptyList())
+    val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(null)
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
 
@@ -28,7 +28,7 @@ fun NavHostScreen(
         composable(Routes.Home.route){
             HomeScreen(
                 paddingValues,
-                nearbyLocations,
+                nearbyLocations!!,
                 nearbyLocationSelect,
                 onCardSelection = { homeViewModel.setNearbyLocationSelect(it)}
             )

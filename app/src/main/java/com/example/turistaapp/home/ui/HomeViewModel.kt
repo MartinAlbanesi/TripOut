@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase
 ) : ViewModel() {
 
-    private val _nearbyLocationsApi = MutableStateFlow<List<NearbyLocation>>(emptyList())
+    private val _nearbyLocationsApi = MutableStateFlow<List<NearbyLocation>?>(null)
     val nearbyLocations = _nearbyLocationsApi.asStateFlow()
 
     private val _nearbyLocationSelect = MutableStateFlow<NearbyLocation?>(null)
@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getNearbyLocationByName(name: String) : NearbyLocation? {
-        return nearbyLocations.value.find { it.name == name }
+        return if(nearbyLocations.value != null) nearbyLocations.value!!.find { it.name == name } else null
     }
 
     fun setNearbyLocationSelect(nearbyLocationName: String) {
