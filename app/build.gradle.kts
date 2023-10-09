@@ -122,7 +122,8 @@ dependencies {
     //Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 
-
+    //turbine
+    testImplementation ("app.cash.turbine:turbine:1.0.0")
 }
 
 kapt {
