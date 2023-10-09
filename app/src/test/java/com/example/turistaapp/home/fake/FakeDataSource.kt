@@ -6,7 +6,7 @@ import com.example.turistaapp.home.data.api.model.NearbyLocationApi
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
 import com.example.turistaapp.home.domain.models.NearbyLocation
 
-object FakeDataStore {
+object FakeDataSource {
 
     val fakeNearbyLocationApi = NearbySearchLocationApi(
         nearbyLocationApis = listOf(

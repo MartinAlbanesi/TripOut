@@ -2,7 +2,7 @@ package com.example.turistaapp.home.data
 
 import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
-import com.example.turistaapp.home.fake.FakeDataStore
+import com.example.turistaapp.home.fake.FakeDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -31,7 +31,7 @@ class NearbySearchLocationRepositoryTest{
     @Test
     fun getNearbyLocation_serviceReturnResponseFromApi_returnNearbyLocationList() = runTest {
         //Given
-        val fakeNearbyLocations = FakeDataStore.fakeNearbyLocationApi
+        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocationApi
 
         val response = Response.success(fakeNearbyLocations)
 

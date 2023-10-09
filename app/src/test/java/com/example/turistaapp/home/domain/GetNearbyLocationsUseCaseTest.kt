@@ -1,6 +1,6 @@
 package com.example.turistaapp.home.domain
 
-import com.example.turistaapp.home.fake.FakeDataStore
+import com.example.turistaapp.home.fake.FakeDataSource
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -27,7 +27,7 @@ class GetNearbyLocationsUseCaseTest{
     @Test
     fun `cuando el repositorio no tiene ningun error devolver la lista de NearbyLocation`() = runTest {
 
-        val fakeNearbyLocations = FakeDataStore.fakeNearbyLocations
+        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
 
         //Given
         coEvery { nearbySearchLocationRepository.getNearbyLocation("location") } returns fakeNearbyLocations
