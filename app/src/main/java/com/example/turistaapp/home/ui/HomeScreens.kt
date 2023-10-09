@@ -1,16 +1,23 @@
 package com.example.turistaapp.home.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import com.example.turistaapp.home.ui.components.SheetContent
 import com.example.turistaapp.home.ui.components.TripDialog
@@ -23,7 +30,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    nearbyLocations: List<NearbyLocation>,
+    nearbyLocations: ResponseUiState,
     nearbyLocationSelect: NearbyLocation?,
     onCardSelection: (String) -> Unit
 ) {
@@ -54,14 +61,40 @@ fun HomeScreen(
 
         //Lo que va dentro del BottomSheet
         sheetContent = {
-            SheetContent(
-                paddingValues = paddingValues,
-                nearbyLocations = nearbyLocations,
-                onClickCard = {
-                    showDialog = true
-                    onCardSelection(it)
+            when (nearbyLocations) {
+                is ResponseUiState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .size(200.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = nearbyLocations.message,
+                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                        )
+                    }
                 }
-            )
+
+                ResponseUiState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(bottom = paddingValues.calculateBottomPadding())
+                            .size(100.dp)
+                    )
+                }
+
+                is ResponseUiState.Success<*> -> {
+                    SheetContent(
+                        paddingValues = paddingValues,
+                        nearbyLocations = nearbyLocations.values as List<NearbyLocation>,
+                        onClickCard = {
+                            showDialog = true
+                            onCardSelection(it)
+                        }
+                    )
+                }
+            }
+
         },
     ) {
         MapScreen(

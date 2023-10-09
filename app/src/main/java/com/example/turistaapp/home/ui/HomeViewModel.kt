@@ -2,6 +2,7 @@ package com.example.turistaapp.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.getLocationString
 import com.example.turistaapp.home.data.api.model.LocationApi
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
@@ -18,7 +19,7 @@ class HomeViewModel @Inject constructor(
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase
 ) : ViewModel() {
 
-    private val _nearbyLocationsApi = MutableStateFlow<List<NearbyLocation>?>(null)
+    private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
     val nearbyLocations = _nearbyLocationsApi.asStateFlow()
 
     private val _nearbyLocationSelect = MutableStateFlow<NearbyLocation?>(null)
@@ -27,14 +28,24 @@ class HomeViewModel @Inject constructor(
     init {
         setNearbyLocations(LocationApi(-34.67113975510375, -58.56181551536259))
     }
-    fun setNearbyLocations(locationApi : LocationApi) {
+
+    fun setNearbyLocations(locationApi: LocationApi) {
+
         viewModelScope.launch(Dispatchers.IO) {
-            _nearbyLocationsApi.value = getNearbyLocationsUseCase(getLocationString(locationApi))
+            try {
+                _nearbyLocationsApi.value =
+                    ResponseUiState.Success(getNearbyLocationsUseCase(getLocationString(locationApi)))
+            }catch (e : Exception) {
+                _nearbyLocationsApi.value = ResponseUiState.Error(e.message.toString())
+            }
         }
+
     }
 
-    private fun getNearbyLocationByName(name: String) : NearbyLocation? {
-        return if(nearbyLocations.value != null) nearbyLocations.value!!.find { it.name == name } else null
+    private fun getNearbyLocationByName(name: String): NearbyLocation? {
+        val nearbyLocation =
+            (nearbyLocations.value as ResponseUiState.Success<List<NearbyLocation>>).values
+        return nearbyLocation.find { it.name == name }
     }
 
     fun setNearbyLocationSelect(nearbyLocationName: String) {
