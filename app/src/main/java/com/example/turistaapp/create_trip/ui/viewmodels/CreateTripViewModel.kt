@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.data.database.entities.CoordinateEntity
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
+import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTripViewModel @Inject constructor(
-    private val insertTripUseCase: InsertTripUseCase
+    private val insertTripUseCase: InsertTripUseCase,
+    private val getPlaceAutocompleteLocationsUseCase: GetPlaceAutocompleteLocationsUseCase
 ) : ViewModel() {
 
     //Viajes que se muestran en la lazy list
