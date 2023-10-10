@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
+import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import java.util.*
@@ -33,9 +35,22 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
     //Nombre del Viaje
     val tripName by createTripViewModel.name.observeAsState("")
 
-    //Origen y Destino
-    val origin by createTripViewModel.origin.observeAsState("")
-    val destination by createTripViewModel.destination.observeAsState("")
+    //Origen
+    val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
+    val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
+        false
+    )
+    val originPredictions by createTripViewModel.destinationPredictions.observeAsState(emptyList())
+
+    //Destino
+    val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
+    val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
+        false
+    )
+    val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(emptyList())
+
+    //val origin by createTripViewModel.origin.observeAsState("")
+    //val destination by createTripViewModel.destination.observeAsState("")
 
     //Fechas
     val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
@@ -74,28 +89,30 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
     val destinationFocusRequester by createTripViewModel.destinationFocusRequester.observeAsState(
         FocusRequester()
     )
-    val membersFocusRequester by createTripViewModel.membersFocusRequester.observeAsState(
-        FocusRequester()
-    )
     val descriptionFocusRequester by createTripViewModel.descriptionFocusRequester.observeAsState(
         FocusRequester()
     )
+
 
     TripFormContent(
         innerPadding,
         tripName = tripName,
         onNameChange = { createTripViewModel.onNameChange(it) },
-        origin = origin,
-        onOriginChange = { createTripViewModel.onOriginChange(it) },
-        destination = destination,
-        onDestinationChange = { createTripViewModel.onDestinationChange(it) },
+        //origin = originAutocompleteQuery,
+        //onOriginChange = { createTripViewModel.onOriginChange(it) },
+        //destination = originAutocompleteQuery,
+        //onDestinationChange = { createTripViewModel.onDestinationChange(it) },
         startDate = startDate,
         endDate = endDate,
         dateRangePickerState = dateRangePickerState,
         showDateRangePickerDialog = showDateRangePickerDialog,
         onDismissDateRangePickerDialog = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
         onConfirmDateRangePickerDialog = {
-            dateRangePickerState.selectedStartDateMillis?.let { createTripViewModel.onStartDateChange(it) }
+            dateRangePickerState.selectedStartDateMillis?.let {
+                createTripViewModel.onStartDateChange(
+                    it
+                )
+            }
             dateRangePickerState.selectedEndDateMillis?.let { createTripViewModel.onEndDateChange(it) }
             createTripViewModel.onShowDateRangePickerDialogChange(it)
         },
@@ -129,8 +146,31 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onCreateTripClick = { createTripViewModel.onCreateTripClick() },
         originFocusRequester = originFocusRequester,
         destinationFocusRequester = destinationFocusRequester,
-        membersFocusRequester = membersFocusRequester,
-        descriptionFocusRequester = descriptionFocusRequester
+        descriptionFocusRequester = descriptionFocusRequester,
+        originAutocompleteQuery = originAutocompleteQuery,
+        onOriginAutocompleteQueryValueChange = {
+            createTripViewModel.onOriginAutocompleteQueryValueChange(it)
+        },
+        isOriginAutocompleteDropdownVisible = isOriginAutocompleteDropdownVisible,
+        onOriginAutocompleteDropdownVisibilityChange = {
+            createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
+        },
+        originAutocompletePredictions = originPredictions,
+        onOriginAutocompletePredictionSelect = {
+            createTripViewModel.onOriginAutocompletePredictionSelect(it)
+        },
+        destinationAutocompleteQuery = destinationAutocompleteQuery,
+        onDestinationAutocompleteQueryValueChange = {
+            createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
+        },
+        isDestinationAutocompleteDropdownVisible = isDestinationAutocompleteDropdownVisible,
+        onDestinationAutocompleteDropdownVisibilityChange = {
+            createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(it)
+        },
+        destinationAutocompletePredictions = destinationPredictions,
+        onDestinationAutocompletePredictionSelect = {
+            createTripViewModel.onDestinationAutocompletePredictionSelect(it)
+        },
     )
 }
 
@@ -140,10 +180,10 @@ fun TripFormContent(
     innerPadding: PaddingValues,
     tripName: String,
     onNameChange: (String) -> Unit,
-    origin: String,
-    onOriginChange: (String) -> Unit,
-    destination: String,
-    onDestinationChange: (String) -> Unit,
+    //origin: String,
+    //onOriginChange: (String) -> Unit,
+    //destination: String,
+    //onDestinationChange: (String) -> Unit,
     startDate: Long,
     endDate: Long,
     dateRangePickerState: DateRangePickerState,
@@ -174,8 +214,19 @@ fun TripFormContent(
     onCreateTripClick: () -> Unit,
     originFocusRequester: FocusRequester,
     destinationFocusRequester: FocusRequester,
-    membersFocusRequester: FocusRequester,
-    descriptionFocusRequester: FocusRequester
+    descriptionFocusRequester: FocusRequester,
+    originAutocompleteQuery: String,
+    onOriginAutocompleteQueryValueChange: (String) -> Unit,
+    isOriginAutocompleteDropdownVisible: Boolean,
+    onOriginAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
+    originAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
+    onOriginAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
+    destinationAutocompleteQuery: String,
+    onDestinationAutocompleteQueryValueChange: (String) -> Unit,
+    isDestinationAutocompleteDropdownVisible: Boolean,
+    onDestinationAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
+    destinationAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
+    onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -184,6 +235,7 @@ fun TripFormContent(
             .padding(8.dp)
     ) {
         item {
+
             // Nombre del Viaje
             TextInputField(
                 label = "Nombre del Viaje",
@@ -196,6 +248,37 @@ fun TripFormContent(
             Spacer(modifier = Modifier.size(4.dp))
 
             // Origen y Destino
+            //Buscador de lugares
+            /*
+            PlaceAutocompleteField(
+                label = "Origen",
+                query = originAutocompleteQuery,
+                onQueryChange = onOriginAutocompleteQueryValueChange,
+                isDropdownVisible = isOriginAutocompleteDropdownVisible,
+                onDropdownVisibilityChange = onOriginAutocompleteDropdownVisibilityChange,
+                predictions = originAutocompletePredictions,
+                onPredictionSelect = onOriginAutocompletePredictionSelect,
+                focusRequester = originFocusRequester,
+                imeAction = ImeAction.Next
+            )
+
+             */
+
+            Spacer(modifier = Modifier.size(4.dp))
+
+            PlaceAutocompleteField(
+                label = "Destino",
+                query = destinationAutocompleteQuery,
+                onQueryChange = onDestinationAutocompleteQueryValueChange,
+                isDropdownVisible = isDestinationAutocompleteDropdownVisible,
+                onDropdownVisibilityChange = onDestinationAutocompleteDropdownVisibilityChange,
+                predictions = destinationAutocompletePredictions,
+                onPredictionSelect = onDestinationAutocompletePredictionSelect,
+                focusRequester = destinationFocusRequester,
+                imeAction = ImeAction.Next
+            )
+
+            /*
             TextInputField(
                 label = "Origen",
                 textValue = origin,
@@ -204,8 +287,6 @@ fun TripFormContent(
                 imeAction = ImeAction.Next
             )
 
-            Spacer(modifier = Modifier.size(4.dp))
-
             TextInputField(
                 label = "Destino",
                 textValue = destination,
@@ -213,6 +294,8 @@ fun TripFormContent(
                 focusRequester = membersFocusRequester,
                 imeAction = ImeAction.Next
             )
+
+             */
 
             Spacer(modifier = Modifier.size(4.dp))
 

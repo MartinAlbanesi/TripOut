@@ -1,14 +1,16 @@
 package com.example.turistaapp.create_trip.domain
 
-import com.example.turistaapp.create_trip.data.PlacesAutocompleteLocationRepository
-import com.example.turistaapp.create_trip.domain.models.PlaceAutocompleteModel
+import android.util.Log
+import com.example.turistaapp.create_trip.data.IPlaceAutocompleteLocationRepository
+import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import javax.inject.Inject
 
 class GetPlaceAutocompleteLocationsUseCase @Inject constructor(
-    private val placeAutocompleteRepository: PlacesAutocompleteLocationRepository
+    private val placeAutocompleteRepository: IPlaceAutocompleteLocationRepository
 ) {
 
-    suspend operator fun invoke(location: String): List<PlaceAutocompleteModel>? {
+    suspend operator fun invoke(location: String): List<PlaceAutocompletePredictionModel>? {
+        Log.d("GetPlaceAutocompleteLocationsUseCase", placeAutocompleteRepository.getPlaceAutocompleteLocations(location).toString())
         return placeAutocompleteRepository.getPlaceAutocompleteLocations(location)
     }
 }

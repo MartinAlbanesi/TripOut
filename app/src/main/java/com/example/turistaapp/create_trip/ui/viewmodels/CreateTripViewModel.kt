@@ -10,6 +10,7 @@ import com.example.turistaapp.create_trip.data.database.entities.CoordinateEntit
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
+import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,7 @@ class CreateTripViewModel @Inject constructor(
         _name.value = name.toString()
     }
 
+
     //Lugares del viaje
     private var _origin = MutableLiveData("")
     val origin: LiveData<String> = _origin
@@ -44,7 +46,7 @@ class CreateTripViewModel @Inject constructor(
     private var _destination = MutableLiveData("")
     val destination: LiveData<String> = _destination
     fun onDestinationChange(destination: String) {
-        _destination.value = destination.toString()
+        _destination.value = destination
     }
 
 
@@ -211,9 +213,6 @@ class CreateTripViewModel @Inject constructor(
     private var _destinationFocusRequester = MutableLiveData(FocusRequester())
     val destinationFocusRequester: LiveData<FocusRequester> = _destinationFocusRequester
 
-    private var _membersFocusRequester = MutableLiveData(FocusRequester())
-    val membersFocusRequester: LiveData<FocusRequester> = _membersFocusRequester
-
     private var _descriptionFocusRequester = MutableLiveData(FocusRequester())
     val descriptionFocusRequester: LiveData<FocusRequester> = _descriptionFocusRequester
 
@@ -226,6 +225,78 @@ class CreateTripViewModel @Inject constructor(
         }
     }
     */
+
+
+    //Datos de origen para el autocomplete
+
+    private val _originQuery = MutableLiveData("")
+    val originQuery: LiveData<String> get() = _originQuery
+
+    private val _originPredictions = MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
+    val originPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _originPredictions
+
+    fun onOriginAutocompleteQueryValueChange(newQuery: String) {
+        _originQuery.value = newQuery
+        searchOriginPlaces(newQuery)
+    }
+
+    private fun searchOriginPlaces(query: String) {
+        viewModelScope.launch {
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            _originPredictions.value = newPredictions
+        }
+    }
+
+    private var _isOriginAutocompleteDropdownVisible = MutableLiveData(false)
+    val isOriginAutocompleteDropdownVisible: LiveData<Boolean> = _isOriginAutocompleteDropdownVisible
+
+    fun onOriginAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
+        _isOriginAutocompleteDropdownVisible.value = isVisible
+    }
+
+    fun onOriginAutocompletePredictionSelect(prediction: PlaceAutocompletePredictionModel) {
+        _originQuery.value = prediction.description
+        _isOriginAutocompleteDropdownVisible.value = false
+    }
+
+    //Datos de destino para el autocomplete
+
+    private val _destinationQuery = MutableLiveData("")
+    val destinationQuery: LiveData<String> get() = _destinationQuery
+
+    private val _destinationPredictions = MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
+    val destinationPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _destinationPredictions
+
+    fun onDestinationAutocompleteQueryValueChange(newQuery: String) {
+        _destinationQuery.value = newQuery
+        searchDestinationPlaces(newQuery)
+    }
+
+    private fun searchDestinationPlaces(query: String) {
+        viewModelScope.launch {
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            _destinationPredictions.value = newPredictions
+        }
+    }
+
+    private fun searchdestinationPlaces(query: String) {
+        viewModelScope.launch {
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            _destinationPredictions.value = newPredictions
+        }
+    }
+
+    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(false)
+    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> = _isDestinationAutocompleteDropdownVisible
+
+    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
+        _isDestinationAutocompleteDropdownVisible.value = isVisible
+    }
+
+    fun onDestinationAutocompletePredictionSelect(prediction: PlaceAutocompletePredictionModel) {
+        _destinationQuery.value = prediction.description
+        _isDestinationAutocompleteDropdownVisible.value = false
+    }
 
 
 }
