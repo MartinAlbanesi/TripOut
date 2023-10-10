@@ -33,17 +33,17 @@ class HomeViewModel @Inject constructor(
     fun setNearbyLocations(lat : Double, lng : Double) {
 
         viewModelScope.launch(dispatcher) {
-            try {
+//            try {
                 val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat,lng))
+
                 if(nearbyLocations.isNullOrEmpty()){
                     _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))
                 }else{
                     _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
-
                 }
-            }catch (e : Exception) {
-                _nearbyLocationsApi.value = ResponseUiState.Error(e.message.toString())
-            }
+//            }catch (e : Exception) {
+//                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
+//            }
         }
 
     }

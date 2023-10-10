@@ -1,17 +1,15 @@
 package com.example.turistaapp.home.ui
 
-import app.cash.turbine.test
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
-import com.example.turistaapp.home.domain.models.NearbyLocation
 import com.example.turistaapp.home.fake.FakeDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -33,7 +31,7 @@ class HomeViewModelTest {
     @Test
     fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnNull_thenNearbyLocationsIsError() = runTest {
 
-        coEvery { getNearbyLocationsUseCase("") } returns null
+        coEvery { getNearbyLocationsUseCase(any()) } returns null
 
         homeViewModel.setNearbyLocations(0.0,0.0)
 
@@ -48,16 +46,31 @@ class HomeViewModelTest {
     @Test
     fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnList_thenNearbyLocationsIsSuccess() = runTest {
 
-        coEvery { getNearbyLocationsUseCase("") } returns FakeDataSource.fakeNearbyLocations
+        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
+
+        coEvery { getNearbyLocationsUseCase(any()) } returns fakeNearbyLocations
 
         homeViewModel.setNearbyLocations(0.0,0.0)
 
         val expected = ResponseUiState.Success(FakeDataSource.fakeNearbyLocations)
 
-        homeViewModel.nearbyLocations.test {
-            var actual = awaitItem()
-
-            assertEquals(expected,actual)
-        }
+        val actual = homeViewModel.nearbyLocations.value
+        assertEquals(expected,actual)
     }
+
+//    @Test
+//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnException_thenNearbyLocationsIsErrorWithMessageException() = runTest {
+//
+//        coEvery { getNearbyLocationsUseCase(any()) }.throws( IndexOutOfBoundsException("Error"))
+//
+//        homeViewModel.setNearbyLocations(0.0,0.0)
+//
+//        val expected = ResponseUiState.Error("Error")
+//
+//        val actual = homeViewModel.nearbyLocations.value
+////        assertEquals(expected,actual)
+//        assertThrows(IndexOutOfBoundsException::class.java) {
+//            throw IndexOutOfBoundsException("Error")
+//        }
+//    }
 }

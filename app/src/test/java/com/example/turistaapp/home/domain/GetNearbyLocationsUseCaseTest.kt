@@ -30,10 +30,10 @@ class GetNearbyLocationsUseCaseTest{
         val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
 
         //Given
-        coEvery { nearbySearchLocationRepository.getNearbyLocation("location") } returns fakeNearbyLocations
+        coEvery { nearbySearchLocationRepository.getNearbyLocation(any()) } returns fakeNearbyLocations
 
         //When
-        val result = getNearbyLocationsUseCase("location")
+        val result = getNearbyLocationsUseCase("")
 
         //Then
         assertEquals(result!![0].name, fakeNearbyLocations[0].name)
@@ -41,9 +41,9 @@ class GetNearbyLocationsUseCaseTest{
 
     @Test
     fun `cuando el repositorio devuelve null entonces devolver null`() = runTest {
-        coEvery { nearbySearchLocationRepository.getNearbyLocation("location") } returns null
+        coEvery { nearbySearchLocationRepository.getNearbyLocation(any()) } returns null
 
-        val result = getNearbyLocationsUseCase("location")
+        val result = getNearbyLocationsUseCase("")
 
         //Then
         assertNull(result)
