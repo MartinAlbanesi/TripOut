@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens.components
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +11,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -41,7 +47,8 @@ fun PlaceAutocompleteField(
     onPredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
     focusRequester: FocusRequester,
     imeAction: ImeAction,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    onClearField : () -> Unit
 ) {
 
     OutlinedTextField(
@@ -51,8 +58,22 @@ fun PlaceAutocompleteField(
         value = query,
         onValueChange = {
             onQueryChange(it)
-            onDropdownVisibilityChange(true)
+            if (it.isEmpty()) {
+                onDropdownVisibilityChange(false)
+            } else {
+                onDropdownVisibilityChange(true)
+            }
         },
+        //Icono de cruz para borrar el texto
+        trailingIcon = {
+            IconButton(
+                onClick = { onClearField() },
+                modifier = Modifier.background(Color.Transparent)
+            ) {
+                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+            }
+        },
+
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = imeAction,
             keyboardType = keyboardType
@@ -62,31 +83,29 @@ fun PlaceAutocompleteField(
             .focusRequester(focusRequester),
     )
 
-    predictions.forEach { prediction ->
-        val description = prediction.description
-        val distance = "Distancia: XXX km" // Reemplaza XXX con la distancia real si tienes esa información disponible
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onPredictionSelect(prediction)
-                    onDropdownVisibilityChange(false)
+    if (isDropdownVisible) {
+        predictions.forEach { prediction ->
+            val description = prediction.description
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onPredictionSelect(prediction)
+                        onDropdownVisibilityChange(false)
 
+                    }
+                    .padding(16.dp)
+            ) {
+                Column {
+                    Text(
+                        text = description ?: "",
+                        style = TextStyle(fontWeight = FontWeight.Bold)
+                    )
                 }
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = description ?: "",
-                    style = TextStyle(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = distance,
-                    style = TextStyle(color = Color.Gray)
-                )
             }
         }
     }
+
 
     /*
     Log.d("PlaceAutocompleteField", "PlaceAutocompleteField: $isDropdownVisible")

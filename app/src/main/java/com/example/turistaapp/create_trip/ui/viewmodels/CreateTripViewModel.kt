@@ -259,6 +259,11 @@ class CreateTripViewModel @Inject constructor(
         _isOriginAutocompleteDropdownVisible.value = false
     }
 
+    fun onClearOriginField(){
+        _originQuery.value = ""
+    }
+
+
     //Datos de destino para el autocomplete
 
     private val _destinationQuery = MutableLiveData("")
@@ -279,13 +284,6 @@ class CreateTripViewModel @Inject constructor(
         }
     }
 
-    private fun searchdestinationPlaces(query: String) {
-        viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
-            _destinationPredictions.value = newPredictions
-        }
-    }
-
     private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(false)
     val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> = _isDestinationAutocompleteDropdownVisible
 
@@ -298,5 +296,8 @@ class CreateTripViewModel @Inject constructor(
         _isDestinationAutocompleteDropdownVisible.value = false
     }
 
+    fun onClearDestinationField(){
+        _destinationQuery.value = ""
+    }
 
 }

@@ -40,7 +40,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
     val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
         false
     )
-    val originPredictions by createTripViewModel.destinationPredictions.observeAsState(emptyList())
+    val originPredictions by createTripViewModel.originPredictions.observeAsState(emptyList())
 
     //Destino
     val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
@@ -159,6 +159,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onOriginAutocompletePredictionSelect = {
             createTripViewModel.onOriginAutocompletePredictionSelect(it)
         },
+        onClearOriginField = { createTripViewModel.onClearOriginField() },
         destinationAutocompleteQuery = destinationAutocompleteQuery,
         onDestinationAutocompleteQueryValueChange = {
             createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
@@ -171,6 +172,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onDestinationAutocompletePredictionSelect = {
             createTripViewModel.onDestinationAutocompletePredictionSelect(it)
         },
+        onClearDestinationField = { createTripViewModel.onClearDestinationField() }
     )
 }
 
@@ -180,10 +182,6 @@ fun TripFormContent(
     innerPadding: PaddingValues,
     tripName: String,
     onNameChange: (String) -> Unit,
-    //origin: String,
-    //onOriginChange: (String) -> Unit,
-    //destination: String,
-    //onDestinationChange: (String) -> Unit,
     startDate: Long,
     endDate: Long,
     dateRangePickerState: DateRangePickerState,
@@ -221,12 +219,14 @@ fun TripFormContent(
     onOriginAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
     originAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
     onOriginAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
+    onClearOriginField: () -> Unit,
     destinationAutocompleteQuery: String,
     onDestinationAutocompleteQueryValueChange: (String) -> Unit,
     isDestinationAutocompleteDropdownVisible: Boolean,
     onDestinationAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
     destinationAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
-    onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit
+    onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
+    onClearDestinationField: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -249,7 +249,6 @@ fun TripFormContent(
 
             // Origen y Destino
             //Buscador de lugares
-            /*
             PlaceAutocompleteField(
                 label = "Origen",
                 query = originAutocompleteQuery,
@@ -259,10 +258,9 @@ fun TripFormContent(
                 predictions = originAutocompletePredictions,
                 onPredictionSelect = onOriginAutocompletePredictionSelect,
                 focusRequester = originFocusRequester,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                onClearField = onClearOriginField
             )
-
-             */
 
             Spacer(modifier = Modifier.size(4.dp))
 
@@ -275,7 +273,8 @@ fun TripFormContent(
                 predictions = destinationAutocompletePredictions,
                 onPredictionSelect = onDestinationAutocompletePredictionSelect,
                 focusRequester = destinationFocusRequester,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                onClearField = onClearDestinationField
             )
 
             /*
