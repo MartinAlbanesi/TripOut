@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.components
+package com.example.turistaapp.create_trip.ui.screens.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TextInputField(
     label: String,
-    textValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    textValue: String,
+    onValueChange: (String) -> Unit,
     focusRequester: FocusRequester,
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text

@@ -31,10 +31,6 @@ android {
         buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
     }
 
-    buildFeatures {
-        buildConfig = true
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -53,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -99,7 +96,11 @@ dependencies {
 
     //Material extend icons
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
-    
+
+    //Room
+    implementation ("androidx.room:room-ktx:2.5.0")
+    kapt ("androidx.room:room-compiler:2.5.0")
+
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")

@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.components
+package com.example.turistaapp.create_trip.ui.screens.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -32,12 +32,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AddList(
+    name: String,
     label: String,
-    values: MutableList<String>
+    values: List<String>,
+    isDialogOpen: Boolean,
+    onValueNameChange: (String) -> Unit,
+    onDialogOpenChange: (Boolean) -> Unit,
+    onAdd: (String) -> Unit,
+    onRemove: (String) -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var isDialogOpen by remember { mutableStateOf(false) }
-
     // Fila con botón de agregar y lista de nombres
     Text(text = label)
     Spacer(modifier = Modifier.size(4.dp))
@@ -48,7 +51,7 @@ fun AddList(
     ) {
         // Botón para abrir el cuadro de diálogo
         IconButton(
-            onClick = { isDialogOpen = true },
+            onClick = {onDialogOpenChange(true)},
             modifier = Modifier.background(MaterialTheme.colorScheme.primary)
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
@@ -72,7 +75,7 @@ fun AddList(
                             .padding(4.dp)
                     )
                     IconButton(
-                        onClick = { values.remove(name) },
+                        onClick = { onRemove(name) },
                         modifier = Modifier.background(MaterialTheme.colorScheme.primary)
                     ) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = null)
@@ -87,14 +90,13 @@ fun AddList(
     if (isDialogOpen) {
         AlertDialog(
             onDismissRequest = {
-                isDialogOpen = false
-                name = ""
+                onDialogOpenChange(false)
             },
             title = { Text("Agregar $label") },
             text = {
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = { onValueNameChange(it) },
                     singleLine = true,
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth()
@@ -104,9 +106,8 @@ fun AddList(
                 Button(
                     onClick = {
                         if (name.isNotBlank()) {
-                            values.add(name)
-                            name = ""
-                            isDialogOpen = false
+                            onAdd(name)
+                            onDialogOpenChange(false)
                         }
                     }
                 ) {
@@ -116,8 +117,7 @@ fun AddList(
             dismissButton = {
                 Button(
                     onClick = {
-                        isDialogOpen = false
-                        name = ""
+                        onDialogOpenChange(false)
                     }
                 ) {
                     Text("Cancelar")
