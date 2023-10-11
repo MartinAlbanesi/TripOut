@@ -3,6 +3,7 @@ package com.example.turistaapp.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.turistaapp.core.utils.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,6 +23,13 @@ class MainViewModel @Inject constructor(
 
     private val _showFloatingActionButton = MutableLiveData(true)
     val showFloatingActionButton : LiveData<Boolean> = _showFloatingActionButton
+
+    private val _route = MutableLiveData(Routes.Home.route)
+    val route : LiveData<String> = _route
+
+    fun setRoute(route : String){
+        _route.value = route
+    }
 
     fun setIndex(index : Int){
         _indexSelect.value = index

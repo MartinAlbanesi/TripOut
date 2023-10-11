@@ -20,17 +20,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.turistaapp.utils.Routes
+import com.example.turistaapp.core.NavHostScreen
+import com.example.turistaapp.core.utils.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(mainViewModel: MainViewModel) {
+fun MainScreen(
+    mainViewModel: MainViewModel = hiltViewModel()
+) {
 
     val navController = rememberNavController()
     val index by mainViewModel.indexSelect.observeAsState(1)
     val title by mainViewModel.titleAppBar.observeAsState("Home")
+    val route by mainViewModel.route.observeAsState(Routes.Home.route)
 
     val showBottomBar by mainViewModel.showBottomBar.observeAsState(true)
     val showFloatingActionButton by mainViewModel.showFloatingActionButton.observeAsState(true)
@@ -38,7 +43,10 @@ fun MainScreen(mainViewModel: MainViewModel) {
     Scaffold(
         topBar = {
             TopBarScreen(
-                title = title
+                title = title,
+                onClickNavigation = {
+                    navController.navigate(route)
+                }
             )
         },
         bottomBar = {
@@ -57,6 +65,7 @@ fun MainScreen(mainViewModel: MainViewModel) {
                     mainViewModel.setTitle("Crea y Viaja")
                     mainViewModel.setShowFloatingActionButton(false)
                     mainViewModel.setShowBottomBar(false)
+                    mainViewModel.setRoute(Routes.Home.route)
                 }
             }
         },
@@ -71,6 +80,7 @@ fun TopBarScreen(
     title: String,
     iconsNavigation: ImageVector = Icons.Outlined.ArrowBack,
     iconsAction: List<ImageVector> = emptyList(),
+    onClickNavigation: () -> Unit,
 ) {
 
     TopAppBar(
@@ -121,7 +131,7 @@ fun BottomBarScreen(
         NavigationBarItem(
             selected = index == 2,
             onClick = {
-                navController.navigate(Routes.Viajes.route)
+                navController.navigate(Routes.Trips.route)
                 changeIndex(2)
             },
             icon = {
@@ -132,7 +142,7 @@ fun BottomBarScreen(
         NavigationBarItem(
             selected = index == 3,
             onClick = {
-                navController.navigate(Routes.Configuraciones.route)
+                navController.navigate(Routes.Settings.route)
                 changeIndex(3)
             },
             icon = {
