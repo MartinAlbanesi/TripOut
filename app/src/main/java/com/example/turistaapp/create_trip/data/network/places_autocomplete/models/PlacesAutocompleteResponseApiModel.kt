@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class PlacesAutocompleteResponseApiModel(
     @SerializedName("predictions") val placesAutocompletePredictionsApi: List<PlaceAutocompletePredictionApiModel>,
-    @SerializedName("status") val statusApi: String?
+    //@SerializedName("status") val statusApi: String?
 )

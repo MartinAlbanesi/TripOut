@@ -1,6 +1,5 @@
-package com.example.turistaapp.create_trip.data.network.place_details
+package com.example.turistaapp.create_trip.data.network.place_details.models
 
-import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApiModel
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 
 fun PlaceApiModel.toLocationModel(): LocationModel {
@@ -8,9 +7,11 @@ fun PlaceApiModel.toLocationModel(): LocationModel {
         lat = geometryApi.locationApi.lat,
         lng = geometryApi.locationApi.lng,
         name = name,
-        photoUrl = photoApi!![0].photoUrl,
+        photoUrl = photoApi?.get(0)?.photoUrl,
         rating = rating,
         userRating = userRatings,
-        direction = direction
+        address = address,
+        types = types,
+        placeID = placeID
     )
 }

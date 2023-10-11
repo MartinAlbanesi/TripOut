@@ -4,15 +4,14 @@ import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 
 data class TripModel(
 
-    val id: Int,
     val name: String,
-    val origin: LocationEntity,
-    val destination: LocationEntity,
+    val origin: LocationModel?,
+    val destination: LocationModel?,
     val startDate: String,
     val endDate: String,
     val transport: String,
     val members: MutableList<String>?,
-    val stops: MutableList<LocationEntity>?,
+    val stops: MutableList<LocationModel>?,
     val description: String?,
     val author: String,
     val images: MutableList<String>?,

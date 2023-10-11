@@ -11,7 +11,7 @@ interface PlacesAutocompleteApiService {
     @GET("maps/api/place/autocomplete/json")
     suspend fun getPlaceAutocompletePredictions(
         @Query("input") input: String,
-        @Query("radius") radius: Int = 5000,
+        //@Query("radius") radius: Int = 5000,
         @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY
     ): Response<PlacesAutocompleteResponseApiModel>
 }

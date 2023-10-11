@@ -10,7 +10,6 @@ class GetPlaceAutocompleteLocationsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(location: String): List<PlaceAutocompletePredictionModel>? {
-        Log.d("GetPlaceAutocompleteLocationsUseCase", placeAutocompleteRepository.getPlaceAutocompleteLocations(location).toString())
         return placeAutocompleteRepository.getPlaceAutocompleteLocations(location)
     }
 }

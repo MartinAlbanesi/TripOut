@@ -48,7 +48,8 @@ fun PlaceAutocompleteField(
     focusRequester: FocusRequester,
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text,
-    onClearField : () -> Unit
+    onClearField: () -> Unit,
+    onSelectedLocationChange: (PlaceAutocompletePredictionModel) -> Unit
 ) {
 
     OutlinedTextField(
@@ -67,7 +68,10 @@ fun PlaceAutocompleteField(
         //Icono de cruz para borrar el texto
         trailingIcon = {
             IconButton(
-                onClick = { onClearField() },
+                onClick = {
+                    onClearField()
+                    onDropdownVisibilityChange(false)
+                },
                 modifier = Modifier.background(Color.Transparent)
             ) {
                 Icon(imageVector = Icons.Default.Clear, contentDescription = null)
@@ -92,7 +96,7 @@ fun PlaceAutocompleteField(
                     .clickable {
                         onPredictionSelect(prediction)
                         onDropdownVisibilityChange(false)
-
+                        onSelectedLocationChange(prediction)
                     }
                     .padding(16.dp)
             ) {

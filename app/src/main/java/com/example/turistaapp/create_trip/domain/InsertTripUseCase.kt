@@ -14,7 +14,9 @@ class InsertTripUseCase @Inject constructor(
 
         val tripEntity = trip.toTripEntity()
 
-        tripDBRepository.insertTrip(tripEntity)
+        if (tripEntity != null) {
+            tripDBRepository.insertTrip(tripEntity)
+        }
     }
 
 }

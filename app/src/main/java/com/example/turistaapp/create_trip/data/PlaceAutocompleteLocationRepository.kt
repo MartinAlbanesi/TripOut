@@ -1,5 +1,6 @@
 package com.example.turistaapp.create_trip.data
 
+import android.util.Log
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import javax.inject.Inject
@@ -15,14 +16,19 @@ class PlaceAutocompleteLocationRepository @Inject constructor(
     override suspend fun getPlaceAutocompleteLocations(location: String): List<PlaceAutocompletePredictionModel>? {
         val api = placesAutocompleteApiService.getPlaceAutocompletePredictions(location)
 
-        if (api.isSuccessful && api.code() == 200) {
-            val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.map {
-                PlaceAutocompletePredictionModel(
-                    description = it.descriptionApi,
-                    distance_meters = it.distanceMetersApi,
-                    types = it.typesApi
-                )
-            }
+        //@Query("types") types: List<String> = listOf("establishment")
+
+        if (api.isSuccessful) {
+            val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.filter { it.typesApi.contains("street_address") || it.typesApi.contains("establishment") || it.typesApi.contains("route") || it.typesApi.contains("premise") }
+                ?.map {
+                    Log.d("PlaceAutocompleteLocationRepository", "getPlaceAutocompleteLocations: ${it.typesApi}")
+                    PlaceAutocompletePredictionModel(
+                        placeId = it.placeIdApi,
+                        description = it.descriptionApi,
+                        distanceMeters = it.distanceMetersApi,
+                        types = it.typesApi
+                    )
+                }
             return placeAutocompleteLocations
         }
         return null

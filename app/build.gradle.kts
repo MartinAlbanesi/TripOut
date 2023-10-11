@@ -93,7 +93,7 @@ dependencies {
 
     //livedata compose
     implementation ("androidx.compose.runtime:runtime-livedata:1.3.1")
-    //testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
 
     //Material extend icons
     implementation ("androidx.compose.material:material-icons-extended:1.4.3")
@@ -109,6 +109,15 @@ dependencies {
     //Retrofit
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    //mockk
+    testImplementation ("io.mockk:mockk:1.12.2")
+
+    //kotlin corrutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+
+    //Mock web Server
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 
 }
 

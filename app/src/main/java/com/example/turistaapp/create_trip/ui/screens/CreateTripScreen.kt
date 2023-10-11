@@ -47,10 +47,9 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
     val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
         false
     )
-    val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(emptyList())
-
-    //val origin by createTripViewModel.origin.observeAsState("")
-    //val destination by createTripViewModel.destination.observeAsState("")
+    val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
+        emptyList()
+    )
 
     //Fechas
     val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
@@ -98,10 +97,6 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         innerPadding,
         tripName = tripName,
         onNameChange = { createTripViewModel.onNameChange(it) },
-        //origin = originAutocompleteQuery,
-        //onOriginChange = { createTripViewModel.onOriginChange(it) },
-        //destination = originAutocompleteQuery,
-        //onDestinationChange = { createTripViewModel.onDestinationChange(it) },
         startDate = startDate,
         endDate = endDate,
         dateRangePickerState = dateRangePickerState,
@@ -160,6 +155,7 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
             createTripViewModel.onOriginAutocompletePredictionSelect(it)
         },
         onClearOriginField = { createTripViewModel.onClearOriginField() },
+        onSelectedOriginLocationChange = { createTripViewModel.onSelectedOriginLocationChange(it) },
         destinationAutocompleteQuery = destinationAutocompleteQuery,
         onDestinationAutocompleteQueryValueChange = {
             createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
@@ -172,7 +168,12 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onDestinationAutocompletePredictionSelect = {
             createTripViewModel.onDestinationAutocompletePredictionSelect(it)
         },
-        onClearDestinationField = { createTripViewModel.onClearDestinationField() }
+        onClearDestinationField = { createTripViewModel.onClearDestinationField() },
+        onSelectedDestinationLocationChange = {
+            createTripViewModel.onSelectedDestinationLocationChange(
+                it
+            )
+        }
     )
 }
 
@@ -220,13 +221,15 @@ fun TripFormContent(
     originAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
     onOriginAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
     onClearOriginField: () -> Unit,
+    onSelectedOriginLocationChange: (PlaceAutocompletePredictionModel) -> Unit,
     destinationAutocompleteQuery: String,
     onDestinationAutocompleteQueryValueChange: (String) -> Unit,
     isDestinationAutocompleteDropdownVisible: Boolean,
     onDestinationAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
     destinationAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
     onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
-    onClearDestinationField: () -> Unit
+    onClearDestinationField: () -> Unit,
+    onSelectedDestinationLocationChange: (PlaceAutocompletePredictionModel) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -259,7 +262,8 @@ fun TripFormContent(
                 onPredictionSelect = onOriginAutocompletePredictionSelect,
                 focusRequester = originFocusRequester,
                 imeAction = ImeAction.Next,
-                onClearField = onClearOriginField
+                onClearField = onClearOriginField,
+                onSelectedLocationChange = onSelectedOriginLocationChange
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -274,27 +278,9 @@ fun TripFormContent(
                 onPredictionSelect = onDestinationAutocompletePredictionSelect,
                 focusRequester = destinationFocusRequester,
                 imeAction = ImeAction.Next,
-                onClearField = onClearDestinationField
+                onClearField = onClearDestinationField,
+                onSelectedLocationChange = onSelectedDestinationLocationChange
             )
-
-            /*
-            TextInputField(
-                label = "Origen",
-                textValue = origin,
-                onValueChange = onOriginChange,
-                focusRequester = destinationFocusRequester,
-                imeAction = ImeAction.Next
-            )
-
-            TextInputField(
-                label = "Destino",
-                textValue = destination,
-                onValueChange = onDestinationChange,
-                focusRequester = membersFocusRequester,
-                imeAction = ImeAction.Next
-            )
-
-             */
 
             Spacer(modifier = Modifier.size(4.dp))
 

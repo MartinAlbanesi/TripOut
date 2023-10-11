@@ -8,6 +8,6 @@ data class PlaceAutocompletePredictionApiModel(
     @SerializedName("structured_formatting") val structuredFormattingApi: PlaceAutocompleteStructuredFormatApiModel,
     @SerializedName("terms") val termsApi: List<PlaceAutocompleteTermApiModel>,
     @SerializedName("distance_meters") val distanceMetersApi: Int?,
-    @SerializedName("place_id") val placeIdApi: String?,
+    @SerializedName("place_id") val placeIdApi: String,
     @SerializedName("types") val typesApi: List<String>
 )
