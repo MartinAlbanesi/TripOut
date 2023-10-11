@@ -1,4 +1,4 @@
-package com.example.turistaapp.home.ui
+package com.example.turistaapp.home.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,6 @@ import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

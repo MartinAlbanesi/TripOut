@@ -12,7 +12,7 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeScreen
-import com.example.turistaapp.home.ui.HomeViewModel
+import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
 import com.example.turistaapp.main.MainViewModel
 
 @Composable
@@ -39,6 +39,9 @@ fun NavHostScreen(
                 setShowFloatingActionButton = {
                     mainViewModel.setShowFloatingActionButton(true)
                 },
+                setTitle = {
+                    mainViewModel.setTitle("Home")
+                }
             ) { homeViewModel.setNearbyLocationSelect(it) }
         }
         composable(Routes.CreateTrip.route){ CreateTripScreen(innerPadding = paddingValues) }

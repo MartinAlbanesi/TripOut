@@ -3,13 +3,13 @@ package com.example.turistaapp.home.ui
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.fake.FakeDataSource
+import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 

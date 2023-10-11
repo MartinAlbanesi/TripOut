@@ -25,7 +25,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turistaapp.core.NavHostScreen
 import com.example.turistaapp.core.utils.Routes
-import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -36,6 +35,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val index by mainViewModel.indexSelect.observeAsState(1)
     val title by mainViewModel.titleAppBar.observeAsState("Home")
+    val route by mainViewModel.route.observeAsState(Routes.Home.route)
 
     val showBottomBar by mainViewModel.showBottomBar.observeAsState(true)
     val showFloatingActionButton by mainViewModel.showFloatingActionButton.observeAsState(true)
@@ -43,7 +43,10 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopBarScreen(
-                title = title
+                title = title,
+                onClickNavigation = {
+                    navController.navigate(route)
+                }
             )
         },
         bottomBar = {
@@ -62,6 +65,7 @@ fun MainScreen(
                     mainViewModel.setTitle("Crea y Viaja")
                     mainViewModel.setShowFloatingActionButton(false)
                     mainViewModel.setShowBottomBar(false)
+                    mainViewModel.setRoute(Routes.Home.route)
                 }
             }
         },
@@ -76,6 +80,7 @@ fun TopBarScreen(
     title: String,
     iconsNavigation: ImageVector = Icons.Outlined.ArrowBack,
     iconsAction: List<ImageVector> = emptyList(),
+    onClickNavigation: () -> Unit,
 ) {
 
     TopAppBar(
