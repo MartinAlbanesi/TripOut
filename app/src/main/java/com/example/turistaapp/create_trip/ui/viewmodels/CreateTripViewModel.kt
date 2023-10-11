@@ -291,22 +291,17 @@ class CreateTripViewModel @Inject constructor(
     val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
     fun onCreateTripClick() {
-        /*
-        viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
-            _destinationPredictions.value = newPredictions
-        }
-         */
 
         viewModelScope.launch {
             Log.d("Prueba", "onCreateTripClick: ${_selectedOriginLocation.value!!.placeId}")
             Log.d("Prueba", "onCreateTripClick: ${_selectedDestinationLocation.value!!.placeId}")
 
-            val origin = getPlaceDetailsUseCase.invoke(/*_selectedOriginLocation.value!!.placeId*/"ChIJN1t_tDeuEmsRUsoyG83frY4")
-            val destination = getPlaceDetailsUseCase.invoke(/*_selectedDestinationLocation.value!!.placeId8*/ "ChIJN1t_tDeuEmsRUsoyG83frY4")
+            val origin = getPlaceDetailsUseCase.invoke(_selectedOriginLocation.value!!.placeId)
+            val destination = getPlaceDetailsUseCase.invoke(_selectedDestinationLocation.value!!.placeId)
 
             Log.d("Prueba", "onCreateTripClick: $origin")
             Log.d("Prueba", "onCreateTripClick: $destination")
+
             _originLocation.value = origin
             _destinationLocation.value = destination
 

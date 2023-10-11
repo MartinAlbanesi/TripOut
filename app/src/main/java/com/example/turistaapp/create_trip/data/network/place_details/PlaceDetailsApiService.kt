@@ -11,8 +11,7 @@ interface PlaceDetailsApiService {
 
     @GET("maps/api/place/details/json")
     suspend fun getPlaceDetails(
-        @Query("place_id)") placeId: String,
-        //@Query("radius") radius: Int = 5000,
+        @Query("place_id") placeId: String,
         @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY
     ): Response<PlacesDetailsResponseApiModel>
 

@@ -20,14 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
-import com.example.turistaapp.utils.Routes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(mainViewModel: MainViewModel, createTripViewModel: CreateTripViewModel) {
+fun MainScreen(
+    mainViewModel: MainViewModel = hiltViewModel()
+) {
 
     val navController = rememberNavController()
     val index by mainViewModel.indexSelect.observeAsState(1)
@@ -62,7 +65,7 @@ fun MainScreen(mainViewModel: MainViewModel, createTripViewModel: CreateTripView
             }
         },
     ) { paddingValues ->
-        NavHostScreen(navController = navController, paddingValues, createTripViewModel = createTripViewModel)
+        NavHostScreen(navController = navController, paddingValues)
     }
 }
 
@@ -122,7 +125,7 @@ fun BottomBarScreen(
         NavigationBarItem(
             selected = index == 2,
             onClick = {
-                navController.navigate(Routes.Viajes.route)
+                navController.navigate(Routes.Trips.route)
                 changeIndex(2)
             },
             icon = {
@@ -133,7 +136,7 @@ fun BottomBarScreen(
         NavigationBarItem(
             selected = index == 3,
             onClick = {
-                navController.navigate(Routes.Configuraciones.route)
+                navController.navigate(Routes.Settings.route)
                 changeIndex(3)
             },
             icon = {

@@ -42,8 +42,4 @@ class CreateTripModule {
     fun provideGetPlaceDetailsResult(placeDetailsRepository: IPlaceDetailsRepository) : GetPlaceDetailsUseCase {
         return GetPlaceDetailsUseCase(placeDetailsRepository)
     }
-
-    @Provides
-    @Singleton
-    fun provideDispatchers() = Dispatchers.IO
 }

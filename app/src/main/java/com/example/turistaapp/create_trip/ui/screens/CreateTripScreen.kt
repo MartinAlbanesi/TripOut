@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
@@ -30,7 +31,10 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTripViewModel) {
+fun CreateTripScreen(
+    innerPadding: PaddingValues,
+    createTripViewModel: CreateTripViewModel = hiltViewModel()
+) {
 
     //Nombre del Viaje
     val tripName by createTripViewModel.name.observeAsState("")

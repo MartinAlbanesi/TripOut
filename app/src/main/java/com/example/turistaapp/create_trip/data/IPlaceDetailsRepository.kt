@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.data
 
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApiModel
 import com.example.turistaapp.create_trip.data.network.place_details.models.toLocationModel
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import javax.inject.Inject
@@ -15,6 +16,4 @@ class PlaceDetailsRepository @Inject constructor(
     override suspend fun getPlaceDetails(placeID: String): LocationModel? {
         return placeDetailsApiService.getPlaceDetails(placeID).body()?.result?.toLocationModel()
     }
-
 }
-
