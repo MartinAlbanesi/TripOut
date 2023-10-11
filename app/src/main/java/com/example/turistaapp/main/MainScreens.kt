@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.turistaapp.core.NavHostScreen
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 

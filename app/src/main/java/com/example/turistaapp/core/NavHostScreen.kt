@@ -13,12 +13,14 @@ import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.home.ui.HomeViewModel
+import com.example.turistaapp.main.MainViewModel
 
 @Composable
 fun NavHostScreen(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
 
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(ResponseUiState.Loading)
@@ -26,11 +28,17 @@ fun NavHostScreen(
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
 
     NavHost(navController = navController, startDestination = Routes.Home.route){
-        composable(Routes.Home.route){
+        composable(Routes.Home.route) {
             HomeScreen(
                 paddingValues,
                 nearbyLocations,
-                nearbyLocationSelect
+                nearbyLocationSelect,
+                setShowBottomBar = {
+                    mainViewModel.setShowBottomBar(true)
+                },
+                setShowFloatingActionButton = {
+                    mainViewModel.setShowFloatingActionButton(true)
+                },
             ) { homeViewModel.setNearbyLocationSelect(it) }
         }
         composable(Routes.CreateTrip.route){ CreateTripScreen(innerPadding = paddingValues) }
