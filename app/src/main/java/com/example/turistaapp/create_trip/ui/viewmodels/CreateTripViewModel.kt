@@ -1,10 +1,8 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,9 +13,7 @@ import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -26,8 +22,7 @@ import javax.inject.Inject
 class CreateTripViewModel @Inject constructor(
     private val insertTripUseCase: InsertTripUseCase,
     private val getPlaceAutocompleteLocationsUseCase: GetPlaceAutocompleteLocationsUseCase,
-    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
-    private val dispatcher: CoroutineDispatcher
+    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 ) : ViewModel() {
 
     //Viajes que se muestran en la lazy list
