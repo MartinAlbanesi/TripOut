@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
-import android.util.Log
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,8 +14,6 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -23,8 +22,7 @@ import javax.inject.Inject
 class CreateTripViewModel @Inject constructor(
     private val insertTripUseCase: InsertTripUseCase,
     private val getPlaceAutocompleteLocationsUseCase: GetPlaceAutocompleteLocationsUseCase,
-    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
-    private val dispatcher: CoroutineDispatcher
+    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 ) : ViewModel() {
 
     //Viajes que se muestran en la lazy list
@@ -290,53 +288,45 @@ class CreateTripViewModel @Inject constructor(
         MutableLiveData<LocationModel>(null)
     val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
-    fun onCreateTripClick() {
-        /*
-        viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
-            _destinationPredictions.value = newPredictions
-        }
-         */
+    fun onCreateTripClick(): Boolean {
+    var isSuccessful = true
 
         viewModelScope.launch {
-            Log.d("Prueba", "onCreateTripClick: ${_selectedOriginLocation.value!!.placeId}")
-            Log.d("Prueba", "onCreateTripClick: ${_selectedDestinationLocation.value!!.placeId}")
-
-            val origin = getPlaceDetailsUseCase.invoke(/*_selectedOriginLocation.value!!.placeId*/"ChIJN1t_tDeuEmsRUsoyG83frY4")
-            val destination = getPlaceDetailsUseCase.invoke(/*_selectedDestinationLocation.value!!.placeId8*/ "ChIJN1t_tDeuEmsRUsoyG83frY4")
-
-            Log.d("Prueba", "onCreateTripClick: $origin")
-            Log.d("Prueba", "onCreateTripClick: $destination")
-            _originLocation.value = origin
-            _destinationLocation.value = destination
-
-            val trip = TripModel(
-                name = _name.value.toString(),
-                origin = originLocation.value,
-                destination = destinationLocation.value,
-                startDate = calendar.timeInMillis.toString(),
-                endDate = calendar.timeInMillis.toString(),
-                transport = _transport.value.toString(),
-                members = _members.value,
-                stops = null,
-                description = _description.value.toString(),
-                author = "author",
-                images = null,
-                comments = null,
-                isFavorite = false,
-                isFinished = false
-            )
-
             try {
-                Log.d("Prueba", trip.toString())
+                val origin = getPlaceDetailsUseCase.invoke(_selectedOriginLocation.value!!.placeId)
+                val destination = getPlaceDetailsUseCase.invoke(_selectedDestinationLocation.value!!.placeId)
+
+                _originLocation.value = origin
+                _destinationLocation.value = destination
+
+                val trip = TripModel(
+                    name = _name.value.toString(),
+                    origin = originLocation.value,
+                    destination = destinationLocation.value,
+                    startDate = calendar.timeInMillis.toString(),
+                    endDate = calendar.timeInMillis.toString(),
+                    transport = _transport.value.toString(),
+                    members = _members.value,
+                    stops = null,
+                    description = _description.value.toString(),
+                    author = "author",
+                    images = null,
+                    comments = null,
+                    isFavorite = false,
+                    isFinished = false
+                )
                 insertTripUseCase.execute(trip)
-            } catch (e: Exception) {
-                Log.d("CreateTripViewModel", e.message.toString())
-                Log.d("CreateTripViewModel", e.stackTraceToString())
+                isSuccessful = true
+
+            }catch (e: Exception){
+                isSuccessful = false
             }
         }
+        return isSuccessful
+    }
 
-
+    fun showMessage(context: Context, message:String){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
 }

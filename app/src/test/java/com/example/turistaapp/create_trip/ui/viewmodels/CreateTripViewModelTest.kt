@@ -1,5 +1,6 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
@@ -10,10 +11,13 @@ import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okhttp3.Dispatcher
+import org.junit.After
 import org.junit.Assert.*
 
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class CreateTripViewModelTest {
@@ -27,7 +31,8 @@ class CreateTripViewModelTest {
     @RelaxedMockK
     private lateinit var getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 
-    private lateinit var dispatcher: CoroutineDispatcher
+    @get:Rule
+    var rule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var createTripViewModel: CreateTripViewModel
 
@@ -35,13 +40,18 @@ class CreateTripViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        dispatcher = Dispatchers.Unconfined
+//        dispatcher = Dispatchers.Unconfined
         createTripViewModel = CreateTripViewModel(
             insertTripUseCase,
             getPlaceAutocompleteLocationsUseCase,
-            getPlaceDetailsUseCase,
-            dispatcher
+            getPlaceDetailsUseCase
         )
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.shutdown()
     }
 
     @Test

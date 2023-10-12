@@ -13,7 +13,6 @@ android {
     namespace = "com.example.turistaapp"
     compileSdk = 33
 
-
     defaultConfig {
         applicationId = "com.example.turistaapp"
         minSdk = 24
@@ -101,24 +100,28 @@ dependencies {
     //Room
     implementation ("androidx.room:room-ktx:2.5.0")
     kapt ("androidx.room:room-compiler:2.5.0")
-    
+
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    //Retrofit
+    //Retrofit2
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
-    //mockk
-    testImplementation ("io.mockk:mockk:1.12.2")
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     //kotlin corrutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
 
+    //mockk
+    testImplementation ("io.mockk:mockk:1.12.2")
+
     //Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
-
 }
 
 kapt {

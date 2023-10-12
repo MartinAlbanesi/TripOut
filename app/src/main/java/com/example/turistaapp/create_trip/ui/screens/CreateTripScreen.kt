@@ -1,5 +1,6 @@
 package com.example.turistaapp.create_trip.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
@@ -30,7 +33,10 @@ import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTripViewModel) {
+fun CreateTripScreen(
+    innerPadding: PaddingValues,
+    createTripViewModel: CreateTripViewModel = hiltViewModel()
+) {
 
     //Nombre del Viaje
     val tripName by createTripViewModel.name.observeAsState("")
@@ -92,6 +98,8 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         FocusRequester()
     )
 
+    val context = LocalContext.current
+
 
     TripFormContent(
         innerPadding,
@@ -138,7 +146,13 @@ fun CreateTripScreen(innerPadding: PaddingValues, createTripViewModel: CreateTri
         onTransportChange = { createTripViewModel.onTransportChange(it) },
         description = description,
         onDescriptionChange = { createTripViewModel.onDescriptionChange(it) },
-        onCreateTripClick = { createTripViewModel.onCreateTripClick() },
+        onCreateTripClick = {
+            if(createTripViewModel.onCreateTripClick())
+                Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT).show()
+
+        },
         originFocusRequester = originFocusRequester,
         destinationFocusRequester = destinationFocusRequester,
         descriptionFocusRequester = descriptionFocusRequester,
