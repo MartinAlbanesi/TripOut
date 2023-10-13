@@ -193,4 +193,12 @@ class TripDaoTest {
 
         assertEquals(location.name,actual[0].name)
     }
+
+    @Test
+    fun getLocationsFromDestination_whenDestinationIsEmpty_returnEmptyList() = runTest {
+
+        val actual = tripDao.getLocationsFromDestination()
+
+        assertEquals(emptyList<Any>(), actual)
+    }
 }

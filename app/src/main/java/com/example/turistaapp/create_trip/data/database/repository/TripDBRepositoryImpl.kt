@@ -17,4 +17,8 @@ class TripDBRepositoryImpl @Inject constructor(
     override suspend fun getAllTrips(): Flow<List<TripEntity>> {
         return tripDao.getAllTrips()
     }
+
+    override suspend fun getLocationsFromDestination(): List<String> {
+        return tripDao.getLocationsFromDestination()
+    }
 }

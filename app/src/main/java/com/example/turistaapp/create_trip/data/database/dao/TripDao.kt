@@ -19,8 +19,8 @@ interface TripDao {
     fun getAllTrips(): Flow<List<TripEntity>>
 
     @Query("SELECT * FROM trips_table")
-    fun getTripList(): List<TripEntity>
+    suspend fun getTripList(): List<TripEntity>
 
     @Query("select destination from trips_table")
-    fun getLocationsFromDestination() : List<String>
+    suspend fun getLocationsFromDestination() : List<String>
 }

@@ -7,4 +7,6 @@ interface TripDBRepository {
     suspend fun insertTrip(trip: TripEntity)
 
     suspend fun getAllTrips(): Flow<List<TripEntity>>
+
+    suspend fun getLocationsFromDestination() : List<String>
 }
