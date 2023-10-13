@@ -4,13 +4,13 @@ import com.example.turistaapp.core.Helper
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import org.junit.Assert.assertNull
 
 class NearbySearchLocationApiServiceTest {
 
@@ -36,7 +36,7 @@ class NearbySearchLocationApiServiceTest {
 
     @Test
     fun searchNearbyPlaces_code200_returnNearbySearchLocationApi() = runTest {
-        val content = Helper.readFileResources("/fake.json")
+        val content = Helper.readFileResources("/fakeNearbyLocations.json")
         mockResponse.setResponseCode(200)
         mockResponse.setBody(content)
         mockWebServer.enqueue(mockResponse)
