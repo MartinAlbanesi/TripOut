@@ -5,6 +5,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -52,5 +54,36 @@ class TripDBRepositoryImplTest {
         assertEquals(2, result.size)
 
         coVerify(exactly = 1) { tripDao.getLocationsFromDestination() }
+    }
+
+    @Test
+    fun `getFlowLocationsFromDestination - when flow from TripDao return emptyList - return emptyList` () = runTest{
+
+        val flowList = flow{
+            emit(emptyList<String>())
+        }
+
+        coEvery { tripDao.getFlowLocationsFromDestination() } returns flowList
+
+        val result = tripDBRepository.getFlowLocationsFromDestination().first()
+
+        assertTrue(result.isEmpty())
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `getFlowLocationsFromDestination - when flow from TripDao String List - return String list` () = runTest{
+
+        val listString = listOf("titi", "wea")
+        val flowList = flow{
+            emit(listString)
+        }
+
+        coEvery { tripDao.getFlowLocationsFromDestination() } returns flowList
+
+        val result = tripDBRepository.getFlowLocationsFromDestination().first()
+
+        assertEquals(listString, result)
+        assertEquals(2, result.size)
     }
 }

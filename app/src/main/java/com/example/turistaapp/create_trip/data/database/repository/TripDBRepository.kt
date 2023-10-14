@@ -9,4 +9,6 @@ interface TripDBRepository {
     suspend fun getAllTrips(): Flow<List<TripEntity>>
 
     suspend fun getLocationsFromDestination() : List<String>
+
+    suspend fun getFlowLocationsFromDestination() : Flow<List<String>>
 }
