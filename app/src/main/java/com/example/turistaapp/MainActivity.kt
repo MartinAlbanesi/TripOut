@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.turistaapp.main.MainScreen
+import com.example.turistaapp.main.ui.MainScreen
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
