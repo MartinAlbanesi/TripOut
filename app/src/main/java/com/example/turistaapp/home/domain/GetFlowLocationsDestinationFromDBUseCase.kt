@@ -1,5 +1,6 @@
 package com.example.turistaapp.home.domain
 
+import android.util.Log
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
@@ -9,14 +10,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetFlowLocationsDestinationFromDB @Inject constructor(
+class GetFlowLocationsDestinationFromDBUseCase @Inject constructor(
     private val tripDBRepository: TripDBRepository
 ) {
 
-    suspend operator fun invoke(): Flow<List<LocationModel>>? {
+    suspend operator fun invoke(): Flow<List<LocationModel>> {
         val destinationLocationsFlow = tripDBRepository.getFlowLocationsFromDestination().first()
-
-        if(destinationLocationsFlow.isEmpty()) return null
 
         val locationModelFlow = flow {
             val destinationLocationToModel = destinationLocationsFlow.map {

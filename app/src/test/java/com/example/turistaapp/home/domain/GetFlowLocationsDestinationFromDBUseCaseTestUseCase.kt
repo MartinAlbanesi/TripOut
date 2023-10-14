@@ -14,9 +14,9 @@ import org.junit.Before
 
 import org.junit.Test
 
-class GetFlowLocationsDestinationFromDBTestUseCase {
+class GetFlowLocationsDestinationFromDBUseCaseTestUseCase {
 
-    private lateinit var getFlowLocationsDestinationFromDB: GetFlowLocationsDestinationFromDB
+    private lateinit var getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase
 
     @RelaxedMockK
     private lateinit var tripDBRepository: TripDBRepository
@@ -25,7 +25,7 @@ class GetFlowLocationsDestinationFromDBTestUseCase {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        getFlowLocationsDestinationFromDB = GetFlowLocationsDestinationFromDB(tripDBRepository)
+        getFlowLocationsDestinationFromDBUseCase = GetFlowLocationsDestinationFromDBUseCase(tripDBRepository)
     }
 
     @Test
@@ -44,7 +44,7 @@ class GetFlowLocationsDestinationFromDBTestUseCase {
             emit(destinationLocationToString)
         }
 
-        val result = getFlowLocationsDestinationFromDB()?.first()
+        val result = getFlowLocationsDestinationFromDBUseCase()?.first()
 
         assertEquals(expected, result)
         assertEquals(2, result?.size)
@@ -57,9 +57,10 @@ class GetFlowLocationsDestinationFromDBTestUseCase {
             emit(emptyList())
         }
 
-        val result = getFlowLocationsDestinationFromDB()?.first()
+        val result = getFlowLocationsDestinationFromDBUseCase().first()
 
-        assertNull(result)
+        assertEquals(emptyList<Any>(), result)
+        assertEquals(0, result.size)
 
     }
 }

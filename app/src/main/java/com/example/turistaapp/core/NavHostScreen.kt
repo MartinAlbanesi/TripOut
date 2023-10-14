@@ -27,6 +27,8 @@ fun NavHostScreen(
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
 
+    val destinationLocations by homeViewModel.destinationLocations.collectAsState(emptyList())
+
     NavHost(navController = navController, startDestination = Routes.Home.route){
         composable(Routes.Home.route) {
             HomeScreen(
@@ -39,6 +41,7 @@ fun NavHostScreen(
                 setShowFloatingActionButton = {
                     mainViewModel.setShowFloatingActionButton(true)
                 },
+                locations = destinationLocations,
                 setTitle = {
                     mainViewModel.setTitle("Home")
                 }
