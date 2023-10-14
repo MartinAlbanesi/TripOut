@@ -2,9 +2,12 @@ package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,24 +22,43 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.turistaapp.R
+import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 
 @Composable
 fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
-    modifier: Modifier = Modifier
+    locations: List<LocationModel> = emptyList(),
+    paddingValues: PaddingValues
 ) {
     Box(
-        modifier = modifier,
+        modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize(),
     ) {
 
         GoogleMap(
             uiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState
-        )
+        ) {
+            locations.forEach {
+                Marker(
+                    state = MarkerState(
+                        position = LatLng(it.lat, it.lng)
+                    ),
+                    title = it.name,
+                    snippet = it.address,
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                )
+            }
+        }
 
         //Barra Superior
         Row(
@@ -72,9 +94,9 @@ fun MapScreen(
 @Composable
 private fun IconForMap(
     painter: Int,
-    contentDescription : String = "",
+    contentDescription: String = "",
     modifier: Modifier = Modifier,
-    onClickButton : () -> Unit
+    onClickButton: () -> Unit
 ) {
     IconButton(
         onClick = { onClickButton },

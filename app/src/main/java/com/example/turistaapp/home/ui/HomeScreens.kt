@@ -107,11 +107,9 @@ fun HomeScreen(
         },
     ) {
         MapScreen(
-            mapUiSettings,
-            cameraPositionState,
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            mapUiSettings = mapUiSettings,
+            cameraPositionState = cameraPositionState,
+            paddingValues = paddingValues
         )
         if (showDialog) {
             if (nearbyLocationSelect != null) {

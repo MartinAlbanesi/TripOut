@@ -32,11 +32,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             if(getRandomLocationFromDB() != null){
                 setNearbyLocations(getRandomLocationFromDB()!!.lat, getRandomLocationFromDB()!!.lng)
-//                Log.i("titi", getRandomLocationFromDB()!!.lat.toString())
-//                Log.i("titi", getRandomLocationFromDB()!!.lng.toString())
             }else{
                 setNearbyLocations(-34.67113975510375, -58.56181551536259)
-//                Log.i("titi", "ta mal")
             }
         }
     }
@@ -46,8 +43,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             try {
                 val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat,lng))
-
-//                Log.i("titi", nearbyLocations.toString())
 
                 if(nearbyLocations.isNullOrEmpty()){
                     _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))

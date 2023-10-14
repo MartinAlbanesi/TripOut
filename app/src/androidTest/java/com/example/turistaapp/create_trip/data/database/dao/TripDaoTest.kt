@@ -6,13 +6,16 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turistaapp.core.database.TripDataBase
 import com.example.turistaapp.core.utils.GsonConverter
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.data.database.entities.TripEntity
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,71 +46,8 @@ class TripDaoTest {
 
     @Test
     fun insertTripListAndReadTripsInserted() = runTest {
-        val location = LocationEntity(
-            1,
-            "Location 1",
-            "Description 1",
-            null,
-            0.0,
-            1,
-            1.1,
-            2.2,
-            null,
-            null,
-        )
-        val expected = listOf(
-            TripEntity(
-                id = 1,
-                name = "Trip 1",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 1",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-            TripEntity(
-                id = 2,
-                name = "Trip 2",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 2",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-            TripEntity(
-                id = 3,
-                name = "Trip 3",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 3",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-        )
+
+        val expected = FakeDataBaseSource.tripEntityList
 
         tripDao.insertTripList(expected)
 
@@ -119,79 +59,17 @@ class TripDaoTest {
 
     @Test
     fun getLocationsFromDestination_returnLocationsList() = runTest{
-        val location = LocationEntity(
-            1,
-            "Location 1",
-            "Description 1",
-            null,
-            0.0,
-            1,
-            -34.6246832,
-            -58.487447,
-            null,
-            null,
-        )
-        val expected = listOf(
-            TripEntity(
-                id = 1,
-                name = "Trip 1",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 1",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-            TripEntity(
-                id = 2,
-                name = "Trip 2",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 2",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-            TripEntity(
-                id = 3,
-                name = "Trip 3",
-                origin = location,
-                destination = location,
-                stops = null,
-                startDate = "2021-01-01",
-                endDate = "2021-01-02",
-                members = null,
-                transport = "Transport 3",
-                description = null,
-                author = "",
-                isFavorite = false,
-                isFinished = false,
-                images = null,
-                comments = null,
-            ),
-        )
 
-        tripDao.insertTripList(expected)
+        val expected = FakeDataBaseSource.locationEntity
+        val tripEntityList = FakeDataBaseSource.tripEntityList
+
+        tripDao.insertTripList(tripEntityList)
 
         val actual = tripDao.getLocationsFromDestination().map {
             GsonConverter.fromJson(it,LocationEntity::class.java)
         }
 
-        assertEquals(location.name,actual[0].name)
+        assertEquals(expected.name,actual[0].name)
     }
 
     @Test
@@ -199,6 +77,27 @@ class TripDaoTest {
 
         val actual = tripDao.getLocationsFromDestination()
 
+        assertEquals(emptyList<Any>(), actual)
+    }
+
+    @Test
+    fun getFlowLocationsFromDestination_returnLocationsList () = runTest{
+        val expected = FakeDataBaseSource.locationEntity
+        val tripEntityList = FakeDataBaseSource.tripEntityList
+
+        tripDao.insertTripList(tripEntityList)
+
+        val actual = tripDao.getFlowLocationsFromDestination().first().map {
+            GsonConverter.fromJson(it,LocationEntity::class.java)
+        }
+        assertEquals(expected.name,actual[0].name)
+    }
+
+    @Test
+    fun getFlowLocationsFromDestination_whenDestinationIsEmpty_returnLocationsList () = runTest{
+        val actual = tripDao.getFlowLocationsFromDestination().first()
+
+        assertTrue(actual.isEmpty())
         assertEquals(emptyList<Any>(), actual)
     }
 }

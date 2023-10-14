@@ -23,4 +23,7 @@ interface TripDao {
 
     @Query("select destination from trips_table")
     suspend fun getLocationsFromDestination() : List<String>
+
+    @Query("select destination from trips_table")
+    fun getFlowLocationsFromDestination() : Flow<List<String>>
 }
