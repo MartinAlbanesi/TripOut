@@ -4,8 +4,10 @@ import com.example.turistaapp.create_trip.data.IPlaceAutocompleteLocationReposit
 import com.example.turistaapp.create_trip.data.IPlaceDetailsRepository
 import com.example.turistaapp.create_trip.data.PlaceAutocompleteLocationRepository
 import com.example.turistaapp.create_trip.data.PlaceDetailsRepository
+import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
+import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import dagger.Module
@@ -41,5 +43,11 @@ class CreateTripModule {
     @Singleton
     fun provideGetPlaceDetailsResult(placeDetailsRepository: IPlaceDetailsRepository) : GetPlaceDetailsUseCase {
         return GetPlaceDetailsUseCase(placeDetailsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetDestinationLocationFromDB(tripDBRepository: TripDBRepository) : GetDestinationLocationsFromDataBase{
+        return GetDestinationLocationsFromDataBase(tripDBRepository)
     }
 }

@@ -126,8 +126,8 @@ class TripDaoTest {
             null,
             0.0,
             1,
-            1.1,
-            2.2,
+            -34.6246832,
+            -58.487447,
             null,
             null,
         )

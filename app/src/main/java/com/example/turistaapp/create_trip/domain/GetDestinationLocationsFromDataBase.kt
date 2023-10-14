@@ -1,5 +1,6 @@
 package com.example.turistaapp.create_trip.domain
 
+import android.util.Log
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
@@ -13,6 +14,10 @@ class GetDestinationLocationsFromDataBase @Inject constructor(
         if(tripsLocations.isEmpty()){
            return emptyList()
         }
-        return tripsLocations.map { GsonConverter.fromJson(it, LocationModel::class.java) }
+//        Log.i("titi", tripsLocations.toString())
+        return tripsLocations.map {
+            Log.i("titi", GsonConverter.fromJson(it, LocationModel::class.java).toString())
+            GsonConverter.fromJson(it, LocationModel::class.java)
+        }
     }
 }

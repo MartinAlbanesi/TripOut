@@ -51,8 +51,8 @@ fun LocationEntity.toLocationModel() = LocationModel(
     rating = rating,
     userRating = userRating,
     address = address,
-    lat = latitude,
-    lng = longitude,
+    lat = lat,
+    lng = lng,
     types = types
 )
 
@@ -64,8 +64,8 @@ fun LocationModel.toLocationEntity() = LocationEntity(
     rating = 0.0,
     userRating = 0,
     address = address,
-    latitude = lat,
-    longitude = lng,
+    lat = lat,
+    lng = lng,
     types = types
 )
 

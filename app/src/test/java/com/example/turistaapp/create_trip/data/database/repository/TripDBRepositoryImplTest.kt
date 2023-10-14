@@ -7,6 +7,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -27,14 +28,13 @@ class TripDBRepositoryImplTest {
     @Test
     fun `getLocationsFromDestination - when TripDao getLocationsFromDestination return emptyList - returnEmptyList`() = runTest {
         // Given
-        val expected = emptyList<String>()
-        coEvery{ tripDao.getLocationsFromDestination() } returns expected
+        coEvery{ tripDao.getLocationsFromDestination() } returns emptyList()
 
         // When
         val result = tripDBRepository.getLocationsFromDestination()
 
         // Then
-        assertEquals(expected, result)
+        assertTrue(result.isEmpty())
         assertEquals(0, result.size)
     }
 

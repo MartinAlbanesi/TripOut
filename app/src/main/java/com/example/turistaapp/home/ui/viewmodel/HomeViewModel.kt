@@ -1,10 +1,12 @@
 package com.example.turistaapp.home.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.getLocationString
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
-    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase
+    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
+    private val getRandomLocationFromDB: GetRandomLocationFromDB
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
@@ -26,23 +29,34 @@ class HomeViewModel @Inject constructor(
     val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
     init {
-        setNearbyLocations(-34.67113975510375, -58.56181551536259)
+        viewModelScope.launch(dispatcher) {
+            if(getRandomLocationFromDB() != null){
+                setNearbyLocations(getRandomLocationFromDB()!!.lat, getRandomLocationFromDB()!!.lng)
+//                Log.i("titi", getRandomLocationFromDB()!!.lat.toString())
+//                Log.i("titi", getRandomLocationFromDB()!!.lng.toString())
+            }else{
+                setNearbyLocations(-34.67113975510375, -58.56181551536259)
+//                Log.i("titi", "ta mal")
+            }
+        }
     }
 
     fun setNearbyLocations(lat : Double, lng : Double) {
 
         viewModelScope.launch(dispatcher) {
-//            try {
+            try {
                 val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat,lng))
+
+//                Log.i("titi", nearbyLocations.toString())
 
                 if(nearbyLocations.isNullOrEmpty()){
                     _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))
                 }else{
                     _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
                 }
-//            }catch (e : Exception) {
-//                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
-//            }
+            }catch (e : Exception) {
+                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
+            }
         }
 
     }

@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
@@ -289,7 +290,7 @@ class CreateTripViewModel @Inject constructor(
     val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
     fun onCreateTripClick(): Boolean {
-    var isSuccessful = true
+        var isSuccessful = true
 
         viewModelScope.launch {
             try {
@@ -315,6 +316,7 @@ class CreateTripViewModel @Inject constructor(
                     isFavorite = false,
                     isFinished = false
                 )
+                Log.i("titi", trip.toString())
                 insertTripUseCase.execute(trip)
                 isSuccessful = true
 

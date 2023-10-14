@@ -1,9 +1,12 @@
 package com.example.turistaapp.core.di
 
+import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
+import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
 import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +34,12 @@ class HomeModule {
     @Singleton
     fun provideDispatcher() : CoroutineDispatcher{
         return Dispatchers.IO
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetRandomLocationFromDB(getDestinationLocationsFromDataBase: GetDestinationLocationsFromDataBase): GetRandomLocationFromDB{
+        return GetRandomLocationFromDB(getDestinationLocationsFromDataBase)
     }
 }
 
