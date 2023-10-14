@@ -14,9 +14,7 @@ class GetDestinationLocationsFromDataBase @Inject constructor(
         if(tripsLocations.isEmpty()){
            return emptyList()
         }
-//        Log.i("titi", tripsLocations.toString())
         return tripsLocations.map {
-            Log.i("titi", GsonConverter.fromJson(it, LocationModel::class.java).toString())
             GsonConverter.fromJson(it, LocationModel::class.java)
         }
     }

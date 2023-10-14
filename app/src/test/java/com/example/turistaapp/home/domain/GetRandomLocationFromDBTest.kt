@@ -1,5 +1,6 @@
 package com.example.turistaapp.home.domain
 
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
@@ -38,26 +39,8 @@ class GetRandomLocationFromDBTest{
     fun `invoke - GetDestinationLocationFromDB return LocationList - return random LocationModel ` () = runTest{
 
         val expected = listOf(
-            LocationModel("titi",
-                "Location 1",
-                "Description 1",
-                0.0,
-                1,
-                null,
-                1.1,
-                2.2,
-                null,
-            ),
-            LocationModel("toto",
-                "Location 2",
-                "Description 2",
-                0.0,
-                1,
-                null,
-                3.3,
-                4.4,
-                null,
-            ),
+            FakeDataBaseSource.locationModel,
+            FakeDataBaseSource.locationModel,
         )
 
         coEvery { getDestinationLocationsFromDataBase() } returns expected

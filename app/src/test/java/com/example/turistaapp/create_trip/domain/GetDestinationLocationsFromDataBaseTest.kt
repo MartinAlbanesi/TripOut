@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.domain
 
 import com.example.turistaapp.core.utils.GsonConverter
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
@@ -41,26 +42,8 @@ class GetDestinationLocationsFromDataBaseTest{
     fun invoke_locationsReturnLocationList_returnLocationModelList() = runTest {
 
         val expected = listOf(
-            LocationModel("titi",
-                "Location 1",
-                "Description 1",
-                0.0,
-                1,
-                null,
-                -34.6246832,
-                -58.487447,
-                null,
-            ),
-            LocationModel("toto",
-                "Location 2",
-                "Description 2",
-                0.0,
-                1,
-                null,
-                -34.6246832,
-                -58.487447,
-                null,
-            ),
+            FakeDataBaseSource.locationModel,
+            FakeDataBaseSource.locationModel,
         )
 
         val locationList = expected.map { GsonConverter.toJson(it) }
