@@ -1,5 +1,7 @@
 package com.example.turistaapp.setting
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +24,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -31,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,6 +92,7 @@ fun SettingUser() {
 
 @Composable
 fun SettingAppearance() {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,24 +111,31 @@ fun SettingAppearance() {
                     .align(CenterVertically)
             )
             var checked by rememberSaveable { mutableStateOf(true) }
-
+            var isDarkTheme by remember{ mutableStateOf(false) }
+            var checkedd by remember{ mutableStateOf(false) }
             Switch(
                 checked = checked,
                 onCheckedChange = {
                     checked = it
-                }, modifier = Modifier
+                    isDarkTheme = !isDarkTheme
+                }
+                , modifier = Modifier
                     .weight(1f)
+
             )
         }
         Spacer(modifier = Modifier.size(6.dp))
         Text("cambiar idioma", fontSize = 20.sp, color = Color.Black, modifier = Modifier)
 
     }
-
 }
 
 @Composable
 fun SettingMore() {
+
+val web= Uri.parse("https://www.figma.com/file/tdo46JJqpCHLXOcjVTvm5O/Turista-App?type=design&node-id=0-1&mode=design&t=igzZ977QOPWQjHZU-0")
+val webIntent = Intent(Intent.ACTION_VIEW,web)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,7 +157,7 @@ fun SettingMore() {
 
 
             )
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/}) {
                 Icon(
                     Icons.Default.ExitToApp,
                     contentDescription = ""
@@ -184,4 +196,3 @@ private fun HomeScreenPrev() {
         }
     }
 }
-
