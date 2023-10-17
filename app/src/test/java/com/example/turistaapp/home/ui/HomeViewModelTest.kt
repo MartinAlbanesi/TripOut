@@ -1,7 +1,9 @@
 package com.example.turistaapp.home.ui
 
 import com.example.turistaapp.core.utils.ResponseUiState
+import com.example.turistaapp.home.domain.GetFlowLocationsDestinationFromDBUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.home.fake.FakeDataSource
 import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
 import io.mockk.MockKAnnotations
@@ -22,10 +24,16 @@ class HomeViewModelTest {
     @RelaxedMockK
     private lateinit var getNearbyLocationsUseCase: GetNearbyLocationsUseCase
 
+    @RelaxedMockK
+    private lateinit var getRandomLocationFromDB: GetRandomLocationFromDB
+
+    @RelaxedMockK
+    private lateinit var getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        homeViewModel = HomeViewModel(dispatcher,getNearbyLocationsUseCase)
+        homeViewModel = HomeViewModel(dispatcher,getNearbyLocationsUseCase, getRandomLocationFromDB, getFlowLocationsDestinationFromDBUseCase)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.example.turistaapp.create_trip.domain
 
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.IPlaceDetailsRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
@@ -28,7 +29,7 @@ class GetPlaceDetailsUseCaseTest {
     @Test
     fun cuandoElRepositorioRetornaLocationModelEntoncesDevolverUnLocationModel() = runTest {
         // Given
-        val expected = LocationModel("placeId", "name", "", 0.0, 0, "phone", 0.0, 0.0, listOf(""))
+        val expected = FakeDataBaseSource.locationModel
 
         coEvery {
             placeDetailsRepository.getPlaceDetails(any())

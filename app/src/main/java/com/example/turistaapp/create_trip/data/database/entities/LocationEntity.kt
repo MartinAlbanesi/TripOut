@@ -25,11 +25,11 @@ data class LocationEntity(
     @ColumnInfo(name = "user_rating")
     val userRating: Int,
 
-    @ColumnInfo(name = "latitude")
-    val latitude: Double,
+    @ColumnInfo(name = "lat")
+    val lat: Double,
 
-    @ColumnInfo(name = "longitude")
-    val longitude: Double,
+    @ColumnInfo(name = "lng")
+    val lng: Double,
 
     @ColumnInfo(name = "photo")
     val photo: String?,

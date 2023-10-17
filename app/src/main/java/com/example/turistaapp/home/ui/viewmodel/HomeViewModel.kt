@@ -1,22 +1,29 @@
 package com.example.turistaapp.home.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.getLocationString
+import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.home.domain.GetFlowLocationsDestinationFromDBUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
-    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase
+    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
+    private val getRandomLocationFromDB: GetRandomLocationFromDB,
+    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
@@ -25,24 +32,43 @@ class HomeViewModel @Inject constructor(
     private val _nearbyLocationSelect = MutableStateFlow<NearbyLocation?>(null)
     val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
-    init {
-        setNearbyLocations(-34.67113975510375, -58.56181551536259)
-    }
+    private val _destinationLocations = MutableStateFlow<List<LocationModel>>(emptyList())
+    val destinationLocations = _destinationLocations.asStateFlow()
 
-    fun setNearbyLocations(lat : Double, lng : Double) {
+    init {
+        getFlowLocationFromDB()
 
         viewModelScope.launch(dispatcher) {
-//            try {
-                val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat,lng))
+            if (getRandomLocationFromDB() != null) {
+                setNearbyLocations(getRandomLocationFromDB()!!.lat, getRandomLocationFromDB()!!.lng)
+            } else {
+                setNearbyLocations(-34.67113975510375, -58.56181551536259)
+            }
+        }
+    }
 
-                if(nearbyLocations.isNullOrEmpty()){
+    private fun getFlowLocationFromDB() {
+        viewModelScope.launch(dispatcher) {
+            getFlowLocationsDestinationFromDBUseCase().collect {
+                _destinationLocations.emit(it)
+            }
+        }
+    }
+
+    fun setNearbyLocations(lat: Double, lng: Double) {
+
+        viewModelScope.launch(dispatcher) {
+            try {
+                val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat, lng))
+
+                if (nearbyLocations.isNullOrEmpty()) {
                     _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))
-                }else{
+                } else {
                     _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
                 }
-//            }catch (e : Exception) {
-//                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
-//            }
+            } catch (e: Exception) {
+                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
+            }
         }
 
     }

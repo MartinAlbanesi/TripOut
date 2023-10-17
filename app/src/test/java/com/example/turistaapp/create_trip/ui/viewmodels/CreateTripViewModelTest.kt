@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
@@ -57,8 +58,7 @@ class CreateTripViewModelTest {
     @Test
     fun cuandoElCasoDeUsoGetPlaceDetailsRetorneLocationModelEntoncesSeteaEnUnaVariableLiveData() = runTest {
         //Given
-        val expected = LocationModel("placeId", "name", "", 0.0, 0, "phone", 0.0, 0.0, listOf(""))
-
+        val expected = FakeDataBaseSource.locationModel
         coEvery {
             getPlaceDetailsUseCase(any())
         }.returns(expected)

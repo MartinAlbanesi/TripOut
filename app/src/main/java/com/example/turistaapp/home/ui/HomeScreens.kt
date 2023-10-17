@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.utils.ResponseUiState
+import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.models.NearbyLocation
 import com.example.turistaapp.home.ui.components.SheetContent
 import com.example.turistaapp.home.ui.components.TripDialog
@@ -33,6 +34,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: NearbyLocation?,
+    locations: List<LocationModel>,
     setShowFloatingActionButton: () -> Unit,
     setShowBottomBar: () -> Unit,
     setTitle: () -> Unit,
@@ -107,11 +109,10 @@ fun HomeScreen(
         },
     ) {
         MapScreen(
-            mapUiSettings,
-            cameraPositionState,
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+            mapUiSettings = mapUiSettings,
+            cameraPositionState = cameraPositionState,
+            paddingValues = paddingValues,
+            locations = locations
         )
         if (showDialog) {
             if (nearbyLocationSelect != null) {
