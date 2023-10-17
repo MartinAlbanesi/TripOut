@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,11 +24,11 @@ fun NavHostScreen(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
 
-    val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(ResponseUiState.Loading)
+    val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
-    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
+    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
-    val destinationLocations by homeViewModel.destinationLocations.collectAsState(emptyList())
+    val destinationLocations by homeViewModel.destinationLocations.collectAsStateWithLifecycle()
 
     NavHost(navController = navController, startDestination = Routes.Home.route){
         composable(Routes.Home.route) {
