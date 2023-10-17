@@ -1,7 +1,7 @@
-package com.example.turistaapp.create_trip.data.network.place_details.models
+package com.example.turistaapp.create_trip.data.network.place_details.models // ktlint-disable package-name
 
-data class PlacesDetailsResponseApiModel (
-    //val html_attributions: List<String>,
+data class PlacesDetailsResponseApiModel(
+    // val html_attributions: List<String>,
     val result: PlaceApiModel,
-    //val status: String?
+    // val status: String?
 )

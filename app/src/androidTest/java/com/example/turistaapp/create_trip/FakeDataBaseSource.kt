@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip
+package com.example.turistaapp.create_trip // ktlint-disable package-name
 
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.data.database.entities.TripEntity

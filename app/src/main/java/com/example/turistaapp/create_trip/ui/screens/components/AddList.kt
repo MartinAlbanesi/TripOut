@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.screens.components
+package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -21,14 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
 
 @Composable
 fun AddList(
@@ -39,7 +34,7 @@ fun AddList(
     onValueNameChange: (String) -> Unit,
     onDialogOpenChange: (Boolean) -> Unit,
     onAdd: (String) -> Unit,
-    onRemove: (String) -> Unit
+    onRemove: (String) -> Unit,
 ) {
     // Fila con botón de agregar y lista de nombres
     Text(text = label)
@@ -47,12 +42,12 @@ fun AddList(
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         // Botón para abrir el cuadro de diálogo
         IconButton(
-            onClick = {onDialogOpenChange(true)},
-            modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            onClick = { onDialogOpenChange(true) },
+            modifier = Modifier.background(MaterialTheme.colorScheme.primary),
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
         }
@@ -65,23 +60,22 @@ fun AddList(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .background(MaterialTheme.colorScheme.secondary)
-                        .wrapContentHeight(Alignment.CenterVertically)
-                ){
+                        .wrapContentHeight(Alignment.CenterVertically),
+                ) {
                     Text(
                         text = name,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
-                            .padding(4.dp)
+                            .padding(4.dp),
                     )
                     IconButton(
                         onClick = { onRemove(name) },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+                        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
                     ) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = null)
                     }
                 }
-
             }
         }
     }
@@ -99,7 +93,7 @@ fun AddList(
                     onValueChange = { onValueNameChange(it) },
                     singleLine = true,
                     maxLines = 1,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             },
             confirmButton = {
@@ -109,7 +103,7 @@ fun AddList(
                             onAdd(name)
                             onDialogOpenChange(false)
                         }
-                    }
+                    },
                 ) {
                     Text("Aceptar")
                 }
@@ -118,11 +112,11 @@ fun AddList(
                 Button(
                     onClick = {
                         onDialogOpenChange(false)
-                    }
+                    },
                 ) {
                     Text("Cancelar")
                 }
-            }
+            },
         )
     }
     Spacer(modifier = Modifier.height(4.dp))

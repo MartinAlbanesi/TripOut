@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.screens.components
+package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +16,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +26,7 @@ fun TextInputField(
     onValueChange: (String) -> Unit,
     focusRequester: FocusRequester,
     imeAction: ImeAction,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
         value = textValue,
@@ -39,14 +38,14 @@ fun TextInputField(
         label = { Text(label) },
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = imeAction,
-            keyboardType = keyboardType
+            keyboardType = keyboardType,
         ),
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = Color.LightGray
+            unfocusedBorderColor = Color.LightGray,
         ),
     )
     Spacer(modifier = Modifier.height(4.dp))

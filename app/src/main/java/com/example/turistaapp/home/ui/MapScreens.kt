@@ -36,36 +36,35 @@ fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
     locations: List<LocationModel> = emptyList(),
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
 ) {
     Box(
         modifier = Modifier
             .padding(paddingValues)
             .fillMaxSize(),
     ) {
-
         GoogleMap(
             uiSettings = mapUiSettings,
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         ) {
             locations.forEach {
                 Marker(
                     state = MarkerState(
-                        position = LatLng(it.lat, it.lng)
+                        position = LatLng(it.lat, it.lng),
                     ),
                     title = it.name,
                     snippet = it.address,
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
                 )
             }
         }
 
-        //Barra Superior
+        // Barra Superior
         Row(
             Modifier
                 .fillMaxWidth()
                 .background(Color(0x1A000000))
-                .align(Alignment.TopCenter)
+                .align(Alignment.TopCenter),
         ) {
             Spacer(modifier = Modifier.weight(2f))
             Text(
@@ -73,19 +72,19 @@ fun MapScreen(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(9f),
                 color = Color.Black,
-                fontSize = 24.sp
+                fontSize = 24.sp,
             )
             IconForMap(
                 painter = R.drawable.tune,
                 modifier = Modifier
                     .align(CenterVertically)
-                    .weight(1f)
+                    .weight(1f),
             ) {}
             IconForMap(
                 painter = R.drawable.fullscreen,
                 modifier = Modifier
                     .align(CenterVertically)
-                    .weight(1f)
+                    .weight(1f),
             ) {}
         }
     }
@@ -96,16 +95,16 @@ private fun IconForMap(
     painter: Int,
     contentDescription: String = "",
     modifier: Modifier = Modifier,
-    onClickButton: () -> Unit
+    onClickButton: () -> Unit,
 ) {
     IconButton(
         onClick = { onClickButton },
-        modifier = modifier.size(24.dp)
+        modifier = modifier.size(24.dp),
     ) {
         Icon(
             painter = painterResource(id = painter),
             contentDescription = contentDescription,
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }

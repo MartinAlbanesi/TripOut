@@ -15,38 +15,38 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
+
 @Module
 @InstallIn(SingletonComponent::class)
 class HomeModule {
 
     @Provides
     @Singleton
-    fun provideNearbySearchLocationRepository(nearbySearchLocationApiService: NearbySearchLocationApiService) : INearbySearchLocationRepository{
+    fun provideNearbySearchLocationRepository(nearbySearchLocationApiService: NearbySearchLocationApiService): INearbySearchLocationRepository {
         return NearbySearchLocationRepository(nearbySearchLocationApiService)
     }
 
     @Provides
     @Singleton
-    fun provideGetResultList(nearbySearchLocationRepository: INearbySearchLocationRepository) : GetNearbyLocationsUseCase{
+    fun provideGetResultList(nearbySearchLocationRepository: INearbySearchLocationRepository): GetNearbyLocationsUseCase {
         return GetNearbyLocationsUseCase(nearbySearchLocationRepository)
     }
 
     @Provides
     @Singleton
-    fun provideDispatcher() : CoroutineDispatcher{
+    fun provideDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
     }
 
     @Singleton
     @Provides
-    fun provideGetRandomLocationFromDB(getDestinationLocationsFromDataBase: GetDestinationLocationsFromDataBase): GetRandomLocationFromDB{
+    fun provideGetRandomLocationFromDB(getDestinationLocationsFromDataBase: GetDestinationLocationsFromDataBase): GetRandomLocationFromDB {
         return GetRandomLocationFromDB(getDestinationLocationsFromDataBase)
     }
 
     @Singleton
     @Provides
-    fun provideGetFlowLocationsDestinationFromDBUseCase(tripDBRepository: TripDBRepository): GetFlowLocationsDestinationFromDBUseCase{
+    fun provideGetFlowLocationsDestinationFromDBUseCase(tripDBRepository: TripDBRepository): GetFlowLocationsDestinationFromDBUseCase {
         return GetFlowLocationsDestinationFromDBUseCase(tripDBRepository)
     }
 }
-

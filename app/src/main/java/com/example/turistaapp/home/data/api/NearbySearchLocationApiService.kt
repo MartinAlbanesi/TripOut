@@ -13,7 +13,6 @@ interface NearbySearchLocationApiService {
         @Query("location") location: String,
         @Query("radius") radius: Int = 5000,
         @Query("type") type: String = "point_of_interest",
-        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY
+        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY,
     ): Response<NearbySearchLocationApi>
-
 }

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
-
 import org.junit.Test
 
 class GetFlowLocationsDestinationFromDBUseCaseTestUseCase {
@@ -29,8 +28,7 @@ class GetFlowLocationsDestinationFromDBUseCaseTestUseCase {
     }
 
     @Test
-    fun `invoke - repository return flow with Sting List - return Flow with LocationModel List` () = runTest{
-
+    fun `invoke - repository return flow with Sting List - return Flow with LocationModel List`() = runTest {
         val expected = listOf(
             FakeDataBaseSource.locationModel,
             FakeDataBaseSource.locationModel,
@@ -51,8 +49,7 @@ class GetFlowLocationsDestinationFromDBUseCaseTestUseCase {
     }
 
     @Test
-    fun `invoke - repository return flow with emptyList - return Flow with emptyList` () = runTest{
-
+    fun `invoke - repository return flow with emptyList - return Flow with emptyList`() = runTest {
         coEvery { tripDBRepository.getFlowLocationsFromDestination() } returns flow {
             emit(emptyList())
         }
@@ -61,6 +58,5 @@ class GetFlowLocationsDestinationFromDBUseCaseTestUseCase {
 
         assertEquals(emptyList<Any>(), result)
         assertEquals(0, result.size)
-
     }
 }

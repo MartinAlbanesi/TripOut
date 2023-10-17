@@ -16,11 +16,10 @@ object FakeDataSource {
                 photoApis = null,
                 rating = 0.0,
                 userRatings = 0,
-                direction = "direction"
-            )
-        )
+                direction = "direction",
+            ),
+        ),
     )
-
 
     val fakeNearbyLocations = listOf(
         NearbyLocation(
@@ -39,7 +38,7 @@ object FakeDataSource {
             userRating = 0,
             direction = "direction",
             lat = 0.0,
-            lng = 0.0
+            lng = 0.0,
         ),
         NearbyLocation(
             name = "name3",
@@ -48,7 +47,7 @@ object FakeDataSource {
             userRating = 0,
             direction = "direction",
             lat = 0.0,
-            lng = 0.0
-        )
+            lng = 0.0,
+        ),
     )
 }

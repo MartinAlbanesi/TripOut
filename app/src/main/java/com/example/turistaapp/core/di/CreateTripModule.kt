@@ -14,7 +14,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -23,31 +22,31 @@ class CreateTripModule {
 
     @Provides
     @Singleton
-    fun providePlaceAutocompleteLocationRepository(placesAutocompleteApiService: PlacesAutocompleteApiService) : IPlaceAutocompleteLocationRepository {
+    fun providePlaceAutocompleteLocationRepository(placesAutocompleteApiService: PlacesAutocompleteApiService): IPlaceAutocompleteLocationRepository {
         return PlaceAutocompleteLocationRepository(placesAutocompleteApiService)
     }
 
     @Provides
     @Singleton
-    fun provideGetResultList(placeAutocompleteLocationRepository: IPlaceAutocompleteLocationRepository) : GetPlaceAutocompleteLocationsUseCase{
+    fun provideGetResultList(placeAutocompleteLocationRepository: IPlaceAutocompleteLocationRepository): GetPlaceAutocompleteLocationsUseCase {
         return GetPlaceAutocompleteLocationsUseCase(placeAutocompleteLocationRepository)
     }
 
     @Provides
     @Singleton
-    fun providePlaceDetailsRepository(placesDetailsApiService: PlaceDetailsApiService) : IPlaceDetailsRepository {
+    fun providePlaceDetailsRepository(placesDetailsApiService: PlaceDetailsApiService): IPlaceDetailsRepository {
         return PlaceDetailsRepository(placesDetailsApiService)
     }
 
     @Provides
     @Singleton
-    fun provideGetPlaceDetailsResult(placeDetailsRepository: IPlaceDetailsRepository) : GetPlaceDetailsUseCase {
+    fun provideGetPlaceDetailsResult(placeDetailsRepository: IPlaceDetailsRepository): GetPlaceDetailsUseCase {
         return GetPlaceDetailsUseCase(placeDetailsRepository)
     }
 
     @Singleton
     @Provides
-    fun provideGetDestinationLocationFromDB(tripDBRepository: TripDBRepository) : GetDestinationLocationsFromDataBase{
+    fun provideGetDestinationLocationFromDB(tripDBRepository: TripDBRepository): GetDestinationLocationsFromDataBase {
         return GetDestinationLocationsFromDataBase(tripDBRepository)
     }
 }

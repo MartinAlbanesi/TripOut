@@ -30,9 +30,8 @@ import com.example.turistaapp.main.MainViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = hiltViewModel(),
 ) {
-
     val navController = rememberNavController()
     val index by mainViewModel.indexSelect.observeAsState(1)
     val title by mainViewModel.titleAppBar.observeAsState("Home")
@@ -47,20 +46,20 @@ fun MainScreen(
                 title = title,
                 onClickNavigation = {
                     navController.navigate(route)
-                }
+                },
             )
         },
         bottomBar = {
-            if(showBottomBar){
+            if (showBottomBar) {
                 BottomBarScreen(
                     index,
                     navController,
-                    changeIndex = { mainViewModel.setIndex(it) }
+                    changeIndex = { mainViewModel.setIndex(it) },
                 )
             }
         },
         floatingActionButton = {
-            if(showFloatingActionButton){
+            if (showFloatingActionButton) {
                 FloatingScreen {
                     navController.navigate(Routes.CreateTrip.route)
                     mainViewModel.setTitle("Crea y Viaja")
@@ -83,7 +82,6 @@ fun TopBarScreen(
     iconsAction: List<ImageVector> = emptyList(),
     onClickNavigation: () -> Unit,
 ) {
-
     TopAppBar(
         title = {
             Text(text = title)
@@ -99,7 +97,7 @@ fun TopBarScreen(
                     Icon(imageVector = icon, contentDescription = null)
                 }
             }
-        }
+        },
     )
 }
 
@@ -114,11 +112,9 @@ fun FloatingScreen(onClickButton: () -> Unit) {
 fun BottomBarScreen(
     index: Int,
     navController: NavHostController = rememberNavController(),
-    changeIndex: (Int) -> Unit
+    changeIndex: (Int) -> Unit,
 ) {
-
     NavigationBar {
-
         NavigationBarItem(
             selected = index == 1,
             onClick = {
@@ -127,7 +123,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.Home, contentDescription = "Home")
-            }
+            },
         )
         NavigationBarItem(
             selected = index == 2,
@@ -137,7 +133,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.DirectionsCar, contentDescription = "Viajes")
-            }
+            },
         )
 
         NavigationBarItem(
@@ -148,8 +144,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.Settings, contentDescription = "Configuraciones")
-            }
+            },
         )
-
     }
 }

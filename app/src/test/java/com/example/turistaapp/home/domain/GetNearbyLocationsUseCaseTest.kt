@@ -1,7 +1,7 @@
 package com.example.turistaapp.home.domain
 
-import com.example.turistaapp.home.fake.FakeDataSource
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
+import com.example.turistaapp.home.fake.FakeDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -11,7 +11,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
-class GetNearbyLocationsUseCaseTest{
+class GetNearbyLocationsUseCaseTest {
 
     private lateinit var getNearbyLocationsUseCase: GetNearbyLocationsUseCase
 
@@ -19,23 +19,22 @@ class GetNearbyLocationsUseCaseTest{
     private lateinit var nearbySearchLocationRepository: NearbySearchLocationRepository
 
     @Before
-    fun setUp(){
+    fun setUp() {
         MockKAnnotations.init(this)
         getNearbyLocationsUseCase = GetNearbyLocationsUseCase(nearbySearchLocationRepository)
     }
 
     @Test
     fun `cuando el repositorio no tiene ningun error devolver la lista de NearbyLocation`() = runTest {
-
         val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
 
-        //Given
+        // Given
         coEvery { nearbySearchLocationRepository.getNearbyLocation(any()) } returns fakeNearbyLocations
 
-        //When
+        // When
         val result = getNearbyLocationsUseCase("")
 
-        //Then
+        // Then
         assertEquals(result!![0].name, fakeNearbyLocations[0].name)
     }
 
@@ -45,7 +44,7 @@ class GetNearbyLocationsUseCaseTest{
 
         val result = getNearbyLocationsUseCase("")
 
-        //Then
+        // Then
         assertNull(result)
     }
 }

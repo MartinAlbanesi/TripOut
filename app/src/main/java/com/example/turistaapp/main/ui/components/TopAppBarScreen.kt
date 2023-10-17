@@ -17,7 +17,6 @@ fun TopAppBarScreen(
     iconsNavigation: ImageVector = Icons.Outlined.ArrowBack,
     iconsAction: List<ImageVector> = emptyList(),
 ) {
-
     TopAppBar(
         title = {
             Text(text = title)
@@ -33,6 +32,6 @@ fun TopAppBarScreen(
                     Icon(imageVector = icon, contentDescription = null)
                 }
             }
-        }
+        },
     )
 }

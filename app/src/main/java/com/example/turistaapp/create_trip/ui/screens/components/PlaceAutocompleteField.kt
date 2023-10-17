@@ -1,6 +1,5 @@
-package com.example.turistaapp.create_trip.ui.screens.components
+package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,18 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,9 +42,8 @@ fun PlaceAutocompleteField(
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text,
     onClearField: () -> Unit,
-    onSelectedLocationChange: (PlaceAutocompletePredictionModel) -> Unit
+    onSelectedLocationChange: (PlaceAutocompletePredictionModel) -> Unit,
 ) {
-
     OutlinedTextField(
         label = { Text(label) },
         singleLine = true,
@@ -65,14 +57,14 @@ fun PlaceAutocompleteField(
                 onDropdownVisibilityChange(true)
             }
         },
-        //Icono de cruz para borrar el texto
+        // Icono de cruz para borrar el texto
         trailingIcon = {
             IconButton(
                 onClick = {
                     onClearField()
                     onDropdownVisibilityChange(false)
                 },
-                modifier = Modifier.background(Color.Transparent)
+                modifier = Modifier.background(Color.Transparent),
             ) {
                 Icon(imageVector = Icons.Default.Clear, contentDescription = null)
             }
@@ -80,7 +72,7 @@ fun PlaceAutocompleteField(
 
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = imeAction,
-            keyboardType = keyboardType
+            keyboardType = keyboardType,
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -98,18 +90,17 @@ fun PlaceAutocompleteField(
                         onDropdownVisibilityChange(false)
                         onSelectedLocationChange(prediction)
                     }
-                    .padding(16.dp)
+                    .padding(16.dp),
             ) {
                 Column {
                     Text(
                         text = description ?: "",
-                        style = TextStyle(fontWeight = FontWeight.Bold)
+                        style = TextStyle(fontWeight = FontWeight.Bold),
                     )
                 }
             }
         }
     }
-
 
     /*
     Log.d("PlaceAutocompleteField", "PlaceAutocompleteField: $isDropdownVisible")
@@ -135,7 +126,5 @@ fun PlaceAutocompleteField(
 
      */
 
-
     Spacer(modifier = Modifier.height(4.dp))
-
 }

@@ -1,6 +1,5 @@
 package com.example.turistaapp.home.domain
 
-import android.util.Log
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetFlowLocationsDestinationFromDBUseCase @Inject constructor(
-    private val tripDBRepository: TripDBRepository
+    private val tripDBRepository: TripDBRepository,
 ) {
 
     suspend operator fun invoke(): Flow<List<LocationModel>> {
@@ -24,11 +23,11 @@ class GetFlowLocationsDestinationFromDBUseCase @Inject constructor(
             emit(destinationLocationToModel)
         }
 
-        val combine = tripDBRepository.getFlowLocationsFromDestination().combine(locationModelFlow){
-            _, locationModels -> locationModels
-        }
+        val combine = tripDBRepository.getFlowLocationsFromDestination()
+            .combine(locationModelFlow) { _, locationModels ->
+                locationModels
+            }
 
         return combine
     }
-
 }

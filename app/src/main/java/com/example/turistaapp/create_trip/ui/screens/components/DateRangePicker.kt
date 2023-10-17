@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.screens.components
+package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,9 +37,8 @@ fun DateRangePickerInput(
     showDateRangePicker: Boolean,
     onDismiss: (Boolean) -> Unit,
     onConfirm: (Boolean) -> Unit,
-    onClickable: () -> Unit
+    onClickable: () -> Unit,
 ) {
-
     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
     formatter.timeZone = TimeZone.getTimeZone("South_America/Argentina")
 
@@ -54,7 +53,6 @@ fun DateRangePickerInput(
                 }) {
                     Text(text = "Confirm")
                 }
-
             },
             dismissButton = {
                 TextButton(onClick = {
@@ -62,11 +60,11 @@ fun DateRangePickerInput(
                 }) {
                     Text(text = "Cancel")
                 }
-            }
+            },
         ) {
             DateRangePicker(
                 state = dateRangePickerState,
-                modifier = Modifier.height(height = 500.dp) // if I don't set this, dialog's buttons are not appearing
+                modifier = Modifier.height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing
             )
         }
     }
@@ -77,13 +75,13 @@ fun DateRangePickerInput(
             .wrapContentSize(Alignment.Center)
             .clickable {
                 onClickable()
-            }
+            },
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             OutlinedTextField(
                 value = "${formatter.format(Date(startDate))} - ${formatter.format(Date(endDate))}",
@@ -98,13 +96,12 @@ fun DateRangePickerInput(
                             .size(60.dp)
                             .clickable {
                                 onClickable()
-                            }
+                            },
                     )
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             )
-
         }
     }
 }

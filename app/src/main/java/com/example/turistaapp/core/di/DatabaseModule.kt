@@ -23,7 +23,7 @@ class DatabaseModule {
         Room.databaseBuilder(
             applicationContext,
             TripDataBase::class.java,
-            "app_database"
+            "app_database",
         ).build()
 
     @Singleton
@@ -34,9 +34,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideTripDBRepository(tripDao: TripDao) : TripDBRepository {
+    fun provideTripDBRepository(tripDao: TripDao): TripDBRepository {
         return TripDBRepositoryImpl(tripDao)
     }
-
-
 }

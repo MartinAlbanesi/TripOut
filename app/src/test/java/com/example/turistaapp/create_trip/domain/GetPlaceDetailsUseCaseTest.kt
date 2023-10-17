@@ -2,14 +2,12 @@ package com.example.turistaapp.create_trip.domain
 
 import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.IPlaceDetailsRepository
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Test
 
@@ -19,6 +17,7 @@ class GetPlaceDetailsUseCaseTest {
 
     @RelaxedMockK
     private lateinit var placeDetailsRepository: IPlaceDetailsRepository
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -35,12 +34,11 @@ class GetPlaceDetailsUseCaseTest {
             placeDetailsRepository.getPlaceDetails(any())
         }.returns(expected)
 
-        //When
+        // When
         val result = getPlaceDetailsUseCase("placeId")
 
-        //Then
+        // Then
         assertEquals(expected, result)
         assertEquals(expected.placeID, result!!.placeID)
-
     }
 }

@@ -24,18 +24,18 @@ import com.example.turistaapp.R
 
 @Composable
 fun TripItem(
-    name : String,
+    name: String,
     photoUrl: String,
     modifier: Modifier = Modifier,
-    onClickCard : () -> Unit
+    onClickCard: () -> Unit,
 ) {
     Card(
         modifier = Modifier
-            .size(200.dp,360.dp)
+            .size(200.dp, 360.dp)
             .padding(4.dp)
             .clickable {
                 onClickCard()
-            }
+            },
     ) {
         Text(text = name, modifier = Modifier.padding(8.dp))
         AsyncImage(
@@ -43,7 +43,7 @@ fun TripItem(
             contentDescription = name,
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.ic_launcher_background),
-            modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(12.dp))
+            modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(12.dp)),
         )
     }
 }

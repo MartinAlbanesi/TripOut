@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.database.entities
+package com.example.turistaapp.create_trip.data.database.entities // ktlint-disable package-name
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -50,5 +50,5 @@ data class TripEntity(
     val images: MutableList<String>?,
 
     @ColumnInfo(name = "comments")
-    val comments: MutableList<String>?
+    val comments: MutableList<String>?,
 )

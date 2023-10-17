@@ -2,7 +2,6 @@ package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomSheetScaffold
@@ -38,9 +37,9 @@ fun HomeScreen(
     setShowFloatingActionButton: () -> Unit,
     setShowBottomBar: () -> Unit,
     setTitle: () -> Unit,
-    onCardSelection: (String) -> Unit
+    onCardSelection: (String) -> Unit,
 ) {
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         setShowBottomBar()
         setShowFloatingActionButton()
         setTitle()
@@ -48,8 +47,8 @@ fun HomeScreen(
     val mapUiSettings by remember {
         mutableStateOf(
             MapUiSettings(
-                zoomControlsEnabled = false
-            )
+                zoomControlsEnabled = false,
+            ),
         )
     }
 
@@ -70,18 +69,18 @@ fun HomeScreen(
     BottomSheetScaffold(
         sheetPeekHeight = paddingFromScaffold,
 
-        //Lo que va dentro del BottomSheet
+        // Lo que va dentro del BottomSheet
         sheetContent = {
             when (nearbyLocations) {
                 is ResponseUiState.Error -> {
                     Box(
                         modifier = Modifier
                             .size(200.dp),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = nearbyLocations.message,
-                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
                         )
                     }
                 }
@@ -90,7 +89,7 @@ fun HomeScreen(
                     CircularProgressIndicator(
                         modifier = Modifier
                             .padding(bottom = paddingValues.calculateBottomPadding())
-                            .size(100.dp)
+                            .size(100.dp),
                     )
                 }
 
@@ -101,18 +100,17 @@ fun HomeScreen(
                         onClickCard = {
                             showDialog = true
                             onCardSelection(it)
-                        }
+                        },
                     )
                 }
             }
-
         },
     ) {
         MapScreen(
             mapUiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState,
             paddingValues = paddingValues,
-            locations = locations
+            locations = locations,
         )
         if (showDialog) {
             if (nearbyLocationSelect != null) {
@@ -120,13 +118,9 @@ fun HomeScreen(
                     name = nearbyLocationSelect.name,
                     photoUrl = nearbyLocationSelect.photoUrl,
                     onDismiss = { showDialog = false },
-                    onConfirm = { showDialog = false }
+                    onConfirm = { showDialog = false },
                 )
             }
         }
-
     }
 }
-
-
-

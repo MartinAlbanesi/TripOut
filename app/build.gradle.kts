@@ -4,7 +4,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -36,7 +36,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -82,49 +82,49 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    //Material design
-    implementation ("com.google.android.material:material:1.9.0")
+    // Material design
+    implementation("com.google.android.material:material:1.9.0")
 
-    //Google maps
-    implementation ("com.google.maps.android:maps-compose:2.11.0")
-    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    // Google maps
+    implementation("com.google.maps.android:maps-compose:2.11.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 
-    //Navigation
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
-    //livedata compose
-    implementation ("androidx.compose.runtime:runtime-livedata:1.3.1")
-    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+    // livedata compose
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.1")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
 
-    //Material extend icons
-    implementation ("androidx.compose.material:material-icons-extended:1.4.3")
+    // Material extend icons
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
 
-    //Room
-    implementation ("androidx.room:room-ktx:2.5.0")
-    kapt ("androidx.room:room-compiler:2.5.0")
+    // Room
+    implementation("androidx.room:room-ktx:2.5.0")
+    kapt("androidx.room:room-compiler:2.5.0")
     testImplementation("androidx.room:room-testing:2.5.0")
 
-    //Dagger Hilt
+    // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    //Retrofit2
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    // Retrofit2
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
-    //Coil
+    // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    //kotlin corrutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    // kotlin corrutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
-    //mockk
-    testImplementation ("io.mockk:mockk:1.12.2")
+    // mockk
+    testImplementation("io.mockk:mockk:1.12.2")
 
-    //Mock web Server
+    // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 }
 

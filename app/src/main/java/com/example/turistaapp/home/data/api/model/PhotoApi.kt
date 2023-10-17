@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 data class PhotoApi(
     val height: Int,
     @SerializedName("photo_reference") val photoUrl: String,
-    val width: Int
+    val width: Int,
 )

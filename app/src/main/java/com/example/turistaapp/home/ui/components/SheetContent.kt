@@ -16,13 +16,14 @@ fun SheetContent(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues,
     nearbyLocations: List<NearbyLocation>,
-    onClickCard: (String) -> Unit
+    onClickCard: (String) -> Unit,
 ) {
     Column(
         Modifier.padding(
             bottom = paddingValues.calculateBottomPadding(),
-            start = 4.dp, end = 4.dp
-        )
+            start = 4.dp,
+            end = 4.dp,
+        ),
     ) {
         Text(text = "Descubre más viajes", modifier = Modifier.padding(8.dp))
 
@@ -31,7 +32,7 @@ fun SheetContent(
                 TripItem(
                     name = it.name,
                     photoUrl = it.photoUrl,
-                    onClickCard = { onClickCard(it.name) }
+                    onClickCard = { onClickCard(it.name) },
                 )
             }
         }

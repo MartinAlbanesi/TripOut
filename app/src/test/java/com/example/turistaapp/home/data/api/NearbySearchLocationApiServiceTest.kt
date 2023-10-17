@@ -4,18 +4,18 @@ import com.example.turistaapp.core.Helper
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.Assert.assertEquals
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import org.junit.Assert.assertNull
 
 class NearbySearchLocationApiServiceTest {
 
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var nearbySearchLocationApiService : NearbySearchLocationApiService
+    private lateinit var nearbySearchLocationApiService: NearbySearchLocationApiService
     private lateinit var mockResponse: MockResponse
 
     @Before
@@ -50,7 +50,7 @@ class NearbySearchLocationApiServiceTest {
     }
 
     @Test
-    fun searchNearbyPlaces_code400_returnNull() = runTest{
+    fun searchNearbyPlaces_code400_returnNull() = runTest {
         mockResponse.setResponseCode(400)
         mockWebServer.enqueue(mockResponse)
 

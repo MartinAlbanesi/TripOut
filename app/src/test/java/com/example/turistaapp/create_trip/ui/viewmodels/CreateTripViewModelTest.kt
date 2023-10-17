@@ -5,18 +5,14 @@ import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import okhttp3.Dispatcher
 import org.junit.After
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,7 +41,7 @@ class CreateTripViewModelTest {
         createTripViewModel = CreateTripViewModel(
             insertTripUseCase,
             getPlaceAutocompleteLocationsUseCase,
-            getPlaceDetailsUseCase
+            getPlaceDetailsUseCase,
         )
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
@@ -57,16 +53,16 @@ class CreateTripViewModelTest {
 
     @Test
     fun cuandoElCasoDeUsoGetPlaceDetailsRetorneLocationModelEntoncesSeteaEnUnaVariableLiveData() = runTest {
-        //Given
+        // Given
         val expected = FakeDataBaseSource.locationModel
         coEvery {
             getPlaceDetailsUseCase(any())
         }.returns(expected)
 
-        //When
+        // When
         createTripViewModel.onCreateTripClick()
 
-        //Then
+        // Then
         val result = createTripViewModel.originLocation.value
         assertEquals(expected, result)
     }

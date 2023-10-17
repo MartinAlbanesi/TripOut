@@ -4,8 +4,8 @@ data class NearbyLocation(
     val name: String,
     val photoUrl: String,
     val rating: Double,
-    val userRating : Int,
-    val direction : String,
+    val userRating: Int,
+    val direction: String,
     val lat: Double,
-    val lng: Double
+    val lng: Double,
 )

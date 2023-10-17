@@ -7,17 +7,15 @@ import javax.inject.Inject
 interface INearbySearchLocationRepository {
 
     suspend fun getNearbyLocation(location: String): List<NearbyLocation>?
-
 }
 
 class NearbySearchLocationRepository @Inject constructor(
-    private val nearbySearchLocationApiService: NearbySearchLocationApiService
+    private val nearbySearchLocationApiService: NearbySearchLocationApiService,
 ) : INearbySearchLocationRepository {
 
     override suspend fun getNearbyLocation(
-        location: String
+        location: String,
     ): List<NearbyLocation>? {
-
         val api = nearbySearchLocationApiService.searchNearbyPlaces(location)
 
         if (api.isSuccessful && api.code() == 200) {
@@ -29,12 +27,11 @@ class NearbySearchLocationRepository @Inject constructor(
                     userRating = it.userRatings,
                     direction = it.direction,
                     lat = it.getLat(),
-                    lng = it.getLng()
+                    lng = it.getLng(),
                 )
             }
             return nearbyLocations
         }
         return null
     }
-
 }

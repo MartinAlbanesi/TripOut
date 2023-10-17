@@ -1,6 +1,5 @@
 package com.example.turistaapp.home.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
@@ -23,7 +22,7 @@ class HomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
     private val getRandomLocationFromDB: GetRandomLocationFromDB,
-    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase
+    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase,
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
@@ -56,7 +55,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setNearbyLocations(lat: Double, lng: Double) {
-
         viewModelScope.launch(dispatcher) {
             try {
                 val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat, lng))
@@ -70,7 +68,6 @@ class HomeViewModel @Inject constructor(
                 _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
             }
         }
-
     }
 
     fun setNearbyLocationSelect(nearbyLocationName: String) {

@@ -9,13 +9,13 @@ import com.example.turistaapp.create_trip.data.database.entities.TripEntity
 
 @Database(
     entities = [
-        TripEntity::class
+        TripEntity::class,
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = true,
 )
-@TypeConverters( Converters::class )
-abstract class TripDataBase: RoomDatabase() {
+@TypeConverters(Converters::class)
+abstract class TripDataBase : RoomDatabase() {
 
     abstract fun getTripDao(): TripDao
 }

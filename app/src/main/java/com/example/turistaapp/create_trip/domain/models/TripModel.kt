@@ -1,6 +1,4 @@
-package com.example.turistaapp.create_trip.domain.models
-
-import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
+package com.example.turistaapp.create_trip.domain.models // ktlint-disable package-name
 
 data class TripModel(
 
@@ -17,5 +15,5 @@ data class TripModel(
     val images: MutableList<String>?,
     val comments: MutableList<String>?,
     val isFavorite: Boolean,
-    val isFinished: Boolean
+    val isFinished: Boolean,
 )

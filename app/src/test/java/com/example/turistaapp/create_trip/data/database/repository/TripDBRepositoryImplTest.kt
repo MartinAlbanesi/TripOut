@@ -30,7 +30,7 @@ class TripDBRepositoryImplTest {
     @Test
     fun `getLocationsFromDestination - when TripDao getLocationsFromDestination return emptyList - returnEmptyList`() = runTest {
         // Given
-        coEvery{ tripDao.getLocationsFromDestination() } returns emptyList()
+        coEvery { tripDao.getLocationsFromDestination() } returns emptyList()
 
         // When
         val result = tripDBRepository.getLocationsFromDestination()
@@ -41,7 +41,7 @@ class TripDBRepositoryImplTest {
     }
 
     @Test
-    fun `getLocationsFromDestination - when TripDao getLocationsFromDestination return String List - return String List`() =runTest {
+    fun `getLocationsFromDestination - when TripDao getLocationsFromDestination return String List - return String List`() = runTest {
         // Given
         val expected = listOf("titi", "wea")
         coEvery { tripDao.getLocationsFromDestination() } returns expected
@@ -57,9 +57,8 @@ class TripDBRepositoryImplTest {
     }
 
     @Test
-    fun `getFlowLocationsFromDestination - when flow from TripDao return emptyList - return emptyList` () = runTest{
-
-        val flowList = flow{
+    fun `getFlowLocationsFromDestination - when flow from TripDao return emptyList - return emptyList`() = runTest {
+        val flowList = flow {
             emit(emptyList<String>())
         }
 
@@ -72,10 +71,9 @@ class TripDBRepositoryImplTest {
     }
 
     @Test
-    fun `getFlowLocationsFromDestination - when flow from TripDao String List - return String list` () = runTest{
-
+    fun `getFlowLocationsFromDestination - when flow from TripDao String List - return String list`() = runTest {
         val listString = listOf("titi", "wea")
-        val flowList = flow{
+        val flowList = flow {
             emit(listString)
         }
 

@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.database.repository
+package com.example.turistaapp.create_trip.data.database.repository // ktlint-disable package-name
 
 import android.util.Log
 import com.example.turistaapp.create_trip.data.database.dao.TripDao
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class TripDBRepositoryImpl @Inject constructor(
-    private val tripDao: TripDao
+    private val tripDao: TripDao,
 ) : TripDBRepository {
     override suspend fun insertTrip(trip: TripEntity) {
         Log.d("Prueba", "insertTrip: $trip")

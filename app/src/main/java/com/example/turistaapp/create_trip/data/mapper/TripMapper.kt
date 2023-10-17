@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.mapper
+package com.example.turistaapp.create_trip.data.mapper // ktlint-disable package-name
 
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.data.database.entities.TripEntity
@@ -19,28 +19,28 @@ fun TripEntity.toTripModel() = TripModel(
     isFavorite = isFavorite,
     isFinished = isFinished,
     images = images,
-    comments = comments
+    comments = comments,
 )
 
 fun TripModel.toTripEntity() = origin?.let {
     destination?.let { it1 ->
         TripEntity(
-        id = 0,
-        name = name,
-        origin = it.toLocationEntity(),
-        destination = it1.toLocationEntity(),
-        stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
-        startDate = startDate,
-        endDate = endDate,
-        members = members,
-        transport = transport,
-        description = description,
-        author = author,
-        isFavorite = isFavorite,
-        isFinished = isFinished,
-        images = images,
-        comments = comments
-    )
+            id = 0,
+            name = name,
+            origin = it.toLocationEntity(),
+            destination = it1.toLocationEntity(),
+            stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
+            startDate = startDate,
+            endDate = endDate,
+            members = members,
+            transport = transport,
+            description = description,
+            author = author,
+            isFavorite = isFavorite,
+            isFinished = isFinished,
+            images = images,
+            comments = comments,
+        )
     }
 }
 
@@ -53,7 +53,7 @@ fun LocationEntity.toLocationModel() = LocationModel(
     address = address,
     lat = lat,
     lng = lng,
-    types = types
+    types = types,
 )
 
 fun LocationModel.toLocationEntity() = LocationEntity(
@@ -66,6 +66,5 @@ fun LocationModel.toLocationEntity() = LocationEntity(
     address = address,
     lat = lat,
     lng = lng,
-    types = types
+    types = types,
 )
-
