@@ -8,7 +8,6 @@ import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
-import com.example.turistaapp.home.domain.models.NearbyLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
     val nearbyLocations = _nearbyLocationsApi.asStateFlow()
 
-    private val _nearbyLocationSelect = MutableStateFlow<NearbyLocation?>(null)
+    private val _nearbyLocationSelect = MutableStateFlow<LocationModel?>(null)
     val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
     private val _destinationLocations = MutableStateFlow<List<LocationModel>>(emptyList())
@@ -78,9 +77,9 @@ class HomeViewModel @Inject constructor(
         _nearbyLocationSelect.value = getNearbyLocation
     }
 
-    private fun getNearbyLocationByName(name: String): NearbyLocation? {
+    private fun getNearbyLocationByName(name: String): LocationModel? {
         val nearbyLocation =
-            (nearbyLocations.value as ResponseUiState.Success<List<NearbyLocation>>).values
+            (nearbyLocations.value as ResponseUiState.Success<List<LocationModel>>).values
         return nearbyLocation.find { it.name == name }
     }
 }

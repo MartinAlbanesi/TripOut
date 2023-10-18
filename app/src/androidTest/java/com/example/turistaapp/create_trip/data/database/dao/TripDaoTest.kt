@@ -10,7 +10,6 @@ import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

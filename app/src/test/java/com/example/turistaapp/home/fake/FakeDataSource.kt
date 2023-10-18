@@ -1,53 +1,62 @@
 package com.example.turistaapp.home.fake
 
-import com.example.turistaapp.home.data.api.model.GeometryApi
-import com.example.turistaapp.home.data.api.model.LocationApi
-import com.example.turistaapp.home.data.api.model.NearbyLocationApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.GeometryApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.LocationApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
+import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
-import com.example.turistaapp.home.domain.models.NearbyLocation
+
 
 object FakeDataSource {
 
     val fakeNearbyLocationApi = NearbySearchLocationApi(
-        nearbyLocationApis = listOf(
-            NearbyLocationApi(
+        nearbyLocationsApi = listOf(
+            PlaceApi(
                 geometryApi = GeometryApi(LocationApi(0.0, 0.0)),
                 name = "name1",
-                photoApis = null,
+                photoApi = null,
                 rating = 0.0,
                 userRatings = 0,
-                direction = "direction",
+                address = "direction",
+                placeID = "",
+                types = listOf(""),
             ),
         ),
     )
 
     val fakeNearbyLocations = listOf(
-        NearbyLocation(
+        LocationModel(
             name = "name1",
             photoUrl = "photoUrl",
             rating = 0.0,
             userRating = 0,
-            direction = "direction",
+            address = "direction",
             lat = 0.0,
             lng = 0.0,
+            placeID = "",
+            types = listOf(""),
         ),
-        NearbyLocation(
+        LocationModel(
             name = "name2",
             photoUrl = "photoUrl",
             rating = 0.0,
             userRating = 0,
-            direction = "direction",
+            address = "direction",
             lat = 0.0,
             lng = 0.0,
+            placeID = "",
+            types = listOf(""),
         ),
-        NearbyLocation(
+        LocationModel(
             name = "name3",
             photoUrl = "photoUrl",
             rating = 0.0,
             userRating = 0,
-            direction = "direction",
+            address = "direction",
             lat = 0.0,
             lng = 0.0,
+            placeID = "",
+            types = listOf(""),
         ),
     )
 }

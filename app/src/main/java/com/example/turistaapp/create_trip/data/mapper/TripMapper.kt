@@ -2,6 +2,7 @@ package com.example.turistaapp.create_trip.data.mapper // ktlint-disable package
 
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.data.database.entities.TripEntity
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 
@@ -22,27 +23,24 @@ fun TripEntity.toTripModel() = TripModel(
     comments = comments,
 )
 
-fun TripModel.toTripEntity() = origin?.let {
-    destination?.let { it1 ->
-        TripEntity(
-            id = 0,
-            name = name,
-            origin = it.toLocationEntity(),
-            destination = it1.toLocationEntity(),
-            stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
-            startDate = startDate,
-            endDate = endDate,
-            members = members,
-            transport = transport,
-            description = description,
-            author = author,
-            isFavorite = isFavorite,
-            isFinished = isFinished,
-            images = images,
-            comments = comments,
-        )
-    }
-}
+fun TripModel.toTripEntity() = TripEntity(
+    id = 0,
+    name = name,
+    origin = this.origin.toLocationEntity(),//toLocationEntity(),
+    destination = this.destination.toLocationEntity(),
+    stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
+    startDate = startDate,
+    endDate = endDate,
+    members = members,
+    transport = transport,
+    description = description,
+    author = author,
+    isFavorite = isFavorite,
+    isFinished = isFinished,
+    images = images,
+    comments = comments,
+)
+
 
 fun LocationEntity.toLocationModel() = LocationModel(
     placeID = placeID,
@@ -68,3 +66,16 @@ fun LocationModel.toLocationEntity() = LocationEntity(
     lng = lng,
     types = types,
 )
+
+fun PlaceApi.toLocationModel() = LocationModel(
+    lat = geometryApi.locationApi.lat,
+    lng = geometryApi.locationApi.lng,
+    name = name,
+    photoUrl = getPhoto(),
+    rating = rating,
+    userRating = userRatings,
+    address = address,
+    types = types,
+    placeID = placeID,
+)
+

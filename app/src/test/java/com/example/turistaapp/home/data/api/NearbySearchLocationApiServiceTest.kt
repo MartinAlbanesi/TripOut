@@ -45,8 +45,8 @@ class NearbySearchLocationApiServiceTest {
         mockWebServer.takeRequest()
 
         assertEquals(200, response.code())
-        assertEquals(2, response.body()!!.nearbyLocationApis.size)
-        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationApis[0].name)
+        assertEquals(2, response.body()!!.nearbyLocationsApi.size)
+        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationsApi[0].name)
     }
 
     @Test

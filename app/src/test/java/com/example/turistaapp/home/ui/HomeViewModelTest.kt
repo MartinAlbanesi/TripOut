@@ -9,6 +9,7 @@ import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -19,6 +20,7 @@ class HomeViewModelTest {
 
     private lateinit var homeViewModel: HomeViewModel
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
     @RelaxedMockK
@@ -47,7 +49,7 @@ class HomeViewModelTest {
 
         homeViewModel.setNearbyLocations(0.0, 0.0)
 
-        var actual = homeViewModel.nearbyLocations.value
+        val actual = homeViewModel.nearbyLocations.value
 
         val expected = ResponseUiState.Error("No se encontraron lugares cercanos")
 
@@ -68,20 +70,4 @@ class HomeViewModelTest {
         val actual = homeViewModel.nearbyLocations.value
         assertEquals(expected, actual)
     }
-
-//    @Test
-//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnException_thenNearbyLocationsIsErrorWithMessageException() = runTest {
-//
-//        coEvery { getNearbyLocationsUseCase(any()) }.throws( IndexOutOfBoundsException("Error"))
-//
-//        homeViewModel.setNearbyLocations(0.0,0.0)
-//
-//        val expected = ResponseUiState.Error("Error")
-//
-//        val actual = homeViewModel.nearbyLocations.value
-// //        assertEquals(expected,actual)
-//        assertThrows(IndexOutOfBoundsException::class.java) {
-//            throw IndexOutOfBoundsException("Error")
-//        }
-//    }
 }

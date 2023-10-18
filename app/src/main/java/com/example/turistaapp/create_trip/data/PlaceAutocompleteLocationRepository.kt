@@ -16,8 +16,6 @@ class PlaceAutocompleteLocationRepository @Inject constructor(
     override suspend fun getPlaceAutocompleteLocations(location: String): List<PlaceAutocompletePredictionModel>? {
         val api = placesAutocompleteApiService.getPlaceAutocompletePredictions(location)
 
-        // @Query("types") types: List<String> = listOf("establishment")
-
         if (api.isSuccessful) {
             val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.filter {
                 it.typesApi.contains("geocode")

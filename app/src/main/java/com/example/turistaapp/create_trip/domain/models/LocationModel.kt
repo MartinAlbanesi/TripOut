@@ -10,4 +10,5 @@ data class LocationModel(
     val lng: Double,
     val photoUrl: String?,
     val types: List<String>?,
+    val isFinished: Boolean = false
 )

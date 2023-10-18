@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.home.domain.models.NearbyLocation
 import com.example.turistaapp.home.ui.components.SheetContent
 import com.example.turistaapp.home.ui.components.TripDialog
 import com.google.android.gms.maps.model.CameraPosition
@@ -32,7 +31,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun HomeScreen(
     paddingValues: PaddingValues,
     nearbyLocations: ResponseUiState,
-    nearbyLocationSelect: NearbyLocation?,
+    nearbyLocationSelect: LocationModel?,
     locations: List<LocationModel>,
     setShowFloatingActionButton: () -> Unit,
     setShowBottomBar: () -> Unit,
@@ -96,7 +95,7 @@ fun HomeScreen(
                 is ResponseUiState.Success<*> -> {
                     SheetContent(
                         paddingValues = paddingValues,
-                        nearbyLocations = nearbyLocations.values as List<NearbyLocation>,
+                        nearbyLocations = nearbyLocations.values as List<LocationModel>,
                         onClickCard = {
                             showDialog = true
                             onCardSelection(it)
