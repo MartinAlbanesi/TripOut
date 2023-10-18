@@ -20,9 +20,7 @@ class PlaceAutocompleteLocationRepository @Inject constructor(
 
         if (api.isSuccessful) {
             val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.filter {
-                it.typesApi.contains("street_address") || it.typesApi.contains("establishment") || it.typesApi.contains(
-                    "route",
-                ) || it.typesApi.contains("premise")
+                it.typesApi.contains("geocode")
             }
                 ?.map {
                     Log.d(

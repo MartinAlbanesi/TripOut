@@ -314,7 +314,6 @@ class CreateTripViewModel @Inject constructor(
                     isFavorite = false,
                     isFinished = false,
                 )
-                Log.i("titi", trip.toString())
                 insertTripUseCase.execute(trip)
                 isSuccessful = true
             } catch (e: Exception) {

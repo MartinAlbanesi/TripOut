@@ -55,7 +55,7 @@ fun HomeScreen(
     val unlam = LatLng(-34.67112967722258, -58.56390981764954)
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(unlam, 14f)
+        position = CameraPosition.fromLatLngZoom(unlam, 11f)
     }
 
     var showDialog by remember {

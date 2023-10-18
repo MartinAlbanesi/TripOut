@@ -1,13 +1,10 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePickerDialog
@@ -19,7 +16,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.sql.Date
@@ -41,6 +39,33 @@ fun DateRangePickerInput(
 ) {
     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
     formatter.timeZone = TimeZone.getTimeZone("South_America/Argentina")
+
+    OutlinedTextField(
+        value = "${formatter.format(Date(startDate))} - ${formatter.format(Date(endDate))}",
+        onValueChange = { dateRangePickerState.displayMode },
+        readOnly = true,
+        label = { Text(label) },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Filled.DateRange,
+                contentDescription = "Date Picker",
+                modifier = Modifier
+                    .size(60.dp),
+            )
+        },
+        interactionSource = remember { MutableInteractionSource() }
+            .also { interactionSource ->
+                LaunchedEffect(interactionSource) {
+                    interactionSource.interactions.collect {
+                        if (it is PressInteraction.Release) {
+                            onClickable()
+                        }
+                    }
+                }
+            },
+        modifier = Modifier
+            .fillMaxWidth(),
+    )
 
     if (showDateRangePicker) {
         DatePickerDialog(
@@ -65,42 +90,6 @@ fun DateRangePickerInput(
             DateRangePicker(
                 state = dateRangePickerState,
                 modifier = Modifier.height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing
-            )
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize(Alignment.Center)
-            .clickable {
-                onClickable()
-            },
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            OutlinedTextField(
-                value = "${formatter.format(Date(startDate))} - ${formatter.format(Date(endDate))}",
-                onValueChange = { dateRangePickerState.displayMode },
-                readOnly = true,
-                label = { Text(label) },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.DateRange,
-                        contentDescription = "Date Picker",
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clickable {
-                                onClickable()
-                            },
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
             )
         }
     }
