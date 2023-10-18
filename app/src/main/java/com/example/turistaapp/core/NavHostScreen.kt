@@ -2,13 +2,12 @@ package com.example.turistaapp.core
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeScreen
@@ -18,34 +17,30 @@ import com.example.turistaapp.main.MainViewModel
 @Composable
 fun NavHostScreen(
     navController: NavHostController,
-    paddingValues: PaddingValues,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    mainViewModel: MainViewModel = hiltViewModel()
 ) {
+    val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
-    val nearbyLocations by homeViewModel.nearbyLocations.collectAsState(ResponseUiState.Loading)
+    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
-    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsState(null)
+    val destinationLocations by homeViewModel.destinationLocations.collectAsStateWithLifecycle()
 
-    NavHost(navController = navController, startDestination = Routes.Home.route){
+    NavHost(navController = navController, startDestination = Routes.Home.route) {
         composable(Routes.Home.route) {
             HomeScreen(
-                paddingValues,
+//                paddingValues,
                 nearbyLocations,
                 nearbyLocationSelect,
-                setShowBottomBar = {
-                    mainViewModel.setShowBottomBar(true)
-                },
-                setShowFloatingActionButton = {
-                    mainViewModel.setShowFloatingActionButton(true)
-                },
-                setTitle = {
-                    mainViewModel.setTitle("Home")
-                }
+                locations = destinationLocations,
+                onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
             ) { homeViewModel.setNearbyLocationSelect(it) }
         }
-        composable(Routes.CreateTrip.route){ CreateTripScreen(innerPadding = paddingValues) }
-        composable(Routes.Trips.route){  }
-        composable(Routes.Settings.route){  }
+        composable(Routes.CreateTrip.route) {
+            CreateTripScreen {
+                navController.navigate(Routes.Home.route)
+            }
+        }
+        composable(Routes.Trips.route) { }
+        composable(Routes.Settings.route) { }
     }
 }

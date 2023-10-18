@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.turistaapp.R
@@ -24,26 +25,30 @@ import com.example.turistaapp.R
 
 @Composable
 fun TripItem(
-    name : String,
-    photoUrl: String,
+    name: String,
+    photoUrl: String?,
     modifier: Modifier = Modifier,
-    onClickCard : () -> Unit
+    onClickCard: () -> Unit,
 ) {
     Card(
         modifier = Modifier
-            .size(200.dp,360.dp)
+            .size(240.dp, 360.dp)
             .padding(4.dp)
             .clickable {
                 onClickCard()
-            }
+            },
     ) {
-        Text(text = name, modifier = Modifier.padding(8.dp))
+        Text(
+            text = name,
+            modifier = Modifier.padding(8.dp),
+            fontWeight = FontWeight.Bold
+        )
         AsyncImage(
-            model = photoUrl,
+            model = photoUrl ?: R.drawable.placeholder,
             contentDescription = name,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             placeholder = painterResource(id = R.drawable.ic_launcher_background),
-            modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(12.dp))
+            modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(12.dp)),
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -19,52 +20,68 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.turistaapp.R
+import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 
 @Composable
 fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
-    modifier: Modifier = Modifier
+    locations: List<LocationModel> = emptyList(),
 ) {
     Box(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxSize(),
     ) {
-
         GoogleMap(
             uiSettings = mapUiSettings,
-            cameraPositionState = cameraPositionState
-        )
+            cameraPositionState = cameraPositionState,
+        ) {
+            locations.forEach {
+                Marker(
+                    state = MarkerState(
+                        position = LatLng(it.lat, it.lng),
+                    ),
+                    title = it.name,
+                    snippet = it.address,
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                )
+            }
+        }
 
-        //Barra Superior
+        // Barra Superior
         Row(
             Modifier
                 .fillMaxWidth()
                 .background(Color(0x1A000000))
-                .align(Alignment.TopCenter)
+                .align(Alignment.TopCenter),
         ) {
-            Spacer(modifier = Modifier.weight(2f))
+//            Spacer(modifier = Modifier.weight(2f))
             Text(
                 text = "Mis Destinos",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(9f),
                 color = Color.Black,
-                fontSize = 24.sp
+                fontSize = 24.sp,
             )
-            IconForMap(
-                painter = R.drawable.tune,
-                modifier = Modifier
-                    .align(CenterVertically)
-                    .weight(1f)
-            ) {}
-            IconForMap(
-                painter = R.drawable.fullscreen,
-                modifier = Modifier
-                    .align(CenterVertically)
-                    .weight(1f)
-            ) {}
+//            IconForMap(
+//                painter = R.drawable.tune,
+//                modifier = Modifier
+//                    .align(CenterVertically)
+//                    .weight(1f),
+//            ) {}
+//            IconForMap(
+//                painter = R.drawable.fullscreen,
+//                modifier = Modifier
+//                    .align(CenterVertically)
+//                    .weight(1f),
+//            ) {}
         }
     }
 }
@@ -72,18 +89,18 @@ fun MapScreen(
 @Composable
 private fun IconForMap(
     painter: Int,
-    contentDescription : String = "",
+    contentDescription: String = "",
     modifier: Modifier = Modifier,
-    onClickButton : () -> Unit
+    onClickButton: () -> Unit,
 ) {
     IconButton(
-        onClick = { onClickButton },
-        modifier = modifier.size(24.dp)
+        onClick = { onClickButton() },
+        modifier = modifier.size(24.dp),
     ) {
         Icon(
             painter = painterResource(id = painter),
             contentDescription = contentDescription,
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }

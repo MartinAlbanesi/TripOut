@@ -1,106 +1,302 @@
-package com.example.turistaapp.create_trip.ui.screens
+package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
+import com.example.turistaapp.main.ui.components.TopAppBarScreen
 import java.util.*
 
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
-    innerPadding: PaddingValues,
-    createTripViewModel: CreateTripViewModel = hiltViewModel()
+    createTripViewModel: CreateTripViewModel = hiltViewModel(),
+    onClickCreateTrip: () -> Unit,
 ) {
-
-    //Nombre del Viaje
+    // Nombre del Viaje
     val tripName by createTripViewModel.name.observeAsState("")
 
-    //Origen
+    // Origen
     val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
     val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
-        false
+        false,
     )
     val originPredictions by createTripViewModel.originPredictions.observeAsState(emptyList())
 
-    //Destino
+    // Destino
     val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
     val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
-        false
+        false,
     )
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
-        emptyList()
+        emptyList(),
     )
 
-    //Fechas
+    // Fechas
     val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
     val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis)
-    //FALTA IMPLEMENTAR EL DATE RANGE PICKER STATE EN EL VIEWMODEL
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = startDate,
-        initialSelectedEndDateMillis = endDate
+        initialSelectedEndDateMillis = endDate,
     )
     val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
-        false
+        false,
     )
 
-    //Acompañantes
+    // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
     val isMemberDialogOpen by createTripViewModel.isMemberDialogOpen.observeAsState(false)
 
-    //Paradas
+    // Paradas
     val stops by createTripViewModel.stops.observeAsState(emptyList())
     val stopName by createTripViewModel.stopName.observeAsState("")
     val isStopDialogOpen by createTripViewModel.isStopDialogOpen.observeAsState(false)
 
-    //Transporte
+    // Transporte
     val transports by createTripViewModel.transports.observeAsState(
-        emptyList()
+        emptyList(),
     )
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
     val transport by createTripViewModel.transport.observeAsState("")
-    //Descripción
+    // Descripción
     val description by createTripViewModel.description.observeAsState("")
-    //Focus Requesters
+    // Focus Requesters
     val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
     val destinationFocusRequester by createTripViewModel.destinationFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
     val descriptionFocusRequester by createTripViewModel.descriptionFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
 
     val context = LocalContext.current
 
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        topBar = {
+            TopAppBarScreen(title = "Crear Viaje"){
+                onClickCreateTrip()
+            }
+        }
+    ) { paddingValues ->
+
+        LazyColumn(
+            modifier = Modifier.padding(
+                vertical = paddingValues.calculateTopPadding(),
+                horizontal = 8.dp,
+            ),
+        ) {
+            item {
+                // Nombre del Viaje
+                TextInputField(
+                    label = "Nombre del Viaje",
+                    textValue = tripName,
+                    onValueChange = { createTripViewModel.onNameChange(it) },
+                    focusRequester = originFocusRequester,
+                    imeAction = ImeAction.Next,
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Origen
+                PlaceAutocompleteField(
+                    label = "Origen",
+                    query = originAutocompleteQuery,
+                    onQueryChange = { createTripViewModel.onOriginAutocompleteQueryValueChange(it) },
+                    isDropdownVisible = isOriginAutocompleteDropdownVisible,
+                    onDropdownVisibilityChange = {
+                        createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
+                    },
+                    predictions = originPredictions,
+                    onPredictionSelect = {
+                        createTripViewModel.onOriginAutocompletePredictionSelect(
+                            it
+                        )
+                    },
+                    focusRequester = originFocusRequester,
+                    imeAction = ImeAction.Next,
+                    onClearField = { createTripViewModel.onClearOriginField() },
+                    onSelectedLocationChange = {
+                        createTripViewModel.onSelectedOriginLocationChange(
+                            it
+                        )
+                    },
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Destino
+                PlaceAutocompleteField(
+                    label = "Destino",
+                    query = destinationAutocompleteQuery,
+                    onQueryChange = {
+                        createTripViewModel.onDestinationAutocompleteQueryValueChange(
+                            it
+                        )
+                    },
+                    isDropdownVisible = isDestinationAutocompleteDropdownVisible,
+                    onDropdownVisibilityChange = {
+                        createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(it)
+                    },
+                    predictions = destinationPredictions,
+                    onPredictionSelect = {
+                        createTripViewModel.onDestinationAutocompletePredictionSelect(
+                            it,
+                        )
+                    },
+                    focusRequester = destinationFocusRequester,
+                    imeAction = ImeAction.Next,
+                    onClearField = { createTripViewModel.onClearDestinationField() },
+                    onSelectedLocationChange = {
+                        createTripViewModel.onSelectedDestinationLocationChange(
+                            it,
+                        )
+                    },
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Fechas
+                DateRangePickerInput(
+                    label = "Fechas",
+                    startDate = startDate,
+                    endDate = endDate,
+                    dateRangePickerState = dateRangePickerState,
+                    showDateRangePicker = showDateRangePickerDialog,
+                    onDismiss = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
+                    onConfirm = {
+                        dateRangePickerState.selectedStartDateMillis?.let { long ->
+                            createTripViewModel.onStartDateChange(
+                                long,
+                            )
+                        }
+                        dateRangePickerState.selectedEndDateMillis?.let { long ->
+                            createTripViewModel.onEndDateChange(
+                                long,
+                            )
+                        }
+                        createTripViewModel.onShowDateRangePickerDialogChange(it)
+                    },
+                ) { createTripViewModel.onShowDateRangePickerDialogChange(true) }
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Transporte
+                ExposedDropdownMenuBoxInput(
+                    label = "Transporte",
+                    values = transports,
+                    isExpanded = isExpanded,
+                    transport = transport,
+                    onExpanded = { createTripViewModel.onIsExpandedChange(it) },
+                    onClickable = { createTripViewModel.onTransportChange(it) },
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Descripción
+                TextInputField(
+                    label = "Descripción (Opcional)",
+                    textValue = description,
+                    onValueChange = { createTripViewModel.onDescriptionChange(it) },
+                    focusRequester = descriptionFocusRequester,
+                    imeAction = ImeAction.Done,
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Acompañantes
+                AddList(
+                    label = "Acompañantes",
+                    name = memberName,
+                    values = members,
+                    isDialogOpen = isMemberDialogOpen,
+                    onValueNameChange = { createTripViewModel.onMemberNameChange(it) },
+                    onDialogOpenChange = {
+                        createTripViewModel.onMemberDialogOpenChange(it)
+                        createTripViewModel.resetMemberNameValue()
+                    },
+                    onAdd = { createTripViewModel.onAddMember(it) },
+                    onRemove = { createTripViewModel.onRemoveMember(it) },
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Paradas
+                AddList(
+                    label = "Puntos de Parada",
+                    name = stopName,
+                    values = stops,
+                    isDialogOpen = isStopDialogOpen,
+                    onValueNameChange = { createTripViewModel.onStopNameChange(it) },
+                    onDialogOpenChange = {
+                        createTripViewModel.onStopDialogOpenChange(it)
+                        createTripViewModel.resetStopNameValue()
+                    },
+                    onAdd = { createTripViewModel.onAddStop(it) },
+                    onRemove = { createTripViewModel.onRemoveStop(it) },
+                )
+
+                Spacer(modifier = Modifier.size(8.dp))
+
+                // Botón para guardar
+                Button(
+                    onClick = {
+                        if (createTripViewModel.onCreateTripClick()) {
+                            Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    // .align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Guardar")
+                }
+            }
+        }
+    }
+
+    /*
     TripFormContent(
         innerPadding,
         tripName = tripName,
@@ -110,10 +306,10 @@ fun CreateTripScreen(
         dateRangePickerState = dateRangePickerState,
         showDateRangePickerDialog = showDateRangePickerDialog,
         onDismissDateRangePickerDialog = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
-        onConfirmDateRangePickerDialog = {
+        onConfirmDateRangePickerDialog = { it ->
             dateRangePickerState.selectedStartDateMillis?.let {
                 createTripViewModel.onStartDateChange(
-                    it
+                    it,
                 )
             }
             dateRangePickerState.selectedEndDateMillis?.let { createTripViewModel.onEndDateChange(it) }
@@ -147,11 +343,11 @@ fun CreateTripScreen(
         description = description,
         onDescriptionChange = { createTripViewModel.onDescriptionChange(it) },
         onCreateTripClick = {
-            if(createTripViewModel.onCreateTripClick())
+            if (createTripViewModel.onCreateTripClick()) {
                 Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT).show()
-            else
+            } else {
                 Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT).show()
-
+            }
         },
         originFocusRequester = originFocusRequester,
         destinationFocusRequester = destinationFocusRequester,
@@ -185,12 +381,14 @@ fun CreateTripScreen(
         onClearDestinationField = { createTripViewModel.onClearDestinationField() },
         onSelectedDestinationLocationChange = {
             createTripViewModel.onSelectedDestinationLocationChange(
-                it
+                it,
             )
-        }
+        },
     )
+     */
 }
 
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripFormContent(
@@ -243,29 +441,28 @@ fun TripFormContent(
     destinationAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
     onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
     onClearDestinationField: () -> Unit,
-    onSelectedDestinationLocationChange: (PlaceAutocompletePredictionModel) -> Unit
+    onSelectedDestinationLocationChange: (PlaceAutocompletePredictionModel) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         item {
-
             // Nombre del Viaje
             TextInputField(
                 label = "Nombre del Viaje",
                 textValue = tripName,
                 onValueChange = onNameChange,
                 focusRequester = originFocusRequester,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
 
             // Origen y Destino
-            //Buscador de lugares
+            // Buscador de lugares
             PlaceAutocompleteField(
                 label = "Origen",
                 query = originAutocompleteQuery,
@@ -277,7 +474,7 @@ fun TripFormContent(
                 focusRequester = originFocusRequester,
                 imeAction = ImeAction.Next,
                 onClearField = onClearOriginField,
-                onSelectedLocationChange = onSelectedOriginLocationChange
+                onSelectedLocationChange = onSelectedOriginLocationChange,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -293,12 +490,12 @@ fun TripFormContent(
                 focusRequester = destinationFocusRequester,
                 imeAction = ImeAction.Next,
                 onClearField = onClearDestinationField,
-                onSelectedLocationChange = onSelectedDestinationLocationChange
+                onSelectedLocationChange = onSelectedDestinationLocationChange,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
 
-            //Fechas
+            // Fechas
             DateRangePickerInput(
                 label = "Fechas",
                 startDate = startDate,
@@ -306,7 +503,7 @@ fun TripFormContent(
                 dateRangePickerState = dateRangePickerState,
                 showDateRangePicker = showDateRangePickerDialog,
                 onDismiss = { onDismissDateRangePickerDialog(it) },
-                onConfirm = { onConfirmDateRangePickerDialog(it) }
+                onConfirm = { onConfirmDateRangePickerDialog(it) },
             ) { onDismissDateRangePickerDialog(true) }
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -318,7 +515,7 @@ fun TripFormContent(
                 isExpanded = isExpanded,
                 transport = transport,
                 onExpanded = onIsExpandedChange,
-                onClickable = onTransportChange
+                onClickable = onTransportChange,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -329,7 +526,7 @@ fun TripFormContent(
                 textValue = description,
                 onValueChange = onDescriptionChange,
                 focusRequester = descriptionFocusRequester,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -343,7 +540,7 @@ fun TripFormContent(
                 onValueNameChange = { onMemberNameChange(it) },
                 onDialogOpenChange = { onMemberDialogOpenChange(it) },
                 onAdd = onAddMember,
-                onRemove = onRemoveMember
+                onRemove = onRemoveMember,
             )
 
             Spacer(modifier = Modifier.size(4.dp))
@@ -357,7 +554,7 @@ fun TripFormContent(
                 onValueNameChange = { onStopNameChange(it) },
                 onDialogOpenChange = { onStopDialogOpenChange(it) },
                 onAdd = onAddStop,
-                onRemove = onRemoveStop
+                onRemove = onRemoveStop,
             )
 
             Spacer(modifier = Modifier.size(8.dp))
@@ -366,11 +563,12 @@ fun TripFormContent(
             Button(
                 onClick = onCreateTripClick,
                 modifier = Modifier
-                    .fillMaxWidth()
-                //.align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(),
+                // .align(Alignment.CenterHorizontally)
             ) {
                 Text("Guardar")
             }
         }
     }
 }
+ */

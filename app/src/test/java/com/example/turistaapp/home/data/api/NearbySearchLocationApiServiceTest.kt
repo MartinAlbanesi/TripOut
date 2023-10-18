@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NearbySearchLocationApiServiceTest {
 
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var nearbySearchLocationApiService : NearbySearchLocationApiService
+    private lateinit var nearbySearchLocationApiService: NearbySearchLocationApiService
     private lateinit var mockResponse: MockResponse
 
     @Before
@@ -36,7 +36,7 @@ class NearbySearchLocationApiServiceTest {
 
     @Test
     fun searchNearbyPlaces_code200_returnNearbySearchLocationApi() = runTest {
-        val content = Helper.readFileResources("/fake.json")
+        val content = Helper.readFileResources("/fakeNearbyLocations.json")
         mockResponse.setResponseCode(200)
         mockResponse.setBody(content)
         mockWebServer.enqueue(mockResponse)
@@ -45,12 +45,12 @@ class NearbySearchLocationApiServiceTest {
         mockWebServer.takeRequest()
 
         assertEquals(200, response.code())
-        assertEquals(2, response.body()!!.nearbyLocationApis.size)
-        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationApis[0].name)
+        assertEquals(2, response.body()!!.nearbyLocationsApi.size)
+        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationsApi[0].name)
     }
 
     @Test
-    fun searchNearbyPlaces_code400_returnNull() = runTest{
+    fun searchNearbyPlaces_code400_returnNull() = runTest {
         mockResponse.setResponseCode(400)
         mockWebServer.enqueue(mockResponse)
 

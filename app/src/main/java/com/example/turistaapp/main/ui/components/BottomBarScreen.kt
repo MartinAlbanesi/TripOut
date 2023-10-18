@@ -12,16 +12,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turistaapp.core.utils.Routes
 
-
 @Composable
 fun BottomBarScreen(
     index: Int,
     navController: NavHostController = rememberNavController(),
-    changeIndex: (Int) -> Unit
+    changeIndex: (Int) -> Unit,
 ) {
-
     NavigationBar {
-
         NavigationBarItem(
             selected = index == 1,
             onClick = {
@@ -30,7 +27,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.Home, contentDescription = "Home")
-            }
+            },
         )
         NavigationBarItem(
             selected = index == 2,
@@ -40,7 +37,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.DirectionsCar, contentDescription = "Viajes")
-            }
+            },
         )
 
         NavigationBarItem(
@@ -51,8 +48,7 @@ fun BottomBarScreen(
             },
             icon = {
                 Icon(Icons.Outlined.Settings, contentDescription = "Configuraciones")
-            }
+            },
         )
-
     }
 }

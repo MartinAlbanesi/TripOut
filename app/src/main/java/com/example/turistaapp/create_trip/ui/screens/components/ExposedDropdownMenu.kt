@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.ui.screens.components
+package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,13 +21,13 @@ fun ExposedDropdownMenuBoxInput(
     isExpanded: Boolean,
     transport: String,
     onExpanded: (Boolean) -> Unit,
-    onClickable: (String) -> Unit
+    onClickable: (String) -> Unit,
 ) {
     ExposedDropdownMenuBox(
         expanded = isExpanded,
         onExpandedChange = { onExpanded(it) },
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         OutlinedTextField(
             value = transport,
@@ -41,21 +41,21 @@ fun ExposedDropdownMenuBoxInput(
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         ExposedDropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { onExpanded(false) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             values.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item) },
                     onClick = {
-                          onClickable(item)
-                          onExpanded(false)
-                    }
+                        onClickable(item)
+                        onExpanded(false)
+                    },
                 )
             }
         }

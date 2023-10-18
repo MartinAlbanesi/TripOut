@@ -17,7 +17,7 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com")
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,20 +26,19 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideGooglePlacesApiService(retrofit: Retrofit) : NearbySearchLocationApiService {
+    fun provideGooglePlacesApiService(retrofit: Retrofit): NearbySearchLocationApiService {
         return retrofit.create(NearbySearchLocationApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGooglePlaceAutocompleteApiService(retrofit: Retrofit) : PlacesAutocompleteApiService {
+    fun provideGooglePlaceAutocompleteApiService(retrofit: Retrofit): PlacesAutocompleteApiService {
         return retrofit.create(PlacesAutocompleteApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGooglePlaceDetailsApiService(retrofit: Retrofit) : PlaceDetailsApiService {
+    fun provideGooglePlaceDetailsApiService(retrofit: Retrofit): PlaceDetailsApiService {
         return retrofit.create(PlaceDetailsApiService::class.java)
     }
-
 }

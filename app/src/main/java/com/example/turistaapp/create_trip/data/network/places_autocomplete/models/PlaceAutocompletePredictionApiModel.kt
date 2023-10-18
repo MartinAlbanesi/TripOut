@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.network.places_autocomplete.models
+package com.example.turistaapp.create_trip.data.network.places_autocomplete.models // ktlint-disable package-name
 
 import com.google.gson.annotations.SerializedName
 
@@ -9,5 +9,5 @@ data class PlaceAutocompletePredictionApiModel(
     @SerializedName("terms") val termsApi: List<PlaceAutocompleteTermApiModel>,
     @SerializedName("distance_meters") val distanceMetersApi: Int?,
     @SerializedName("place_id") val placeIdApi: String,
-    @SerializedName("types") val typesApi: List<String>
+    @SerializedName("types") val typesApi: List<String>,
 )

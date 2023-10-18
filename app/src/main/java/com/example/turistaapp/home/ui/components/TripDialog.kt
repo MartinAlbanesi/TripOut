@@ -22,69 +22,67 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.example.turistaapp.R
 
 @Composable
 fun TripDialog(
     name: String,
-    photoUrl: String,
+    photoUrl: String?,
     rating: Double = 0.0,
     userRating: Int = 0,
     direction: String = "",
     lat: Double = 0.0,
     lng: Double = 0.0,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
             Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.8f)
+                .fillMaxHeight(0.8f),
         ) {
             Card(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 Column(
-                    Modifier.padding(8.dp)
+                    Modifier.padding(8.dp),
                 ) {
                     Text(
-                        text = name, modifier = Modifier
-                            .padding(4.dp)
+                        text = name,
+                        modifier = Modifier
+                            .padding(4.dp),
                     )
                     AsyncImage(
-                        model = photoUrl,
+                        model = photoUrl ?: R.drawable.placeholder,
                         contentDescription = name,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .weight(1f)
                             .padding(4.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(12.dp)),
                     )
                     Button(
                         onClick = { onConfirm() },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
+                            .align(Alignment.CenterHorizontally),
                     ) {
                         Text(text = "Confirmar Viaje")
                     }
                 }
             }
 
-
             IconButton(
                 onClick = { onDismiss() },
                 modifier = Modifier
-                    .align(Alignment.TopEnd)
-            )
-            {
+                    .align(Alignment.TopEnd),
+            ) {
                 Icon(
                     Icons.Outlined.Cancel,
                     contentDescription = Icons.Outlined.Cancel.toString(),
                 )
             }
-
         }
     }
-
 }

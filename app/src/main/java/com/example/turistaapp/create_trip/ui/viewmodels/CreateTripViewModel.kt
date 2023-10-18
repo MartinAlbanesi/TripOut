@@ -1,10 +1,9 @@
-package com.example.turistaapp.create_trip.ui.viewmodels
+package com.example.turistaapp.create_trip.ui.viewmodels // ktlint-disable package-name
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,9 +14,7 @@ import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -27,22 +24,20 @@ class CreateTripViewModel @Inject constructor(
     private val insertTripUseCase: InsertTripUseCase,
     private val getPlaceAutocompleteLocationsUseCase: GetPlaceAutocompleteLocationsUseCase,
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
-    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    //Viajes que se muestran en la lazy list
+    // Viajes que se muestran en la lazy list
     private var _trips = MutableLiveData<List<TripModel>>()
     val trips: LiveData<List<TripModel>> = _trips
 
-    //Nombre del viaje
+    // Nombre del viaje
     private var _name = MutableLiveData("")
     val name: LiveData<String> = _name
     fun onNameChange(name: String) {
         _name.value = name.toString()
     }
 
-
-    //Lugares del viaje
+    // Lugares del viaje
     private var _origin = MutableLiveData("")
     val origin: LiveData<String> = _origin
     fun onOriginChange(origin: String) {
@@ -55,8 +50,7 @@ class CreateTripViewModel @Inject constructor(
         _destination.value = destination
     }
 
-
-    //Fechas del viaje
+    // Fechas del viaje
     val calendar: Calendar = Calendar.getInstance()
 
     private var _startDate = MutableLiveData(calendar.timeInMillis)
@@ -77,7 +71,7 @@ class CreateTripViewModel @Inject constructor(
         _showDateRangePickerDialog.value = showDateRangePickerDialog
     }
 
-    //Miembros
+    // Miembros
     private var _members = MutableLiveData(mutableListOf<String>())
     val members: LiveData<MutableList<String>> = _members
 
@@ -107,7 +101,7 @@ class CreateTripViewModel @Inject constructor(
         _memberName.value = ""
     }
 
-    //Paradas
+    // Paradas
     private var _stops = MutableLiveData(mutableListOf<String>())
     val stops: LiveData<MutableList<String>> = _stops
 
@@ -137,15 +131,15 @@ class CreateTripViewModel @Inject constructor(
         _stopName.value = ""
     }
 
-    //Transportes
+    // Transportes
     private var _transports = MutableLiveData(
         listOf(
             "Auto",
             "Moto",
             "Transporte Público",
             "A pie",
-            "Bicicleta"
-        )
+            "Bicicleta",
+        ),
     )
     val transports: LiveData<List<String>> = _transports
 
@@ -161,14 +155,14 @@ class CreateTripViewModel @Inject constructor(
         _transport.value = transport
     }
 
-    //Descripción
+    // Descripción
     private var _description = MutableLiveData("")
     val description: LiveData<String> = _description
     fun onDescriptionChange(description: String) {
         _description.value = description.toString()
     }
 
-    //Focus Requesters
+    // Focus Requesters
     private var _originFocusRequester = MutableLiveData(FocusRequester())
     val originFocusRequester: LiveData<FocusRequester> = _originFocusRequester
 
@@ -188,8 +182,7 @@ class CreateTripViewModel @Inject constructor(
     }
     */
 
-
-    //Datos de origen para el autocomplete
+    // Datos de origen para el autocomplete
 
     private val _originQuery = MutableLiveData("")
     val originQuery: LiveData<String> get() = _originQuery
@@ -236,7 +229,7 @@ class CreateTripViewModel @Inject constructor(
         _selectedOriginLocation.value = selectedLocation
     }
 
-    //Datos de destino para el autocomplete
+    // Datos de destino para el autocomplete
 
     private val _destinationQuery = MutableLiveData("")
     val destinationQuery: LiveData<String> get() = _destinationQuery
@@ -283,31 +276,32 @@ class CreateTripViewModel @Inject constructor(
         _selectedDestinationLocation.value = selectedLocation
     }
 
-    //Crear viaje con los datos ingresados
+    // Crear viaje con los datos ingresados
 
     private val _originLocation =
-        MutableLiveData<LocationModel>(null)
+        MutableLiveData<LocationModel>()
     val originLocation: LiveData<LocationModel> get() = _originLocation
 
     private val _destinationLocation =
         MutableLiveData<LocationModel>(null)
-    val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
+    private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
     fun onCreateTripClick(): Boolean {
-    var isSuccessful = true
+        var isSuccessful = true
 
         viewModelScope.launch {
             try {
                 val origin = getPlaceDetailsUseCase.invoke(_selectedOriginLocation.value!!.placeId)
-                val destination = getPlaceDetailsUseCase.invoke(_selectedDestinationLocation.value!!.placeId)
+                val destination =
+                    getPlaceDetailsUseCase.invoke(_selectedDestinationLocation.value!!.placeId)
 
                 _originLocation.value = origin
                 _destinationLocation.value = destination
 
                 val trip = TripModel(
                     name = _name.value.toString(),
-                    origin = originLocation.value,
-                    destination = destinationLocation.value,
+                    origin = originLocation.value!!,
+                    destination = destinationLocation.value!!,
                     startDate = calendar.timeInMillis.toString(),
                     endDate = calendar.timeInMillis.toString(),
                     transport = _transport.value.toString(),
@@ -318,20 +312,18 @@ class CreateTripViewModel @Inject constructor(
                     images = null,
                     comments = null,
                     isFavorite = false,
-                    isFinished = false
+                    isFinished = false,
                 )
                 insertTripUseCase.execute(trip)
                 isSuccessful = true
-
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 isSuccessful = false
             }
         }
         return isSuccessful
     }
 
-    fun showMessage(context: Context, message:String){
+    fun showMessage(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
 }

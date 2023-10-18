@@ -1,19 +1,20 @@
 package com.example.turistaapp.create_trip.ui.viewmodels
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
-import okhttp3.Dispatcher
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.*
-
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class CreateTripViewModelTest {
@@ -27,7 +28,8 @@ class CreateTripViewModelTest {
     @RelaxedMockK
     private lateinit var getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 
-    private lateinit var dispatcher: CoroutineDispatcher
+    @get:Rule
+    var rule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var createTripViewModel: CreateTripViewModel
 
@@ -35,28 +37,32 @@ class CreateTripViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        dispatcher = Dispatchers.Unconfined
+//        dispatcher = Dispatchers.Unconfined
         createTripViewModel = CreateTripViewModel(
             insertTripUseCase,
             getPlaceAutocompleteLocationsUseCase,
             getPlaceDetailsUseCase,
-            dispatcher
         )
+        Dispatchers.setMain(Dispatchers.Unconfined)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.shutdown()
     }
 
     @Test
     fun cuandoElCasoDeUsoGetPlaceDetailsRetorneLocationModelEntoncesSeteaEnUnaVariableLiveData() = runTest {
-        //Given
-        val expected = LocationModel("placeId", "name", "", 0.0, 0, "phone", 0.0, 0.0, listOf(""))
-
+        // Given
+        val expected = FakeDataBaseSource.locationModel
         coEvery {
             getPlaceDetailsUseCase(any())
         }.returns(expected)
 
-        //When
+        // When
         createTripViewModel.onCreateTripClick()
 
-        //Then
+        // Then
         val result = createTripViewModel.originLocation.value
         assertEquals(expected, result)
     }

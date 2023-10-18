@@ -1,19 +1,15 @@
 package com.example.turistaapp.create_trip.data
 
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
-import com.example.turistaapp.create_trip.data.network.place_details.models.GeometryApiModel
-import com.example.turistaapp.create_trip.data.network.place_details.models.LocationApiModel
-import com.example.turistaapp.create_trip.data.network.place_details.models.PhotoApiModel
-import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApiModel
-import com.example.turistaapp.create_trip.data.network.place_details.models.PlacesDetailsResponseApiModel
-import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.create_trip.data.network.place_details.models.GeometryApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.LocationApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceResponseApi
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
@@ -36,17 +32,17 @@ class PlaceDetailsRepositoryTest {
     fun `cuando el service retorna PlacesDetailsResponseApiModel entonces repositorio retorna LocationModel`() =
         runTest {
             // Given
-            val expected = PlaceApiModel(
-                geometryApi = GeometryApiModel(LocationApiModel(0.0, 0.0)),
+            val expected = PlaceApi(
+                geometryApi = GeometryApi(LocationApi(0.0, 0.0)),
                 name = "name",
                 placeID = "placeID",
                 rating = 0.0,
                 userRatings = 0,
                 types = listOf("types"),
-                address = "address"
+                address = "address",
+                photoApi = emptyList()
             )
-            val expected2 = Response.success(PlacesDetailsResponseApiModel(expected))
-
+            val expected2 = Response.success(PlaceResponseApi(expected))
 
             coEvery {
                 placeDetailsApiService.getPlaceDetails(any())

@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.database.entities
+package com.example.turistaapp.create_trip.data.database.entities // ktlint-disable package-name
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
