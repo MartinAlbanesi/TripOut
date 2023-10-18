@@ -11,8 +11,8 @@ interface NearbySearchLocationApiService {
     @GET("/maps/api/place/nearbysearch/json")
     suspend fun searchNearbyPlaces(
         @Query("location") location: String,
-        @Query("radius") radius: Int = 5000,
-        @Query("type") type: String = "point_of_interest",
+        @Query("radius") radius: Int = 200,
+        @Query("type") type: String = "point_of_interest,natural_feature,food,parkairport",
         @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY,
     ): Response<NearbySearchLocationApi>
 }
