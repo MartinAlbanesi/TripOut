@@ -5,7 +5,6 @@ import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromData
 import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
-import com.example.turistaapp.home.domain.GetFlowLocationsDestinationFromDBUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import dagger.Module
@@ -42,11 +41,5 @@ class HomeModule {
     @Provides
     fun provideGetRandomLocationFromDB(getDestinationLocationsFromDataBase: GetDestinationLocationsFromDataBase): GetRandomLocationFromDB {
         return GetRandomLocationFromDB(getDestinationLocationsFromDataBase)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGetFlowLocationsDestinationFromDBUseCase(tripDBRepository: TripDBRepository): GetFlowLocationsDestinationFromDBUseCase {
-        return GetFlowLocationsDestinationFromDBUseCase(tripDBRepository)
     }
 }

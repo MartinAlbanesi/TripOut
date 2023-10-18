@@ -3,8 +3,8 @@ package com.example.turistaapp.create_trip.domain.models // ktlint-disable packa
 data class TripModel(
 
     val name: String,
-    val origin: LocationModel?,
-    val destination: LocationModel?,
+    val origin: LocationModel,
+    val destination: LocationModel,
     val startDate: String,
     val endDate: String,
     val transport: String,

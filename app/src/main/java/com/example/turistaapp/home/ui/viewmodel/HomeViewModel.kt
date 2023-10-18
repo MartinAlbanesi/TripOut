@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.getLocationString
+import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.home.domain.GetFlowLocationsDestinationFromDBUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.home.domain.models.NearbyLocation
@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +22,8 @@ class HomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
     private val getRandomLocationFromDB: GetRandomLocationFromDB,
-    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase,
+    private val getGetTripsUseCase: GetTripsUseCase,
+//    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase,
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
@@ -48,8 +49,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getFlowLocationFromDB() {
         viewModelScope.launch(dispatcher) {
-            getFlowLocationsDestinationFromDBUseCase().collect {
-                _destinationLocations.emit(it)
+            getGetTripsUseCase()
+                .map { it.map { item -> item.destination } }
+                .collect{
+                _destinationLocations.value = it
             }
         }
     }

@@ -279,7 +279,7 @@ class CreateTripViewModel @Inject constructor(
     // Crear viaje con los datos ingresados
 
     private val _originLocation =
-        MutableLiveData<LocationModel>(null)
+        MutableLiveData<LocationModel>()
     val originLocation: LiveData<LocationModel> get() = _originLocation
 
     private val _destinationLocation =
@@ -300,8 +300,8 @@ class CreateTripViewModel @Inject constructor(
 
                 val trip = TripModel(
                     name = _name.value.toString(),
-                    origin = originLocation.value,
-                    destination = destinationLocation.value,
+                    origin = originLocation.value!!,
+                    destination = destinationLocation.value!!,
                     startDate = calendar.timeInMillis.toString(),
                     endDate = calendar.timeInMillis.toString(),
                     transport = _transport.value.toString(),
