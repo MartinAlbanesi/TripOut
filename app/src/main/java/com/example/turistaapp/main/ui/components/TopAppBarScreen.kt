@@ -24,7 +24,7 @@ fun TopAppBarScreen(
         },
         navigationIcon = {
             if(iconsNavigation != null){
-                IconButton(onClick = { onClickNavigationBack }) {
+                IconButton(onClick = { onClickNavigationBack() }) {
                     Icon(imageVector = iconsNavigation, contentDescription = null)
                 }
             }
