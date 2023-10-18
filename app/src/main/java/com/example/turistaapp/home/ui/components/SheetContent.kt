@@ -14,7 +14,7 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 @Composable
 fun SheetContent(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues,
+    paddingValues: PaddingValues = PaddingValues(),
     nearbyLocations: List<LocationModel>,
     onClickCard: (String) -> Unit,
 ) {

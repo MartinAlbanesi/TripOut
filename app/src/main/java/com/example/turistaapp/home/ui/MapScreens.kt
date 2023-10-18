@@ -40,7 +40,7 @@ fun MapScreen(
 ) {
     Box(
         modifier = Modifier
-            .padding(paddingValues)
+//            .padding(paddingValues)
             .fillMaxSize(),
     ) {
         GoogleMap(

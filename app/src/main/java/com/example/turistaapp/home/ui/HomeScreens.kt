@@ -1,15 +1,17 @@
 package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +23,7 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.ui.components.SheetContent
 import com.example.turistaapp.home.ui.components.TripDialog
+import com.example.turistaapp.main.ui.components.TopAppBarScreen
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapUiSettings
@@ -29,20 +32,13 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    paddingValues: PaddingValues,
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
     locations: List<LocationModel>,
-    setShowFloatingActionButton: () -> Unit,
-    setShowBottomBar: () -> Unit,
-    setTitle: () -> Unit,
+    onClickFloatingBottom : () -> Unit,
     onCardSelection: (String) -> Unit,
 ) {
-    LaunchedEffect(key1 = true) {
-        setShowBottomBar()
-        setShowFloatingActionButton()
-        setTitle()
-    }
+
     val mapUiSettings by remember {
         mutableStateOf(
             MapUiSettings(
@@ -61,13 +57,13 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-    val paddingFromScaffold by remember {
-        mutableStateOf(paddingValues.calculateBottomPadding() * 1.5f)
-    }
-
     BottomSheetScaffold(
-        sheetPeekHeight = paddingFromScaffold,
-
+        topBar = {
+            TopAppBarScreen(
+                title = "Home",
+                iconsNavigation = null
+            )
+        },
         // Lo que va dentro del BottomSheet
         sheetContent = {
             when (nearbyLocations) {
@@ -79,22 +75,21 @@ fun HomeScreen(
                     ) {
                         Text(
                             text = nearbyLocations.message,
-                            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding()),
                         )
                     }
                 }
 
                 ResponseUiState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .padding(bottom = paddingValues.calculateBottomPadding())
-                            .size(100.dp),
-                    )
+//                    CircularProgressIndicator(
+//                        modifier = Modifier
+//                            .padding(bottom = paddingValues.calculateBottomPadding())
+//                            .size(100.dp),
+//                    )
                 }
 
                 is ResponseUiState.Success<*> -> {
                     SheetContent(
-                        paddingValues = paddingValues,
+//                        paddingValues = paddingValues,
                         nearbyLocations = nearbyLocations.values as List<LocationModel>,
                         onClickCard = {
                             showDialog = true
@@ -104,21 +99,32 @@ fun HomeScreen(
                 }
             }
         },
-    ) {
-        MapScreen(
-            mapUiSettings = mapUiSettings,
-            cameraPositionState = cameraPositionState,
-            paddingValues = paddingValues,
-            locations = locations,
-        )
-        if (showDialog) {
-            if (nearbyLocationSelect != null) {
-                TripDialog(
-                    name = nearbyLocationSelect.name,
-                    photoUrl = nearbyLocationSelect.photoUrl,
-                    onDismiss = { showDialog = false },
-                    onConfirm = { showDialog = false },
-                )
+    ) { paddingValues ->
+
+        Box(Modifier.fillMaxSize()) {
+            MapScreen(
+                mapUiSettings = mapUiSettings,
+                cameraPositionState = cameraPositionState,
+                paddingValues = paddingValues,
+                locations = locations,
+            )
+            FloatingActionButton(
+                onClick = { onClickFloatingBottom() },
+                modifier = Modifier
+                    .padding(bottom = paddingValues.calculateBottomPadding() + 16.dp, end = 16.dp)
+                    .align(Alignment.BottomEnd)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
+            }
+            if (showDialog) {
+                if (nearbyLocationSelect != null) {
+                    TripDialog(
+                        name = nearbyLocationSelect.name,
+                        photoUrl = nearbyLocationSelect.photoUrl,
+                        onDismiss = { showDialog = false },
+                        onConfirm = { showDialog = false },
+                    )
+                }
             }
         }
     }

@@ -14,16 +14,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 @Composable
 fun TopAppBarScreen(
     title: String,
-    iconsNavigation: ImageVector = Icons.Outlined.ArrowBack,
+    iconsNavigation: ImageVector? = Icons.Outlined.ArrowBack,
     iconsAction: List<ImageVector> = emptyList(),
+    onClickNavigationBack: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
             Text(text = title)
         },
         navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = iconsNavigation, contentDescription = null)
+            if(iconsNavigation != null){
+                IconButton(onClick = { onClickNavigationBack }) {
+                    Icon(imageVector = iconsNavigation, contentDescription = null)
+                }
             }
         },
         actions = {
