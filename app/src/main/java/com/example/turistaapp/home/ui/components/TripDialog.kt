@@ -22,11 +22,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.example.turistaapp.R
 
 @Composable
 fun TripDialog(
     name: String,
-    photoUrl: String,
+    photoUrl: String?,
     rating: Double = 0.0,
     userRating: Int = 0,
     direction: String = "",
@@ -53,7 +54,7 @@ fun TripDialog(
                             .padding(4.dp),
                     )
                     AsyncImage(
-                        model = photoUrl,
+                        model = photoUrl ?: R.drawable.placeholder,
                         contentDescription = name,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

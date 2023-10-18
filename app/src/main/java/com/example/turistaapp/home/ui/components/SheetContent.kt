@@ -31,7 +31,7 @@ fun SheetContent(
             items(nearbyLocations) {
                 TripItem(
                     name = it.name,
-                    photoUrl = it.photoUrl,
+                    photoUrl = it.photoUrl ?: null,
                     onClickCard = { onClickCard(it.name) },
                 )
             }

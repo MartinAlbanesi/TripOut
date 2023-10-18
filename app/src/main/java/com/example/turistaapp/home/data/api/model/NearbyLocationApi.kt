@@ -19,7 +19,10 @@ data class NearbyLocationApi(
         return geometryApi.locationApi.lng
     }
 
-    fun getPhoto(): String {
+    fun getPhoto(): String? {
+        if(photoApis.isNullOrEmpty())
+            return null
+
         return getPhotosFromMap(photoApis?.get(0)?.photoUrl ?: "titi")
     }
 }
