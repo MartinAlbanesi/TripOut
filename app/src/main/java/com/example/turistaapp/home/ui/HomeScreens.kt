@@ -105,7 +105,6 @@ fun HomeScreen(
             MapScreen(
                 mapUiSettings = mapUiSettings,
                 cameraPositionState = cameraPositionState,
-                paddingValues = paddingValues,
                 locations = locations,
             )
             FloatingActionButton(

@@ -2,12 +2,10 @@ package com.example.turistaapp.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,11 +34,9 @@ fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
     locations: List<LocationModel> = emptyList(),
-    paddingValues: PaddingValues,
 ) {
     Box(
         modifier = Modifier
-//            .padding(paddingValues)
             .fillMaxSize(),
     ) {
         GoogleMap(
@@ -66,7 +62,7 @@ fun MapScreen(
                 .background(Color(0x1A000000))
                 .align(Alignment.TopCenter),
         ) {
-            Spacer(modifier = Modifier.weight(2f))
+//            Spacer(modifier = Modifier.weight(2f))
             Text(
                 text = "Mis Destinos",
                 textAlign = TextAlign.Center,
@@ -74,18 +70,18 @@ fun MapScreen(
                 color = Color.Black,
                 fontSize = 24.sp,
             )
-            IconForMap(
-                painter = R.drawable.tune,
-                modifier = Modifier
-                    .align(CenterVertically)
-                    .weight(1f),
-            ) {}
-            IconForMap(
-                painter = R.drawable.fullscreen,
-                modifier = Modifier
-                    .align(CenterVertically)
-                    .weight(1f),
-            ) {}
+//            IconForMap(
+//                painter = R.drawable.tune,
+//                modifier = Modifier
+//                    .align(CenterVertically)
+//                    .weight(1f),
+//            ) {}
+//            IconForMap(
+//                painter = R.drawable.fullscreen,
+//                modifier = Modifier
+//                    .align(CenterVertically)
+//                    .weight(1f),
+//            ) {}
         }
     }
 }
@@ -98,7 +94,7 @@ private fun IconForMap(
     onClickButton: () -> Unit,
 ) {
     IconButton(
-        onClick = { onClickButton },
+        onClick = { onClickButton() },
         modifier = modifier.size(24.dp),
     ) {
         Icon(
