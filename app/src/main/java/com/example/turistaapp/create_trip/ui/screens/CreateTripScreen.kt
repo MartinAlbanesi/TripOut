@@ -1,8 +1,6 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
 import android.annotation.SuppressLint
-import android.widget.Toast
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -33,6 +32,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.main.ui.components.TopAppBarScreen
+import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -111,10 +111,10 @@ fun CreateTripScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
-            TopAppBarScreen(title = "Crear Viaje"){
+            TopAppBarScreen(title = "Crear Viaje") {
                 onClickCreateTrip()
             }
-        }
+        },
     ) { paddingValues ->
 
         LazyColumn(
@@ -147,7 +147,7 @@ fun CreateTripScreen(
                     predictions = originPredictions,
                     onPredictionSelect = {
                         createTripViewModel.onOriginAutocompletePredictionSelect(
-                            it
+                            it,
                         )
                     },
                     focusRequester = originFocusRequester,
@@ -155,7 +155,7 @@ fun CreateTripScreen(
                     onClearField = { createTripViewModel.onClearOriginField() },
                     onSelectedLocationChange = {
                         createTripViewModel.onSelectedOriginLocationChange(
-                            it
+                            it,
                         )
                     },
                 )
@@ -168,7 +168,7 @@ fun CreateTripScreen(
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
                         createTripViewModel.onDestinationAutocompleteQueryValueChange(
-                            it
+                            it,
                         )
                     },
                     isDropdownVisible = isDestinationAutocompleteDropdownVisible,
@@ -279,11 +279,23 @@ fun CreateTripScreen(
                 Button(
                     onClick = {
                         if (createTripViewModel.onCreateTripClick()) {
-                            Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT)
-                                .show()
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = "Viaje creado con éxito",
+                                        actionLabel = "Cancelar",
+                                        duration = SnackbarDuration.Indefinite,
+                                    )
+                            }
                         } else {
-                            Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT)
-                                .show()
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = "Error al crear el viaje",
+                                        actionLabel = "Cancelar",
+                                        duration = SnackbarDuration.Short,
+                                    )
+                            }
                         }
                     },
                     modifier = Modifier
