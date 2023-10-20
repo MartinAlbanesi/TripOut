@@ -1,7 +1,5 @@
-package com.example.turistaapp.setting
+package com.example.turistaapp.setting.ui
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,33 +35,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-fun SettingsScreen() {
+fun SettingsScreen(darkTheme:Boolean , changeTheme : () -> Unit ) {
     Column(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(color = Color.White),
-
 //     verticalAlignment = Alignment.CenterVertically
 
     ) {
         SettingUser()
         Spacer(modifier = Modifier.size(21.dp))
         //Divider( thickness = 2.dp , modifier = Modifier.padding(4.dp))
-        SettingAppearance()
+        SettingAppearance(darkTheme) { changeTheme() }
         Spacer(modifier = Modifier.size(21.dp))
         SettingMore()
         Spacer(modifier = Modifier.size(264.dp))
         SettingVersion()
-    }
 
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,13 +83,11 @@ fun SettingUser() {
             modifier = Modifier.fillMaxWidth() ,
             singleLine = true
             )
-
     }
 }
 
 @Composable
-fun SettingAppearance() {
-
+fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,13 +106,11 @@ fun SettingAppearance() {
                     .align(CenterVertically)
             )
             var checked by rememberSaveable { mutableStateOf(true) }
-            var isDarkTheme by remember{ mutableStateOf(false) }
-            var checkedd by remember{ mutableStateOf(false) }
-            Switch(
+
+           Switch(
                 checked = checked,
                 onCheckedChange = {
-                    checked = it
-                    isDarkTheme = !isDarkTheme
+                    changeTheme()
                 }
                 , modifier = Modifier
                     .weight(1f)
@@ -126,15 +119,10 @@ fun SettingAppearance() {
         }
         Spacer(modifier = Modifier.size(6.dp))
         Text("cambiar idioma", fontSize = 20.sp, color = Color.Black, modifier = Modifier)
-
     }
 }
-
 @Composable
 fun SettingMore() {
-
-val web= Uri.parse("https://www.figma.com/file/tdo46JJqpCHLXOcjVTvm5O/Turista-App?type=design&node-id=0-1&mode=design&t=igzZ977QOPWQjHZU-0")
-val webIntent = Intent(Intent.ACTION_VIEW,web)
 
     Column(
         modifier = Modifier
@@ -154,8 +142,6 @@ val webIntent = Intent(Intent.ACTION_VIEW,web)
                 modifier = Modifier
                     .weight(1f)
                     .align(CenterVertically)
-
-
             )
             IconButton(onClick = { /*TODO*/}) {
                 Icon(
@@ -166,11 +152,11 @@ val webIntent = Intent(Intent.ACTION_VIEW,web)
             }
         }
     }
-
 }
 
 @Composable
 fun SettingVersion() {
+
     Text(
         "Version 1,4",
         fontSize = 20.sp,
@@ -182,17 +168,42 @@ fun SettingVersion() {
     )
 
 }
+/*
 
-@Preview(showSystemUi = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreenPrev() {
-    TuristaAppTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            SettingsScreen()
+
+fun idiomas() {
+    val items = listOf("Español","Ingles","Frances","Japon")
+
+    var isExpanden by remember { mutableStateOf(false) }
+    var selectedItem by remember { mutableStateOf(items) }
+
+    ExposedDropdownMenuBox(expanded = isExpanden,
+        onExpandedChange ={isExpanden = it}) {
+        DropdownMenu(expanded = isExpanden ,
+            onDismissRequest = {isExpanden = false} ,
+            modifier = Modifier.fillMaxWidth()
+        ){
+            items.forEach{ itt ->
+                DropdownMenuItem(
+                    text = {Text(text = itt)},
+                    onClick = {
+                        selectedItem = items
+                        isExpanden = true
+                    })
+            }
         }
     }
 }
+
+/*
+@Composable
+fun DropDownMenuExample(){
+val options = listOf("español","ingles","portuges")
+var expanded by remember { mutableListOf() }
+
+}*/
+
+
+ */

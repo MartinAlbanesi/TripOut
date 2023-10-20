@@ -36,7 +36,7 @@ fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
     locations: List<LocationModel> = emptyList(),
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues = PaddingValues()
 ) {
     Box(
         modifier = Modifier
