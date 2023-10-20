@@ -89,13 +89,15 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun onAddMember(member: String) {
-        _members.value?.add(member)
+        val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
+        updatedMembers.add(member)
+        _members.value = updatedMembers
     }
 
     fun onRemoveMember(index: Int) {
-        if (index in 0 until (_members.value?.size ?: 0)) {
-            _members.value?.removeAt(index)
-        }
+        val updatedMembers = _members.value?.toMutableList()
+        updatedMembers?.removeAt(index)
+        _members.value = updatedMembers
     }
 
     fun resetMemberNameValue() {
@@ -124,8 +126,10 @@ class CreateTripViewModel @Inject constructor(
         _stops.value?.add(stop)
     }
 
-    fun onRemoveStop(stop: String) {
-        _stops.value?.remove(stop)
+    fun onRemoveStop(index: Int) {
+        val updatedStops = _stops.value?.toMutableList()
+        updatedStops?.removeAt(index)
+        _stops.value = updatedStops
     }
 
     fun resetStopNameValue() {

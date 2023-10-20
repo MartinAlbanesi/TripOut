@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -62,42 +60,17 @@ fun AddList(
 
         Spacer(modifier = Modifier.size(4.dp))
 
+        // Lista de nombres
         LazyRow {
             itemsIndexed(values) { index, name ->
                 MemberInputChip(
                     text = name,
-                    onDismiss = { onRemove(index) },
+                    onDismiss = {
+                        onRemove(index)
+                    },
                 )
             }
         }
-
-        /*
-        // Lista horizontal de nombres
-        LazyRow {
-            items(values) { name ->
-                Row(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .background(MaterialTheme.colorScheme.secondary)
-                        .wrapContentHeight(Alignment.CenterVertically),
-                ) {
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(4.dp),
-                    )
-                    IconButton(
-                        onClick = { onDismiss(name) },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.primary),
-                    ) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = null)
-                    }
-                }
-            }
-        }
-        */
     }
 
     // Cuadro de diálogo para ingresar el nombre
@@ -154,7 +127,6 @@ fun MemberInputChip(
     InputChip(
         onClick = {
             onDismiss()
-            enabled = !enabled
         },
         label = { Text(text) },
         selected = enabled,
