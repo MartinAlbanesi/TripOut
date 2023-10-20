@@ -1,5 +1,6 @@
 package com.example.turistaapp.setting.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +41,7 @@ import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(darkTheme:Boolean , changeTheme : () -> Unit ) {
+fun SettingsScreen(darkTheme: Boolean, changeTheme: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -48,14 +50,16 @@ fun SettingsScreen(darkTheme:Boolean , changeTheme : () -> Unit ) {
 //     verticalAlignment = Alignment.CenterVertically
 
     ) {
+
         SettingUser()
         Spacer(modifier = Modifier.size(21.dp))
         //Divider( thickness = 2.dp , modifier = Modifier.padding(4.dp))
         SettingAppearance(darkTheme) { changeTheme() }
         Spacer(modifier = Modifier.size(21.dp))
-        SettingMore()
+        SettingMore("MAS")
         Spacer(modifier = Modifier.size(264.dp))
         SettingVersion()
+        MenuDesplegable(listOf("a", "b","c"))
 
     }
 }
@@ -78,16 +82,17 @@ fun SettingUser() {
 
         Text("Nombre de usuario", fontSize = 16.sp)
         Spacer(modifier = Modifier.size(6.dp))
-        TextField(value = nameRemember,
+        TextField(
+            value = nameRemember,
             onValueChange = { nameRemember = it },
-            modifier = Modifier.fillMaxWidth() ,
+            modifier = Modifier.fillMaxWidth(),
             singleLine = true
-            )
+        )
     }
 }
 
 @Composable
-fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit ) {
+fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -107,12 +112,11 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit ) {
             )
             var checked by rememberSaveable { mutableStateOf(true) }
 
-           Switch(
+            Switch(
                 checked = checked,
                 onCheckedChange = {
                     changeTheme()
-                }
-                , modifier = Modifier
+                }, modifier = Modifier
                     .weight(1f)
 
             )
@@ -121,8 +125,9 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit ) {
         Text("cambiar idioma", fontSize = 20.sp, color = Color.Black, modifier = Modifier)
     }
 }
+
 @Composable
-fun SettingMore() {
+fun SettingMore(prueba:String) {
 
     Column(
         modifier = Modifier
@@ -130,7 +135,7 @@ fun SettingMore() {
             .background(color = Color.Gray)
             .padding(horizontal = 8.dp, vertical = 12.dp)
     ) {
-        Text(text = "MAS", fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
+        Text(text =prueba, fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,7 +148,7 @@ fun SettingMore() {
                     .weight(1f)
                     .align(CenterVertically)
             )
-            IconButton(onClick = { /*TODO*/}) {
+            IconButton(onClick = { /*TODO*/ }) {
                 Icon(
                     Icons.Default.ExitToApp,
                     contentDescription = ""
@@ -164,9 +169,7 @@ fun SettingVersion() {
         modifier = Modifier
             .fillMaxWidth(),
         textAlign = TextAlign.Center
-
     )
-
 }
 /*
 
@@ -196,14 +199,58 @@ fun idiomas() {
         }
     }
 }
+*/
 
-/*
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenuExample(){
-val options = listOf("español","ingles","portuges")
-var expanded by remember { mutableListOf() }
+// traer del viewModel ()
+fun MenuDesplegable(lista : List<String>) {
+   //val options = listOf("Español", "Ingles")
 
-}*/
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(lista[0]) }
+    // We want to react on tap/press on TextField to show menu
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+    ) {
+        TextField(
+            // The `menuAnchor` modifier must be passed to the text field for correctness.
+            modifier = Modifier.menuAnchor(),
+            readOnly = true,
+            value = selectedOptionText,
+            onValueChange = {},
+            label = { Text("Label") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            lista.forEach{ pepito ->
+                DropdownMenuItem(
+                    text = { Text(pepito) },
+                    onClick = {
+                        expanded = false
+                        Log.i("a", "cualquuier cosa xD")
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
 
+            }
+/*
+            DropdownMenuItem(
+                text = { Text("") },
+                onClick = {
+                    expanded = false
+                    Log.i("a", "cualquuier cosa xD")
+                },
+                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+            )
+*/
+            // }
+        }
+    }
+}
 
- */
