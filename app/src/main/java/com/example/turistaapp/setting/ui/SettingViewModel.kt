@@ -12,8 +12,11 @@ class SettingViewModel:ViewModel() {
     private val _darkTheme = MutableLiveData<Boolean>(false)
       val darkTheme: LiveData<Boolean> = _darkTheme
 
-    fun changeTheme() {
-     _darkTheme.value = !_darkTheme.value!!
-    }
+    private val _listLanguage = listOf<String>("Español" , "Ingles" , "Portuges")
+    val listLanguage = _listLanguage
 
+
+    fun changeTheme() {
+        _darkTheme.value = !_darkTheme.value!!
+    }
 }

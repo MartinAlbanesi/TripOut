@@ -1,31 +1,29 @@
 package com.example.turistaapp.setting.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,10 +31,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontVariation.weight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +61,6 @@ fun SettingsScreen(darkTheme: Boolean, changeTheme: () -> Unit) {
         SettingMore("MAS")
         Spacer(modifier = Modifier.size(264.dp))
         SettingVersion()
-        MenuDesplegable(listOf("a", "b","c"))
-
     }
 }
 
@@ -101,44 +101,56 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
     ) {
         Text(text = "Aparencia", fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
 
         ) {
             Text(
-                "modo oscuro", fontSize = 20.sp, color = Color.Black, modifier = Modifier
+                "modo oscuro",
+                fontSize = 20.sp,
+                color = Color.Black,
+                modifier = Modifier
                     .weight(5f)
                     .align(CenterVertically)
             )
             var checked by rememberSaveable { mutableStateOf(true) }
 
             Switch(
-                checked = checked,
-                onCheckedChange = {
+                checked = checked, onCheckedChange = {
                     changeTheme()
-                }, modifier = Modifier
-                    .weight(1f)
+                }, modifier = Modifier.weight(1f)
 
             )
         }
         Spacer(modifier = Modifier.size(6.dp))
-        Text("cambiar idioma", fontSize = 20.sp, color = Color.Black, modifier = Modifier)
+        Row  {
+            Text(
+                "cambiar idioma",
+                 fontSize = 20.sp,
+                 color = Color.Black,
+                modifier = Modifier
+                    .weight(3f)
+                    .align(CenterVertically)
+            )
+            val a: SettingViewModel = viewModel()
+
+            // val b =   listOf<String>("español", "ingles","portuges")
+            DropDownMenu(lista = a.listLanguage)
+        }
     }
 }
 
-@Composable
-fun SettingMore(prueba:String) {
 
+@Composable
+fun SettingMore(prueba: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.Gray)
             .padding(horizontal = 8.dp, vertical = 12.dp)
     ) {
-        Text(text =prueba, fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
+        Text(text = prueba, fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 "Informacion legal",
@@ -150,8 +162,7 @@ fun SettingMore(prueba:String) {
             )
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(
-                    Icons.Default.ExitToApp,
-                    contentDescription = ""
+                    Icons.Default.ExitToApp, contentDescription = ""
                     // modifier = Modifier.size(24.dp)
                 )
             }
@@ -166,12 +177,10 @@ fun SettingVersion() {
         "Version 1,4",
         fontSize = 20.sp,
         color = Color.Black,
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center
     )
-}
-/*
+}/*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -201,54 +210,61 @@ fun idiomas() {
 }
 */
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 // traer del viewModel ()
-fun MenuDesplegable(lista : List<String>) {
-   //val options = listOf("Español", "Ingles")
+fun DropDownMenu(lista: List<String>) {
+    //val options = listOf("Español", "Ingles")
 
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(lista[0]) }
     // We want to react on tap/press on TextField to show menu
     ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
+        expanded = expanded, onExpandedChange = { expanded = !expanded }, modifier = Modifier
+
     ) {
         TextField(
             // The `menuAnchor` modifier must be passed to the text field for correctness.
-            modifier = Modifier.menuAnchor(),
+            modifier = Modifier
+                .menuAnchor()
+                .widthIn(min = 30.dp)
+                .fillMaxWidth(0.4f),
             readOnly = true,
             value = selectedOptionText,
             onValueChange = {},
-            label = { Text("Label") },
+            //label = { Text(" ") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
-        )
+
+            )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .widthIn(min = 50.dp)
+                .fillMaxWidth(0.5f)
         ) {
-            lista.forEach{ pepito ->
+            lista.forEach { Ite ->
                 DropdownMenuItem(
-                    text = { Text(pepito) },
+                    text = { Text(Ite) },
                     onClick = {
                         expanded = false
-                        Log.i("a", "cualquuier cosa xD")
+                        selectedOptionText = Ite
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
 
-            }
-/*
-            DropdownMenuItem(
-                text = { Text("") },
-                onClick = {
-                    expanded = false
-                    Log.i("a", "cualquuier cosa xD")
-                },
-                contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-            )
-*/
+            }/*
+                        DropdownMenuItem(
+                            text = { Text("") },
+                            onClick = {
+                                expanded = false
+                                Log.i("a", "cualquuier cosa xD")
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+            */
             // }
         }
     }
