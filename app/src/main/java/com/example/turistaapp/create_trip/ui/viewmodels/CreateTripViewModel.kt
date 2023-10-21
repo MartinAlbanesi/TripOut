@@ -77,21 +77,15 @@ class CreateTripViewModel @Inject constructor(
     private var _memberName = MutableLiveData("")
     val memberName: LiveData<String> = _memberName
 
-    private var _isMemberDialogOpen = MutableLiveData(false)
-    val isMemberDialogOpen: LiveData<Boolean> = _isMemberDialogOpen
-
     fun onMemberNameChange(memberName: String) {
         _memberName.value = memberName
-    }
-
-    fun onMemberDialogOpenChange(isMemberDialogOpen: Boolean) {
-        _isMemberDialogOpen.value = isMemberDialogOpen
     }
 
     fun onAddMember(member: String) {
         val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
         updatedMembers.add(member)
         _members.value = updatedMembers
+        resetMemberNameValue()
     }
 
     fun onRemoveMember(index: Int) {
@@ -111,19 +105,15 @@ class CreateTripViewModel @Inject constructor(
     private var _stopName = MutableLiveData("")
     val stopName: LiveData<String> = _stopName
 
-    private var _isStopDialogOpen = MutableLiveData(false)
-    val isStopDialogOpen: LiveData<Boolean> = _isStopDialogOpen
-
     fun onStopNameChange(stopName: String) {
         _stopName.value = stopName
     }
 
-    fun onStopDialogOpenChange(isStopDialogOpen: Boolean) {
-        _isStopDialogOpen.value = isStopDialogOpen
-    }
-
     fun onAddStop(stop: String) {
-        _stops.value?.add(stop)
+        val updatedStops = _stops.value?.toMutableList() ?: mutableListOf()
+        updatedStops.add(stop)
+        _stops.value = updatedStops
+        resetStopNameValue()
     }
 
     fun onRemoveStop(index: Int) {
