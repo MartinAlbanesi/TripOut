@@ -1,7 +1,6 @@
 package com.example.turistaapp.create_trip.ui.viewmodels // ktlint-disable package-name
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData

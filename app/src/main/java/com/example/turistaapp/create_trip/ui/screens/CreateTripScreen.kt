@@ -2,7 +2,6 @@ package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
