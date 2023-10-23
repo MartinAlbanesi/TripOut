@@ -139,7 +139,6 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
     }
 }
 
-
 @Composable
 fun SettingMore(prueba: String) {
     Column(
@@ -210,7 +209,6 @@ fun idiomas() {
 }
 */
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 // traer del viewModel ()
@@ -254,7 +252,6 @@ fun DropDownMenu(lista: List<String>) {
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
-
             }/*
                         DropdownMenuItem(
                             text = { Text("") },

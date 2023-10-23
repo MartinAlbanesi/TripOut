@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.example.turistaapp.main.ui.MainScreen
 import com.example.turistaapp.setting.ui.SettingViewModel
 import com.example.turistaapp.setting.ui.SettingsScreen
+import com.example.turistaapp.setting.ui.TripDetail
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,10 +33,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    MainScreen()
-                    SettingsScreen(darkTheme = isDarkTheme) {
+ //                   MainScreen()
+                /*    SettingsScreen(darkTheme = isDarkTheme) {
                         settingViewModel.changeTheme()
-                    }
+                    }*/
+                    TripDetail()
                 }
             }
         }
