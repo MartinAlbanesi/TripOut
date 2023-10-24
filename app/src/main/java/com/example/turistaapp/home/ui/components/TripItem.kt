@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.example.turistaapp.R
 
 
@@ -46,7 +48,9 @@ fun TripItem(
             textAlign = TextAlign.Center,
         )
         if(rating != null && userRating != null){
-            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)) {
                 Icon(Icons.Default.Star, contentDescription = null, tint = Color.Yellow)
                 Spacer(modifier = Modifier.size(4.dp))
                 Text(text = "$rating")
@@ -55,15 +59,18 @@ fun TripItem(
             }
             Text(text = "$address", modifier = Modifier.padding(horizontal = 8.dp))
         }
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = photoUrl ?: R.drawable.placeholder,
             contentDescription = name,
             contentScale = ContentScale.FillBounds,
-            placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            //placeholder = painterResource(id = R.drawable.ic_launcher_background),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
                 .clip(RoundedCornerShape(12.dp)),
+            loading = {
+                CircularProgressIndicator()
+            }
         )
     }
 }
