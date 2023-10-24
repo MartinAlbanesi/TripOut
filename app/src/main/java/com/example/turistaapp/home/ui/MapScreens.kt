@@ -66,21 +66,17 @@ fun MapScreen(
 //                )
                 MarkerInfoWindow(
                     state = MarkerState(LatLng(location.lat, location.lng)),
-                    icon = if(!location.isFinished)
+                    icon = if (!location.isFinished)
                         BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-                        else
+                    else
                         BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
-                    onInfoWindowClick = {
-                        Log.d("titi", location.photoUrl ?: "no photo url")
-                    }
                 ) {
                     Box(
                         modifier = Modifier
                             .background(
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 shape = RoundedCornerShape(35.dp, 35.dp, 35.dp, 35.dp)
-                            )
-                        ,
+                            ),
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp),
@@ -88,19 +84,19 @@ fun MapScreen(
                         ) {
 
                             AsyncImage(
-                                model = "location.photoUrl",
+                                model = location.photoUrl,
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
                                     .height(80.dp)
                                     .fillMaxWidth(),
-                                placeholder = painterResource(id = R.drawable.placeholder)
-                                )
+//                                placeholder = painterResource(id = R.drawable.placeholder)
+                            )
                             //.........................Spacer
                             Spacer(modifier = Modifier.height(24.dp))
                             //.........................Text: title
                             Text(
-                                text = "title",//location.tripName,
+                                text = location.tripName,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier
                                     .padding(top = 10.dp)
