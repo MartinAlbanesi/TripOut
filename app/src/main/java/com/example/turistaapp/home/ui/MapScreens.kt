@@ -55,76 +55,20 @@ fun MapScreen(
             uiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState,
         ) {
-            locations.forEach {location ->
-//                Marker(
-//                    state = MarkerState(
-//                        position = LatLng(it.lat, it.lng),
-//                    ),
-//                    title = it.name,
-//                    snippet = it.address,
-//                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-//                )
-                MarkerInfoWindow(
-                    state = MarkerState(LatLng(location.lat, location.lng)),
-                    icon = if (!location.isFinished)
-                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-                    else
-                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                shape = RoundedCornerShape(35.dp, 35.dp, 35.dp, 35.dp)
-                            ),
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-
-                            AsyncImage(
-                                model = location.photoUrl,
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .height(80.dp)
-                                    .fillMaxWidth(),
-//                                placeholder = painterResource(id = R.drawable.placeholder)
-                            )
-                            //.........................Spacer
-                            Spacer(modifier = Modifier.height(24.dp))
-                            //.........................Text: title
-                            Text(
-                                text = location.tripName,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(top = 10.dp)
-                                    .fillMaxWidth(),
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            //.........................Text : description
-                            Text(
-                                text = location.address ?: location.name,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .padding(top = 10.dp, start = 25.dp, end = 25.dp)
-                                    .fillMaxWidth(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            //.........................Spacer
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Button(onClick = { /*TODO*/ }) {
-                                Text(text = "Ver Detalles")
-                            }
-
-                        }
-
+            locations.forEach {
+                Marker(
+                    state = MarkerState(
+                        position = LatLng(it.lat, it.lng),
+                    ),
+                    title = it.tripName,
+                    snippet = it.name,
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                    onClick = {
+                        //TODO: Abrir pantalla de detalles
+                        false
                     }
-                }
+                )
+
             }
         }
 
