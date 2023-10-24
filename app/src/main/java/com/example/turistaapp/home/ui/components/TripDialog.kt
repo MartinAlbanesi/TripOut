@@ -28,7 +28,7 @@ fun TripDialog(
     userRating: Int? = null,
     address: String? = null,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
+    onConfirm: (String) -> Unit,
 ) {
     Dialog(
         onDismissRequest = { onDismiss() },
@@ -50,7 +50,7 @@ fun TripDialog(
                     modifier = Modifier.fillMaxSize().weight(1f)
                 )
                 Button(
-                    onClick = { onConfirm() },
+                    onClick = { onConfirm("$address") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),

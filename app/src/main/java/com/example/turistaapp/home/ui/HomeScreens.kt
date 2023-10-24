@@ -36,7 +36,8 @@ fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
     locations: List<LocationModel>,
-    onClickFloatingBottom : () -> Unit,
+    onClickFloatingBottom: () -> Unit,
+    onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
 ) {
 
@@ -124,7 +125,10 @@ fun HomeScreen(
                         userRating = nearbyLocationSelect.userRating,
                         address = nearbyLocationSelect.address,
                         onDismiss = { showDialog = false },
-                        onConfirm = { showDialog = false },
+                        onConfirm = {
+                            showDialog = false
+                            onCreateTripDialog(it)
+                        },
                     )
                 }
             }
