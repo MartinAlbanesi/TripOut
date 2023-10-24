@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material3.BottomSheetDefaults
@@ -96,14 +97,14 @@ fun BottomScaffoldBody() {
                     //completarlo para que quede al fondo de todo
                 )
             }
-            Spacer(modifier = Modifier.padding(29.dp))
+            Spacer(modifier = Modifier.padding(24.dp))
             Text(
                 text = "Puntos de parada",
-                fontSize = 26.sp,
+                fontSize = 19.sp,
                 color = Color.White,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.padding(20.dp))
+            Spacer(modifier = Modifier.padding(9.dp))
             ElevatedCard(
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 8.dp
@@ -119,23 +120,25 @@ fun BottomScaffoldBody() {
                         "",
                         tint = Color.Black,
                         modifier = Modifier
-                            .weight(10f)
-                            .padding(start = 1.dp)
+                           .size( width = 63.dp , height = 90.dp)
                     )
-                    Text(
-                        text = "Parque Patricios",
-                        fontSize = 24.sp,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Text(
-                        text = "Av caseros",
-                        fontSize = 18.sp,
-                        color = Color.Black
-                    )
+                    Column  {
 
+                        Text(
+                            text = "Parque Patricios",
+                            fontSize = 23.sp,
+                            color = Color.Black
+                        )
+                         Text(
+                            text = "Av caseros 3021,CABA ",
+                            fontSize = 19.sp,
+                            color = Color.Black
+                        )
+                    }
                 }
             }
+
+
             Spacer(modifier = Modifier.size(50.dp))
             Text(
                 text = "Transporte",
@@ -156,16 +159,26 @@ fun BottomScaffoldBody() {
                 Text(
                     text = "El lorax",
                     modifier = Modifier,
-                    color = Color.Black
-                )
+                    color = Color.Black ,
+                    fontSize = 23.sp,
+                    )
             }
             Spacer(modifier = Modifier.size(9.dp))
-            Text(
-                text = "Imagenes",
-                modifier = Modifier,
-                color = Color.White,
-                fontSize = 19.sp,
-            )
+            Row() {
+                Text(
+                    text = "Imagenes",
+                    modifier = Modifier,
+                    color = Color.White,
+                    fontSize = 26.sp,
+                )
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    "",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(height = 30.dp , width = 50.dp)
+                )
+            }
         }
     }
 
