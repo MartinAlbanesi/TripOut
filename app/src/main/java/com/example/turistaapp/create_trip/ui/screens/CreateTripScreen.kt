@@ -1,22 +1,28 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
 import android.annotation.SuppressLint
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddHome
+import androidx.compose.material.icons.filled.AddLocation
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.TripOrigin
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -34,13 +40,13 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.main.ui.components.TopAppBarScreen
+import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
-    address : String?,
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     onClickCreateTrip: () -> Unit,
 ) {
@@ -77,12 +83,10 @@ fun CreateTripScreen(
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-    val isMemberDialogOpen by createTripViewModel.isMemberDialogOpen.observeAsState(false)
 
     // Paradas
     val stops by createTripViewModel.stops.observeAsState(emptyList())
     val stopName by createTripViewModel.stopName.observeAsState("")
-    val isStopDialogOpen by createTripViewModel.isStopDialogOpen.observeAsState(false)
 
     // Transporte
     val transports by createTripViewModel.transports.observeAsState(
@@ -113,10 +117,10 @@ fun CreateTripScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
-            TopAppBarScreen(title = "Crear Viaje"){
+            TopAppBarScreen(title = "Crear Viaje") {
                 onClickCreateTrip()
             }
-        }
+        },
     ) { paddingValues ->
 
         LazyColumn(
@@ -133,6 +137,9 @@ fun CreateTripScreen(
                     onValueChange = { createTripViewModel.onNameChange(it) },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.AddHome, contentDescription = "Trip Title")
+                    },
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -149,7 +156,7 @@ fun CreateTripScreen(
                     predictions = originPredictions,
                     onPredictionSelect = {
                         createTripViewModel.onOriginAutocompletePredictionSelect(
-                            it
+                            it,
                         )
                     },
                     focusRequester = originFocusRequester,
@@ -157,7 +164,13 @@ fun CreateTripScreen(
                     onClearField = { createTripViewModel.onClearOriginField() },
                     onSelectedLocationChange = {
                         createTripViewModel.onSelectedOriginLocationChange(
-                            it
+                            it,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.TripOrigin,
+                            contentDescription = "Origin",
                         )
                     },
                 )
@@ -170,7 +183,7 @@ fun CreateTripScreen(
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
                         createTripViewModel.onDestinationAutocompleteQueryValueChange(
-                            it
+                            it,
                         )
                     },
                     isDropdownVisible = isDestinationAutocompleteDropdownVisible,
@@ -189,6 +202,12 @@ fun CreateTripScreen(
                     onSelectedLocationChange = {
                         createTripViewModel.onSelectedDestinationLocationChange(
                             it,
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Flag,
+                            contentDescription = "Destination",
                         )
                     },
                 )
@@ -232,30 +251,20 @@ fun CreateTripScreen(
 
                 Spacer(modifier = Modifier.size(4.dp))
 
-                // Descripción
-                TextInputField(
-                    label = "Descripción (Opcional)",
-                    textValue = description,
-                    onValueChange = { createTripViewModel.onDescriptionChange(it) },
-                    focusRequester = descriptionFocusRequester,
-                    imeAction = ImeAction.Done,
-                )
-
-                Spacer(modifier = Modifier.size(4.dp))
-
                 // Acompañantes
                 AddList(
                     label = "Acompañantes",
                     name = memberName,
                     values = members,
-                    isDialogOpen = isMemberDialogOpen,
                     onValueNameChange = { createTripViewModel.onMemberNameChange(it) },
-                    onDialogOpenChange = {
-                        createTripViewModel.onMemberDialogOpenChange(it)
-                        createTripViewModel.resetMemberNameValue()
-                    },
                     onAdd = { createTripViewModel.onAddMember(it) },
                     onRemove = { createTripViewModel.onRemoveMember(it) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Contacts,
+                            contentDescription = "Member Name",
+                        )
+                    },
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -265,14 +274,34 @@ fun CreateTripScreen(
                     label = "Puntos de Parada",
                     name = stopName,
                     values = stops,
-                    isDialogOpen = isStopDialogOpen,
                     onValueNameChange = { createTripViewModel.onStopNameChange(it) },
-                    onDialogOpenChange = {
-                        createTripViewModel.onStopDialogOpenChange(it)
-                        createTripViewModel.resetStopNameValue()
-                    },
                     onAdd = { createTripViewModel.onAddStop(it) },
                     onRemove = { createTripViewModel.onRemoveStop(it) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.AddLocation,
+                            contentDescription = "Member Name",
+                        )
+                    },
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                // Descripción
+                TextInputField(
+                    label = "Descripción (Opcional)",
+                    textValue = description,
+                    onValueChange = { createTripViewModel.onDescriptionChange(it) },
+                    focusRequester = descriptionFocusRequester,
+                    imeAction = ImeAction.Done,
+                    singleLine = false,
+                    maxLines = 3,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Description,
+                            contentDescription = "Trip Title",
+                        )
+                    },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -281,11 +310,23 @@ fun CreateTripScreen(
                 Button(
                     onClick = {
                         if (createTripViewModel.onCreateTripClick()) {
-                            Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT)
-                                .show()
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = "Viaje creado con éxito",
+                                        actionLabel = "Cancelar",
+                                        duration = SnackbarDuration.Indefinite,
+                                    )
+                            }
                         } else {
-                            Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT)
-                                .show()
+                            scope.launch {
+                                snackbarHostState
+                                    .showSnackbar(
+                                        message = "Error al crear el viaje",
+                                        actionLabel = "Cancelar",
+                                        duration = SnackbarDuration.Short,
+                                    )
+                            }
                         }
                     },
                     modifier = Modifier

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Timelapse
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerState
@@ -45,12 +46,18 @@ fun DateRangePickerInput(
         onValueChange = { dateRangePickerState.displayMode },
         readOnly = true,
         label = { Text(label) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.Timelapse,
+                contentDescription = "Date Picker",
+            )
+        },
         trailingIcon = {
             Icon(
                 imageVector = Icons.Filled.DateRange,
                 contentDescription = "Date Picker",
                 modifier = Modifier
-                    .size(60.dp),
+                    .size(40.dp),
             )
         },
         interactionSource = remember { MutableInteractionSource() }

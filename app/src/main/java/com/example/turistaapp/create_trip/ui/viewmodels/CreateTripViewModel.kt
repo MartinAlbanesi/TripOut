@@ -77,23 +77,21 @@ class CreateTripViewModel @Inject constructor(
     private var _memberName = MutableLiveData("")
     val memberName: LiveData<String> = _memberName
 
-    private var _isMemberDialogOpen = MutableLiveData(false)
-    val isMemberDialogOpen: LiveData<Boolean> = _isMemberDialogOpen
-
     fun onMemberNameChange(memberName: String) {
         _memberName.value = memberName
     }
 
-    fun onMemberDialogOpenChange(isMemberDialogOpen: Boolean) {
-        _isMemberDialogOpen.value = isMemberDialogOpen
-    }
-
     fun onAddMember(member: String) {
-        _members.value?.add(member)
+        val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
+        updatedMembers.add(member)
+        _members.value = updatedMembers
+        resetMemberNameValue()
     }
 
-    fun onRemoveMember(member: String) {
-        _members.value?.remove(member)
+    fun onRemoveMember(index: Int) {
+        val updatedMembers = _members.value?.toMutableList()
+        updatedMembers?.removeAt(index)
+        _members.value = updatedMembers
     }
 
     fun resetMemberNameValue() {
@@ -107,23 +105,21 @@ class CreateTripViewModel @Inject constructor(
     private var _stopName = MutableLiveData("")
     val stopName: LiveData<String> = _stopName
 
-    private var _isStopDialogOpen = MutableLiveData(false)
-    val isStopDialogOpen: LiveData<Boolean> = _isStopDialogOpen
-
     fun onStopNameChange(stopName: String) {
         _stopName.value = stopName
     }
 
-    fun onStopDialogOpenChange(isStopDialogOpen: Boolean) {
-        _isStopDialogOpen.value = isStopDialogOpen
-    }
-
     fun onAddStop(stop: String) {
-        _stops.value?.add(stop)
+        val updatedStops = _stops.value?.toMutableList() ?: mutableListOf()
+        updatedStops.add(stop)
+        _stops.value = updatedStops
+        resetStopNameValue()
     }
 
-    fun onRemoveStop(stop: String) {
-        _stops.value?.remove(stop)
+    fun onRemoveStop(index: Int) {
+        val updatedStops = _stops.value?.toMutableList()
+        updatedStops?.removeAt(index)
+        _stops.value = updatedStops
     }
 
     fun resetStopNameValue() {

@@ -26,6 +26,7 @@ fun TextInputField(
     keyboardType: KeyboardType = KeyboardType.Text,
     singleLine: Boolean = true,
     maxLines: Int = 1,
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     OutlinedTextField(
         value = textValue,
@@ -46,5 +47,6 @@ fun TextInputField(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = Color.LightGray,
         ),
+        leadingIcon = leadingIcon,
     )
 }

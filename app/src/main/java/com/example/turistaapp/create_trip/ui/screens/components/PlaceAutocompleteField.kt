@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +44,7 @@ fun PlaceAutocompleteField(
     keyboardType: KeyboardType = KeyboardType.Text,
     onClearField: () -> Unit,
     onSelectedLocationChange: (PlaceAutocompletePredictionModel) -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     OutlinedTextField(
         label = { Text(label) },
@@ -57,16 +59,18 @@ fun PlaceAutocompleteField(
                 onDropdownVisibilityChange(true)
             }
         },
-        // Icono de cruz para borrar el texto
+        leadingIcon = leadingIcon,
         trailingIcon = {
-            IconButton(
-                onClick = {
-                    onClearField()
-                    onDropdownVisibilityChange(false)
-                },
-                modifier = Modifier.background(Color.Transparent),
-            ) {
-                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+            if (query.isNotEmpty()) {
+                IconButton(
+                    onClick = {
+                        onClearField()
+                        onDropdownVisibilityChange(false)
+                    },
+                    modifier = Modifier.background(Color.Transparent),
+                ) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                }
             }
         },
 
