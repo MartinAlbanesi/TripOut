@@ -59,6 +59,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation("androidx.compose.foundation:foundation-android:+")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -71,4 +73,13 @@ dependencies {
     //Google maps
     implementation ("com.google.maps.android:maps-compose:2.11.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
+
+
+    // HORIZONTAL PAGER
+    implementation("com.google.accompanist:accompanist-pager:0.19.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.19.0")
+
+    //DATASTORE
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
 }
