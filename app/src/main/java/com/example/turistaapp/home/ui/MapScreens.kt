@@ -3,7 +3,6 @@ package com.example.turistaapp.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -12,14 +11,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -40,6 +37,7 @@ fun MapScreen(
             .fillMaxSize(),
     ) {
         GoogleMap(
+            modifier = Modifier.matchParentSize(),
             uiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState,
         ) {
@@ -48,10 +46,15 @@ fun MapScreen(
                     state = MarkerState(
                         position = LatLng(it.lat, it.lng),
                     ),
-                    title = it.name,
-                    snippet = it.address,
+                    title = it.tripName,
+                    snippet = it.name,
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                    onClick = {
+                        //TODO: Abrir pantalla de detalles
+                        false
+                    }
                 )
+
             }
         }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -35,7 +36,8 @@ fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
     locations: List<LocationModel>,
-    onClickFloatingBottom : () -> Unit,
+    onClickFloatingBottom: () -> Unit,
+    onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
 ) {
 
@@ -80,16 +82,15 @@ fun HomeScreen(
                 }
 
                 ResponseUiState.Loading -> {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier
-//                            .padding(bottom = paddingValues.calculateBottomPadding())
-//                            .size(100.dp),
-//                    )
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(100.dp),
+                    )
                 }
 
                 is ResponseUiState.Success<*> -> {
                     SheetContent(
-//                        paddingValues = paddingValues,
                         nearbyLocations = nearbyLocations.values as List<LocationModel>,
                         onClickCard = {
                             showDialog = true
@@ -120,8 +121,14 @@ fun HomeScreen(
                     TripDialog(
                         name = nearbyLocationSelect.name,
                         photoUrl = nearbyLocationSelect.photoUrl,
+                        rating = nearbyLocationSelect.rating,
+                        userRating = nearbyLocationSelect.userRating,
+                        address = nearbyLocationSelect.address,
                         onDismiss = { showDialog = false },
-                        onConfirm = { showDialog = false },
+                        onConfirm = {
+                            showDialog = false
+                            onCreateTripDialog(it)
+                        },
                     )
                 }
             }

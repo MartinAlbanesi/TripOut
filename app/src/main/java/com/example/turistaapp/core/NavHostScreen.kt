@@ -8,6 +8,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeScreen
@@ -28,15 +29,18 @@ fun NavHostScreen(
     NavHost(navController = navController, startDestination = Routes.Home.route) {
         composable(Routes.Home.route) {
             HomeScreen(
-//                paddingValues,
                 nearbyLocations,
                 nearbyLocationSelect,
                 locations = destinationLocations,
                 onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
+                onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
             ) { homeViewModel.setNearbyLocationSelect(it) }
         }
-        composable(Routes.CreateTrip.route) {
-            CreateTripScreen {
+        composable(
+            Routes.CreateTrip.route,
+            arguments = listOf(navArgument("address"){defaultValue = ""})
+        ) {
+            CreateTripScreen(address = it.arguments?.getString("address")) {
                 navController.navigate(Routes.Home.route)
             }
         }

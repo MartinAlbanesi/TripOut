@@ -22,7 +22,6 @@ class HomeViewModel @Inject constructor(
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
     private val getRandomLocationFromDB: GetRandomLocationFromDB,
     private val getGetTripsUseCase: GetTripsUseCase,
-//    private val getFlowLocationsDestinationFromDBUseCase: GetFlowLocationsDestinationFromDBUseCase,
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
@@ -51,7 +50,7 @@ class HomeViewModel @Inject constructor(
             getGetTripsUseCase()
                 .map { it.map { item -> item.destination } }
                 .collect{
-                _destinationLocations.value = it
+                    _destinationLocations.value = it
             }
         }
     }
