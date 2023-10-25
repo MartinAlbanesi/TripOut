@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,28 +24,11 @@ class CreateTripViewModel @Inject constructor(
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
 ) : ViewModel() {
 
-    // Viajes que se muestran en la lazy list
-    private var _trips = MutableLiveData<List<TripModel>>()
-    val trips: LiveData<List<TripModel>> = _trips
-
     // Nombre del viaje
     private var _name = MutableLiveData("")
     val name: LiveData<String> = _name
     fun onNameChange(name: String) {
         _name.value = name.toString()
-    }
-
-    // Lugares del viaje
-    private var _origin = MutableLiveData("")
-    val origin: LiveData<String> = _origin
-    fun onOriginChange(origin: String) {
-        _origin.value = origin.toString()
-    }
-
-    private var _destination = MutableLiveData("")
-    val destination: LiveData<String> = _destination
-    fun onDestinationChange(destination: String) {
-        _destination.value = destination
     }
 
     // Fechas del viaje
@@ -167,23 +149,12 @@ class CreateTripViewModel @Inject constructor(
     private var _descriptionFocusRequester = MutableLiveData(FocusRequester())
     val descriptionFocusRequester: LiveData<FocusRequester> = _descriptionFocusRequester
 
-    /*
-    suspend fun getTrips() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getTripsUseCase.execute().collect {
-                _trips = MutableLiveData(it)
-            }
-        }
-    }
-    */
-
     // Datos de origen para el autocomplete
 
     private val _originQuery = MutableLiveData("")
     val originQuery: LiveData<String> get() = _originQuery
 
-    private val _originPredictions =
-        MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
+    private val _originPredictions = MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val originPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _originPredictions
 
     fun onOriginAutocompleteQueryValueChange(newQuery: String) {
@@ -216,9 +187,15 @@ class CreateTripViewModel @Inject constructor(
         _selectedOriginLocation.value = null
     }
 
-    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel>()
-    val selectedOriginLocationLiveData: LiveData<PlaceAutocompletePredictionModel> =
-        _selectedOriginLocation
+    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel>(
+        PlaceAutocompletePredictionModel(
+            placeId = "",
+            description = "",
+            distanceMeters = null,
+            types = emptyList(),
+        ),
+    )
+    val selectedOriginLocation: LiveData<PlaceAutocompletePredictionModel> = _selectedOriginLocation
 
     fun onSelectedOriginLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedOriginLocation.value = selectedLocation
@@ -263,9 +240,15 @@ class CreateTripViewModel @Inject constructor(
         _selectedDestinationLocation.value = null
     }
 
-    private val _selectedDestinationLocation = MutableLiveData<PlaceAutocompletePredictionModel>()
-    val selectedDestinationLocationLiveData: LiveData<PlaceAutocompletePredictionModel> =
-        _selectedDestinationLocation
+    private val _selectedDestinationLocation = MutableLiveData<PlaceAutocompletePredictionModel>(
+        PlaceAutocompletePredictionModel(
+            placeId = "",
+            description = "",
+            distanceMeters = null,
+            types = emptyList(),
+        ),
+    )
+    val selectedDestinationLocation: LiveData<PlaceAutocompletePredictionModel> = _selectedDestinationLocation
 
     fun onSelectedDestinationLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedDestinationLocation.value = selectedLocation
@@ -273,30 +256,29 @@ class CreateTripViewModel @Inject constructor(
 
     // Crear viaje con los datos ingresados
 
-    private val _originLocation =
-        MutableLiveData<LocationModel>()
-    val originLocation: LiveData<LocationModel> get() = _originLocation
+    // private val _originLocation = MutableLiveData<LocationModel>()
+    // val originLocation: LiveData<LocationModel> get() = _originLocation
 
-    private val _destinationLocation =
-        MutableLiveData<LocationModel>(null)
-    private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
+    // private val _destinationLocation = MutableLiveData<LocationModel>(null)
+    // private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
     fun onCreateTripClick(): Boolean {
         var isSuccessful = true
 
         viewModelScope.launch {
             try {
-                val origin = getPlaceDetailsUseCase.invoke(_selectedOriginLocation.value!!.placeId)
-                val destination =
-                    getPlaceDetailsUseCase.invoke(_selectedDestinationLocation.value!!.placeId)
+                val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
+                val destination = getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
 
+                /*
                 _originLocation.value = origin
                 _destinationLocation.value = destination
+                 */
 
                 val trip = TripModel(
                     name = _name.value.toString(),
-                    origin = originLocation.value!!,
-                    destination = destinationLocation.value!!,
+                    origin = origin!!,
+                    destination = destination!!,
                     startDate = calendar.timeInMillis.toString(),
                     endDate = calendar.timeInMillis.toString(),
                     transport = _transport.value.toString(),
