@@ -23,10 +23,14 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -51,8 +55,18 @@ fun CreateTripScreen(
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     onClickCreateTrip: () -> Unit,
 ) {
+
+    LaunchedEffect(true){
+        if(address != null){
+            createTripViewModel.setDestination(address)
+        }
+    }
+
     // Nombre del Viaje
-    val tripName by createTripViewModel.name.observeAsState("")
+//    val tripName by createTripViewModel.name.observeAsState("")
+    var tripName by rememberSaveable {
+        mutableStateOf("")
+    }
 
     // Origen
     val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
@@ -126,8 +140,10 @@ fun CreateTripScreen(
 
         LazyColumn(
             modifier = Modifier.padding(
-                vertical = paddingValues.calculateTopPadding(),
-                horizontal = 8.dp,
+                top = paddingValues.calculateTopPadding(),
+                bottom = 8.dp,
+                end = 8.dp,
+                start = 8.dp
             ),
         ) {
             item {
@@ -135,7 +151,7 @@ fun CreateTripScreen(
                 TextInputField(
                     label = "Nombre del Viaje",
                     textValue = tripName,
-                    onValueChange = { createTripViewModel.onNameChange(it) },
+                    onValueChange = { tripName = it/*createTripViewModel.onNameChange(it)*/ },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
                     leadingIcon = {
@@ -310,7 +326,7 @@ fun CreateTripScreen(
                 // Botón para guardar
                 Button(
                     onClick = {
-                        if (createTripViewModel.onCreateTripClick()) {
+                        if (createTripViewModel.onCreateTripClick(tripName)) {
                             scope.launch {
                                 snackbarHostState
                                     .showSnackbar(

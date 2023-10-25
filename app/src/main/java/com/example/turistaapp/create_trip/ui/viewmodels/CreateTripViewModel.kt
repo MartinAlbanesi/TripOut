@@ -29,12 +29,12 @@ class CreateTripViewModel @Inject constructor(
     private var _trips = MutableLiveData<List<TripModel>>()
     val trips: LiveData<List<TripModel>> = _trips
 
-    // Nombre del viaje
-    private var _name = MutableLiveData("")
-    val name: LiveData<String> = _name
-    fun onNameChange(name: String) {
-        _name.value = name.toString()
-    }
+//    // Nombre del viaje
+//    private var _name = MutableLiveData("")
+//    val name: LiveData<String> = _name
+//    fun onNameChange(name: String) {
+//        _name.value = name.toString()
+//    }
 
     // Lugares del viaje
     private var _origin = MutableLiveData("")
@@ -233,6 +233,12 @@ class CreateTripViewModel @Inject constructor(
         MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val destinationPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _destinationPredictions
 
+    fun setDestination(address: String?) {
+        _destinationQuery.value = address
+        searchDestinationPlaces(address!!)
+
+    }
+
     fun onDestinationAutocompleteQueryValueChange(newQuery: String) {
         _destinationQuery.value = newQuery
         searchDestinationPlaces(newQuery)
@@ -245,7 +251,7 @@ class CreateTripViewModel @Inject constructor(
         }
     }
 
-    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(false)
+    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
     val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
         _isDestinationAutocompleteDropdownVisible
 
@@ -281,7 +287,7 @@ class CreateTripViewModel @Inject constructor(
         MutableLiveData<LocationModel>(null)
     private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
-    fun onCreateTripClick(): Boolean {
+    fun onCreateTripClick(name : String): Boolean {
         var isSuccessful = true
 
         viewModelScope.launch {
@@ -294,7 +300,7 @@ class CreateTripViewModel @Inject constructor(
                 _destinationLocation.value = destination
 
                 val trip = TripModel(
-                    name = _name.value.toString(),
+                    name = name,
                     origin = originLocation.value!!,
                     destination = destinationLocation.value!!,
                     startDate = calendar.timeInMillis.toString(),
