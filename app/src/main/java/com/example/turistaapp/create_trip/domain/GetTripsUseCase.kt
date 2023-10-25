@@ -4,7 +4,6 @@ import com.example.turistaapp.create_trip.data.database.repository.TripDBReposit
 import com.example.turistaapp.create_trip.data.mapper.toTripModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

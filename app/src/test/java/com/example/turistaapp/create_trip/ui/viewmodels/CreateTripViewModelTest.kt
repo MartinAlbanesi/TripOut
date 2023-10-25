@@ -60,11 +60,10 @@ class CreateTripViewModelTest {
         }.returns(expected)
 
         // When
-        val actual = createTripViewModel.onCreateTripClick()
+        val result = createTripViewModel.onCreateTripClick("test")
 
         // Then
-        // val result = createTripViewModel.selectedOriginLocation.value
-        assertEquals(true, actual)
+        assertEquals(true, result)
     }
 
     @Test

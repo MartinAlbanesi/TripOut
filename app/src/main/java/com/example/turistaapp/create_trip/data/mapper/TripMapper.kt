@@ -8,9 +8,9 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 
 fun TripEntity.toTripModel() = TripModel(
     name = name,
-    origin = origin.toLocationModel(),
-    destination = destination.toLocationModel(),
-    stops = stops?.map { it.toLocationModel() }?.toMutableList(),
+    origin = origin.toLocationModel(name, isFinished),
+    destination = destination.toLocationModel(name, isFinished),
+    stops = stops?.map { it.toLocationModel(name, isFinished) }?.toMutableList(),
     startDate = startDate,
     endDate = endDate,
     members = members,
@@ -42,7 +42,10 @@ fun TripModel.toTripEntity() = TripEntity(
 )
 
 
-fun LocationEntity.toLocationModel() = LocationModel(
+fun LocationEntity.toLocationModel(
+    tripName : String = "",
+    isFinished : Boolean = false
+) = LocationModel(
     placeID = placeID,
     name = name,
     photoUrl = photo,
@@ -52,6 +55,8 @@ fun LocationEntity.toLocationModel() = LocationModel(
     lat = lat,
     lng = lng,
     types = types,
+    tripName = tripName,
+    isFinished = isFinished
 )
 
 fun LocationModel.toLocationEntity() = LocationEntity(

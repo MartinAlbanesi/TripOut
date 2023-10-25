@@ -24,12 +24,9 @@ class CreateTripViewModel @Inject constructor(
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
 ) : ViewModel() {
 
-    // Nombre del viaje
-    private var _name = MutableLiveData("")
-    val name: LiveData<String> = _name
-    fun onNameChange(name: String) {
-        _name.value = name.toString()
-    }
+    // Viajes que se muestran en la lazy list
+    private var _trips = MutableLiveData<List<TripModel>>()
+    val trips: LiveData<List<TripModel>> = _trips
 
     // Fechas del viaje
     val calendar: Calendar = Calendar.getInstance()
@@ -154,7 +151,8 @@ class CreateTripViewModel @Inject constructor(
     private val _originQuery = MutableLiveData("")
     val originQuery: LiveData<String> get() = _originQuery
 
-    private val _originPredictions = MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
+    private val _originPredictions =
+        MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val originPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _originPredictions
 
     fun onOriginAutocompleteQueryValueChange(newQuery: String) {
@@ -210,6 +208,11 @@ class CreateTripViewModel @Inject constructor(
         MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val destinationPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _destinationPredictions
 
+    fun setDestination(address: String?) {
+        _destinationQuery.value = address
+        searchDestinationPlaces(address!!)
+    }
+
     fun onDestinationAutocompleteQueryValueChange(newQuery: String) {
         _destinationQuery.value = newQuery
         searchDestinationPlaces(newQuery)
@@ -222,7 +225,7 @@ class CreateTripViewModel @Inject constructor(
         }
     }
 
-    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(false)
+    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
     val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
         _isDestinationAutocompleteDropdownVisible
 
@@ -248,7 +251,8 @@ class CreateTripViewModel @Inject constructor(
             types = emptyList(),
         ),
     )
-    val selectedDestinationLocation: LiveData<PlaceAutocompletePredictionModel> = _selectedDestinationLocation
+    val selectedDestinationLocation: LiveData<PlaceAutocompletePredictionModel> =
+        _selectedDestinationLocation
 
     fun onSelectedDestinationLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedDestinationLocation.value = selectedLocation
@@ -262,13 +266,14 @@ class CreateTripViewModel @Inject constructor(
     // private val _destinationLocation = MutableLiveData<LocationModel>(null)
     // private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
 
-    fun onCreateTripClick(): Boolean {
+    fun onCreateTripClick(name: String): Boolean {
         var isSuccessful = true
 
         viewModelScope.launch {
             try {
                 val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
-                val destination = getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
+                val destination =
+                    getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
 
                 /*
                 _originLocation.value = origin
@@ -276,7 +281,7 @@ class CreateTripViewModel @Inject constructor(
                  */
 
                 val trip = TripModel(
-                    name = _name.value.toString(),
+                    name = name,
                     origin = origin!!,
                     destination = destination!!,
                     startDate = calendar.timeInMillis.toString(),
