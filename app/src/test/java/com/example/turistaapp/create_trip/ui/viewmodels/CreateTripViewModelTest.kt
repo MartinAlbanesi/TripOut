@@ -60,7 +60,7 @@ class CreateTripViewModelTest {
         }.returns(expected)
 
         // When
-        createTripViewModel.onCreateTripClick()
+        createTripViewModel.onCreateTripClick("")
 
         // Then
         val result = createTripViewModel.originLocation.value
