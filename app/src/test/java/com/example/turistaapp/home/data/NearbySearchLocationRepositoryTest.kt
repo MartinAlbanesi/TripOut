@@ -1,6 +1,6 @@
 package com.example.turistaapp.home.data
 
-import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
+import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi
 import com.example.turistaapp.home.fake.FakeDataSource
 import io.mockk.MockKAnnotations

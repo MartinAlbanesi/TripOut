@@ -1,6 +1,7 @@
 package com.example.turistaapp.home.data.api
 
 import com.example.turistaapp.core.Helper
+import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
