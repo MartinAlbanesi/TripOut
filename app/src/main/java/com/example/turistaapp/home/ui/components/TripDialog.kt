@@ -50,7 +50,7 @@ fun TripDialog(
                     modifier = Modifier.fillMaxSize().weight(1f)
                 )
                 Button(
-                    onClick = { onConfirm("$address") },
+                    onClick = { onConfirm("$name, $address") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
