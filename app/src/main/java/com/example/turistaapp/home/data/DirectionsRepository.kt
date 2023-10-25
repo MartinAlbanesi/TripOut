@@ -22,9 +22,6 @@ class DirectionsRepository @Inject constructor(
         mode: String
     ): DirectionsModel? {
         val api = directionsApiService.getDirection(origin, destination, mode)
-        if (!api.isSuccessful) {
-            return null
-        }
         return api.body()?.toDirectionsModel()
     }
 
