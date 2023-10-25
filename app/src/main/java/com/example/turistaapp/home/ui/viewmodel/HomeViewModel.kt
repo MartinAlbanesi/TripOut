@@ -8,6 +8,7 @@ import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
+import com.example.turistaapp.home.domain.GetRouteModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ class HomeViewModel @Inject constructor(
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
     private val getRandomLocationFromDB: GetRandomLocationFromDB,
     private val getGetTripsUseCase: GetTripsUseCase,
+    private val getRouteModel: GetRouteModel
 ) : ViewModel() {
 
     private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)

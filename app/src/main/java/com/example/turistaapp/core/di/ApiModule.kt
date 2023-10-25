@@ -2,6 +2,7 @@ package com.example.turistaapp.core.di
 
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
+import com.example.turistaapp.home.data.api.service.DirectionsApiService
 import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
 import dagger.Module
 import dagger.Provides
@@ -28,6 +29,12 @@ class ApiModule {
     @Singleton
     fun provideGooglePlacesApiService(retrofit: Retrofit): NearbySearchLocationApiService {
         return retrofit.create(NearbySearchLocationApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDirectionsApiService(retrofit: Retrofit) : DirectionsApiService{
+        return retrofit.create(DirectionsApiService::class.java)
     }
 
     @Provides
