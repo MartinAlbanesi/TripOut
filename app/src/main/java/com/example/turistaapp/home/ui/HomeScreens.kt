@@ -35,7 +35,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
-    locations: List<LocationModel>,
+//    locations: List<LocationModel>,
+    locations: Pair<List<LocationModel>, List<LocationModel>>,
     onClickFloatingBottom: () -> Unit,
     onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,

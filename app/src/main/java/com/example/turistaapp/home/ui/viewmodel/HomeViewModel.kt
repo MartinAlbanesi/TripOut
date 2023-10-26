@@ -33,8 +33,11 @@ class HomeViewModel @Inject constructor(
     private val _nearbyLocationSelect = MutableStateFlow<LocationModel?>(null)
     val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
-    private val _destinationLocations = MutableStateFlow<List<LocationModel>>(emptyList())
+    private val _destinationLocations = MutableStateFlow<Pair<List<LocationModel>, List<LocationModel>>?>(null)
     val destinationLocations = _destinationLocations.asStateFlow()
+//    private val _destinationLocations = MutableStateFlow<List<LocationModel>>(emptyList())
+//    val destinationLocations = _destinationLocations.asStateFlow()
+//
 
     private val _polyLinesPoints = MutableStateFlow<List<LatLng>>(emptyList())
     val polyLinesPoints = _polyLinesPoints.asStateFlow()
@@ -58,7 +61,7 @@ class HomeViewModel @Inject constructor(
     private fun getFlowLocationFromDB() {
         viewModelScope.launch(dispatcher) {
             getGetTripsUseCase()
-                .map { it.map { item -> item.destination } }
+                .map { item -> Pair(item.map { it.destination }, item.map { it.destination }) }
                 .collect{
                     _destinationLocations.value = it
             }

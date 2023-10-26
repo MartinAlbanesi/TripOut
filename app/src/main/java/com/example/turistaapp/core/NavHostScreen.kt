@@ -31,7 +31,7 @@ fun NavHostScreen(
             HomeScreen(
                 nearbyLocations,
                 nearbyLocationSelect,
-                locations = destinationLocations,
+                locations = destinationLocations!!,
                 onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
             ) { homeViewModel.setNearbyLocationSelect(it) }

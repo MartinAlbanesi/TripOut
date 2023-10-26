@@ -30,7 +30,8 @@ import com.google.maps.android.compose.MarkerState
 fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
-    locations: List<LocationModel> = emptyList(),
+//    locations: List<LocationModel> = emptyList(),
+    locations: Pair<List<LocationModel>, List<LocationModel>>
 ) {
     Box(
         modifier = Modifier
@@ -41,7 +42,7 @@ fun MapScreen(
             uiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState,
         ) {
-            locations.forEach {
+            locations.second.forEach {
                 Marker(
                     state = MarkerState(
                         position = LatLng(it.lat, it.lng),
