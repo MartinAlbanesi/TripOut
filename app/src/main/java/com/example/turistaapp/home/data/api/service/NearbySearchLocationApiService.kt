@@ -1,4 +1,4 @@
-package com.example.turistaapp.home.data.api
+package com.example.turistaapp.home.data.api.service
 
 import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.home.data.api.model.NearbySearchLocationApi

@@ -1,7 +1,7 @@
 package com.example.turistaapp.home.data.api
 
 import com.example.turistaapp.core.Helper
-import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
+import com.example.turistaapp.home.data.api.service.DirectionsApiService
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -13,41 +13,42 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class NearbySearchLocationApiServiceTest {
+class DirectionsApiServiceTest {
 
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var nearbySearchLocationApiService: NearbySearchLocationApiService
     private lateinit var mockResponse: MockResponse
+    private lateinit var directionsApiService: DirectionsApiService
 
     @Before
     fun setUp() {
         mockResponse = MockResponse()
         mockWebServer = MockWebServer()
-        nearbySearchLocationApiService = Retrofit.Builder()
+        directionsApiService = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(NearbySearchLocationApiService::class.java)
+            .create(DirectionsApiService::class.java)
     }
 
     @After
     fun tearDown() {
         mockWebServer.shutdown()
     }
-
+    
     @Test
-    fun searchNearbyPlaces_code200_returnNearbySearchLocationApi() = runTest {
-        val content = Helper.readFileResources("/fakeNearbyLocations.json")
+    fun `getDirection - Get 200 code - return DirectionsApi` () = runTest{
+        val content = Helper.readFileResources("/fakeDirections.json")
         mockResponse.setResponseCode(200)
         mockResponse.setBody(content)
         mockWebServer.enqueue(mockResponse)
 
-        val response = nearbySearchLocationApiService.searchNearbyPlaces("")
+        val response = directionsApiService.getDirection("", "")
         mockWebServer.takeRequest()
 
         assertEquals(200, response.code())
-        assertEquals(2, response.body()!!.nearbyLocationsApi.size)
-        assertEquals("Universidad Nacional de La Matanza", response.body()!!.nearbyLocationsApi[0].name)
+        assertEquals(response.body()!!.status, "OK")
+        assertEquals(response.body()!!.routes[0].summary, "ON-401 E")
+
     }
 
     @Test
@@ -55,7 +56,7 @@ class NearbySearchLocationApiServiceTest {
         mockResponse.setResponseCode(400)
         mockWebServer.enqueue(mockResponse)
 
-        val response = nearbySearchLocationApiService.searchNearbyPlaces("")
+        val response = directionsApiService.getDirection("", "")
         mockWebServer.takeRequest()
         assertEquals(400, response.code())
         assertNull(response.body())
