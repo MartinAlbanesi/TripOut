@@ -24,4 +24,12 @@ data class TripModel(
     fun getOriginWithTripId(): LocationModel {
         return this.origin.copy(tripId = this.tripId)
     }
+
+    fun getLatLngOrigin(): String {
+        return "${this.origin.lat},${this.origin.lng}"
+    }
+
+    fun getLatLngDestination(): String {
+        return "${this.destination.lat},${this.destination.lng}"
+    }
 }

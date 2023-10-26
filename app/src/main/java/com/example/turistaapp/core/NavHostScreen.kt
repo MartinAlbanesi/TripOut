@@ -24,12 +24,20 @@ fun NavHostScreen(
 
     val destinationLocations by homeViewModel.destinationLocations.collectAsStateWithLifecycle()
 
+    val directionSelect by homeViewModel.polyLinesPoints.collectAsStateWithLifecycle()
+
+    val markerSelect by homeViewModel.markerSelect.collectAsStateWithLifecycle()
+
     NavHost(navController = navController, startDestination = Routes.Home.route) {
         composable(Routes.Home.route) {
             HomeScreen(
                 nearbyLocations,
                 nearbyLocationSelect,
                 locations = destinationLocations!!,
+                directionSelect = directionSelect,
+                markerSelect = markerSelect,
+                onInfoWindowClose = { homeViewModel.getFlowLocationFromDB() },
+                onMarkerSelected = { homeViewModel.getTripById(it)},
                 onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
             ) { homeViewModel.setNearbyLocationSelect(it) }
