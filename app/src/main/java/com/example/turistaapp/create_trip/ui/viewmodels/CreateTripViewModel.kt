@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
@@ -108,11 +109,9 @@ class CreateTripViewModel @Inject constructor(
     // Transportes
     private var _transports = MutableLiveData(
         listOf(
-            "Auto",
-            "Moto",
-            "Transporte Público",
-            "A pie",
-            "Bicicleta",
+            Transports.Driving.type,
+            Transports.Walking.type,
+            Transports.Bicycling.type,
         ),
     )
     val transports: LiveData<List<String>> = _transports

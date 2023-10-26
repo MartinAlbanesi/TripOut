@@ -37,7 +37,7 @@ object FakeDataSource {
             types = listOf(""),
         ),
         LocationModel(
-            name = "name2",
+            name = "name1",
             photoUrl = "photoUrl",
             rating = 0.0,
             userRating = 0,
@@ -48,7 +48,7 @@ object FakeDataSource {
             types = listOf(""),
         ),
         LocationModel(
-            name = "name3",
+            name = "name1",
             photoUrl = "photoUrl",
             rating = 0.0,
             userRating = 0,

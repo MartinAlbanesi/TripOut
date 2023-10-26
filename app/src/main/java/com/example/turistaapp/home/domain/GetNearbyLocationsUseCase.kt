@@ -9,6 +9,6 @@ class GetNearbyLocationsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(location: String): List<LocationModel>? {
-        return nearbySearchLocationRepository.getNearbyLocation(location)
+        return nearbySearchLocationRepository.getNearbyLocation(location)?.sortedBy { it.userRating }?.reversed()
     }
 }

@@ -2,7 +2,7 @@ package com.example.turistaapp.home.data
 
 import com.example.turistaapp.create_trip.data.mapper.toLocationModel
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
+import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
 import javax.inject.Inject
 
 interface INearbySearchLocationRepository {
