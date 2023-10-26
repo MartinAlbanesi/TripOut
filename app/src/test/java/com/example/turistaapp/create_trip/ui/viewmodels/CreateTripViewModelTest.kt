@@ -65,9 +65,8 @@ class CreateTripViewModelTest {
         // Then
         assertEquals(true, result)
     }
-
-    @Test
-    fun `searchOriginPlaces - onOriginAutocompleteQueryValueChange - originPrediction get PlaceAutocompletePredictionModel list`() {
-        TODO("Not yet implemented")
-    }
+//    @Test
+//    fun `searchOriginPlaces - onOriginAutocompleteQueryValueChange - originPrediction get PlaceAutocompletePredictionModel list`() {
+//        TODO("Not yet implemented")
+//    }
 }

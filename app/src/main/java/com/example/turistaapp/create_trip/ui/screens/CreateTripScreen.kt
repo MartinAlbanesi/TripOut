@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddHome
-import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Flag
@@ -51,13 +50,12 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
-    address : String?,
+    address: String?,
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     onClickCreateTrip: () -> Unit,
 ) {
-
-    LaunchedEffect(true){
-        if(address != null){
+    LaunchedEffect(true) {
+        if (address != null) {
             createTripViewModel.setDestination(address)
         }
     }
@@ -143,7 +141,7 @@ fun CreateTripScreen(
                 top = paddingValues.calculateTopPadding(),
                 bottom = 8.dp,
                 end = 8.dp,
-                start = 8.dp
+                start = 8.dp,
             ),
         ) {
             item {
@@ -171,24 +169,19 @@ fun CreateTripScreen(
                         createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
                     },
                     predictions = originPredictions,
-                    onPredictionSelect = {
-                        createTripViewModel.onOriginAutocompletePredictionSelect(
-                            it,
-                        )
-                    },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
                     onClearField = { createTripViewModel.onClearOriginField() },
-                    onSelectedLocationChange = {
-                        createTripViewModel.onSelectedOriginLocationChange(
-                            it,
-                        )
-                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.TripOrigin,
                             contentDescription = "Origin",
                         )
+                    },
+                    onItemClick = {
+                        createTripViewModel.onOriginAutocompletePredictionSelect(it)
+                        createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(false)
+                        createTripViewModel.onSelectedOriginLocationChange(it)
                     },
                 )
 
@@ -208,24 +201,19 @@ fun CreateTripScreen(
                         createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(it)
                     },
                     predictions = destinationPredictions,
-                    onPredictionSelect = {
-                        createTripViewModel.onDestinationAutocompletePredictionSelect(
-                            it,
-                        )
-                    },
                     focusRequester = destinationFocusRequester,
                     imeAction = ImeAction.Next,
                     onClearField = { createTripViewModel.onClearDestinationField() },
-                    onSelectedLocationChange = {
-                        createTripViewModel.onSelectedDestinationLocationChange(
-                            it,
-                        )
-                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Flag,
                             contentDescription = "Destination",
                         )
+                    },
+                    onItemClick = {
+                        createTripViewModel.onDestinationAutocompletePredictionSelect(it)
+                        createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(false)
+                        createTripViewModel.onSelectedDestinationLocationChange(it)
                     },
                 )
 
@@ -286,6 +274,7 @@ fun CreateTripScreen(
 
                 Spacer(modifier = Modifier.size(4.dp))
 
+                /*
                 // Paradas
                 AddList(
                     label = "Puntos de Parada",
@@ -303,6 +292,7 @@ fun CreateTripScreen(
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
+                */
 
                 // Descripción
                 TextInputField(

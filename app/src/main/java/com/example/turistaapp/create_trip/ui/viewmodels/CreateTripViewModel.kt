@@ -191,6 +191,7 @@ class CreateTripViewModel @Inject constructor(
             description = "",
             distanceMeters = null,
             types = emptyList(),
+            structured_formatting = null,
         ),
     )
     val selectedOriginLocation: LiveData<PlaceAutocompletePredictionModel> = _selectedOriginLocation
@@ -249,6 +250,7 @@ class CreateTripViewModel @Inject constructor(
             description = "",
             distanceMeters = null,
             types = emptyList(),
+            structured_formatting = null,
         ),
     )
     val selectedDestinationLocation: LiveData<PlaceAutocompletePredictionModel> =
