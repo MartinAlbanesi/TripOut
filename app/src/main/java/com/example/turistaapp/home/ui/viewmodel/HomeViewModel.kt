@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(
     private fun getFlowLocationFromDB() {
         viewModelScope.launch(dispatcher) {
             getGetTripsUseCase()
-                .map { item -> Pair(item.map { it.destination }, item.map { it.destination }) }
+                .map { item -> Pair(item.map { it.origin }, item.map { it.destination }) }
                 .collect{
                     _destinationLocations.value = it
             }

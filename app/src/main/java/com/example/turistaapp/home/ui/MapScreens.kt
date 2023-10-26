@@ -57,6 +57,21 @@ fun MapScreen(
                 )
 
             }
+            //TODO: Para cuando implemente el caso de uso GetRouteModel
+//            locations.first.forEach {
+//                Marker(
+//                    state = MarkerState(
+//                        position = LatLng(it.lat, it.lng),
+//                    ),
+//                    title = it.tripName,
+//                    snippet = it.name,
+//                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
+//                    onClick = {
+//                        //TODO: Abrir pantalla de detalles
+//                        false
+//                    }
+//                )
+//            }
         }
 
         // Barra Superior
