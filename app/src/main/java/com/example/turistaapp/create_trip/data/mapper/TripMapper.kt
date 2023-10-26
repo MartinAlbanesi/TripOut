@@ -7,6 +7,7 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 
 fun TripEntity.toTripModel() = TripModel(
+    tripId = this.id,
     name = name,
     origin = origin.toLocationModel(name, isFinished),
     destination = destination.toLocationModel(name, isFinished),

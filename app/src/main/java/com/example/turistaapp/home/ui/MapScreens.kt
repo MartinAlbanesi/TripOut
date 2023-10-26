@@ -30,7 +30,6 @@ import com.google.maps.android.compose.MarkerState
 fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
-//    locations: List<LocationModel> = emptyList(),
     locations: Pair<List<LocationModel>, List<LocationModel>>
 ) {
     Box(
@@ -50,7 +49,7 @@ fun MapScreen(
                     title = it.tripName,
                     snippet = it.name,
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                    onClick = {
+                    onClick = {marker ->
                         //TODO: Abrir pantalla de detalles
                         false
                     }
