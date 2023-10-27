@@ -23,10 +23,9 @@ import com.google.maps.android.compose.Polyline
 fun MapScreen(
     mapUiSettings: MapUiSettings,
     cameraPositionState: CameraPositionState,
-    locations: Pair<List<LocationModel>, List<LocationModel>>,
+    locations: Pair<List<LocationModel>, List<LocationModel>>?,
     directionSelect: List<LatLng>,
     markerSelect : Boolean,
-//    onInfoWindowClose: () -> Unit,
     onClickMarker: (Int) -> Unit,
 ) {
     Box(
@@ -40,7 +39,7 @@ fun MapScreen(
         ) {
             if(markerSelect)Polyline(points = directionSelect)
 
-            locations.second.forEach {
+            locations?.second?.forEach {
                 Marker(
                     state = MarkerState(
                         position = LatLng(it.lat, it.lng),
@@ -53,14 +52,14 @@ fun MapScreen(
                         onClickMarker(it.tripId)
                         false
                     },
-//                    onInfoWindowClose = {
-//                        onInfoWindowClose()
-//                    }
+        //                    onInfoWindowClose = {
+        //                        onInfoWindowClose()
+        //                    }
                 )
 
             }
             if(markerSelect){
-                locations.first.forEach {
+                locations?.first?.forEach {
                     Marker(
                         state = MarkerState(
                             position = LatLng(it.lat, it.lng),

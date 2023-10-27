@@ -25,7 +25,7 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.map.ui.components.SheetContent
 import com.example.turistaapp.map.ui.components.TripDialog
-import com.example.turistaapp.home.ui.components.TopAppBarScreen
+import com.example.turistaapp.main.ui.components.TopAppBarScreen
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapUiSettings
@@ -36,7 +36,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
-    locations: Pair<List<LocationModel>, List<LocationModel>>,
+    locations: Pair<List<LocationModel>, List<LocationModel>>?,
     directionSelect : List<LatLng>,
     markerSelect : Boolean,
     onClickArrowBack: () -> Unit,
