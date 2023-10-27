@@ -52,12 +52,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getTripById(id: Int) {
-//        if (!markerSelect.value) {
             viewModelScope.launch(dispatcher) {
                 try {
                     val selectTrip =getGetTripsUseCase().first().first { it.tripId == id }
-//                        getGetTripsUseCase().map { it.filter { trip -> trip.tripId == id } }.first()
-//                            .first()
                     val selectRoute = getRouteModel(
                         origin = selectTrip.getLatLngOrigin(),
                         destination = selectTrip.getLatLngDestination(),
@@ -72,7 +69,6 @@ class HomeViewModel @Inject constructor(
                     Log.i("titi", e.message.toString())
                 }
             }
-//        }
     }
 
     private fun getRandomLocation() {

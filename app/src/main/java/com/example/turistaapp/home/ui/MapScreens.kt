@@ -1,18 +1,14 @@
 package com.example.turistaapp.home.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -30,7 +26,7 @@ fun MapScreen(
     locations: Pair<List<LocationModel>, List<LocationModel>>,
     directionSelect: List<LatLng>,
     markerSelect : Boolean,
-    onInfoWindowClose: () -> Unit,
+//    onInfoWindowClose: () -> Unit,
     onClickMarker: (Int) -> Unit,
 ) {
     Box(
@@ -38,7 +34,7 @@ fun MapScreen(
             .fillMaxSize(),
     ) {
         GoogleMap(
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.fillMaxSize(),
             uiSettings = mapUiSettings,
             cameraPositionState = cameraPositionState,
         ) {
@@ -85,13 +81,13 @@ fun MapScreen(
                 .align(Alignment.TopCenter),
         ) {
 //            Spacer(modifier = Modifier.weight(2f))
-            Text(
-                text = "Mis Destinos",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(9f),
-                color = Color.Black,
-                fontSize = 24.sp,
-            )
+//            Text(
+//                text = "Mis Destinos",
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.weight(9f),
+//                color = Color.Black,
+//                fontSize = 24.sp,
+//            )
 //            IconForMap(
 //                painter = R.drawable.tune,
 //                modifier = Modifier

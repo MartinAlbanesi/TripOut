@@ -36,7 +36,7 @@ fun NavHostScreen(
                 locations = destinationLocations!!,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
-                onInfoWindowClose = { homeViewModel.getFlowLocationFromDB() },
+                onClickArrowBack = { homeViewModel.getFlowLocationFromDB() },
                 onMarkerSelected = { homeViewModel.getTripById(it)},
                 onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},

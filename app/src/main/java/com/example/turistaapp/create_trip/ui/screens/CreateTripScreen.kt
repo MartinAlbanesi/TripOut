@@ -122,7 +122,7 @@ fun CreateTripScreen(
         FocusRequester(),
     )
 
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -132,7 +132,10 @@ fun CreateTripScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
-            TopAppBarScreen(title = "Crear Viaje") {
+            TopAppBarScreen(
+                title = "Crear Viaje",
+                isMarkerSelected = true
+            ) {
                 onClickCreateTrip()
             }
         },
