@@ -7,17 +7,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
-import com.example.turistaapp.home.ui.HomeScreen
-import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
+import com.example.turistaapp.map.ui.HomeScreen
+import com.example.turistaapp.map.ui.viewmodel.HomeViewModel
 
 @Composable
 fun NavHostScreen(
-    navController: NavHostController,
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
+
+    val navController = rememberNavController()
+
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
