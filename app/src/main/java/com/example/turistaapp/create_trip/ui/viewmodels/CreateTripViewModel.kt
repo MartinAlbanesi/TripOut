@@ -62,10 +62,12 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun onAddMember(member: String) {
-        val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
-        updatedMembers.add(member)
-        _members.value = updatedMembers
-        resetMemberNameValue()
+        if (!member.isBlank()) {
+            val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
+            updatedMembers.add(member)
+            _members.value = updatedMembers
+            resetMemberNameValue()
+        }
     }
 
     fun onRemoveMember(index: Int) {

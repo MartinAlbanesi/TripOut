@@ -139,6 +139,10 @@ fun CreateTripScreen(
         mutableStateOf(true)
     }
 
+    var isMemberNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -164,7 +168,7 @@ fun CreateTripScreen(
             item {
                 // Nombre del Viaje
                 TextInputField(
-                    label = "Nombre del Viaje",
+                    label = "Nombre del Viaje *",
                     textValue = tripName,
                     onValueChange = {
                         tripName = it
@@ -183,7 +187,7 @@ fun CreateTripScreen(
 
                 // Origen
                 PlaceAutocompleteField(
-                    label = "Origen",
+                    label = "Origen *",
                     query = originAutocompleteQuery,
                     onQueryChange = {
                         createTripViewModel.onOriginAutocompleteQueryValueChange(it)
@@ -215,7 +219,7 @@ fun CreateTripScreen(
 
                 // Destino
                 PlaceAutocompleteField(
-                    label = "Destino",
+                    label = "Destino *",
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
                         createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
@@ -290,8 +294,16 @@ fun CreateTripScreen(
                     label = "Acompañantes",
                     name = memberName,
                     values = members,
-                    onValueNameChange = { createTripViewModel.onMemberNameChange(it) },
-                    onAdd = { createTripViewModel.onAddMember(it) },
+                    onValueNameChange = {
+                        createTripViewModel.onMemberNameChange(it)
+                        isMemberNameValid = true
+                    },
+                    onAdd = {
+                        if (memberName.isBlank()) {
+                            isMemberNameValid = false
+                        }
+                        createTripViewModel.onAddMember(it)
+                    },
                     onRemove = { createTripViewModel.onRemoveMember(it) },
                     leadingIcon = {
                         Icon(
@@ -299,6 +311,7 @@ fun CreateTripScreen(
                             contentDescription = "Member Name",
                         )
                     },
+                    isError = !isMemberNameValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -325,7 +338,7 @@ fun CreateTripScreen(
 
                 // Descripción
                 TextInputField(
-                    label = "Descripción (Opcional)",
+                    label = "Descripción",
                     textValue = description,
                     onValueChange = {
                         description = it
