@@ -1,7 +1,8 @@
 package com.example.turistaapp.home.domain
 
+import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.home.data.IDirectionsRepository
-import com.example.turistaapp.home.domain.models.directions.RouteModel
+import com.example.turistaapp.home.domain.models.RouteModel
 import javax.inject.Inject
 
 class GetRouteModel @Inject constructor(
@@ -10,10 +11,9 @@ class GetRouteModel @Inject constructor(
     suspend operator fun invoke(
         origin: String,
         destination: String,
-        mode: String
-    ) : RouteModel? {
-        val directions = directionsRepository.getDirections(origin, destination, mode)
-
-        return directions?.routeModel?.firstOrNull()
+        transport: String,
+        trip: TripModel
+    ): RouteModel? {
+        return directionsRepository.getDirections(origin, destination, transport)?.copy(trip = trip)
     }
 }

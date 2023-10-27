@@ -35,7 +35,11 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
-    locations: List<LocationModel>,
+    locations: Pair<List<LocationModel>, List<LocationModel>>,
+    directionSelect : List<LatLng>,
+    markerSelect : Boolean,
+    onInfoWindowClose: () -> Unit,
+    onMarkerSelected : (Int) -> Unit,
     onClickFloatingBottom: () -> Unit,
     onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
@@ -107,6 +111,12 @@ fun HomeScreen(
                 mapUiSettings = mapUiSettings,
                 cameraPositionState = cameraPositionState,
                 locations = locations,
+                directionSelect = directionSelect,
+                markerSelect = markerSelect,
+                onInfoWindowClose = {
+                    onInfoWindowClose()
+                },
+                onClickMarker = { onMarkerSelected(it) }
             )
             FloatingActionButton(
                 onClick = { onClickFloatingBottom() },

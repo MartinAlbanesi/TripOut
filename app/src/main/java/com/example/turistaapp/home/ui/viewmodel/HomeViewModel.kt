@@ -1,5 +1,6 @@
 package com.example.turistaapp.home.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
@@ -14,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,19 +36,46 @@ class HomeViewModel @Inject constructor(
     private val _nearbyLocationSelect = MutableStateFlow<LocationModel?>(null)
     val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
-    private val _destinationLocations = MutableStateFlow<List<LocationModel>>(emptyList())
+    private val _destinationLocations =
+        MutableStateFlow<Pair<List<LocationModel>, List<LocationModel>>?>(null)
     val destinationLocations = _destinationLocations.asStateFlow()
 
     private val _polyLinesPoints = MutableStateFlow<List<LatLng>>(emptyList())
     val polyLinesPoints = _polyLinesPoints.asStateFlow()
 
+    private val _markerSelect = MutableStateFlow(false)
+    val markerSelect = _markerSelect.asStateFlow()
+
     init {
         getFlowLocationFromDB()
         getRandomLocation()
-//        decoPoints("dzjsEfmwdJl@v@_CxCyFxH_GnHwFxHaJnL{GxIqEbGUp@YOcH{D}EkCsGwDuBeAoBy@wL{CoLqCoEgAwC{@cMqEcJgDe^oMsBe@mCe@sGsA_NmCeEu@_Do@gAu@a@i@O_@Gc@?e@Ru@PShAo@f@q@Nk@F{@E{A_AoHaDmRuFaZgDeQiPe|@_BwIwAeHqBuFwHqQoLoXoG{NgQsa@cDsHgDsGiAuBi@_BkDmGwAyCgIoRuIgS_d@ceAiIoR_CmF{@{AoBkC}BiC_FsF}EmH_GqJwAgCIWQiAKW?QAGFSPw@Xy@nCiElKsObHaKbFmHrDmFHMKKqI_HoEmDg@i@E_@B]dBcFv@cETmCD}C]kMHoANWDMC_@Bm@FWX_@j@k@Z_ALoAEw@_@_@]Mc@?m@@wBUsD[yAU}Bq@{@Q_FoBiGsCyDqBmCuAoAy@}X{PoMeJyEcDkBwAuE{D}K_JqIqGuGcFwMaKmGaF{DwCqIeG_G}EyCiC_FkE_CwA{EuD{RkOmImGc@_@MQgBqA{@m@[YY]?ECG[q@Ko@?o@Hq@\\_Af@iA?m@Mu@Yg@m@g@e@Mk@F[`@Md@m@~EyN~S_B`CcBxBi@z@oC|DmD`FiFvH{FjIiRxXuKtOeGzIwKvOqMfRcMpQyGvJoBzCePxUwF~HaFdHwEbH}GjK}ExGoCvCw@n@uA|@aBr@k@Vq@NoB^{AJmGPiBJk@CcCH}M^cCLwB?qCEiA@uFVaHP{EPoKT}Lh@mJTcPZsV^uM\\kj@jAwP\\qAEo@IcB_@oDoAwPkG_N_F}TeIsOyF}B{@qCaAqB{@_CmA{C_B}CoA}Bu@sD_AcI}BoBu@iX{J_P}FwM}Eqo@yUyXcKmG}B{HeCoDmA}BcAyC}A_GuCuCaAsCy@cFuAcOkFgWkJmK}DsMyEoNmFiAm@yA}@iBcBqBqCoAgCgAsCwDgLgD}JeCmH}HwTqCaIGk@yAcEiHqT_CeHgDqJoDsIqBeFk@cBsB}GoAsEeGiRwDwK_ByFm@aCk@}COqA@_BNoAl@eBrAuCdAiBpE}GfGeJ|B}DrAaDlFsNp@aCj@gDVwAr@yCn@gBlCaG~CaHxB}EzEeLxBqEx@oBrS}d@dRob@zJoTdCaFfCoEvGsKnCwEnDuF~BiEl@cAlBcDlBsCvCmDxAsA~DgF`B{BfCuEx@sBdF}L~AaEPOfGoLf@_Af@m@l@Yl@@j@PtB`BhAv@XD^Z~HnHfBtAZJn@Ll@d@x@vALU`@cA`AoCnAiBzAsAtAaCr@iB~@uAn@e@")
     }
 
-    private fun getRandomLocation(){
+    fun getTripById(id: Int) {
+//        if (!markerSelect.value) {
+            viewModelScope.launch(dispatcher) {
+                try {
+                    val selectTrip =getGetTripsUseCase().first().first { it.tripId == id }
+//                        getGetTripsUseCase().map { it.filter { trip -> trip.tripId == id } }.first()
+//                            .first()
+                    val selectRoute = getRouteModel(
+                        origin = selectTrip.getLatLngOrigin(),
+                        destination = selectTrip.getLatLngDestination(),
+                        transport = selectTrip.transport,
+                        trip = selectTrip
+                    )
+                    decoPoints(selectRoute!!.points)
+                    _destinationLocations.value =
+                        Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))
+                    _markerSelect.value = true
+                } catch (e: Exception) {
+                    Log.i("titi", e.message.toString())
+                }
+            }
+//        }
+    }
+
+    private fun getRandomLocation() {
         viewModelScope.launch(dispatcher) {
             if (getRandomLocationFromDB() != null) {
                 setNearbyLocations(getRandomLocationFromDB()!!.lat, getRandomLocationFromDB()!!.lng)
@@ -55,13 +85,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getFlowLocationFromDB() {
+    fun getFlowLocationFromDB() {
         viewModelScope.launch(dispatcher) {
+            _markerSelect.value = false
             getGetTripsUseCase()
-                .map { it.map { item -> item.destination } }
-                .collect{
+                .map { item ->
+                    Pair(
+                        item.map { it.getOriginWithTripId() },
+                        item.map { it.getDestinationWithTripId() }
+                    )
+                }
+                .collect {
                     _destinationLocations.value = it
-            }
+                }
         }
     }
 
@@ -92,9 +128,8 @@ class HomeViewModel @Inject constructor(
         return nearbyLocation.find { it.name == name }
     }
 
-    private fun decoPoints(points: String): List<LatLng>{
+    private fun decoPoints(points: String) {
         _polyLinesPoints.value = decodePoly(points)
-        return decodePoly(points);
     }
 
     /**
@@ -130,8 +165,10 @@ class HomeViewModel @Inject constructor(
             val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
             lng += dlng
 
-            val p = LatLng(lat.toDouble() / 1E5,
-                lng.toDouble() / 1E5)
+            val p = LatLng(
+                lat.toDouble() / 1E5,
+                lng.toDouble() / 1E5
+            )
             poly.add(p)
         }
 

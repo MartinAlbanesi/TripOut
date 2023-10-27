@@ -12,7 +12,7 @@ interface DirectionsApiService {
     suspend fun getDirection(
         @Query("origin") origin: String,
         @Query("destination") destination: String,
-        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY,
         @Query("mode") mode: String = "driving",
+        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY,
     ): Response<DirectionsApi>
 }

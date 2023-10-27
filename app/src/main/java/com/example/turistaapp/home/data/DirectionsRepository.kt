@@ -1,8 +1,8 @@
 package com.example.turistaapp.home.data
 
 import com.example.turistaapp.home.data.api.service.DirectionsApiService
-import com.example.turistaapp.home.data.mappers.toDirectionsModel
-import com.example.turistaapp.home.domain.models.DirectionsModel
+import com.example.turistaapp.home.data.mappers.toRouteModel
+import com.example.turistaapp.home.domain.models.RouteModel
 import javax.inject.Inject
 
 interface IDirectionsRepository {
@@ -10,7 +10,7 @@ interface IDirectionsRepository {
         origin: String,
         destination: String,
         mode: String,
-    ): DirectionsModel?
+    ): RouteModel?
 }
 
 class DirectionsRepository @Inject constructor(
@@ -20,9 +20,9 @@ class DirectionsRepository @Inject constructor(
         origin: String,
         destination: String,
         mode: String
-    ): DirectionsModel? {
+    ): RouteModel? {
         val api = directionsApiService.getDirection(origin, destination, mode)
-        return api.body()?.toDirectionsModel()
+        return api.body()?.routes?.get(0)?.toRouteModel()
     }
 
 }

@@ -11,5 +11,6 @@ data class LocationModel(
     val photoUrl: String?,
     val types: List<String>?,
     val isFinished: Boolean = false,
-    val tripName: String = "titi"
+    val tripName: String = "titi",
+    var tripId: Int = 0
 )
