@@ -1,4 +1,4 @@
-package com.example.turistaapp.core
+package com.example.turistaapp.core.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
