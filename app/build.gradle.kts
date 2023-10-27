@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.turistaapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.turistaapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -71,7 +71,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.firebase:protolite-well-known-types:18.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -81,9 +80,6 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    // Material design
-    implementation("com.google.android.material:material:1.9.0")
 
     // Google maps
     implementation("com.google.maps.android:maps-compose:2.11.0")
@@ -126,6 +122,12 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
+    // HORIZONTAL PAGER
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
+    //datastore preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
 
 kapt {
