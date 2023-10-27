@@ -33,7 +33,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun MapScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
@@ -65,13 +65,6 @@ fun HomeScreen(
     }
 
     BottomSheetScaffold(
-//        topBar = {
-//            TopAppBarScreen(
-//                title = "Home",
-//                iconsNavigation = null
-//            )
-//        },
-        // Lo que va dentro del BottomSheet
         sheetContent = {
             when (nearbyLocations) {
                 is ResponseUiState.Error -> {
@@ -108,15 +101,12 @@ fun HomeScreen(
     ) { paddingValues ->
 
         Box(Modifier.fillMaxSize()) {
-            MapScreen(
+            MapView(
                 mapUiSettings = mapUiSettings,
                 cameraPositionState = cameraPositionState,
                 locations = locations,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
-//                onInfoWindowClose = {
-//                    onClickArrowBack()
-//                },
                 onClickMarker = { onMarkerSelected(it) }
             )
             TopAppBarScreen(

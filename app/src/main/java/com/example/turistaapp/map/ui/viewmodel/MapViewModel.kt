@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class MapViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
     private val getRandomLocationFromDB: GetRandomLocationFromDB,

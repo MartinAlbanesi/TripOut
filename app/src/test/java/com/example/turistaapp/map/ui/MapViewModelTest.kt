@@ -6,7 +6,7 @@ import com.example.turistaapp.map.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.map.domain.GetRandomLocationFromDB
 import com.example.turistaapp.map.domain.GetRouteModel
 import com.example.turistaapp.map.fake.FakeDataSource
-import com.example.turistaapp.map.ui.viewmodel.HomeViewModel
+import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -17,9 +17,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class HomeViewModelTest {
+class MapViewModelTest {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var mapViewModel: MapViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
@@ -39,7 +39,7 @@ class HomeViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        homeViewModel = HomeViewModel(
+        mapViewModel = MapViewModel(
             dispatcher,
             getNearbyLocationsUseCase,
             getRandomLocationFromDB,
@@ -52,9 +52,9 @@ class HomeViewModelTest {
     fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnNull_thenNearbyLocationsIsError() = runTest {
         coEvery { getNearbyLocationsUseCase(any()) } returns null
 
-        homeViewModel.setNearbyLocations(0.0, 0.0)
+        mapViewModel.setNearbyLocations(0.0, 0.0)
 
-        val actual = homeViewModel.nearbyLocations.value
+        val actual = mapViewModel.nearbyLocations.value
 
         val expected = ResponseUiState.Error("No se encontraron lugares cercanos")
 
@@ -68,11 +68,11 @@ class HomeViewModelTest {
 
         coEvery { getNearbyLocationsUseCase(any()) } returns fakeNearbyLocations
 
-        homeViewModel.setNearbyLocations(0.0, 0.0)
+        mapViewModel.setNearbyLocations(0.0, 0.0)
 
         val expected = ResponseUiState.Success(FakeDataSource.fakeNearbyLocations)
 
-        val actual = homeViewModel.nearbyLocations.value
+        val actual = mapViewModel.nearbyLocations.value
         assertEquals(expected, actual)
     }
 }

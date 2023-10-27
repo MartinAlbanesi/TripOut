@@ -13,25 +13,25 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.turistaapp.core.utils.Routes
-import com.example.turistaapp.map.ui.HomeScreen
-import com.example.turistaapp.map.ui.viewmodel.HomeViewModel
+import com.example.turistaapp.map.ui.MapScreen
+import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 
 
 @Composable
 fun MainScreen(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    mapViewModel: MapViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
 
-    val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
+    val nearbyLocations by mapViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
-    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
+    val nearbyLocationSelect by mapViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
-    val destinationLocations by homeViewModel.destinationLocations.collectAsStateWithLifecycle()
+    val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
-    val directionSelect by homeViewModel.polyLinesPoints.collectAsStateWithLifecycle()
+    val directionSelect by mapViewModel.polyLinesPoints.collectAsStateWithLifecycle()
 
-    val markerSelect by homeViewModel.markerSelect.collectAsStateWithLifecycle()
+    val markerSelect by mapViewModel.markerSelect.collectAsStateWithLifecycle()
 
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
@@ -51,21 +51,21 @@ fun MainScreen(
         }
         when(titles[state]){
             Routes.Home.route -> {
-                HomeScreen(
+
+            }
+
+            Routes.Map.route -> {
+                MapScreen(
                     nearbyLocations,
                     nearbyLocationSelect,
                     locations = destinationLocations,
                     directionSelect = directionSelect,
                     markerSelect = markerSelect,
-                    onClickArrowBack = { homeViewModel.getFlowLocationFromDB() },
-                    onMarkerSelected = { homeViewModel.getTripById(it)},
+                    onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
+                    onMarkerSelected = { mapViewModel.getTripById(it)},
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-                ) { homeViewModel.setNearbyLocationSelect(it) }
-            }
-
-            Routes.Map.route -> {
-                Text(text = "Map")
+                ) { mapViewModel.setNearbyLocationSelect(it) }
             }
             Routes.Settings.route -> {
                 Text(text = "Settings")
