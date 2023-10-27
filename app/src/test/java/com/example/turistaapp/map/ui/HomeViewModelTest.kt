@@ -4,6 +4,7 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.map.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.map.domain.GetRandomLocationFromDB
+import com.example.turistaapp.map.domain.GetRouteModel
 import com.example.turistaapp.map.fake.FakeDataSource
 import com.example.turistaapp.map.ui.viewmodel.HomeViewModel
 import io.mockk.MockKAnnotations
@@ -32,6 +33,9 @@ class HomeViewModelTest {
     @RelaxedMockK
     private lateinit var getTripsUseCase: GetTripsUseCase
 
+    @RelaxedMockK
+    private lateinit var getRouteModel: GetRouteModel
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -39,7 +43,8 @@ class HomeViewModelTest {
             dispatcher,
             getNearbyLocationsUseCase,
             getRandomLocationFromDB,
-            getTripsUseCase
+            getTripsUseCase,
+            getRouteModel
         )
     }
 
