@@ -1,7 +1,5 @@
 package com.example.turistaapp.create_trip.ui.viewmodels // ktlint-disable package-name
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,9 +23,11 @@ class CreateTripViewModel @Inject constructor(
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
 ) : ViewModel() {
 
+    /*
     // Viajes que se muestran en la lazy list
     private var _trips = MutableLiveData<List<TripModel>>()
     val trips: LiveData<List<TripModel>> = _trips
+     */
 
     // Fechas del viaje
     val calendar: Calendar = Calendar.getInstance()
@@ -77,34 +77,35 @@ class CreateTripViewModel @Inject constructor(
     fun resetMemberNameValue() {
         _memberName.value = ""
     }
+    /*
+        // Paradas
+        private var _stops = MutableLiveData(mutableListOf<String>())
+        val stops: LiveData<MutableList<String>> = _stops
 
-    // Paradas
-    private var _stops = MutableLiveData(mutableListOf<String>())
-    val stops: LiveData<MutableList<String>> = _stops
+        private var _stopName = MutableLiveData("")
+        val stopName: LiveData<String> = _stopName
 
-    private var _stopName = MutableLiveData("")
-    val stopName: LiveData<String> = _stopName
+        fun onStopNameChange(stopName: String) {
+            _stopName.value = stopName
+        }
 
-    fun onStopNameChange(stopName: String) {
-        _stopName.value = stopName
-    }
+        fun onAddStop(stop: String) {
+            val updatedStops = _stops.value?.toMutableList() ?: mutableListOf()
+            updatedStops.add(stop)
+            _stops.value = updatedStops
+            resetStopNameValue()
+        }
 
-    fun onAddStop(stop: String) {
-        val updatedStops = _stops.value?.toMutableList() ?: mutableListOf()
-        updatedStops.add(stop)
-        _stops.value = updatedStops
-        resetStopNameValue()
-    }
+        fun onRemoveStop(index: Int) {
+            val updatedStops = _stops.value?.toMutableList()
+            updatedStops?.removeAt(index)
+            _stops.value = updatedStops
+        }
 
-    fun onRemoveStop(index: Int) {
-        val updatedStops = _stops.value?.toMutableList()
-        updatedStops?.removeAt(index)
-        _stops.value = updatedStops
-    }
-
-    fun resetStopNameValue() {
-        _stopName.value = ""
-    }
+        fun resetStopNameValue() {
+            _stopName.value = ""
+        }
+     */
 
     // Transportes
     private var _transports = MutableLiveData(
@@ -122,17 +123,10 @@ class CreateTripViewModel @Inject constructor(
         _isExpanded.value = isExpanded
     }
 
-    private var _transport = MutableLiveData("")
+    private var _transport = MutableLiveData(Transports.Driving.type)
     val transport: LiveData<String> = _transport
     fun onTransportChange(transport: String) {
         _transport.value = transport
-    }
-
-    // Descripción
-    private var _description = MutableLiveData("")
-    val description: LiveData<String> = _description
-    fun onDescriptionChange(description: String) {
-        _description.value = description.toString()
     }
 
     // Focus Requesters
@@ -184,16 +178,7 @@ class CreateTripViewModel @Inject constructor(
         _selectedOriginLocation.value = null
     }
 
-    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel>(
-        PlaceAutocompletePredictionModel(
-            placeId = "",
-            description = "",
-            distanceMeters = null,
-            types = emptyList(),
-            structured_formatting = null,
-        ),
-    )
-    val selectedOriginLocation: LiveData<PlaceAutocompletePredictionModel> = _selectedOriginLocation
+    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel?>(null)
 
     fun onSelectedOriginLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedOriginLocation.value = selectedLocation
@@ -243,70 +228,62 @@ class CreateTripViewModel @Inject constructor(
         _selectedDestinationLocation.value = null
     }
 
-    private val _selectedDestinationLocation = MutableLiveData<PlaceAutocompletePredictionModel>(
-        PlaceAutocompletePredictionModel(
-            placeId = "",
-            description = "",
-            distanceMeters = null,
-            types = emptyList(),
-            structured_formatting = null,
-        ),
-    )
-    val selectedDestinationLocation: LiveData<PlaceAutocompletePredictionModel> =
-        _selectedDestinationLocation
+    private val _selectedDestinationLocation =
+        MutableLiveData<PlaceAutocompletePredictionModel?>(null)
 
     fun onSelectedDestinationLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedDestinationLocation.value = selectedLocation
     }
 
+    fun validateTripName(tripName: String): Boolean {
+        if (tripName.isBlank()) {
+            return false
+        }
+        return true
+    }
+
+    fun validateTripOrigin(): Boolean {
+        if (_selectedOriginLocation.value == null) {
+            return false
+        }
+        return true
+    }
+
+    fun validateTripDestination(): Boolean {
+        if (_selectedDestinationLocation.value == null) {
+            return false
+        }
+        return true
+    }
+
     // Crear viaje con los datos ingresados
 
-    // private val _originLocation = MutableLiveData<LocationModel>()
-    // val originLocation: LiveData<LocationModel> get() = _originLocation
-
-    // private val _destinationLocation = MutableLiveData<LocationModel>(null)
-    // private val destinationLocation: LiveData<LocationModel> get() = _destinationLocation
-
-    fun onCreateTripClick(name: String): Boolean {
+    fun onCreateTripClick(name: String, description: String) {
         var isSuccessful = true
 
         viewModelScope.launch {
-            try {
-                val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
-                val destination =
-                    getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
+            val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
+            val destination =
+                getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
 
-                /*
-                _originLocation.value = origin
-                _destinationLocation.value = destination
-                 */
-
-                val trip = TripModel(
-                    name = name,
-                    origin = origin!!,
-                    destination = destination!!,
-                    startDate = calendar.timeInMillis.toString(),
-                    endDate = calendar.timeInMillis.toString(),
-                    transport = _transport.value.toString(),
-                    members = _members.value,
-                    stops = null,
-                    description = _description.value.toString(),
-                    author = "author",
-                    images = null,
-                    comments = null,
-                    isFavorite = false,
-                    isFinished = false,
-                )
-                insertTripUseCase.execute(trip)
-                isSuccessful = true
-            } catch (e: Exception) {
-                isSuccessful = false
-            }
+            val trip = TripModel(
+                name = name,
+                origin = origin!!,
+                destination = destination!!,
+                startDate = calendar.timeInMillis.toString(),
+                endDate = calendar.timeInMillis.toString(),
+                transport = _transport.value.toString(),
+                members = _members.value,
+                stops = null,
+                description = description,
+                author = "author",
+                images = null,
+                comments = null,
+                isFavorite = false,
+                isFinished = false,
+            )
+            insertTripUseCase.execute(trip)
+            isSuccessful = true
         }
-        return isSuccessful
-    }
-
-    fun showMessage(context: Context, message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -60,7 +60,7 @@ class CreateTripViewModelTest {
         }.returns(expected)
 
         // When
-        val result = createTripViewModel.onCreateTripClick("test")
+        val result = createTripViewModel.onCreateTripClick("test", "test")
 
         // Then
         assertEquals(true, result)

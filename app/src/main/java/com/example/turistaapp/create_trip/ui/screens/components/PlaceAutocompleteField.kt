@@ -44,6 +44,7 @@ fun PlaceAutocompleteField(
     onClearField: () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     onItemClick: (PlaceAutocompletePredictionModel) -> Unit,
+    isError: Boolean = false,
 ) {
     OutlinedTextField(
         label = { Text(label) },
@@ -77,6 +78,7 @@ fun PlaceAutocompleteField(
             imeAction = imeAction,
             keyboardType = keyboardType,
         ),
+        isError = isError,
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
@@ -95,8 +97,8 @@ fun PlaceAutocompleteField(
             predictions.forEach { prediction ->
                 prediction.structured_formatting?.let {
                     TwoLineListItem(
-                        it.main_text!!,
-                        it.secondary_text!!,
+                        it.main_text ?: "",
+                        it.secondary_text ?: "",
                     ) { onItemClick(prediction) }
                     if (predictions.last() != prediction) {
                         Divider(

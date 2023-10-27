@@ -22,7 +22,7 @@ fun ExposedDropdownMenuBoxInput(
     label: String,
     values: List<String>,
     isExpanded: Boolean,
-    transport: String,
+    transport: String = values[0],
     onExpanded: (Boolean) -> Unit,
     onClickable: (String) -> Unit,
 ) {

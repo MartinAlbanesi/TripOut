@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,7 +33,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -96,10 +96,11 @@ fun CreateTripScreen(
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-
-    // Paradas
-    val stops by createTripViewModel.stops.observeAsState(emptyList())
-    val stopName by createTripViewModel.stopName.observeAsState("")
+    /*
+        // Paradas
+        val stops by createTripViewModel.stops.observeAsState(emptyList())
+        val stopName by createTripViewModel.stopName.observeAsState("")
+    */
 
     // Transporte
     val transports by createTripViewModel.transports.observeAsState(
@@ -107,8 +108,13 @@ fun CreateTripScreen(
     )
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
     val transport by createTripViewModel.transport.observeAsState("")
+
     // Descripción
-    val description by createTripViewModel.description.observeAsState("")
+//    val description by createTripViewModel.description.observeAsState("")
+    var description by rememberSaveable {
+        mutableStateOf("")
+    }
+
     // Focus Requesters
     val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
         FocusRequester(),
@@ -120,7 +126,18 @@ fun CreateTripScreen(
         FocusRequester(),
     )
 
-    val context = LocalContext.current
+    // Validaciones
+    var isTripNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isOriginValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isDestinationValid by rememberSaveable {
+        mutableStateOf(true)
+    }
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -149,12 +166,13 @@ fun CreateTripScreen(
                 TextInputField(
                     label = "Nombre del Viaje",
                     textValue = tripName,
-                    onValueChange = { tripName = it/*createTripViewModel.onNameChange(it)*/ },
+                    onValueChange = { tripName = it /*createTripViewModel.onNameChange(it)*/ },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.AddHome, contentDescription = "Trip Title")
                     },
+                    isError = !isTripNameValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -183,6 +201,7 @@ fun CreateTripScreen(
                         createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(false)
                         createTripViewModel.onSelectedOriginLocationChange(it)
                     },
+                    isError = !isOriginValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -215,6 +234,7 @@ fun CreateTripScreen(
                         createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(false)
                         createTripViewModel.onSelectedDestinationLocationChange(it)
                     },
+                    isError = !isDestinationValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -240,7 +260,10 @@ fun CreateTripScreen(
                         }
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
-                ) { createTripViewModel.onShowDateRangePickerDialogChange(true) }
+                    onClickable = {
+                        createTripViewModel.onShowDateRangePickerDialogChange(true)
+                    },
+                )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
@@ -298,7 +321,9 @@ fun CreateTripScreen(
                 TextInputField(
                     label = "Descripción (Opcional)",
                     textValue = description,
-                    onValueChange = { createTripViewModel.onDescriptionChange(it) },
+                    onValueChange = {
+                        description = it /* createTripViewModel.onDescriptionChange(it) */
+                    },
                     focusRequester = descriptionFocusRequester,
                     imeAction = ImeAction.Done,
                     singleLine = false,
@@ -316,7 +341,16 @@ fun CreateTripScreen(
                 // Botón para guardar
                 Button(
                     onClick = {
-                        if (createTripViewModel.onCreateTripClick(tripName)) {
+                        isTripNameValid = createTripViewModel.validateTripName(tripName)
+                        isOriginValid = createTripViewModel.validateTripOrigin()
+                        isDestinationValid = createTripViewModel.validateTripDestination()
+
+                        Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
+                        Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
+                        Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
+
+                        if (isTripNameValid && isOriginValid && isDestinationValid) {
+                            createTripViewModel.onCreateTripClick(tripName, description)
                             scope.launch {
                                 snackbarHostState
                                     .showSnackbar(
@@ -338,7 +372,6 @@ fun CreateTripScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
-                    // .align(Alignment.CenterHorizontally)
                 ) {
                     Text("Guardar")
                 }

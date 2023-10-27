@@ -27,6 +27,7 @@ fun TextInputField(
     singleLine: Boolean = true,
     maxLines: Int = 1,
     leadingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
 ) {
     OutlinedTextField(
         value = textValue,
@@ -48,5 +49,6 @@ fun TextInputField(
             unfocusedBorderColor = Color.LightGray,
         ),
         leadingIcon = leadingIcon,
+        isError = isError,
     )
 }
