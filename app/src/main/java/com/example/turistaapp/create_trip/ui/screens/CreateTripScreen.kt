@@ -166,12 +166,16 @@ fun CreateTripScreen(
                 TextInputField(
                     label = "Nombre del Viaje",
                     textValue = tripName,
-                    onValueChange = { tripName = it /*createTripViewModel.onNameChange(it)*/ },
+                    onValueChange = {
+                        tripName = it
+                        isTripNameValid = true
+                    },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.AddHome, contentDescription = "Trip Title")
                     },
+                    onClearField = { tripName = "" },
                     isError = !isTripNameValid,
                 )
 
@@ -181,7 +185,10 @@ fun CreateTripScreen(
                 PlaceAutocompleteField(
                     label = "Origen",
                     query = originAutocompleteQuery,
-                    onQueryChange = { createTripViewModel.onOriginAutocompleteQueryValueChange(it) },
+                    onQueryChange = {
+                        createTripViewModel.onOriginAutocompleteQueryValueChange(it)
+                        isOriginValid = true
+                    },
                     isDropdownVisible = isOriginAutocompleteDropdownVisible,
                     onDropdownVisibilityChange = {
                         createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
@@ -211,9 +218,8 @@ fun CreateTripScreen(
                     label = "Destino",
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
-                        createTripViewModel.onDestinationAutocompleteQueryValueChange(
-                            it,
-                        )
+                        createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
+                        isDestinationValid = true
                     },
                     isDropdownVisible = isDestinationAutocompleteDropdownVisible,
                     onDropdownVisibilityChange = {
@@ -322,7 +328,7 @@ fun CreateTripScreen(
                     label = "Descripción (Opcional)",
                     textValue = description,
                     onValueChange = {
-                        description = it /* createTripViewModel.onDescriptionChange(it) */
+                        description = it
                     },
                     focusRequester = descriptionFocusRequester,
                     imeAction = ImeAction.Done,
@@ -334,6 +340,7 @@ fun CreateTripScreen(
                             contentDescription = "Trip Title",
                         )
                     },
+                    onClearField = { description = "" },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))

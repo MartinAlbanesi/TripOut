@@ -259,8 +259,6 @@ class CreateTripViewModel @Inject constructor(
     // Crear viaje con los datos ingresados
 
     fun onCreateTripClick(name: String, description: String) {
-        var isSuccessful = true
-
         viewModelScope.launch {
             val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
             val destination =
@@ -283,7 +281,6 @@ class CreateTripViewModel @Inject constructor(
                 isFinished = false,
             )
             insertTripUseCase.execute(trip)
-            isSuccessful = true
         }
     }
 }
