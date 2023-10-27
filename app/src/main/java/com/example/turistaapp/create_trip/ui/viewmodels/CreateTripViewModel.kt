@@ -141,75 +141,49 @@ class CreateTripViewModel @Inject constructor(
     private var _descriptionFocusRequester = MutableLiveData(FocusRequester())
     val descriptionFocusRequester: LiveData<FocusRequester> = _descriptionFocusRequester
 
-    // Datos de origen para el autocomplete
-
-    private val _originQuery = MutableLiveData("")
-    val originQuery: LiveData<String> get() = _originQuery
-
+    // Ubicaciones
+    // Lista de predicciones del Origen
     private val _originPredictions =
         MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val originPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _originPredictions
 
-    fun onOriginAutocompleteQueryValueChange(newQuery: String) {
-        _originQuery.value = newQuery
-        searchOriginPlaces(newQuery)
-    }
-
-    private fun searchOriginPlaces(query: String) {
+    // Busca predicciones de ubicaciones para el Origen según una query
+    fun searchOriginPlaces(query: String) {
         viewModelScope.launch {
             val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
             _originPredictions.value = newPredictions
         }
     }
 
-    private var _isOriginAutocompleteDropdownVisible = MutableLiveData(false)
-    val isOriginAutocompleteDropdownVisible: LiveData<Boolean> =
-        _isOriginAutocompleteDropdownVisible
-
-    fun onOriginAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
-        _isOriginAutocompleteDropdownVisible.value = isVisible
-    }
-
-    fun onOriginAutocompletePredictionSelect(prediction: PlaceAutocompletePredictionModel) {
-        _originQuery.value = prediction.description
-        _isOriginAutocompleteDropdownVisible.value = false
-    }
-
-    fun onClearOriginField() {
-        _originQuery.value = ""
+    // Origen seleccionado en las predicciones
+    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel?>(null)
+    fun clearSelectedOriginLocation() {
         _selectedOriginLocation.value = null
     }
-
-    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel?>(null)
-
     fun onSelectedOriginLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedOriginLocation.value = selectedLocation
     }
 
-    // Datos de destino para el autocomplete
-
-    private val _destinationQuery = MutableLiveData("")
-    val destinationQuery: LiveData<String> get() = _destinationQuery
-
+    // Lista de predicciones del Destino
     private val _destinationPredictions =
         MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val destinationPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _destinationPredictions
 
-    fun setDestination(address: String?) {
-        _destinationQuery.value = address
-        searchDestinationPlaces(address!!)
-    }
-
-    fun onDestinationAutocompleteQueryValueChange(newQuery: String) {
-        _destinationQuery.value = newQuery
-        searchDestinationPlaces(newQuery)
-    }
-
-    private fun searchDestinationPlaces(query: String) {
+    // Busca predicciones de ubicaciones para el Destino según una query
+    fun searchDestinationPlaces(query: String) {
         viewModelScope.launch {
             val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
             _destinationPredictions.value = newPredictions
         }
+    }
+
+    // Setea
+    fun setDestination(address: String?) {
+        searchDestinationPlaces(address!!)
+    }
+
+    fun clearSelectedDestinationLocation() {
+        _selectedDestinationLocation.value = null
     }
 
     private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
@@ -218,16 +192,6 @@ class CreateTripViewModel @Inject constructor(
 
     fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
         _isDestinationAutocompleteDropdownVisible.value = isVisible
-    }
-
-    fun onDestinationAutocompletePredictionSelect(prediction: PlaceAutocompletePredictionModel) {
-        _destinationQuery.value = prediction.description
-        _isDestinationAutocompleteDropdownVisible.value = false
-    }
-
-    fun onClearDestinationField() {
-        _destinationQuery.value = ""
-        _selectedDestinationLocation.value = null
     }
 
     private val _selectedDestinationLocation =
