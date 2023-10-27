@@ -1,4 +1,4 @@
-package com.example.turistaapp.main.ui
+package com.example.turistaapp.core.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab

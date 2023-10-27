@@ -1,4 +1,4 @@
-package com.example.turistaapp.main.ui.components
+package com.example.turistaapp.core.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack

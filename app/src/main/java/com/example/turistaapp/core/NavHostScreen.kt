@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
-import com.example.turistaapp.main.ui.MainScreen
+import com.example.turistaapp.core.ui.MainScreen
 
 @Composable
 fun NavHostScreen(
