@@ -19,14 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.turistaapp.create_trip.domain.models.LocationModel
 
 @Composable
 fun TripDialog(
-    name: String,
-    photoUrl: String?,
-    rating: Double? = null,
-    userRating: Int? = null,
-    address: String? = null,
+//    name: String,
+//    photoUrl: String?,
+//    rating: Double? = null,
+//    userRating: Int? = null,
+//    address: String? = null,
+    nearbyLocationSelect: LocationModel,
     onDismiss: () -> Unit,
     onConfirm: (String) -> Unit,
 ) {
@@ -42,15 +44,15 @@ fun TripDialog(
                 Modifier.padding(8.dp),
             ) {
                 TripItem(
-                    name = name,
-                    photoUrl = photoUrl,
-                    rating = rating,
-                    userRating = userRating,
-                    address = address,
+                    name = nearbyLocationSelect.name,
+                    photoUrl = nearbyLocationSelect.photoUrl,
+                    rating = nearbyLocationSelect.rating,
+                    userRating = nearbyLocationSelect.userRating,
+                    address = nearbyLocationSelect.address,
                     modifier = Modifier.fillMaxSize().weight(1f)
                 )
                 Button(
-                    onClick = { onConfirm("$name, $address") },
+                    onClick = { onConfirm("${nearbyLocationSelect.name}, ${nearbyLocationSelect.address}") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),

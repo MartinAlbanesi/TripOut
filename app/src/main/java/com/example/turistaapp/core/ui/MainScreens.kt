@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.turistaapp.core.utils.Routes
+import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 
@@ -51,7 +52,12 @@ fun MainScreen(
         }
         when(titles[state]){
             Routes.Home.route -> {
-
+                HomeScreen(
+                    nearbyLocations = nearbyLocations,
+                    nearbyLocationSelect = nearbyLocationSelect,
+                    onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
+                    onCardSelection = { mapViewModel.setNearbyLocationSelect(it) }
+                )
             }
 
             Routes.Map.route -> {
