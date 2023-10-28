@@ -2,62 +2,93 @@ package com.example.turistaapp.welcome
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.turistaapp.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
-@Preview
 @Composable
-private fun ContentView() {
-    val pagerState = rememberPagerState { 2 }
+fun WelcomeScreen() {
+    var pagerState = rememberPagerState { 2 }
+
+    val scope = rememberCoroutineScope()
+
+    val buttonText = if (pagerState.currentPage == 0) {
+        "Siguiente"
+    } else {
+        "Empezar"
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
     ) {
-        PagerContent(pagerState = pagerState)
-    }
+        Column(Modifier.fillMaxWidth()) {
 
-}
+            Image(
+                painter = painterResource(id = R.drawable.logo_with_name),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(CircleShape)
+            )
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun PagerContent(pagerState: PagerState) {
+            HorizontalPager(
+                modifier = Modifier.weight(1f),
+                state = pagerState,
+                userScrollEnabled = false,
+                key = {
+                    pagerState.currentPage
+                }
+            ) { pager ->
+                when (pager) {
+                    0 -> {
+                        ViewOne(stringResource(R.string.Welcome1))
+                    }
 
-    HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
-        state = pagerState
-    ) { pager ->
-        when (pager) {
-            0 -> {
-                ViewOne()
+                    1 -> {
+                        ViewTwo(stringResource(R.string.Welcome2))
+                    }
+                }
             }
 
-            1 -> {
-                ViewTwo()
+            Button(
+                onClick = {
+                    scope.launch {
+                        pagerState.scrollToPage(pagerState.currentPage + 1)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 32.dp)
+            ) {
+                Text(text = buttonText)
             }
         }
     }
@@ -65,58 +96,23 @@ private fun PagerContent(pagerState: PagerState) {
 
 
 @Composable
-private fun ViewOne() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_with_name),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally)
-                .clip(CircleShape)
-        )
-        Text(
-            text = "Bienvenido",
-            fontFamily = FontFamily.Monospace,
-            fontWeight = FontWeight.Bold,
-            color = Color.DarkGray,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-    }
+private fun ViewOne(text: String) {
+    Text(
+        text = text,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center,
+    )
+
 }
 
 @Composable
-private fun ViewTwo() {
+private fun ViewTwo(text: String) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+        modifier = Modifier,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_with_name),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally)
-                .clip(CircleShape)
-        )
-        Text(
-            text = "Trip Out, Aplicación gratuita que nos permite planificar y organizar viajes, pudiendo guardar todos los detalles importantes y permitiendo al usuario realizar múltiples acciones",
-            fontWeight = FontWeight.Medium,
-            color = Color.DarkGray,
-            fontFamily = FontFamily.Monospace,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
+        ViewOne(text)
     }
 }
 
