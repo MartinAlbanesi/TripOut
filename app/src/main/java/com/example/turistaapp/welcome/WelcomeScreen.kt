@@ -1,5 +1,6 @@
 package com.example.turistaapp.welcome
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,14 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WelcomeScreen() {
-    var pagerState = rememberPagerState { 2 }
+    var pagerState = rememberPagerState {2}
 
     val scope = rememberCoroutineScope()
 
@@ -54,7 +53,7 @@ fun WelcomeScreen() {
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(160.dp)
                     .align(Alignment.CenterHorizontally)
                     .clip(CircleShape)
             )
@@ -80,13 +79,18 @@ fun WelcomeScreen() {
 
             Button(
                 onClick = {
-                    scope.launch {
-                        pagerState.scrollToPage(pagerState.currentPage + 1)
+                    if(pagerState.currentPage == 0){
+                        scope.launch {
+                            pagerState.scrollToPage(pagerState.currentPage + 1)
+                        }
+                    }
+                    if(pagerState.currentPage == 1){
+                        Log.i("titi", "WelcomeScreen: ")
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 32.dp)
+                    .padding(vertical = 32.dp, horizontal = 32.dp)
             ) {
                 Text(text = buttonText)
             }
