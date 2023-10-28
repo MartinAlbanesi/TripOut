@@ -1,4 +1,4 @@
-package com.example.turistaapp.welcome
+package com.example.turistaapp.welcome.ui
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.turistaapp.core.data.datastore.LocalDataStore
+import com.example.turistaapp.core.data.datastore.LocalDataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +26,7 @@ class DataStoreModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataStore(dataStore : DataStore<Preferences>) : LocalDataStore {
-        return LocalDataStore(dataStore)
+    fun provideLocalDataStore(dataStore : DataStore<Preferences>) : LocalDataStoreRepository {
+        return LocalDataStoreRepository(dataStore)
     }
 }
