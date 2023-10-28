@@ -1,6 +1,5 @@
 package com.example.turistaapp.core
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -8,11 +7,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.turistaapp.core.utils.Routes
+import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.home.ui.viewmodel.HomeViewModel
-import com.example.turistaapp.main.MainViewModel
 
 @Composable
 fun NavHostScreen(

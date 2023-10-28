@@ -10,7 +10,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.turistaapp.core.utils.Routes
+import com.example.turistaapp.core.utils.enums.Routes
 
 @Composable
 fun BottomBarScreen(

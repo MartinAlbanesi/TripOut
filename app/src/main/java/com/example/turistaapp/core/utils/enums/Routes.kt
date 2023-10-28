@@ -1,4 +1,4 @@
-package com.example.turistaapp.core.utils
+package com.example.turistaapp.core.utils.enums
 
 sealed class Routes(val route: String) {
     object Home : Routes("home_screen")
