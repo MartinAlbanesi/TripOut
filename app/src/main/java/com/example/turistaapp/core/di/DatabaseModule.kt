@@ -37,6 +37,4 @@ class DatabaseModule {
     fun provideTripDBRepository(tripDao: TripDao) : TripDBRepository {
         return TripDBRepositoryImpl(tripDao)
     }
-
-
 }

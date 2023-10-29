@@ -118,7 +118,6 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
                 checked = checked, onCheckedChange = {
                     changeTheme()
                 }, modifier = Modifier.weight(1f)
-
             )
         }
         Spacer(modifier = Modifier.size(6.dp))
