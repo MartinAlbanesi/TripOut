@@ -125,6 +125,12 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
+    // HORIZONTAL PAGER
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
+    //datastore preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
 
 kapt {
