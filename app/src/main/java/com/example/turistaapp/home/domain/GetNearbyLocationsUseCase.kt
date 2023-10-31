@@ -1,7 +1,7 @@
-package com.example.turistaapp.map.domain
+package com.example.turistaapp.home.domain
 
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.map.data.INearbySearchLocationRepository
+import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import javax.inject.Inject
 
 class GetNearbyLocationsUseCase @Inject constructor(

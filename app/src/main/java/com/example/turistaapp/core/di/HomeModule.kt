@@ -1,14 +1,14 @@
 package com.example.turistaapp.core.di
 
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
+import com.example.turistaapp.home.data.INearbySearchLocationRepository
+import com.example.turistaapp.home.data.NearbySearchLocationRepository
+import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
+import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.map.data.DirectionsRepository
 import com.example.turistaapp.map.data.IDirectionsRepository
-import com.example.turistaapp.map.data.INearbySearchLocationRepository
-import com.example.turistaapp.map.data.NearbySearchLocationRepository
 import com.example.turistaapp.map.data.api.service.DirectionsApiService
-import com.example.turistaapp.map.data.api.service.NearbySearchLocationApiService
-import com.example.turistaapp.map.domain.GetNearbyLocationsUseCase
-import com.example.turistaapp.map.domain.GetRandomLocationFromDB
 import com.example.turistaapp.map.domain.GetRouteModel
 import dagger.Module
 import dagger.Provides
@@ -45,18 +45,4 @@ class HomeModule {
     fun provideGetRandomLocationFromDB(getDestinationLocationsFromDataBase: GetDestinationLocationsFromDataBase): GetRandomLocationFromDB {
         return GetRandomLocationFromDB(getDestinationLocationsFromDataBase)
     }
-
-    @Singleton
-    @Provides
-    fun provideDirectionsRepository(directionsService : DirectionsApiService) : IDirectionsRepository {
-        return DirectionsRepository(directionsService)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGetRouteModel(directionsRepository: DirectionsRepository) : GetRouteModel {
-        return GetRouteModel(directionsRepository)
-    }
-
-
 }

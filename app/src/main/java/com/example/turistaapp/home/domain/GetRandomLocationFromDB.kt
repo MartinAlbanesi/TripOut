@@ -1,4 +1,4 @@
-package com.example.turistaapp.map.domain
+package com.example.turistaapp.home.domain
 
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
 import com.example.turistaapp.create_trip.domain.models.LocationModel

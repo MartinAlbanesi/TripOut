@@ -7,8 +7,8 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.core.utils.getLocationString
 import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.map.domain.GetNearbyLocationsUseCase
-import com.example.turistaapp.map.domain.GetRandomLocationFromDB
+import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.map.domain.GetRouteModel
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,17 +23,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
-    private val getNearbyLocationsUseCase: GetNearbyLocationsUseCase,
-    private val getRandomLocationFromDB: GetRandomLocationFromDB,
     private val getGetTripsUseCase: GetTripsUseCase,
     private val getRouteModel: GetRouteModel
 ) : ViewModel() {
-
-    private val _nearbyLocationsApi = MutableStateFlow<ResponseUiState>(ResponseUiState.Loading)
-    val nearbyLocations = _nearbyLocationsApi.asStateFlow()
-
-    private val _nearbyLocationSelect = MutableStateFlow<LocationModel?>(null)
-    val nearbyLocationSelect = _nearbyLocationSelect.asStateFlow()
 
     private val _destinationLocations =
         MutableStateFlow<Pair<List<LocationModel>, List<LocationModel>>?>(null)
@@ -47,35 +39,24 @@ class MapViewModel @Inject constructor(
 
     init {
         getFlowLocationFromDB()
-        getRandomLocation()
     }
 
     fun getTripById(id: Int) {
-            viewModelScope.launch(dispatcher) {
-                try {
-                    val selectTrip =getGetTripsUseCase().first().first { it.tripId == id }
-                    val selectRoute = getRouteModel(
-                        origin = selectTrip.getLatLngOrigin(),
-                        destination = selectTrip.getLatLngDestination(),
-                        transport = selectTrip.transport,
-                        trip = selectTrip
-                    )
-                    decoPoints(selectRoute!!.points)
-                    _destinationLocations.value =
-                        Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))
-                    _markerSelect.value = true
-                } catch (e: Exception) {
-                    Log.i("titi", e.message.toString())
-                }
-            }
-    }
-
-    private fun getRandomLocation() {
         viewModelScope.launch(dispatcher) {
-            if (getRandomLocationFromDB() != null) {
-                setNearbyLocations(getRandomLocationFromDB()!!.lat, getRandomLocationFromDB()!!.lng)
-            } else {
-                setNearbyLocations(-34.67113975510375, -58.56181551536259)
+            try {
+                val selectTrip = getGetTripsUseCase().first().first { it.tripId == id }
+                val selectRoute = getRouteModel(
+                    origin = selectTrip.getLatLngOrigin(),
+                    destination = selectTrip.getLatLngDestination(),
+                    transport = selectTrip.transport,
+                    trip = selectTrip
+                )
+                decoPoints(selectRoute!!.points)
+                _destinationLocations.value =
+                    Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))
+                _markerSelect.value = true
+            } catch (e: Exception) {
+                Log.i("titi", e.message.toString())
             }
         }
     }
@@ -96,32 +77,6 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setNearbyLocations(lat: Double, lng: Double) {
-        viewModelScope.launch(dispatcher) {
-            try {
-                val nearbyLocations = getNearbyLocationsUseCase(getLocationString(lat, lng))
-
-                if (nearbyLocations.isNullOrEmpty()) {
-                    _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))
-                } else {
-                    _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
-                }
-            } catch (e: Exception) {
-                _nearbyLocationsApi.emit(ResponseUiState.Error(e.message.toString()))
-            }
-        }
-    }
-
-    fun setNearbyLocationSelect(nearbyLocationName: String) {
-        val getNearbyLocation = getNearbyLocationByName(nearbyLocationName)
-        _nearbyLocationSelect.value = getNearbyLocation
-    }
-
-    private fun getNearbyLocationByName(name: String): LocationModel? {
-        val nearbyLocation =
-            (nearbyLocations.value as ResponseUiState.Success<List<LocationModel>>).values
-        return nearbyLocation.find { it.name == name }
-    }
 
     private fun decoPoints(points: String) {
         _polyLinesPoints.value = decodePoly(points)

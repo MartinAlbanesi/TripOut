@@ -1,6 +1,7 @@
 package com.example.turistaapp.map.domain
 
-import com.example.turistaapp.map.data.NearbySearchLocationRepository
+import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import com.example.turistaapp.map.fake.FakeDataSource
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

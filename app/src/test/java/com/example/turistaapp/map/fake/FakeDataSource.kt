@@ -4,7 +4,7 @@ import com.example.turistaapp.create_trip.data.network.place_details.models.Geom
 import com.example.turistaapp.create_trip.data.network.place_details.models.LocationApi
 import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.map.data.api.model.NearbySearchLocationApi
+import com.example.turistaapp.home.data.api.models.NearbySearchLocationApi
 
 
 object FakeDataSource {

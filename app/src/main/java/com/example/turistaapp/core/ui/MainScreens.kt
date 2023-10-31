@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.turistaapp.core.utils.Routes
 import com.example.turistaapp.home.ui.HomeScreen
+import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 
@@ -21,12 +22,13 @@ import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 @Composable
 fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
 
-    val nearbyLocations by mapViewModel.nearbyLocations.collectAsStateWithLifecycle()
+    val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
-    val nearbyLocationSelect by mapViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
+    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
@@ -56,7 +58,7 @@ fun MainScreen(
                     nearbyLocations = nearbyLocations,
                     nearbyLocationSelect = nearbyLocationSelect,
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-                    onCardSelection = { mapViewModel.setNearbyLocationSelect(it) }
+                    onCardSelection = { homeViewModel.setNearbyLocationSelect(it) }
                 )
             }
 
@@ -71,7 +73,7 @@ fun MainScreen(
                     onMarkerSelected = { mapViewModel.getTripById(it)},
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-                ) { mapViewModel.setNearbyLocationSelect(it) }
+                ) { homeViewModel.setNearbyLocationSelect(it) }
             }
             Routes.Settings.route -> {
                 Text(text = "Settings")

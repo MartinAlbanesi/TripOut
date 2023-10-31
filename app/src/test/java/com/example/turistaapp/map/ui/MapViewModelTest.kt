@@ -2,8 +2,8 @@ package com.example.turistaapp.map.ui
 
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.GetTripsUseCase
-import com.example.turistaapp.map.domain.GetNearbyLocationsUseCase
-import com.example.turistaapp.map.domain.GetRandomLocationFromDB
+import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
+import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.example.turistaapp.map.domain.GetRouteModel
 import com.example.turistaapp.map.fake.FakeDataSource
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
