@@ -63,9 +63,9 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -83,22 +83,25 @@ dependencies {
 
     // Google maps
     implementation("com.google.maps.android:maps-compose:2.11.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
     // livedata compose
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.1")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     // Material extend icons
     implementation("androidx.compose.material:material-icons-extended")
 
     // Room
-    implementation("androidx.room:room-ktx:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
-    testImplementation("androidx.room:room-testing:2.5.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    testImplementation("androidx.room:room-testing:2.6.0")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -112,9 +115,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    // kotlin corrutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    // kotlin coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     // mockk
@@ -122,9 +125,6 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
-
-    //Location
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
 }
 
 kapt {
