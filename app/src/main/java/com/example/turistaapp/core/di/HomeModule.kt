@@ -5,6 +5,7 @@ import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromData
 import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
+import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -50,5 +51,11 @@ class HomeModule {
     @Provides
     fun provideFusedLocationProviderClient(@ApplicationContext context: Context) : FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetLastLocation(@ApplicationContext context: Context, fusedLocationProviderClient: FusedLocationProviderClient) : GetLastLocationUseCase {
+        return GetLastLocationUseCase(fusedLocationProviderClient, context)
     }
 }
