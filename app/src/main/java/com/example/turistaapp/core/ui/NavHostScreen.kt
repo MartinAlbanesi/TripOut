@@ -1,48 +1,32 @@
 package com.example.turistaapp.core.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
-import com.example.turistaapp.core.ui.MainScreen
 import com.example.turistaapp.core.utils.enums.Routes
+import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
+import com.example.turistaapp.welcome.ui.WelcomeScreen
+import com.example.turistaapp.welcome.ui.WelcomeViewModel
 
 @Composable
 fun NavHostScreen(
-//    homeViewModel: HomeViewModel = hiltViewModel(),
+    welcomeViewModel: WelcomeViewModel = hiltViewModel()
 ) {
-
     val navController = rememberNavController()
 
-//    val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
-//
-//    val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
-//
-//    val destinationLocations by homeViewModel.destinationLocations.collectAsStateWithLifecycle()
-//
-//    val directionSelect by homeViewModel.polyLinesPoints.collectAsStateWithLifecycle()
-//
-//    val markerSelect by homeViewModel.markerSelect.collectAsStateWithLifecycle()
+    val name by welcomeViewModel.name.collectAsStateWithLifecycle()
 
-    NavHost(navController = navController, startDestination = Routes.Home.route) {
+    val starDestination = if (name != null) Routes.Home.route else  Routes.Welcome.route
+
+    NavHost(navController = navController, startDestination = starDestination) {
         composable(Routes.Home.route) {
             MainScreen(navController = navController)
         }
-//        composable(Routes.Map.route) {
-//            HomeScreen(
-//                nearbyLocations,
-//                nearbyLocationSelect,
-//                locations = destinationLocations!!,
-//                directionSelect = directionSelect,
-//                markerSelect = markerSelect,
-//                onClickArrowBack = { homeViewModel.getFlowLocationFromDB() },
-//                onMarkerSelected = { homeViewModel.getTripById(it)},
-//                onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
-//                onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-//            ) { homeViewModel.setNearbyLocationSelect(it) }
-//        }
         composable(
             Routes.CreateTrip.route,
             arguments = listOf(navArgument("address"){defaultValue = ""})
@@ -51,7 +35,11 @@ fun NavHostScreen(
                 navController.navigate(Routes.Home.route)
             }
         }
-//        composable(Routes.Trips.route) { }
-//        composable(Routes.Settings.route) { }
+        composable(Routes.Welcome.route) {
+            WelcomeScreen(onClickSaveName = {
+                welcomeViewModel.setNameInDataStore(it)
+                navController.navigate(Routes.Home.route)
+            })
+        }
     }
 }

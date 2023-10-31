@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import java.util.regex.Pattern
 
 class GetNearbyLocationsUseCaseTest {
 

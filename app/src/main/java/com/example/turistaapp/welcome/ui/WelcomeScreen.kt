@@ -1,11 +1,12 @@
 package com.example.turistaapp.welcome.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,36 +39,36 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.turistaapp.R
-import com.example.turistaapp.ui.theme.TuristaAppTheme
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
-    var pagerState = rememberPagerState {2}
+    var pagerState = rememberPagerState { 2 }
 
     val scope = rememberCoroutineScope()
 
     val circleFirst by animateColorAsState(
-        targetValue = if(pagerState.currentPage == 0) MaterialTheme.colorScheme.primary else Color.Gray,
+        targetValue = if (pagerState.currentPage == 0) MaterialTheme.colorScheme.primary else Color.Gray,
         label = "circleFirst"
     )
 
     val circleSecond by animateColorAsState(
-        targetValue = if(pagerState.currentPage == 1) MaterialTheme.colorScheme.primary else Color.Gray,
+        targetValue = if (pagerState.currentPage == 1) MaterialTheme.colorScheme.primary else Color.Gray,
         label = "circleSecond"
     )
 
     val buttonText = if (pagerState.currentPage == 0) "Siguiente" else "Empezar"
 
     var value by remember { mutableStateOf("") }
+
+    var isError by remember { mutableStateOf(false) }
 
 
     Box(
@@ -92,38 +93,50 @@ fun WelcomeScreen(
                 userScrollEnabled = false,
             ) { pager ->
                 when (pager) {
-                    0 -> { ViewOne(stringResource(R.string.Welcome1)) }
+                    0 -> {
+                        ViewOne(stringResource(R.string.Welcome1))
+                    }
 
-                    1 -> { ViewTwo(value){
-                        value = it
-                    } }
+                    1 -> {
+                        ViewTwo(value, isError) {
+                            value = it
+                        }
+                    }
                 }
             }
 
-                DrawCircle(
-                    color = circleFirst,
-                    Modifier
-                        .align(CenterHorizontally)
-                        .offset(x = (-20).dp)
-                )
-                DrawCircle(
-                    color = circleSecond,
-                    Modifier
-                        .align(CenterHorizontally)
-                        .offset(x = (20).dp)
-                )
-
+            DrawCircle(
+                color = circleFirst,
+                Modifier
+                    .align(CenterHorizontally)
+                    .offset(x = (-20).dp)
+            )
+            DrawCircle(
+                color = circleSecond,
+                Modifier
+                    .align(CenterHorizontally)
+                    .offset(x = (20).dp)
+            )
 
             Button(
                 onClick = {
-                    if(pagerState.currentPage == 0){
+                    if (pagerState.currentPage == 0) {
                         scope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1, animationSpec = tween(500))
+                            pagerState.animateScrollToPage(
+                                pagerState.currentPage + 1,
+                                animationSpec = tween(500)
+                            )
                         }
                     }
-                    if(pagerState.currentPage == 1){
+                    if (pagerState.currentPage == 1) {
                         //TODO: Navigate to main screen, save name, permissions
-                        onClickSaveName(value)
+                        if (validateName(value)) {
+                            isError = false
+                            onClickSaveName(value)
+                        } else {
+                            isError = true
+                        }
+
                     }
                 },
                 modifier = Modifier
@@ -164,7 +177,8 @@ private fun ViewOne(text: String) {
 
 @Composable
 private fun ViewTwo(
-    value : String,
+    value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
     Column(
@@ -179,14 +193,29 @@ private fun ViewTwo(
         Spacer(modifier = Modifier.size(16.dp))
         OutlinedTextField(
             value = value,
-            onValueChange = {onValueChange(it)},
+            onValueChange = { onValueChange(it) },
             label = { Text(text = "Nombre") },
             singleLine = true,
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 32.dp),
+            isError = isError
         )
+        AnimatedVisibility(
+            visible = isError,
+            enter = expandVertically(
+                animationSpec = tween(500),
+                expandFrom = Alignment.Bottom,
+            ),
+            modifier = Modifier.padding(top = 4.dp),
+        ) {
+            Text(
+                text = "Introduzca un nombre válido",
+                color = Color.Red,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
     }
 }
 
@@ -195,13 +224,13 @@ fun DrawCircle(
     color: Color,
     modifier: Modifier = Modifier
 ) {
-    Canvas(modifier = modifier){
+    Canvas(modifier = modifier) {
         drawCircle(
             color = color,
             radius = 40f,
         )
     }
-    Canvas(modifier = modifier){
+    Canvas(modifier = modifier) {
         drawCircle(
             color = Color.White,
             radius = 41f,
@@ -210,6 +239,12 @@ fun DrawCircle(
             )
         )
     }
+}
+
+fun validateName(name: String): Boolean {
+    val pattern = Pattern.compile("^[A-Z][a-zA-Z ]*\$")
+    val matcher = pattern.matcher(name)
+    return matcher.matches()
 }
 
 
