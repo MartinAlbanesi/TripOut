@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.domain // ktlint-disable package-name
+package com.example.turistaapp.my_trips.domain // ktlint-disable package-name
 
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.data.mapper.toTripModel

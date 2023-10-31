@@ -27,7 +27,7 @@ fun TripEntity.toTripModel() = TripModel(
 fun TripModel.toTripEntity() = TripEntity(
     id = 0,
     name = name,
-    origin = this.origin.toLocationEntity(),//toLocationEntity(),
+    origin = this.origin.toLocationEntity(), // toLocationEntity(),
     destination = this.destination.toLocationEntity(),
     stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
     startDate = startDate,
@@ -42,10 +42,9 @@ fun TripModel.toTripEntity() = TripEntity(
     comments = comments,
 )
 
-
 fun LocationEntity.toLocationModel(
-    tripName : String = "",
-    isFinished : Boolean = false
+    tripName: String = "",
+    isFinished: Boolean = false,
 ) = LocationModel(
     placeID = placeID,
     name = name,
@@ -57,7 +56,7 @@ fun LocationEntity.toLocationModel(
     lng = lng,
     types = types,
     tripName = tripName,
-    isFinished = isFinished
+    isFinished = isFinished,
 )
 
 fun LocationModel.toLocationEntity() = LocationEntity(
@@ -84,4 +83,3 @@ fun PlaceApi.toLocationModel() = LocationModel(
     types = types,
     placeID = placeID,
 )
-

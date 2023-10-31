@@ -126,6 +126,9 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
+    // Joda Time
+    implementation ("joda-time:joda-time:2.10.12")
 }
 
 kapt {

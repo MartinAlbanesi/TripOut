@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +45,6 @@ import com.example.turistaapp.main.ui.components.TopAppBarScreen
 import kotlinx.coroutines.launch
 import java.util.*
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
