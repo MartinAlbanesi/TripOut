@@ -1,4 +1,4 @@
-package com.example.turistaapp.core.database
+package com.example.turistaapp.core.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
