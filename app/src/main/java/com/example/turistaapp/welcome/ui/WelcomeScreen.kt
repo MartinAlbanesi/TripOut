@@ -41,27 +41,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.turistaapp.R
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 import kotlinx.coroutines.launch
 
-@Preview
-@Composable
-fun Wea() {
-    TuristaAppTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            WelcomeScreen()
-        }
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    onClickSaveName: (String) -> Unit,
+) {
     var pagerState = rememberPagerState {2}
 
     val scope = rememberCoroutineScope()
@@ -134,6 +123,7 @@ fun WelcomeScreen() {
                     }
                     if(pagerState.currentPage == 1){
                         //TODO: Navigate to main screen, save name, permissions
+                        onClickSaveName(value)
                     }
                 },
                 modifier = Modifier
