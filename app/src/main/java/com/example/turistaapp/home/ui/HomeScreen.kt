@@ -1,6 +1,8 @@
 package com.example.turistaapp.home.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,7 +36,9 @@ fun HomeScreen(
         item {
             Text(
                 text = "Descubre más viajes",
-                modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
             )
         }
         item {
@@ -49,10 +53,14 @@ fun HomeScreen(
                     )
                 }
                 is ResponseUiState.Loading -> {
-                    CircularProgressIndicator(modifier = Modifier.padding(16.dp).size(100.dp))
+                    CircularProgressIndicator(modifier = Modifier
+                        .padding(16.dp)
+                        .size(100.dp))
                 }
                 is ResponseUiState.Error -> {
-                    //TODO: Screen error
+                    Column(Modifier.fillMaxWidth().height(200.dp)) {
+                        Text(text = nearbyLocations.message)
+                    }
                 }
 
 

@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 if (nearbyLocations.isNullOrEmpty()) {
-                    _nearbyLocationsApi.emit(ResponseUiState.Error("No se encontraron lugares cercanos"))
+                    _nearbyLocationsApi.emit(ResponseUiState.Error("Por ahora no hay lugares para recomendar"))
                 } else {
                     _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
                 }

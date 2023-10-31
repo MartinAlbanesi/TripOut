@@ -3,8 +3,8 @@ package com.example.turistaapp.home.domain
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import com.example.turistaapp.home.utils.isAccessCoarseLocationPermissionsGranted
 import com.example.turistaapp.home.utils.isGPSEnable
-import com.example.turistaapp.home.utils.isLocationPermissionsGranted
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class GetLastLocationUseCase @Inject constructor(
 
     @SuppressLint("MissingPermission")
     suspend operator fun invoke(): Location? {
-        if(!isGPSEnable(context) || !isLocationPermissionsGranted(context) ){
+        if(!isGPSEnable(context) || !isAccessCoarseLocationPermissionsGranted(context) ){
             return null
         }
 

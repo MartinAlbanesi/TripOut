@@ -48,11 +48,11 @@ fun MapScreen(
         )
     }
 
-    val unlam = LatLng(-34.67112967722258, -58.56390981764954)
-
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(unlam, 11f)
-    }
+//    val unlam = LatLng(-34.67112967722258, -58.56390981764954)
+//
+//    val cameraPositionState = rememberCameraPositionState {
+//        position = CameraPosition.fromLatLngZoom(unlam, 11f)
+//    }
 
 
 
@@ -95,7 +95,7 @@ fun MapScreen(
         Box(Modifier.fillMaxSize()) {
             MapView(
                 mapUiSettings = mapUiSettings,
-                cameraPositionState = cameraPositionState,
+//                cameraPositionState = cameraPositionState,
                 locations = locations,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
