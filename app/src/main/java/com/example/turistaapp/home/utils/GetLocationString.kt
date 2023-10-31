@@ -1,4 +1,4 @@
-package com.example.turistaapp.core.utils
+package com.example.turistaapp.home.utils
 
 import com.example.turistaapp.create_trip.data.network.place_details.models.LocationApi
 

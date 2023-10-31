@@ -122,6 +122,9 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
+    //Location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 }
 
 kapt {

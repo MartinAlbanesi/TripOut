@@ -3,7 +3,7 @@ package com.example.turistaapp.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.utils.ResponseUiState
-import com.example.turistaapp.core.utils.getLocationString
+import com.example.turistaapp.home.utils.getLocationString
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
