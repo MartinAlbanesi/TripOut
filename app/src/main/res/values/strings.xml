@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Trip Out</string>
-    <string name="Welcome1">Bienvenido</string>
-    <string name="Welcome2">Trip Out, Aplicación gratuita que nos permite planificar y organizar viajes, pudiendo guardar todos los detalles importantes y permitiendo al usuario realizar múltiples acciones</string>
+    <string name="Welcome1">Una aplicación donde puedes organizar y planificar tus viajes soñados!</string>
 </resources>
