@@ -17,7 +17,7 @@ import com.google.maps.android.compose.Polyline
 @Composable
 fun MapView(
     mapUiSettings: MapUiSettings,
-//    cameraPositionState: CameraPositionState,
+    cameraPositionState: CameraPositionState,
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
     directionSelect: List<LatLng>,
     markerSelect: Boolean,
@@ -30,7 +30,7 @@ fun MapView(
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             uiSettings = mapUiSettings,
-//            cameraPositionState = cameraPositionState,
+            cameraPositionState = cameraPositionState,
         ) {
             if (markerSelect) Polyline(points = directionSelect)
 

@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
-import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -28,16 +27,13 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(
-    nearbyLocations: ResponseUiState,
-    nearbyLocationSelect: LocationModel?,
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
     directionSelect : List<LatLng>,
     markerSelect : Boolean,
+    lastLocation: LatLng?,
     onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
     onClickFloatingBottom: () -> Unit,
-    onCreateTripDialog: (String) -> Unit,
-    onCardSelection: (String) -> Unit,
 ) {
 
     val mapUiSettings by remember {
@@ -48,54 +44,22 @@ fun MapScreen(
         )
     }
 
-//    val unlam = LatLng(-34.67112967722258, -58.56390981764954)
-//
-//    val cameraPositionState = rememberCameraPositionState {
-//        position = CameraPosition.fromLatLngZoom(unlam, 11f)
-//    }
+    val unlam = lastLocation ?: LatLng(-34.67112967722258, -58.56390981764954)
 
-
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(unlam, 10f)
+    }
 
     BottomSheetScaffold(
         sheetContent = {
-//            when (nearbyLocations) {
-//                is ResponseUiState.Error -> {
-//                    Box(
-//                        modifier = Modifier
-//                            .size(200.dp),
-//                        contentAlignment = Alignment.Center,
-//                    ) {
-//                        Text(
-//                            text = nearbyLocations.message,
-//                        )
-//                    }
-//                }
-//
-//                ResponseUiState.Loading -> {
-//                    CircularProgressIndicator(
-//                        modifier = Modifier
-//                            .padding(16.dp)
-//                            .size(100.dp),
-//                    )
-//                }
-//
-//                is ResponseUiState.Success<*> -> {
-//                    SheetContent(
-//                        nearbyLocations = nearbyLocations.values as List<LocationModel>,
-//                        onClickCard = {
-//                            showDialog = true
-//                            onCardSelection(it)
-//                        },
-//                    )
-//                }
-//            }
+            //TODO : Agregar BottomSheet Content
         },
     ) { paddingValues ->
 
         Box(Modifier.fillMaxSize()) {
             MapView(
                 mapUiSettings = mapUiSettings,
-//                cameraPositionState = cameraPositionState,
+                cameraPositionState = cameraPositionState,
                 locations = locations,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
@@ -115,22 +79,6 @@ fun MapScreen(
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
-//            if (showDialog) {
-//                if (nearbyLocationSelect != null) {
-//                    TripDialog(
-//                        name = nearbyLocationSelect.name,
-//                        photoUrl = nearbyLocationSelect.photoUrl,
-//                        rating = nearbyLocationSelect.rating,
-//                        userRating = nearbyLocationSelect.userRating,
-//                        address = nearbyLocationSelect.address,
-//                        onDismiss = { showDialog = false },
-//                        onConfirm = {
-//                            showDialog = false
-//                            onCreateTripDialog(it)
-//                        },
-//                    )
-//                }
-//            }
         }
     }
 }

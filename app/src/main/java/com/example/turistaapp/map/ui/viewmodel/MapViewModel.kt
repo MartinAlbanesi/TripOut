@@ -1,10 +1,12 @@
 package com.example.turistaapp.map.ui.viewmodel
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.map.domain.GetRouteModel
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class MapViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getGetTripsUseCase: GetTripsUseCase,
-    private val getRouteModel: GetRouteModel
+    private val getRouteModel: GetRouteModel,
+    private val getLastLocationUseCase: GetLastLocationUseCase
 ) : ViewModel() {
 
     private val _destinationLocations =
@@ -33,8 +36,23 @@ class MapViewModel @Inject constructor(
     private val _markerSelect = MutableStateFlow(false)
     val markerSelect = _markerSelect.asStateFlow()
 
+    private val _lastLocation = MutableStateFlow<LatLng?>(null)
+    val lastLocation = _lastLocation.asStateFlow()
+
     init {
         getFlowLocationFromDB()
+        getLastLocation()
+    }
+
+    private fun getLastLocation(){
+        viewModelScope.launch(dispatcher) {
+            if(getLastLocationUseCase() != null) {
+                _lastLocation.value = LatLng(
+                    getLastLocationUseCase()!!.latitude,
+                    getLastLocationUseCase()!!.longitude
+                )
+            }
+        }
     }
 
     fun getTripById(id: Int) {

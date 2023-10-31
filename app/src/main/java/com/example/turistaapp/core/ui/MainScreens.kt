@@ -36,6 +36,8 @@ fun MainScreen(
 
     val markerSelect by mapViewModel.markerSelect.collectAsStateWithLifecycle()
 
+    val lastLocation by mapViewModel.lastLocation.collectAsStateWithLifecycle()
+
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
         Routes.Home.route,
@@ -64,16 +66,14 @@ fun MainScreen(
 
             Routes.Map.route -> {
                 MapScreen(
-                    nearbyLocations,
-                    nearbyLocationSelect,
                     locations = destinationLocations,
                     directionSelect = directionSelect,
                     markerSelect = markerSelect,
+                    lastLocation = lastLocation,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it)},
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
-                    onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-                ) { homeViewModel.setNearbyLocationSelect(it) }
+                )
             }
             Routes.Settings.route -> {
                 Text(text = "Settings")
