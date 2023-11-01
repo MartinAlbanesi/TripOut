@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.map.domain.GetRouteModel
+import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,6 +41,9 @@ class MapViewModel @Inject constructor(
     private val _lastLocation = MutableStateFlow<LatLng?>(null)
     val lastLocation = _lastLocation.asStateFlow()
 
+    private val _tripSelected = MutableStateFlow<RouteModel?>(null)
+    val tripSelected = _tripSelected.asStateFlow()
+
     init {
         getFlowLocationFromDB()
         getLastLocation()
@@ -65,6 +70,7 @@ class MapViewModel @Inject constructor(
                     transport = selectTrip.transport,
                     trip = selectTrip
                 )
+                _tripSelected.value = selectRoute
                 decoPoints(selectRoute!!.points)
                 _destinationLocations.value =
                     Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))

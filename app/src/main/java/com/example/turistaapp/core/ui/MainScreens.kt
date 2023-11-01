@@ -44,6 +44,8 @@ fun MainScreen(
 
     val lastLocation by mapViewModel.lastLocation.collectAsStateWithLifecycle()
 
+    val routeModel by mapViewModel.tripSelected.collectAsStateWithLifecycle()
+
     //Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
 
@@ -81,6 +83,7 @@ fun MainScreen(
                     directionSelect = directionSelect,
                     markerSelect = markerSelect,
                     lastLocation = lastLocation,
+                    routeModel = routeModel,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it)},
                 )

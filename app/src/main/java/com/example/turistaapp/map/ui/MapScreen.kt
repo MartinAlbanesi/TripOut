@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.map.domain.models.RouteModel
+import com.example.turistaapp.setting.ui.TripDetails
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.model.CameraPosition
@@ -28,6 +30,7 @@ fun MapScreen(
     directionSelect : List<LatLng>,
     markerSelect : Boolean,
     lastLocation: LatLng?,
+    routeModel: RouteModel?,
     onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
 ) {
@@ -56,7 +59,9 @@ fun MapScreen(
 
     BottomSheetScaffold(
         sheetContent = {
-            //TODO : Agregar BottomSheet Content
+            if(markerSelect){
+                TripDetails(routeModel)
+            }
         },
     ) { paddingValues ->
 
