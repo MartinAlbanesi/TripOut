@@ -18,10 +18,7 @@ class WelcomeViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel(){
 
-//    private val _name = MutableStateFlow<String?>(null)
-//    val name = _name.asStateFlow()
-
-    private val _name = MutableStateFlow<String?>(null)
+    private val _name = MutableStateFlow<String?>("titi")
     val name = _name.asStateFlow()
 
     init {
