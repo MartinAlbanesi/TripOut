@@ -3,6 +3,7 @@ package com.example.turistaapp.create_trip.data // ktlint-disable package-name
 import android.util.Log
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
+import com.example.turistaapp.create_trip.domain.models.PlaceAutocompleteStructuredFormatModel
 import javax.inject.Inject
 
 interface IPlaceAutocompleteLocationRepository {
@@ -18,20 +19,23 @@ class PlaceAutocompleteLocationRepository @Inject constructor(
 
         if (api.isSuccessful) {
             val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.filter {
-                it.typesApi.contains("geocode")
+                !it.typesApi.contains("country")
+                !it.typesApi.contains("continent")
+                !it.typesApi.contains("geocode")
+            }?.map {
+                PlaceAutocompletePredictionModel(
+                    placeId = it.placeIdApi,
+                    description = it.descriptionApi,
+                    distanceMeters = it.distanceMetersApi,
+                    types = it.typesApi,
+                    structured_formatting = it.structuredFormattingApi.let { structuredFormattingApi ->
+                        PlaceAutocompleteStructuredFormatModel(
+                            main_text = structuredFormattingApi.mainTextApi,
+                            secondary_text = structuredFormattingApi.secondaryTextApi,
+                        )
+                    },
+                )
             }
-                ?.map {
-                    Log.d(
-                        "PlaceAutocompleteLocationRepository",
-                        "getPlaceAutocompleteLocations: ${it.typesApi}",
-                    )
-                    PlaceAutocompletePredictionModel(
-                        placeId = it.placeIdApi,
-                        description = it.descriptionApi,
-                        distanceMeters = it.distanceMetersApi,
-                        types = it.typesApi,
-                    )
-                }
             return placeAutocompleteLocations
         }
         return null

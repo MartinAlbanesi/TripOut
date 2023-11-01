@@ -5,4 +5,5 @@ data class PlaceAutocompletePredictionModel(
     val description: String?,
     val distanceMeters: Int?,
     val types: List<String>,
+    val structured_formatting: PlaceAutocompleteStructuredFormatModel?,
 )

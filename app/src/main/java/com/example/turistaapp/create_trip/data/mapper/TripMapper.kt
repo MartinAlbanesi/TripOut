@@ -7,10 +7,11 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 
 fun TripEntity.toTripModel() = TripModel(
+    tripId = this.id,
     name = name,
-    origin = origin.toLocationModel(),
-    destination = destination.toLocationModel(),
-    stops = stops?.map { it.toLocationModel() }?.toMutableList(),
+    origin = origin.toLocationModel(name, isFinished),
+    destination = destination.toLocationModel(name, isFinished),
+    stops = stops?.map { it.toLocationModel(name, isFinished) }?.toMutableList(),
     startDate = startDate,
     endDate = endDate,
     members = members,
@@ -26,7 +27,7 @@ fun TripEntity.toTripModel() = TripModel(
 fun TripModel.toTripEntity() = TripEntity(
     id = 0,
     name = name,
-    origin = this.origin.toLocationEntity(),//toLocationEntity(),
+    origin = this.origin.toLocationEntity(), // toLocationEntity(),
     destination = this.destination.toLocationEntity(),
     stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
     startDate = startDate,
@@ -41,8 +42,10 @@ fun TripModel.toTripEntity() = TripEntity(
     comments = comments,
 )
 
-
-fun LocationEntity.toLocationModel() = LocationModel(
+fun LocationEntity.toLocationModel(
+    tripName: String = "",
+    isFinished: Boolean = false,
+) = LocationModel(
     placeID = placeID,
     name = name,
     photoUrl = photo,
@@ -52,6 +55,8 @@ fun LocationEntity.toLocationModel() = LocationModel(
     lat = lat,
     lng = lng,
     types = types,
+    tripName = tripName,
+    isFinished = isFinished,
 )
 
 fun LocationModel.toLocationEntity() = LocationEntity(
@@ -78,4 +83,3 @@ fun PlaceApi.toLocationModel() = LocationModel(
     types = types,
     placeID = placeID,
 )
-

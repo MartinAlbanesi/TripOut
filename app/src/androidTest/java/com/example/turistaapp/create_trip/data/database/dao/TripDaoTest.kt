@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.turistaapp.core.database.TripDataBase
+import com.example.turistaapp.core.data.database.TripDataBase
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity

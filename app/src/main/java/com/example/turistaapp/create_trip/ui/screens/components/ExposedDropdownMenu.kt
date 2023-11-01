@@ -3,10 +3,13 @@ package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disab
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiTransportation
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +22,7 @@ fun ExposedDropdownMenuBoxInput(
     label: String,
     values: List<String>,
     isExpanded: Boolean,
-    transport: String,
+    transport: String = values[0],
     onExpanded: (Boolean) -> Unit,
     onClickable: (String) -> Unit,
 ) {
@@ -35,6 +38,12 @@ fun ExposedDropdownMenuBoxInput(
             readOnly = true,
             label = { Text(label) },
             placeholder = { Text("Selecciona un transporte") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.EmojiTransportation,
+                    contentDescription = "Transporte",
+                )
+            },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
             },

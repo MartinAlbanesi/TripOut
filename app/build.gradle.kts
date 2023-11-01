@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.example.turistaapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.turistaapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -63,15 +63,14 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.firebase:protolite-well-known-types:18.0.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -82,27 +81,27 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // Material design
-    implementation("com.google.android.material:material:1.9.0")
-
     // Google maps
     implementation("com.google.maps.android:maps-compose:2.11.0")
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Location
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
     // livedata compose
-    implementation("androidx.compose.runtime:runtime-livedata:1.3.1")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 
     // Material extend icons
-    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.compose.material:material-icons-extended")
 
     // Room
-    implementation("androidx.room:room-ktx:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
-    testImplementation("androidx.room:room-testing:2.5.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    testImplementation("androidx.room:room-testing:2.6.0")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -116,9 +115,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    // kotlin corrutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    // kotlin coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     // mockk
@@ -126,6 +125,21 @@ dependencies {
 
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
+
+    // Joda Time
+    implementation ("joda-time:joda-time:2.10.12")
+
+    // HORIZONTAL PAGER
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
+    //datastore preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //splash screen
+    implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    //Accompanist-Permissions
+    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
 }
 
 kapt {
