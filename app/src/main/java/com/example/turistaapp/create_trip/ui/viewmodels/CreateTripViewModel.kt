@@ -11,7 +11,9 @@ import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -21,6 +23,7 @@ class CreateTripViewModel @Inject constructor(
     private val insertTripUseCase: InsertTripUseCase,
     private val getPlaceAutocompleteLocationsUseCase: GetPlaceAutocompleteLocationsUseCase,
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
+    private val getNameFromDataStore: GetNameFromDataStore,
 ) : ViewModel() {
 
     /*
@@ -240,7 +243,7 @@ class CreateTripViewModel @Inject constructor(
                 members = _members.value,
                 stops = null,
                 description = description,
-                author = "author",
+                author = getNameFromDataStore().first()!!,
                 images = null,
                 comments = null,
                 isFavorite = false,

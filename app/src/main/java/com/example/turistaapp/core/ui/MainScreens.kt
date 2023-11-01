@@ -35,6 +35,8 @@ fun MainScreen(
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
+    val locationSelect by homeViewModel.locationSelect.collectAsStateWithLifecycle()
+
     //Map
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
@@ -71,6 +73,7 @@ fun MainScreen(
                     nearbyLocations = nearbyLocations,
                     nearbyLocationSelect = nearbyLocationSelect,
                     myTrips = myTrips,
+                    locationSelect = locationSelect,
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },

@@ -38,7 +38,7 @@ fun TripDialog(
         Box(
             Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.8f),
+                .fillMaxHeight(0.7f),
         ) {
             Column(
                 Modifier.padding(8.dp),
