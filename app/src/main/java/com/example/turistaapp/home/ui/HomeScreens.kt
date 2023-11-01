@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
@@ -38,7 +39,7 @@ fun HomeScreen(
     locations: Pair<List<LocationModel>, List<LocationModel>>,
     directionSelect : List<LatLng>,
     markerSelect : Boolean,
-    onInfoWindowClose: () -> Unit,
+    onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
     onClickFloatingBottom: () -> Unit,
     onCreateTripDialog: (String) -> Unit,
@@ -64,12 +65,12 @@ fun HomeScreen(
     }
 
     BottomSheetScaffold(
-        topBar = {
-            TopAppBarScreen(
-                title = "Home",
-                iconsNavigation = null
-            )
-        },
+//        topBar = {
+//            TopAppBarScreen(
+//                title = "Home",
+//                iconsNavigation = null
+//            )
+//        },
         // Lo que va dentro del BottomSheet
         sheetContent = {
             when (nearbyLocations) {
@@ -113,10 +114,16 @@ fun HomeScreen(
                 locations = locations,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
-                onInfoWindowClose = {
-                    onInfoWindowClose()
-                },
+//                onInfoWindowClose = {
+//                    onClickArrowBack()
+//                },
                 onClickMarker = { onMarkerSelected(it) }
+            )
+            TopAppBarScreen(
+                title = "Mis Destinos",
+                isMarkerSelected = markerSelect,
+                color = Color.Black,
+                onClickNavigationBack = {onClickArrowBack()}
             )
             FloatingActionButton(
                 onClick = { onClickFloatingBottom() },
