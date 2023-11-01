@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -74,9 +73,13 @@ fun HomeScreen(
                         )
                     }
                     is ResponseUiState.Loading -> {
-                        CircularProgressIndicator(modifier = Modifier
-                            .padding(16.dp)
-                            .size(100.dp))
+                        Box(modifier = Modifier.fillMaxWidth()
+                            .padding(4.dp)
+                            .size(240.dp, 360.dp),
+                            contentAlignment = Alignment.Center
+                        ){
+                            CircularProgressIndicator(Modifier.size(100.dp))
+                        }
                     }
                     is ResponseUiState.Error -> {
                         Column(

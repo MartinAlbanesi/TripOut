@@ -26,7 +26,6 @@ fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
-    settingViewModel: SettingViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickChangeTheme: () -> Unit
 ) {
