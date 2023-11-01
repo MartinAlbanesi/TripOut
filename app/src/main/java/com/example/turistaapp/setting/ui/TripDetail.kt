@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.turistaapp.map.domain.models.RouteModel
+import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -106,9 +107,15 @@ fun TripDetails(
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
-                Text(text = "${routeModel?.trip!!.startDate}  -", fontSize = 20.sp, color = Color.White)
-                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                Text(text = routeModel.trip.endDate, fontSize = 20.sp, color = Color.White)
+                Text(
+                    text = "${
+                        formatMilisToDateString(
+                            routeModel?.trip!!.startDate,
+                            "dd/MM/yyyy"
+                        )
+                    } - ${formatMilisToDateString(routeModel?.trip!!.endDate, "dd/MM/yyyy")}",
+                    fontSize = 20.sp
+                )
             }
             Spacer(modifier = Modifier.padding(7.dp))
 
@@ -226,7 +233,7 @@ fun TripDetails(
             )
             Card(
                 modifier = Modifier
-                    .padding(horizontal = 13.dp )
+                    .padding(horizontal = 13.dp)
                     .size(360.dp, height = 130.dp)
 
             ) {
@@ -255,8 +262,8 @@ fun TripDetails(
                 )
             }
             //imagenes
-            if(routeModel?.trip!!.images != null){
-                LazyRow (Modifier.fillMaxWidth()) {
+            if (routeModel?.trip!!.images != null) {
+                LazyRow(Modifier.fillMaxWidth()) {
                     items(routeModel.trip.images!!.toList()) { imagen ->
                         AsyncImage(model = imagen, contentDescription = "")
                     }
