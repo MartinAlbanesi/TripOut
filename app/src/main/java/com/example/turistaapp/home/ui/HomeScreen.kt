@@ -30,6 +30,7 @@ fun HomeScreen(
     nearbyLocations: ResponseUiState,
     nearbyLocationSelect: LocationModel?,
     myTrips: List<TripModel>,
+    locationSelect: String = "",
     onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
 ) {
@@ -39,12 +40,18 @@ fun HomeScreen(
 
     LazyColumn() {
         item {
-            Text(
-                text = "Descubre más viajes",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-            )
+            Column {
+                Text(
+                    text = "Descubre más viajes",
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp, top = 8.dp),
+                )
+                Text(
+                    text = "Cerca de $locationSelect",
+                    modifier = Modifier
+                        .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                )
+            }
         }
         item {
             when (nearbyLocations) {
