@@ -15,21 +15,24 @@ import com.example.turistaapp.welcome.ui.WelcomeViewModel
 
 @Composable
 fun NavHostScreen(
-    welcomeViewModel: WelcomeViewModel = hiltViewModel()
+    welcomeViewModel: WelcomeViewModel = hiltViewModel(),
+    onClickChangeTheme: () -> Unit
 ) {
     val navController = rememberNavController()
 
     val name by welcomeViewModel.name.collectAsStateWithLifecycle()
 
-    val starDestination = if (name != null) Routes.Home.route else  Routes.Welcome.route
+    val starDestination = if (name != null) Routes.Home.route else Routes.Welcome.route
 
     NavHost(navController = navController, startDestination = starDestination) {
         composable(Routes.Home.route) {
-            MainScreen(navController = navController)
+            MainScreen(navController = navController) {
+                onClickChangeTheme()
+            }
         }
         composable(
             Routes.CreateTrip.route,
-            arguments = listOf(navArgument("address"){defaultValue = ""})
+            arguments = listOf(navArgument("address") { defaultValue = "" })
         ) {
             CreateTripScreen(address = it.arguments?.getString("address")) {
                 navController.navigate(Routes.Home.route)

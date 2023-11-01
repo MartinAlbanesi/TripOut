@@ -18,18 +18,24 @@ import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
+import com.example.turistaapp.setting.ui.SettingViewModel
+import com.example.turistaapp.setting.ui.SettingsScreen
 
 @Composable
 fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
+    settingViewModel: SettingViewModel = hiltViewModel(),
     navController: NavHostController,
+    onClickChangeTheme: () -> Unit
 ) {
+    //Home
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
+    //Map
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
     val directionSelect by mapViewModel.polyLinesPoints.collectAsStateWithLifecycle()
@@ -38,6 +44,7 @@ fun MainScreen(
 
     val lastLocation by mapViewModel.lastLocation.collectAsStateWithLifecycle()
 
+    //Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
 
     var state by remember { mutableIntStateOf(0) }
@@ -80,7 +87,9 @@ fun MainScreen(
             }
 
             Routes.Settings.route -> {
-                Text(text = "Settings")
+                SettingsScreen(){
+                    onClickChangeTheme()
+                }
             }
         }
     }

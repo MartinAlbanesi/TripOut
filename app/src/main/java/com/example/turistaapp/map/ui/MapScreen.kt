@@ -30,7 +30,6 @@ fun MapScreen(
     lastLocation: LatLng?,
     onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
-//    onClickFloatingBottom: () -> Unit,
 ) {
 
     val coarseLocationPermission = rememberPermissionState(

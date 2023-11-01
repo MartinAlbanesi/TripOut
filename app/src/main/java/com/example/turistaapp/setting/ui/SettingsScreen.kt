@@ -43,7 +43,7 @@ import com.example.turistaapp.ui.theme.TuristaAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(darkTheme: Boolean, changeTheme: () -> Unit) {
+fun SettingsScreen(darkTheme: Boolean = false, changeTheme: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(8.dp)

@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.turistaapp.core.ui.NavHostScreen
+import com.example.turistaapp.setting.ui.SettingViewModel
 import com.example.turistaapp.ui.theme.TuristaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    NavHostScreen()
+                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
                 }
             }
         }
