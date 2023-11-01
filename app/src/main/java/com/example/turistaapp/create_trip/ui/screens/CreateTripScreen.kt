@@ -1,6 +1,6 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddHome
-import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Flag
@@ -46,42 +45,54 @@ import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import kotlinx.coroutines.launch
 import java.util.*
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
-    address : String?,
+    address: String?,
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     onClickCreateTrip: () -> Unit,
 ) {
-
-    LaunchedEffect(true){
-        if(address != null){
+    LaunchedEffect(true) {
+        if (address != null) {
             createTripViewModel.setDestination(address)
         }
     }
 
     // Nombre del Viaje
-//    val tripName by createTripViewModel.name.observeAsState("")
     var tripName by rememberSaveable {
         mutableStateOf("")
     }
 
     // Origen
-    val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
-    val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
-        false,
-    )
+    var originAutocompleteQuery by rememberSaveable {
+        mutableStateOf("")
+    }
+    var isOriginAutocompleteDropdownVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
     val originPredictions by createTripViewModel.originPredictions.observeAsState(emptyList())
 
+    // val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
+    // val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
+    //     false,
+    // )
+
     // Destino
-    val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
-    val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
-        false,
-    )
+    var destinationAutocompleteQuery by rememberSaveable {
+        mutableStateOf(address ?: "")
+    }
+    var isDestinationAutocompleteDropdownVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
         emptyList(),
     )
+
+    // val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
+    // val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
+    //     false,
+    // )
+    // val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState( emptyList() )
 
     // Fechas
     val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
@@ -97,10 +108,11 @@ fun CreateTripScreen(
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-
-    // Paradas
-    val stops by createTripViewModel.stops.observeAsState(emptyList())
-    val stopName by createTripViewModel.stopName.observeAsState("")
+    /*
+        // Paradas
+        val stops by createTripViewModel.stops.observeAsState(emptyList())
+        val stopName by createTripViewModel.stopName.observeAsState("")
+    */
 
     // Transporte
     val transports by createTripViewModel.transports.observeAsState(
@@ -108,8 +120,13 @@ fun CreateTripScreen(
     )
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
     val transport by createTripViewModel.transport.observeAsState("")
+
     // Descripción
-    val description by createTripViewModel.description.observeAsState("")
+//    val description by createTripViewModel.description.observeAsState("")
+    var description by rememberSaveable {
+        mutableStateOf("")
+    }
+
     // Focus Requesters
     val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
         FocusRequester(),
@@ -121,7 +138,22 @@ fun CreateTripScreen(
         FocusRequester(),
     )
 
-//    val context = LocalContext.current
+    // Validaciones
+    var isTripNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isOriginValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isDestinationValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isMemberNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -133,7 +165,7 @@ fun CreateTripScreen(
         topBar = {
             TopAppBarScreen(
                 title = "Crear Viaje",
-                isMarkerSelected = true
+                isMarkerSelected = true,
             ) {
                 onClickCreateTrip()
             }
@@ -145,46 +177,48 @@ fun CreateTripScreen(
                 top = paddingValues.calculateTopPadding(),
                 bottom = 8.dp,
                 end = 8.dp,
-                start = 8.dp
+                start = 8.dp,
             ),
         ) {
             item {
                 // Nombre del Viaje
                 TextInputField(
-                    label = "Nombre del Viaje",
+                    label = "Nombre del Viaje *",
                     textValue = tripName,
-                    onValueChange = { tripName = it/*createTripViewModel.onNameChange(it)*/ },
+                    onValueChange = {
+                        tripName = it
+                        isTripNameValid = true
+                    },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.AddHome, contentDescription = "Trip Title")
                     },
+                    onClearField = { tripName = "" },
+                    isError = !isTripNameValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
                 // Origen
                 PlaceAutocompleteField(
-                    label = "Origen",
+                    label = "Origen *",
                     query = originAutocompleteQuery,
-                    onQueryChange = { createTripViewModel.onOriginAutocompleteQueryValueChange(it) },
+                    onQueryChange = {
+                        originAutocompleteQuery = it
+                        isOriginValid = true
+                        createTripViewModel.searchOriginPlaces(originAutocompleteQuery)
+                    },
                     isDropdownVisible = isOriginAutocompleteDropdownVisible,
                     onDropdownVisibilityChange = {
-                        createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
+                        isOriginAutocompleteDropdownVisible = it
                     },
                     predictions = originPredictions,
-                    onPredictionSelect = {
-                        createTripViewModel.onOriginAutocompletePredictionSelect(
-                            it,
-                        )
-                    },
                     focusRequester = originFocusRequester,
                     imeAction = ImeAction.Next,
-                    onClearField = { createTripViewModel.onClearOriginField() },
-                    onSelectedLocationChange = {
-                        createTripViewModel.onSelectedOriginLocationChange(
-                            it,
-                        )
+                    onClearField = {
+                        originAutocompleteQuery = ""
+                        createTripViewModel.clearSelectedOriginLocation()
                     },
                     leadingIcon = {
                         Icon(
@@ -192,36 +226,37 @@ fun CreateTripScreen(
                             contentDescription = "Origin",
                         )
                     },
+                    onItemClick = {
+                        originAutocompleteQuery = it.description ?: ""
+                        isOriginAutocompleteDropdownVisible = false
+                        createTripViewModel.onSelectedOriginLocationChange(it)
+                        // createTripViewModel.onOriginAutocompletePredictionSelect(it)
+                        // createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(false)
+                    },
+                    isError = !isOriginValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
                 // Destino
                 PlaceAutocompleteField(
-                    label = "Destino",
+                    label = "Destino *",
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
-                        createTripViewModel.onDestinationAutocompleteQueryValueChange(
-                            it,
-                        )
+                        destinationAutocompleteQuery = it
+                        isDestinationValid = true
+                        createTripViewModel.searchDestinationPlaces(destinationAutocompleteQuery)
                     },
                     isDropdownVisible = isDestinationAutocompleteDropdownVisible,
                     onDropdownVisibilityChange = {
-                        createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(it)
+                        isDestinationAutocompleteDropdownVisible = it
                     },
                     predictions = destinationPredictions,
-                    onPredictionSelect = {
-                        createTripViewModel.onDestinationAutocompletePredictionSelect(
-                            it,
-                        )
-                    },
                     focusRequester = destinationFocusRequester,
                     imeAction = ImeAction.Next,
-                    onClearField = { createTripViewModel.onClearDestinationField() },
-                    onSelectedLocationChange = {
-                        createTripViewModel.onSelectedDestinationLocationChange(
-                            it,
-                        )
+                    onClearField = {
+                        destinationAutocompleteQuery = ""
+                        createTripViewModel.clearSelectedDestinationLocation()
                     },
                     leadingIcon = {
                         Icon(
@@ -229,6 +264,12 @@ fun CreateTripScreen(
                             contentDescription = "Destination",
                         )
                     },
+                    onItemClick = {
+                        destinationAutocompleteQuery = it.description ?: ""
+                        isDestinationAutocompleteDropdownVisible = false
+                        createTripViewModel.onSelectedDestinationLocationChange(it)
+                    },
+                    isError = !isDestinationValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -254,7 +295,10 @@ fun CreateTripScreen(
                         }
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
-                ) { createTripViewModel.onShowDateRangePickerDialogChange(true) }
+                    onClickable = {
+                        createTripViewModel.onShowDateRangePickerDialogChange(true)
+                    },
+                )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
@@ -275,8 +319,16 @@ fun CreateTripScreen(
                     label = "Acompañantes",
                     name = memberName,
                     values = members,
-                    onValueNameChange = { createTripViewModel.onMemberNameChange(it) },
-                    onAdd = { createTripViewModel.onAddMember(it) },
+                    onValueNameChange = {
+                        createTripViewModel.onMemberNameChange(it)
+                        isMemberNameValid = true
+                    },
+                    onAdd = {
+                        if (memberName.isBlank()) {
+                            isMemberNameValid = false
+                        }
+                        createTripViewModel.onAddMember(it)
+                    },
                     onRemove = { createTripViewModel.onRemoveMember(it) },
                     leadingIcon = {
                         Icon(
@@ -284,10 +336,12 @@ fun CreateTripScreen(
                             contentDescription = "Member Name",
                         )
                     },
+                    isError = !isMemberNameValid,
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
+                /*
                 // Paradas
                 AddList(
                     label = "Puntos de Parada",
@@ -305,12 +359,15 @@ fun CreateTripScreen(
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
+                */
 
                 // Descripción
                 TextInputField(
-                    label = "Descripción (Opcional)",
+                    label = "Descripción",
                     textValue = description,
-                    onValueChange = { createTripViewModel.onDescriptionChange(it) },
+                    onValueChange = {
+                        description = it
+                    },
                     focusRequester = descriptionFocusRequester,
                     imeAction = ImeAction.Done,
                     singleLine = false,
@@ -321,6 +378,7 @@ fun CreateTripScreen(
                             contentDescription = "Trip Title",
                         )
                     },
+                    onClearField = { description = "" },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -328,7 +386,16 @@ fun CreateTripScreen(
                 // Botón para guardar
                 Button(
                     onClick = {
-                        if (createTripViewModel.onCreateTripClick(tripName)) {
+                        isTripNameValid = createTripViewModel.validateTripName(tripName)
+                        isOriginValid = createTripViewModel.validateTripOrigin()
+                        isDestinationValid = createTripViewModel.validateTripDestination()
+
+                        Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
+                        Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
+                        Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
+
+                        if (isTripNameValid && isOriginValid && isDestinationValid) {
+                            createTripViewModel.onCreateTripClick(tripName, description)
                             scope.launch {
                                 snackbarHostState
                                     .showSnackbar(
@@ -350,7 +417,6 @@ fun CreateTripScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
-                    // .align(Alignment.CenterHorizontally)
                 ) {
                     Text("Guardar")
                 }

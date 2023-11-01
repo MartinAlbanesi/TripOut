@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,7 +52,7 @@ class CreateTripViewModelTest {
     }
 
     @Test
-    fun cuandoElCasoDeUsoGetPlaceDetailsRetorneLocationModelEntoncesSeteaEnUnaVariableLiveData() = runTest {
+    fun `onCreateTripClick - SaveTripClicked - return true`() = runTest {
         // Given
         val expected = FakeDataBaseSource.locationModel
         coEvery {
@@ -60,10 +60,13 @@ class CreateTripViewModelTest {
         }.returns(expected)
 
         // When
-        createTripViewModel.onCreateTripClick("")
+        val result = createTripViewModel.onCreateTripClick("test", "test")
 
         // Then
-        val result = createTripViewModel.originLocation.value
-        assertEquals(expected, result)
+        assertEquals(true, result)
     }
+//    @Test
+//    fun `searchOriginPlaces - onOriginAutocompleteQueryValueChange - originPrediction get PlaceAutocompletePredictionModel list`() {
+//        TODO("Not yet implemented")
+//    }
 }

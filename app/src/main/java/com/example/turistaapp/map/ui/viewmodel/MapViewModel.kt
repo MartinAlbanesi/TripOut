@@ -4,10 +4,10 @@ import android.location.Location
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.turistaapp.create_trip.domain.GetTripsUseCase
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.map.domain.GetRouteModel
+import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

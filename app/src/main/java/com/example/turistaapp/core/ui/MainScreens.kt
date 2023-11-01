@@ -17,12 +17,13 @@ import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
-
+import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
 
 @Composable
 fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
+    myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
 
@@ -38,11 +39,13 @@ fun MainScreen(
 
     val lastLocation by mapViewModel.lastLocation.collectAsStateWithLifecycle()
 
+    val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
+
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
         Routes.Home.route,
         Routes.Map.route,
-        Routes.Settings.route
+        Routes.Settings.route,
     )
     Column {
         TabRow(selectedTabIndex = state) {
@@ -50,11 +53,11 @@ fun MainScreen(
                 Tab(
                     text = { Text(title) },
                     selected = state == index,
-                    onClick = { state = index }
+                    onClick = { state = index },
                 )
             }
         }
-        when(titles[state]){
+        when (titles[state]) {
             Routes.Home.route -> {
                 HomeScreen(
                     nearbyLocations = nearbyLocations,
@@ -75,6 +78,7 @@ fun MainScreen(
                     onMarkerSelected = { mapViewModel.getTripById(it)},
                 )
             }
+
             Routes.Settings.route -> {
                 Text(text = "Settings")
             }
