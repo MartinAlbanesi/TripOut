@@ -1,5 +1,7 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,12 +35,19 @@ import java.util.Calendar
 
 @Composable
 fun TripItem(
-    trip: TripModel,
+    photoUrl: String,
+    name: String,
+    startDate: String,
+    endDate: String,
+    originName: String,
+    destinationName: String,
+    modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp,
         ),
+        modifier = modifier,
     ) {
         Box(
             modifier = Modifier
@@ -45,23 +55,29 @@ fun TripItem(
             contentAlignment = Alignment.BottomStart,
         ) {
             AsyncImage(
-                model = trip.destination.photoUrl,
+                model = photoUrl,
                 contentDescription = "Translated description of what the image contains",
                 modifier = Modifier
                     .fillMaxWidth()
                     .widthIn(0.dp, 300.dp) // mention max width here
-                    .heightIn(0.dp, 150.dp), // mention max height here
+                    .heightIn(0.dp, 120.dp), // mention max height here
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             )
             // Headline (Title)
-            Text(
-                text = trip.name,
+            Row (
                 modifier = Modifier
-                    .padding(start = 16.dp, bottom = 8.dp),
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-                color = Color.White,
-            )
+                    .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
+            ) {
+                Text(
+                    text = name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 8.dp, bottom = 4.dp),
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                    color = Color.White,
+                )
+            }
         }
         // Subhead (Date)
         Row(
@@ -72,10 +88,10 @@ fun TripItem(
             Text(
                 text = "${
                     formatMilisToDateString(
-                        trip.startDate,
+                        startDate,
                         "dd/MM/yyyy",
                     )
-                } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
+                } - ${formatMilisToDateString(endDate, "dd/MM/yyyy")}",
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
@@ -87,7 +103,7 @@ fun TripItem(
         ) {
             Icon(imageVector = Icons.Default.TripOrigin, contentDescription = "Origin Title")
             Text(
-                text = trip.origin.name,
+                text = originName,
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
@@ -98,13 +114,14 @@ fun TripItem(
         ) {
             Icon(imageVector = Icons.Default.Flag, contentDescription = "Destination Title")
             Text(
-                text = trip.destination.name,
+                text = destinationName,
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
         }
         Spacer(modifier = Modifier.heightIn(8.dp))
     }
+    Spacer(modifier = Modifier.heightIn(4.dp))
 }
 
 fun formatMilisToDateString(milisegundosString: String, formato: String): String {
@@ -167,6 +184,17 @@ fun TripItemPreview() {
     )
 
     TuristaAppTheme {
-        TripItem(trip)
+        TripItem(
+            name = trip.destination.name,
+            photoUrl = trip.destination.photoUrl ?: "",
+            startDate = trip.startDate,
+            endDate = trip.endDate,
+            originName = trip.origin.name,
+            destinationName = trip.destination.name,
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .clickable { },
+        )
     }
 }

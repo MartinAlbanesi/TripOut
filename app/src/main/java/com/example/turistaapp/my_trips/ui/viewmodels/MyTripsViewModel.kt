@@ -4,22 +4,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.compose.runtime.LaunchedEffect
 
 @HiltViewModel
 class MyTripsViewModel @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
     private val getTripsUseCase: GetTripsUseCase,
 ) : ViewModel() {
+    /*
     private var _trips = MutableLiveData<List<TripModel>>()
     val trips: LiveData<List<TripModel>> = _trips
+     */
+    init {
+        getTrips()
+    }
 
-    suspend fun getTrips() {
-        viewModelScope.launch {
+    private val _trips = MutableStateFlow<List<TripModel>>(emptyList())
+    val trips = _trips.asStateFlow()
+
+    fun getTrips() {
+        viewModelScope.launch(dispatcher) {
             getTripsUseCase()
                 .collect { tripList ->
                     _trips.value = tripList
