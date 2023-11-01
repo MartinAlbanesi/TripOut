@@ -1,11 +1,9 @@
 package com.example.turistaapp.map.ui.viewmodel
 
-import android.location.Location
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.map.domain.GetRouteModel
 import com.example.turistaapp.map.domain.models.RouteModel
