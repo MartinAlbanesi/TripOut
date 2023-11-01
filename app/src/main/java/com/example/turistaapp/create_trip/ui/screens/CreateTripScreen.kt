@@ -41,7 +41,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownM
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
-import com.example.turistaapp.main.ui.components.TopAppBarScreen
+import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import kotlinx.coroutines.launch
 import java.util.*
 

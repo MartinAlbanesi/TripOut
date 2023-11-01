@@ -1,18 +1,19 @@
 package com.example.turistaapp.core.di
 
+import android.content.Context
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
-import com.example.turistaapp.home.data.DirectionsRepository
-import com.example.turistaapp.home.data.IDirectionsRepository
 import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
-import com.example.turistaapp.home.data.api.service.DirectionsApiService
 import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
+import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
-import com.example.turistaapp.home.domain.GetRouteModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -48,15 +49,13 @@ class HomeModule {
 
     @Singleton
     @Provides
-    fun provideDirectionsRepository(directionsService : DirectionsApiService) : IDirectionsRepository {
-        return DirectionsRepository(directionsService)
+    fun provideFusedLocationProviderClient(@ApplicationContext context: Context) : FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(context)
     }
 
     @Singleton
     @Provides
-    fun provideGetRouteModel(directionsRepository: DirectionsRepository) : GetRouteModel {
-        return GetRouteModel(directionsRepository)
+    fun provideGetLastLocation(@ApplicationContext context: Context, fusedLocationProviderClient: FusedLocationProviderClient) : GetLastLocationUseCase {
+        return GetLastLocationUseCase(fusedLocationProviderClient, context)
     }
-
-
 }
