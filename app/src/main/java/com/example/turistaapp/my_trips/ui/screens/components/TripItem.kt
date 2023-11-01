@@ -1,8 +1,12 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Flag
@@ -13,7 +17,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -33,13 +39,30 @@ fun TripItem(
             defaultElevation = 6.dp,
         ),
     ) {
-        // Headline (Title)
-        Text(
-            text = trip.name,
+        Box(
             modifier = Modifier
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
-            fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-        )
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomStart,
+        ) {
+            AsyncImage(
+                model = trip.destination.photoUrl,
+                contentDescription = "Translated description of what the image contains",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(0.dp, 300.dp) // mention max width here
+                    .heightIn(0.dp, 150.dp), // mention max height here
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+            )
+            // Headline (Title)
+            Text(
+                text = trip.name,
+                modifier = Modifier
+                    .padding(start = 16.dp, bottom = 8.dp),
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                color = Color.White,
+            )
+        }
         // Subhead (Date)
         Row(
             modifier = Modifier
@@ -80,11 +103,7 @@ fun TripItem(
                     .padding(start = 8.dp),
             )
         }
-        AsyncImage(
-            model = trip.destination.photoUrl,
-            contentDescription = "Translated description of what the image contains",
-            modifier = Modifier.fillMaxWidth(),
-        )
+        Spacer(modifier = Modifier.heightIn(8.dp))
     }
 }
 
