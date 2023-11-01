@@ -97,7 +97,7 @@ fun BottomScaffoldBody(
     direccion: String,
     tipoTransporte: String,
     descripcionDelViaje: String,
-    listaImagenes: List<String>
+    listaImagenes: List<String>?
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -183,13 +183,6 @@ fun BottomScaffoldBody(
 
             }
             Spacer(modifier = Modifier.padding(7.dp))
-            Text(
-                text = "Puntos de parada",
-                fontSize = 19.sp,
-                color = Color.White,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
             Row {
 
@@ -322,11 +315,11 @@ fun BottomScaffoldBody(
                 )
             }
             //imagenes
-
-            LazyRow (Modifier.fillMaxWidth()
-                 ) {
-                items(listaImagenes) { imagen ->
-                    AsyncImage(model = imagen, contentDescription = "")
+            if(listaImagenes != null){
+                LazyRow (Modifier.fillMaxWidth()) {
+                    items(listaImagenes) { imagen ->
+                        AsyncImage(model = imagen, contentDescription = "")
+                    }
                 }
             }
         }
