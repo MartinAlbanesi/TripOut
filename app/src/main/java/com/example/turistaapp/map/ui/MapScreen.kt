@@ -2,21 +2,14 @@ package com.example.turistaapp.map.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -33,7 +26,7 @@ fun MapScreen(
     lastLocation: LatLng?,
     onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
-    onClickFloatingBottom: () -> Unit,
+//    onClickFloatingBottom: () -> Unit,
 ) {
 
     val mapUiSettings by remember {
@@ -71,14 +64,6 @@ fun MapScreen(
                 color = Color.Black,
                 onClickNavigationBack = {onClickArrowBack()}
             )
-            FloatingActionButton(
-                onClick = { onClickFloatingBottom() },
-                modifier = Modifier
-                    .padding(bottom = paddingValues.calculateBottomPadding() + 16.dp, end = 16.dp)
-                    .align(Alignment.BottomEnd)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
         }
     }
 }

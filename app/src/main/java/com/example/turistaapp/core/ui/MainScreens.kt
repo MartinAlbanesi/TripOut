@@ -60,7 +60,8 @@ fun MainScreen(
                     nearbyLocations = nearbyLocations,
                     nearbyLocationSelect = nearbyLocationSelect,
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
-                    onCardSelection = { homeViewModel.setNearbyLocationSelect(it) }
+                    onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
+                    onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 )
             }
 
@@ -72,7 +73,6 @@ fun MainScreen(
                     lastLocation = lastLocation,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it)},
-                    onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 )
             }
             Routes.Settings.route -> {
