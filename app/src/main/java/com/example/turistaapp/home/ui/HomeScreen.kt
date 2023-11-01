@@ -13,9 +13,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -75,7 +75,7 @@ fun HomeScreen(
                         Column(
                             Modifier
                                 .fillMaxWidth()
-                                .height(200.dp)) {
+                        ) {
                             Text(text = nearbyLocations.message)
                         }
                     }
@@ -83,30 +83,30 @@ fun HomeScreen(
 
                 }
             }
-        }
-        item {
-            Text(
-                text = "Mis viajes",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-            )
-        }
-        items(myTrips) { trip ->
-            TripItem(
-                name = trip.name,
-                photoUrl = trip.destination.photoUrl ?: "",
-                startDate = trip.startDate,
-                endDate = trip.endDate,
-                originName = trip.origin.name,
-                destinationName = trip.destination.name,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-                    .clickable { },
-            )
+            item {
+                Text(
+                    text = "Mis viajes",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                )
+            }
+            items(myTrips) { trip ->
+                TripItem(
+                    name = trip.name,
+                    photoUrl = trip.destination.photoUrl ?: "",
+                    startDate = trip.startDate,
+                    endDate = trip.endDate,
+                    originName = trip.origin.name,
+                    destinationName = trip.destination.name,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .clickable { },
+                )
+            }
         }
 
         FloatingActionButton(

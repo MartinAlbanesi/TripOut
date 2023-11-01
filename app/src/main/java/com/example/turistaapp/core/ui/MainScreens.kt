@@ -26,7 +26,6 @@ fun MainScreen(
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
@@ -62,7 +61,8 @@ fun MainScreen(
                 HomeScreen(
                     nearbyLocations = nearbyLocations,
                     nearbyLocationSelect = nearbyLocationSelect,
-                    onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it))},
+                    myTrips = myTrips,
+                    onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                 )
