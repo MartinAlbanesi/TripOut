@@ -51,9 +51,7 @@ class HomeViewModel @Inject constructor(
                         ),
                     )
                     _locationSelect.value = randomLocation.name
-                }
-
-                if (lastLocation != null) {
+                }else if (lastLocation != null) {
                     nearbyLocations = getNearbyLocationsUseCase(
                         getLocationString(
                             lastLocation.latitude,
