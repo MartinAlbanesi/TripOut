@@ -137,6 +137,9 @@ dependencies {
 
     //splash screen
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    //Accompanist-Permissions
+    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
 }
 
 kapt {
