@@ -6,7 +6,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,7 +18,6 @@ import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
-import com.example.turistaapp.setting.ui.SettingViewModel
 import com.example.turistaapp.setting.ui.SettingsScreen
 
 @Composable
@@ -27,16 +26,16 @@ fun MainScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     navController: NavHostController,
-    onClickChangeTheme: () -> Unit
+    onClickChangeTheme: () -> Unit,
 ) {
-    //Home
+    // Home
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
     val locationSelect by homeViewModel.locationSelect.collectAsStateWithLifecycle()
 
-    //Map
+    // Map
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
     val directionSelect by mapViewModel.polyLinesPoints.collectAsStateWithLifecycle()
@@ -47,10 +46,10 @@ fun MainScreen(
 
     val routeModel by mapViewModel.tripSelected.collectAsStateWithLifecycle()
 
-    //Trips
+    // Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
 
-    var state by remember { mutableIntStateOf(0) }
+    var state by remember { mutableStateOf(0) }
     val titles = listOf(
         Routes.Home.route,
         Routes.Map.route,
@@ -87,12 +86,12 @@ fun MainScreen(
                     lastLocation = lastLocation,
                     routeModel = routeModel,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
-                    onMarkerSelected = { mapViewModel.getTripById(it)},
+                    onMarkerSelected = { mapViewModel.getTripById(it) },
                 )
             }
 
             Routes.Settings.route -> {
-                SettingsScreen(){
+                SettingsScreen() {
                     onClickChangeTheme()
                 }
             }
