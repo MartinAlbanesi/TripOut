@@ -1,7 +1,6 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,15 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.turistaapp.create_trip.domain.models.LocationModel
-import com.example.turistaapp.create_trip.domain.models.TripModel
-import com.example.turistaapp.ui.theme.TuristaAppTheme
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import java.util.Calendar
 
 @Composable
 fun TripItem(
@@ -49,36 +46,44 @@ fun TripItem(
         ),
         modifier = modifier,
     ) {
-        Box(
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth(),
+//            contentAlignment = Alignment.BottomStart,
+//        ) {
+//            AsyncImage(
+//                model = photoUrl,
+//                contentDescription = "Translated description of what the image contains",
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .widthIn(0.dp, 300.dp) // mention max width here
+//                    .heightIn(0.dp, 120.dp), // mention max height here
+//                contentScale = ContentScale.Crop,
+//            )
+//            // Headline (Title)
+//            Row (
+//                modifier = Modifier
+//                    .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
+//            ) {
+//                Text(
+//                    text = name,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(start = 8.dp, bottom = 4.dp),
+//                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+//                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+//                    color = Color.White,
+//                )
+//            }
+//        }
+        ImageWithBrush(
+            name = name,
+            photoUrl = photoUrl,
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomStart,
-        ) {
-            AsyncImage(
-                model = photoUrl,
-                contentDescription = "Translated description of what the image contains",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .widthIn(0.dp, 300.dp) // mention max width here
-                    .heightIn(0.dp, 120.dp), // mention max height here
-                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            )
-            // Headline (Title)
-            Row (
-                modifier = Modifier
-                    .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
-            ) {
-                Text(
-                    text = name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.dp, bottom = 4.dp),
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-                    color = Color.White,
-                )
-            }
-        }
+                .fillMaxWidth()
+                .widthIn(0.dp, 300.dp) // mention max width here
+                .heightIn(0.dp, 120.dp), // mention max height here)
+        )
         // Subhead (Date)
         Row(
             modifier = Modifier
@@ -131,70 +136,39 @@ fun formatMilisToDateString(milisegundosString: String, formato: String): String
     return formatter.print(dateTime)
 }
 
-@Preview
 @Composable
-fun TripItemPreview() {
-    val origin = LocationModel(
-        placeID = "placeID",
-        name = "Google Sydney - Pirrama Road",
-        address = "address A",
-        rating = 4.5,
-        userRating = 4,
-        lat = 0.0,
-        lng = 0.0,
-        photoUrl = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Ftodofondos.com%2Fbin%2Ffondos%2F07%2F15%2F19d.jpg&f=1&nofb=1&ipt=17f83c6505836d11e575c170c14c7362d30f2ce1369976101add2d71bfd3b8f6&ipo=images",
-        types = listOf("types"),
-        isFinished = false,
-        tripName = "tripName",
-        tripId = 0,
-    )
-
-    val destination = LocationModel(
-        placeID = "placeID",
-        name = "Avenida Siempre Viva 1234 - Moron",
-        address = "address B",
-        rating = 3.5,
-        userRating = 3,
-        lat = 0.0,
-        lng = 0.0,
-        photoUrl = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Ftodofondos.com%2Fbin%2Ffondos%2F07%2F15%2F19d.jpg&f=1&nofb=1&ipt=17f83c6505836d11e575c170c14c7362d30f2ce1369976101add2d71bfd3b8f6&ipo=images",
-        types = listOf("types"),
-        isFinished = false,
-        tripName = "tripName",
-        tripId = 0,
-    )
-
-    val calendar: Calendar = Calendar.getInstance()
-
-    val trip = TripModel(
-        name = "Trip 1",
-        origin = origin,
-        destination = destination,
-        startDate = "1698710400000",
-        endDate = "1698969600000",
-        transport = "driving",
-        members = null,
-        stops = null,
-        description = "Un viaje espectacular para visitar un lugar hermoso en la ciudad",
-        author = "author",
-        images = null,
-        comments = null,
-        isFavorite = false,
-        isFinished = false,
-    )
-
-    TuristaAppTheme {
-        TripItem(
-            name = trip.destination.name,
-            photoUrl = trip.destination.photoUrl ?: "",
-            startDate = trip.startDate,
-            endDate = trip.endDate,
-            originName = trip.origin.name,
-            destinationName = trip.destination.name,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .clickable { },
+fun <T> ImageWithBrush(
+    modifier: Modifier = Modifier,
+    name: String,
+    photoUrl: T,
+    padding: Dp = 0.dp,
+    textCenter: Boolean = false,
+) {
+    Box(
+        modifier = Modifier.padding(padding),
+        contentAlignment = Alignment.BottomStart,
+    ) {
+        AsyncImage(
+            model = photoUrl,
+            contentDescription = "Translated description of what the image contains",
+            modifier = modifier,
+            contentScale = ContentScale.Crop,
         )
+        // Headline (Title)
+        Row (
+            modifier = Modifier
+                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
+        ) {
+            Text(
+                text = name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 4.dp),
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                color = Color.White,
+                textAlign = if(textCenter) TextAlign.Center else TextAlign.Start
+            )
+        }
     }
 }
