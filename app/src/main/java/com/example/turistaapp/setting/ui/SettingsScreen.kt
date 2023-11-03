@@ -53,14 +53,14 @@ fun SettingsScreen(darkTheme: Boolean = false, changeTheme: () -> Unit) {
 
     ) {
 
-        SettingUser()
-        Spacer(modifier = Modifier.size(21.dp))
+//        SettingUser()
+//        Spacer(modifier = Modifier.size(21.dp))
         //Divider( thickness = 2.dp , modifier = Modifier.padding(4.dp))
         SettingAppearance(darkTheme) { changeTheme() }
-        Spacer(modifier = Modifier.size(21.dp))
-        SettingMore("MAS")
-        Spacer(modifier = Modifier.size(264.dp))
-        SettingVersion()
+//        Spacer(modifier = Modifier.size(21.dp))
+//        SettingMore("MAS")
+//        Spacer(modifier = Modifier.size(264.dp))
+//        SettingVersion()
     }
 }
 
@@ -115,26 +115,29 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
             var checked by rememberSaveable { mutableStateOf(true) }
 
             Switch(
-                checked = checked, onCheckedChange = {
+                checked = checked,
+                onCheckedChange = {
                     changeTheme()
-                }, modifier = Modifier.weight(1f)
+                    checked = it
+                },
+                modifier = Modifier.weight(1f)
             )
         }
-        Spacer(modifier = Modifier.size(6.dp))
-        Row  {
-            Text(
-                "cambiar idioma",
-                 fontSize = 20.sp,
-                 color = Color.Black,
-                modifier = Modifier
-                    .weight(3f)
-                    .align(CenterVertically)
-            )
-            val a: SettingViewModel = viewModel()
-
-            // val b =   listOf<String>("español", "ingles","portuges")
-            DropDownMenu(lista = a.listLanguage)
-        }
+//        Spacer(modifier = Modifier.size(6.dp))
+//        Row  {
+//            Text(
+//                "cambiar idioma",
+//                 fontSize = 20.sp,
+//                 color = Color.Black,
+//                modifier = Modifier
+//                    .weight(3f)
+//                    .align(CenterVertically)
+//            )
+//            val a: SettingViewModel = viewModel()
+//
+//            // val b =   listOf<String>("español", "ingles","portuges")
+//            DropDownMenu(lista = a.listLanguage)
+//        }
     }
 }
 
