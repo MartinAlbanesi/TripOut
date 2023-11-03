@@ -1,6 +1,8 @@
 package com.example.turistaapp.map.ui
 
 import android.Manifest
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.BottomSheetScaffold
@@ -12,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.map.domain.models.RouteModel
@@ -43,6 +46,12 @@ fun MapScreen(
         coarseLocationPermission.launchPermissionRequest()
     }
 
+    val sheetPeekHeight by animateDpAsState(
+        targetValue = if(markerSelect) 200.dp else 0.dp,
+        label = "sheetPeekHeight",
+        animationSpec = tween(1000)
+    )
+
     val mapUiSettings by remember {
         mutableStateOf(
             MapUiSettings(
@@ -63,6 +72,7 @@ fun MapScreen(
                 TripDetails(routeModel)
             }
         },
+        sheetPeekHeight = sheetPeekHeight
     ) { paddingValues ->
 
         Box(Modifier.fillMaxSize()) {

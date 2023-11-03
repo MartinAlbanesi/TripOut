@@ -68,28 +68,28 @@ fun TripDetails(
 
                 ) {
 
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        "",
-                        tint = Color.Yellow,
-                        modifier = Modifier
-                            .padding(horizontal = 13.dp)
-                    )
-
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        "",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .padding(horizontal = 13.dp)
-                    )
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        "",
-                        tint = Color.Red,
-                        modifier = Modifier
-                            .padding(horizontal = 13.dp)
-                    )
+//                    Icon(
+//                        imageVector = Icons.Default.Share,
+//                        "",
+//                        tint = Color.Yellow,
+//                        modifier = Modifier
+//                            .padding(horizontal = 13.dp)
+//                    )
+//
+//                    Icon(
+//                        imageVector = Icons.Default.Delete,
+//                        "",
+//                        tint = Color.White,
+//                        modifier = Modifier
+//                            .padding(horizontal = 13.dp)
+//                    )
+//                    Icon(
+//                        imageVector = Icons.Default.FavoriteBorder,
+//                        "",
+//                        tint = Color.Red,
+//                        modifier = Modifier
+//                            .padding(horizontal = 13.dp)
+//                    )
                     // .align(alignment = )
                 }
             }
@@ -253,13 +253,12 @@ fun TripDetails(
                     color = Color.White,
                     fontSize = 26.sp,
                 )
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    "",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(height = 30.dp, width = 50.dp)
-                )
+//                Icon(
+//                    imageVector = Icons.Default.Add,
+//                    "",
+//                    modifier = Modifier
+//                        .size(height = 30.dp, width = 50.dp)
+//                )
             }
             //imagenes
             if (routeModel?.trip!!.images != null) {

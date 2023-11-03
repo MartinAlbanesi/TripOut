@@ -114,7 +114,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
-                        .clickable { },
+//                        .clickable { },
                 )
             }
         }
