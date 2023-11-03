@@ -53,6 +53,7 @@ fun HomeScreen(
     onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
     onClickFloatingBottom: () -> Unit,
+    onClickShakeGame: () -> Unit,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -70,7 +71,7 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .height(200.dp)
                         .clickable {
-                            //TODO: Navegar al minijuego
+                            onClickShakeGame()
                         }
                 )
             }

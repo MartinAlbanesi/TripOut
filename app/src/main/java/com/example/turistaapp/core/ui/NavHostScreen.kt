@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
+import com.example.turistaapp.home.ui.ShakeGameScreen
 import com.example.turistaapp.welcome.ui.WelcomeScreen
 import com.example.turistaapp.welcome.ui.WelcomeViewModel
 
@@ -43,6 +44,9 @@ fun NavHostScreen(
                 welcomeViewModel.setNameInDataStore(it)
                 navController.navigate(Routes.Home.route)
             })
+        }
+        composable(Routes.ShakeGame.route){
+            ShakeGameScreen()
         }
     }
 }

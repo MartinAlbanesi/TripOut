@@ -76,6 +76,7 @@ fun MainScreen(
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
+                    onClickShakeGame = { navController.navigate(Routes.ShakeGame.route) },
                 )
             }
 

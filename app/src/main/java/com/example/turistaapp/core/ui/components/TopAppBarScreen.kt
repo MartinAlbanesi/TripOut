@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TopAppBarScreen(
     title: String,
-    isMarkerSelected : Boolean,
+    isMarkerSelected : Boolean = false,
     color : Color = LocalContentColor.current,
     onClickNavigationBack: () -> Unit,
 ) {
