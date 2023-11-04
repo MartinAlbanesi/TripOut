@@ -34,7 +34,7 @@ import org.joda.time.format.DateTimeFormat
 import java.util.Calendar
 
 @Composable
-fun TripItem(
+fun MyTripsItem(
     photoUrl: String,
     name: String,
     startDate: String,
@@ -184,7 +184,7 @@ fun TripItemPreview() {
     )
 
     TuristaAppTheme {
-        TripItem(
+        MyTripsItem(
             name = trip.destination.name,
             photoUrl = trip.destination.photoUrl ?: "",
             startDate = trip.startDate,

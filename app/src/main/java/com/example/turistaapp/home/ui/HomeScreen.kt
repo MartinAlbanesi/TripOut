@@ -1,6 +1,5 @@
 package com.example.turistaapp.home.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,7 +28,7 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
-import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+import com.example.turistaapp.my_trips.ui.screens.components.MyTripsItem
 
 @Composable
 fun HomeScreen(
@@ -104,7 +103,7 @@ fun HomeScreen(
                 )
             }
             items(myTrips) { trip ->
-                TripItem(
+                MyTripsItem(
                     name = trip.name,
                     photoUrl = trip.destination.photoUrl ?: "",
                     startDate = trip.startDate,
