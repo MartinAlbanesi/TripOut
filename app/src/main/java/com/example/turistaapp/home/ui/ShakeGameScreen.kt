@@ -18,97 +18,116 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
+import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
+import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
+import com.example.turistaapp.map.ui.components.TripDialog
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlin.math.sqrt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ShakeGameScreen() {
-    var x by remember {
-        mutableFloatStateOf(0f)
-    }
-    var y by remember {
-        mutableFloatStateOf(0f)
-    }
-    var z by remember {
-        mutableFloatStateOf(0f)
-    }
+fun ShakeGameScreen(
+    shakeViewModel: ShakeViewModel = hiltViewModel(),
+    onCreateTripDialog: (String) -> Unit,
+) {
 
-    var value by remember {
-        mutableStateOf("")
-    }
+    val originPredictions by shakeViewModel.originPredictions.observeAsState(emptyList())
 
-    var list by remember {
-        mutableStateOf(listOf<String>())
-    }
+    val selectedLocations by shakeViewModel.selectedLocations.collectAsStateWithLifecycle()
 
-    var select by remember{
-        mutableStateOf("")
-    }
+    val focusRequest = remember { FocusRequester() }
 
-    val context = LocalContext.current
+    var x by remember { mutableFloatStateOf(0f) }
+    var y by remember { mutableFloatStateOf(0f) }
+    var z by remember { mutableFloatStateOf(0f) }
 
-    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    var value by remember { mutableStateOf("") }
 
-    val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
-    var isShake = false
+    var isMenuVisible by remember { mutableStateOf(false) }
+
+    val sensorManager = shakeViewModel.getSensorManager()
+    val sensor = shakeViewModel.getSensorAcceleration()
+    var isShake by remember { mutableStateOf(false) }
+
+    var acceleration by remember { mutableDoubleStateOf(0.0) }
+
+    var locationSelected: LocationModel? by remember { mutableStateOf(null) }
 
     sensorManager.registerListener(object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent?) {
             event?.run {
-                x = this.values[0]*2f;
-                y = this.values[1]*2f;
-                z = this.values[2]*2f;
+                x = this.values[0] * 2f;
+                y = this.values[1] * 2f;
+                z = this.values[2] * 2f;
 
                 // Calcula la aceleración total
-                var acceleration = Math.sqrt((x * x + y * y + z * z).toDouble());
+                acceleration = sqrt((x * x + y * y + z * z).toDouble());
 
                 // Comprueba si la aceleración supera el umbral de agitación
-                if (acceleration > 60f && !isShake && list.size > 2) {
-                    Toast.makeText(context, "Shake event detected", Toast.LENGTH_SHORT).show()
-                    select = list.random()
+                if (acceleration > 60f && !isShake && selectedLocations.size >= 2) {
+//                    Toast.makeText(LocalContext.current, "Shake detected", Toast.LENGTH_SHORT).show()
+                    locationSelected = selectedLocations.random()
                     isShake = true
                 }
             }
         }
-
         override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
         }
-
     }, sensor, SensorManager.SENSOR_DELAY_FASTEST)
 
-    if(isShake){
-        Dialog(onDismissRequest = { isShake = false }) {
-            Text(text = select)
-        }
+
+
+
+
+    if (isShake) {
+        TripDialog(
+            nearbyLocationSelect = locationSelected!!,
+            onDismiss = { isShake = false },
+            onConfirm = {
+                isShake = false
+                onCreateTripDialog(it)
+            }
+        )
     }
 
     Scaffold(
         topBar = {
             TopAppBarScreen(
                 title = "Shake'n Descover",
+                isMarkerSelected = true,
                 onClickNavigationBack = {
                     //TODO: Volver a home
                 }
@@ -130,7 +149,7 @@ fun ShakeGameScreen() {
                     .fillMaxWidth()
                     .weight(3f),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Column(Modifier.fillMaxWidth()) {
 
                     Text(
@@ -148,32 +167,61 @@ fun ShakeGameScreen() {
                     )
                 }
             }
-            OutlinedTextField(
-                value = value,
-                onValueChange = { value = it },
-                label = { Text(text = "Ingrese una ubicación") },
-                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color.LightGray,
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = androidx.compose.ui.text.input.ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        list += value
-                        value = ""
-                    }
-                ),
-                modifier = Modifier.fillMaxWidth()
+            PlaceAutocompleteField(
+                label = "Ingrese una ubicación",
+                query = value,
+                onQueryChange = {
+                    value = it
+                    shakeViewModel.searchOriginPlaces(value)
+                },
+                isDropdownVisible = isMenuVisible,
+                onDropdownVisibilityChange = {
+                    isMenuVisible = it
+                },
+                predictions = originPredictions,
+                focusRequester = focusRequest,
+                imeAction = androidx.compose.ui.text.input.ImeAction.Done,
+                onClearField = {
+                    value = ""
+                },
+                onItemClick = {
+                    value = it.description ?: ""
+//                    createTripViewModel.onSelectedOriginLocationChange(it)
+                    shakeViewModel.onClickSelectedLocation(it.placeId)
+                    value = ""
+                    isMenuVisible = false
+                    focusRequest.freeFocus()
+                },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Map, contentDescription = null)
+                }
             )
+//            OutlinedTextField(
+//                value = value,
+//                onValueChange = { value = it },
+//                label = { Text(text = "Ingrese una ubicación") },
+//                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+//                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                    unfocusedBorderColor = Color.LightGray,
+//                ),
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = androidx.compose.ui.text.input.ImeAction.Done
+//                ),
+//                keyboardActions = KeyboardActions(
+//                    onDone = {
+//                        list += value
+//                        value = ""
+//                    }
+//                ),
+//                modifier = Modifier.fillMaxWidth()
+//            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                items(list) {
-                    Text(text = it)
+                items(selectedLocations) {
+                    Text(text = "${it.name} - ${it.address}")
                 }
             }
         }

@@ -1,6 +1,8 @@
 package com.example.turistaapp.core.di
 
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
 import com.example.turistaapp.home.data.INearbySearchLocationRepository
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
@@ -57,5 +59,17 @@ class HomeModule {
     @Provides
     fun provideGetLastLocation(@ApplicationContext context: Context, fusedLocationProviderClient: FusedLocationProviderClient) : GetLastLocationUseCase {
         return GetLastLocationUseCase(fusedLocationProviderClient, context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSensorManager(@ApplicationContext context: Context) : SensorManager {
+        return context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+
+    @Singleton
+    @Provides
+    fun provideSensorAcceleration(sensorManager: SensorManager) : Sensor? {
+        return sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
     }
 }

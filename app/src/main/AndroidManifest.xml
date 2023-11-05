@@ -23,7 +23,6 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:windowSoftInputMode="adjustResize"
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.MySplash">
