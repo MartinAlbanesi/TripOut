@@ -1,15 +1,21 @@
 package com.example.turistaapp.home.ui
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -17,10 +23,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,9 +71,13 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-    Box(modifier = Modifier.fillMaxSize()){
+    var showFloatingButtons by remember {
+        mutableStateOf(false)
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn() {
-            item{
+            item {
                 ImageWithBrush(
                     name = "Descubra su siguiente viaje",
                     photoUrl = R.drawable.ic_launcher_foreground,
@@ -100,16 +116,19 @@ fun HomeScreen(
                             },
                         )
                     }
+
                     is ResponseUiState.Loading -> {
-                        Box(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(4.dp)
-                            .size(240.dp, 360.dp),
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
+                                .size(240.dp, 360.dp),
                             contentAlignment = Alignment.Center
-                        ){
+                        ) {
                             CircularProgressIndicator(Modifier.size(100.dp))
                         }
                     }
+
                     is ResponseUiState.Error -> {
                         Column(
                             Modifier
@@ -148,8 +167,47 @@ fun HomeScreen(
             }
         }
 
+        AnimatedVisibility(
+            visible = showFloatingButtons,
+            enter = expandVertically(expandFrom = Alignment.Top) { 0 },
+            // Shrinks the content to half of its full height via an animation.
+            exit = shrinkVertically(shrinkTowards = Alignment.Bottom){0},
+            modifier = Modifier
+                .padding(bottom = 16.dp, end = 16.dp)
+                .align(Alignment.BottomEnd)
+                .offset(y = (-80).dp)
+        ) {
+            Column {
+
+                ExtendedFloatingActionButton(
+                    onClick = { onClickFloatingBottom() },
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
+                    text = { Text(text = "Sample") },
+                    modifier = Modifier
+//                    .padding(bottom = 16.dp, end = 16.dp)
+//                    .align(Alignment.BottomEnd),
+//                    .offset(y = (-80).dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                ExtendedFloatingActionButton(
+                    onClick = { onClickFloatingBottom() },
+                    icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
+                    text = { Text(text = "Sample") },
+                    modifier = Modifier
+//                    .padding(bottom = 16.dp, end = 16.dp)
+//                    .align(Alignment.BottomEnd),
+//                    .offset(y = (-160).dp)
+                )
+            }
+
+
+        }
+
         FloatingActionButton(
-            onClick = { onClickFloatingBottom() },
+            onClick = {
+                //onClickFloatingBottom()
+                showFloatingButtons = !showFloatingButtons
+            },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
                 .align(Alignment.BottomEnd)
