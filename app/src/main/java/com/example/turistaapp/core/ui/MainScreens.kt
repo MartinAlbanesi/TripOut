@@ -1,5 +1,8 @@
 package com.example.turistaapp.core.ui
 
+import android.content.ContentValues
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -18,8 +21,9 @@ import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
-import com.example.turistaapp.setting.ui.SettingViewModel
 import com.example.turistaapp.setting.ui.SettingsScreen
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun MainScreen(
@@ -27,16 +31,16 @@ fun MainScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     navController: NavHostController,
-    onClickChangeTheme: () -> Unit
+    onClickChangeTheme: () -> Unit,
 ) {
-    //Home
+    // Home
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
     val locationSelect by homeViewModel.locationSelect.collectAsStateWithLifecycle()
 
-    //Map
+    // Map
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
     val directionSelect by mapViewModel.polyLinesPoints.collectAsStateWithLifecycle()
@@ -47,8 +51,13 @@ fun MainScreen(
 
     val routeModel by mapViewModel.tripSelected.collectAsStateWithLifecycle()
 
-    //Trips
+    // Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
+
+    val scanLauncher = rememberLauncherForActivityResult(
+        contract = ScanContract(),
+        onResult = { result -> Log.i(ContentValues.TAG, "scanned code: ${result.contents}") },
+    )
 
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
@@ -77,6 +86,9 @@ fun MainScreen(
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onClickShakeGame = { navController.navigate(Routes.ShakeGame.route) },
+                    onQRButtonClick = {
+                        scanLauncher.launch(ScanOptions())
+                    },
                 )
             }
 
@@ -88,12 +100,12 @@ fun MainScreen(
                     lastLocation = lastLocation,
                     routeModel = routeModel,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
-                    onMarkerSelected = { mapViewModel.getTripById(it)},
+                    onMarkerSelected = { mapViewModel.getTripById(it) },
                 )
             }
 
             Routes.Settings.route -> {
-                SettingsScreen(){
+                SettingsScreen() {
                     onClickChangeTheme()
                 }
             }

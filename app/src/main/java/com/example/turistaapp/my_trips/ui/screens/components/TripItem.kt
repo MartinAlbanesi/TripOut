@@ -1,5 +1,6 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.TripOrigin
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,58 +30,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.qr_code.ui.QRDialog
+import com.google.gson.Gson
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
 @Composable
 fun TripItem(
-    photoUrl: String,
-    name: String,
-    startDate: String,
-    endDate: String,
-    originName: String,
-    destinationName: String,
+    trip: TripModel,
+    isDialogOpen: Boolean,
+    onQRButtonClick: () -> Unit,
+    onDismissDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val gson = Gson()
+
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp,
         ),
         modifier = modifier,
     ) {
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth(),
-//            contentAlignment = Alignment.BottomStart,
-//        ) {
-//            AsyncImage(
-//                model = photoUrl,
-//                contentDescription = "Translated description of what the image contains",
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .widthIn(0.dp, 300.dp) // mention max width here
-//                    .heightIn(0.dp, 120.dp), // mention max height here
-//                contentScale = ContentScale.Crop,
-//            )
-//            // Headline (Title)
-//            Row (
-//                modifier = Modifier
-//                    .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
-//            ) {
-//                Text(
-//                    text = name,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(start = 8.dp, bottom = 4.dp),
-//                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-//                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-//                    color = Color.White,
-//                )
-//            }
-//        }
         ImageWithBrush(
-            name = name,
-            photoUrl = photoUrl,
+            name = trip.name,
+            photoUrl = trip.destination.photoUrl ?: "",
             modifier = Modifier
                 .fillMaxWidth()
                 .widthIn(0.dp, 300.dp) // mention max width here
@@ -93,10 +69,10 @@ fun TripItem(
             Text(
                 text = "${
                     formatMilisToDateString(
-                        startDate,
+                        trip.startDate,
                         "dd/MM/yyyy",
                     )
-                } - ${formatMilisToDateString(endDate, "dd/MM/yyyy")}",
+                } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
@@ -108,7 +84,7 @@ fun TripItem(
         ) {
             Icon(imageVector = Icons.Default.TripOrigin, contentDescription = "Origin Title")
             Text(
-                text = originName,
+                text = trip.origin.name,
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
@@ -119,12 +95,23 @@ fun TripItem(
         ) {
             Icon(imageVector = Icons.Default.Flag, contentDescription = "Destination Title")
             Text(
-                text = destinationName,
+                text = trip.destination.name,
                 modifier = Modifier
                     .padding(start = 8.dp),
             )
         }
         Spacer(modifier = Modifier.heightIn(8.dp))
+
+        val jsonTrip = gson.toJson(trip)
+        QRButton(
+            onQRButtonClick = {
+                Log.d("TripItem", "TripItem: $jsonTrip")
+                onQRButtonClick()
+            },
+            isDialogOpen = isDialogOpen,
+            onDismissDialog = { onDismissDialog() },
+            dataQR = jsonTrip,
+        )
     }
     Spacer(modifier = Modifier.heightIn(4.dp))
 }
@@ -155,7 +142,7 @@ fun <T> ImageWithBrush(
             contentScale = ContentScale.Crop,
         )
         // Headline (Title)
-        Row (
+        Row(
             modifier = Modifier
                 .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
         ) {
@@ -167,8 +154,48 @@ fun <T> ImageWithBrush(
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
                 color = Color.White,
-                textAlign = if(textCenter) TextAlign.Center else TextAlign.Start
+                textAlign = if (textCenter) TextAlign.Center else TextAlign.Start,
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun QRButton(
+    onQRButtonClick: () -> Unit,
+    isDialogOpen: Boolean,
+    onDismissDialog: () -> Unit,
+    dataQR: String,
+    modifier: Modifier = Modifier,
+) {
+    ElevatedCard(
+        modifier = modifier,
+        onClick = onQRButtonClick,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.QrCode,
+                contentDescription = "QR Button",
+                modifier = Modifier
+                    .padding(end = 8.dp),
+            )
+            Text(
+                text = "QR",
+                modifier = Modifier
+                    .padding(end = 8.dp),
+            )
+        }
+    }
+
+    if (isDialogOpen) {
+        QRDialog(
+            onDismiss = { onDismissDialog() },
+            data = dataQR,
+        )
     }
 }
