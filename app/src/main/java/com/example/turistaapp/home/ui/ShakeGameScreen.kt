@@ -1,13 +1,10 @@
 package com.example.turistaapp.home.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +13,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,30 +30,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
-import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.map.ui.components.TripDialog
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.math.sqrt
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShakeGameScreen(
     shakeViewModel: ShakeViewModel = hiltViewModel(),
     onCreateTripDialog: (String) -> Unit,
 ) {
+
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.world))
 
     val originPredictions by shakeViewModel.originPredictions.observeAsState(emptyList())
 
@@ -158,13 +149,20 @@ fun ShakeGameScreen(
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
-                    AsyncImage(
-                        model = R.drawable.ic_launcher_foreground,
+                    LottieAnimation(
+                        composition = lottie.value,
+                        iterations = LottieConstants.IterateForever,
                         modifier = Modifier
                             .offset(x = x.dp, y = y.dp)
                             .fillMaxWidth(),
-                        contentDescription = null
                     )
+//                    AsyncImage(
+//                        model = R.drawable.ic_launcher_foreground,
+//                        modifier = Modifier
+//                            .offset(x = x.dp, y = y.dp)
+//                            .fillMaxWidth(),
+//                        contentDescription = null
+//                    )
                 }
             }
             PlaceAutocompleteField(

@@ -1,8 +1,6 @@
 package com.example.turistaapp.home.ui
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
@@ -14,25 +12,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,18 +36,60 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.turistaapp.R
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
-import com.example.turistaapp.my_trips.ui.screens.components.ImageWithBrush
 import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+
+
+@Composable
+fun ShakeGamePreview(
+    name: String,
+    onClickShakeGame:() -> Unit,
+) {
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.world))
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clickable {
+                onClickShakeGame()
+            },
+        contentAlignment = Alignment.BottomStart,
+    ) {
+        LottieAnimation(
+            composition = lottie.value,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+        )
+        Row (
+            modifier = Modifier
+                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
+        ) {
+            Text(
+                text = name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 4.dp),
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+}
 
 @Composable
 fun HomeScreen(
@@ -78,18 +113,21 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn() {
             item {
-                ImageWithBrush(
-                    name = "Descubra su siguiente viaje",
-                    photoUrl = R.drawable.ic_launcher_foreground,
-                    padding = 8.dp,
-                    textCenter = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clickable {
-                            onClickShakeGame()
-                        }
-                )
+                ShakeGamePreview(name = "Descubra su siguiente viaje") {
+                    onClickShakeGame()
+                }
+//                ImageWithBrush(
+//                    name = "Descubra su siguiente viaje",
+//                    photoUrl = R.drawable.ic_launcher_foreground,
+//                    padding = 8.dp,
+//                    textCenter = true,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(200.dp)
+//                        .clickable {
+//                            onClickShakeGame()
+//                        }
+//                )
             }
             item {
                 Column {
@@ -171,7 +209,7 @@ fun HomeScreen(
             visible = showFloatingButtons,
             enter = expandVertically(expandFrom = Alignment.Top) { 0 },
             // Shrinks the content to half of its full height via an animation.
-            exit = shrinkVertically(shrinkTowards = Alignment.Bottom){0},
+            exit = shrinkVertically(shrinkTowards = Alignment.Bottom) { 0 },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
                 .align(Alignment.BottomEnd)
