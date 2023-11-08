@@ -50,6 +50,8 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
+            _locationSelect.value = "ti"
+
             _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
         }
 
