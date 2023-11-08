@@ -3,8 +3,10 @@ package com.example.turistaapp.welcome.ui
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -39,7 +41,7 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
-    var pagerState = rememberPagerState { 2 }
+    val pagerState = rememberPagerState { 2 }
 
     val scope = rememberCoroutineScope()
 
@@ -88,24 +90,24 @@ fun WelcomeScreen(
 
                     1 -> {
                         PagerViewTwo(value, isError) {
+                            if(isError) isError = false
                             value = it
                         }
                     }
                 }
             }
 
-            DrawCircle(
-                color = circleFirst,
-                Modifier
-                    .align(CenterHorizontally)
-                    .offset(x = (-20).dp)
-            )
-            DrawCircle(
-                color = circleSecond,
-                Modifier
-                    .align(CenterHorizontally)
-                    .offset(x = (20).dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                DrawCircle(
+                    color = circleFirst,
+                )
+                DrawCircle(
+                    color = circleSecond,
+                )
+            }
 
             Button(
                 onClick = {
@@ -118,7 +120,6 @@ fun WelcomeScreen(
                         }
                     }
                     if (pagerState.currentPage == 1) {
-                        //TODO: Navigate to main screen, save name, permissions
                         if (validateName(value)) {
                             isError = false
                             onClickSaveName(value)

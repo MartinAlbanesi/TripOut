@@ -37,15 +37,6 @@ fun MapScreen(
     onClickArrowBack: () -> Unit,
     onMarkerSelected : (Int) -> Unit,
 ) {
-
-    val coarseLocationPermission = rememberPermissionState(
-        permission = Manifest.permission.ACCESS_COARSE_LOCATION
-    )
-
-    LaunchedEffect(true){
-        coarseLocationPermission.launchPermissionRequest()
-    }
-
     val sheetPeekHeight by animateDpAsState(
         targetValue = if(markerSelect) 200.dp else 0.dp,
         label = "sheetPeekHeight",

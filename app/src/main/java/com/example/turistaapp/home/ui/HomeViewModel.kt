@@ -36,6 +36,25 @@ class HomeViewModel @Inject constructor(
         getRandomLocation()
     }
 
+    fun getNearbyLocationsWithLastLocation(){
+        viewModelScope.launch(dispatcher) {
+            var nearbyLocations: List<LocationModel>? = null
+            val lastLocation = getLastLocationUseCase()
+
+            if (lastLocation != null) {
+                nearbyLocations = getNearbyLocationsUseCase(
+                    getLocationString(
+                        lastLocation.latitude,
+                        lastLocation.longitude,
+                    ),
+                )
+            }
+
+            _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
+        }
+
+    }
+
     private fun getRandomLocation() {
         viewModelScope.launch(dispatcher) {
             try {
