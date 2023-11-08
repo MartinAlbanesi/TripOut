@@ -1,5 +1,6 @@
 package com.example.turistaapp.map.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.turistaapp.R
+import com.example.turistaapp.core.ui.components.shimmerBrush
 
 
 @Composable
@@ -36,6 +40,8 @@ fun TripItem(
     address: String? = null,
     modifier: Modifier = Modifier,
 ) {
+
+    val showShimmer = remember { mutableStateOf(true) }
     Card(
         modifier = modifier
     ) {
@@ -65,14 +71,16 @@ fun TripItem(
             contentScale = ContentScale.FillBounds,
             //placeholder = painterResource(id = R.drawable.ic_launcher_background),
             modifier = Modifier
+                .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))
                 .fillMaxSize()
                 .padding(8.dp)
                 .clip(RoundedCornerShape(12.dp)),
-            loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                    CircularProgressIndicator(modifier = Modifier.size(80.dp))
-                }
-            }
+//            loading = {
+//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+//                    CircularProgressIndicator(modifier = Modifier.size(80.dp))
+//                }
+//            },
+            onSuccess = {showShimmer.value = false}
         )
     }
 }
