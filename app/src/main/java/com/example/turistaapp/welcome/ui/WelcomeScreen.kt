@@ -1,16 +1,19 @@
 package com.example.turistaapp.welcome.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
@@ -22,13 +25,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.welcome.ui.components.DrawCircle
 import com.example.turistaapp.welcome.ui.components.PagerViewOne
@@ -41,6 +45,11 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
+
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp.dp.value
+
     val pagerState = rememberPagerState { 2 }
 
     val scope = rememberCoroutineScope()
@@ -61,20 +70,28 @@ fun WelcomeScreen(
 
     var isError by remember { mutableStateOf(false) }
 
+    val offsetY by animateFloatAsState(
+        targetValue = if(pagerState.currentPage == 0) 0f else (screenHeight / 3),
+        label = "offsetY",
+        animationSpec = tween(1000)
+    )
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Text(
-                text = "TRIP OUT",
+            Spacer(modifier = Modifier.size(16.dp))
+            AsyncImage(
+                model = R.drawable.tripout,
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .size(240.dp)
                     .weight(1f)
-                    .padding(top = 40.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 40.sp
+                    .align(Alignment.CenterHorizontally)
+                    .offset(y = offsetY.dp)
+                    .padding(bottom = 16.dp)
             )
 
             HorizontalPager(
@@ -90,7 +107,7 @@ fun WelcomeScreen(
 
                     1 -> {
                         PagerViewTwo(value, isError) {
-                            if(isError) isError = false
+                            if (isError) isError = false
                             value = it
                         }
                     }

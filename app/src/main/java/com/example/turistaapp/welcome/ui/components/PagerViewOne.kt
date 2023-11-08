@@ -24,11 +24,11 @@ fun PagerViewOne(text: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.logo_with_name),
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .size(160.dp)
+                .size(240.dp)
                 .align(Alignment.CenterHorizontally)
                 .clip(CircleShape)
         )
