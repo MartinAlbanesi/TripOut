@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -14,9 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -156,13 +160,6 @@ fun ShakeGameScreen(
                             .offset(x = x.dp, y = y.dp)
                             .fillMaxWidth(),
                     )
-//                    AsyncImage(
-//                        model = R.drawable.ic_launcher_foreground,
-//                        modifier = Modifier
-//                            .offset(x = x.dp, y = y.dp)
-//                            .fillMaxWidth(),
-//                        contentDescription = null
-//                    )
                 }
             }
             PlaceAutocompleteField(
@@ -184,7 +181,6 @@ fun ShakeGameScreen(
                 },
                 onItemClick = {
                     value = it.description ?: ""
-//                    createTripViewModel.onSelectedOriginLocationChange(it)
                     shakeViewModel.onClickSelectedLocation(it.placeId)
                     value = ""
                     isMenuVisible = false
@@ -194,34 +190,40 @@ fun ShakeGameScreen(
                     Icon(imageVector = Icons.Default.Map, contentDescription = null)
                 }
             )
-//            OutlinedTextField(
-//                value = value,
-//                onValueChange = { value = it },
-//                label = { Text(text = "Ingrese una ubicación") },
-//                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-//                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-//                    unfocusedBorderColor = Color.LightGray,
-//                ),
-//                keyboardOptions = KeyboardOptions(
-//                    imeAction = androidx.compose.ui.text.input.ImeAction.Done
-//                ),
-//                keyboardActions = KeyboardActions(
-//                    onDone = {
-//                        list += value
-//                        value = ""
-//                    }
-//                ),
-//                modifier = Modifier.fillMaxWidth()
-//            )
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .padding(8.dp)
             ) {
                 items(selectedLocations) {
-                    Text(text = "${it.name} - ${it.address}")
+                    ItemShake(
+                        text = "${it.name} - ${it.address}",
+                        onDelete = {
+                            shakeViewModel.onClickDeletedLocation(it)
+                        }
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ItemShake(
+    text: String,
+    onDelete: () -> Unit
+) {
+    Row(Modifier.fillMaxWidth()) {
+        Text(text = text, modifier = Modifier.weight(1f))
+        IconButton(
+            onClick = { onDelete() },
+        ) {
+            Icon(
+                Icons.Default.Delete,
+                contentDescription = null
+            )
+        }
+        Spacer(modifier = Modifier.padding(8.dp))
     }
 }

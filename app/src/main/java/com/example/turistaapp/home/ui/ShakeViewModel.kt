@@ -1,6 +1,5 @@
 package com.example.turistaapp.home.ui
 
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.lifecycle.LiveData
@@ -35,6 +34,12 @@ class ShakeViewModel @Inject constructor(
     fun onClickSelectedLocation(placeId: String){
         viewModelScope.launch {
             _selectedLocations.value += getPlaceDetailsUseCase(placeId)!!
+        }
+    }
+
+    fun onClickDeletedLocation(location: LocationModel){
+        viewModelScope.launch {
+            _selectedLocations.value -= location
         }
     }
 
