@@ -3,8 +3,15 @@ package com.example.turistaapp.core.ui
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -17,7 +24,6 @@ import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.home.ui.ShakeGameScreen
 import com.example.turistaapp.welcome.ui.WelcomeScreen
 import com.example.turistaapp.welcome.ui.WelcomeViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @Composable
 fun NavHostScreen(
@@ -51,7 +57,22 @@ fun NavHostScreen(
         }
         composable(
             Routes.CreateTrip.route,
-            arguments = listOf(navArgument("address") { defaultValue = "" })
+            arguments = listOf(navArgument("address") { defaultValue = "" }),
+            enterTransition = {
+                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
+                    IntOffset(fullSize.width, fullSize.height)
+                }
+            },
+            exitTransition = {
+                slideOut(tween(200, easing = LinearOutSlowInEasing)) {
+                    IntOffset(it.width, it.height)
+                }
+            },
+            popEnterTransition = {
+                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
+                    IntOffset(fullSize.width, fullSize.height)
+                }
+            }
         ) {
             CreateTripScreen(address = it.arguments?.getString("address")) {
                 navController.navigate(Routes.Home.route)
@@ -63,7 +84,31 @@ fun NavHostScreen(
                 launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
             })
         }
-        composable(Routes.ShakeGame.route){
+        composable(
+            Routes.ShakeGame.route,
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = 500
+                    ),
+                )
+            },
+            exitTransition = {
+                slideOutVertically(
+                    animationSpec = tween(
+                        durationMillis = 200
+                    ),
+                    targetOffsetY = { -it }
+                )
+            },
+            popEnterTransition = {
+                slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = 500
+                    ),
+                )
+            }
+        ){
             ShakeGameScreen(
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
                 onNavigateToHome = { navController.navigate(Routes.Home.route) }

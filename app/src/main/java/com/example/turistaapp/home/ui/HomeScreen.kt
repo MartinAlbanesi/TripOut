@@ -116,18 +116,6 @@ fun HomeScreen(
                 ShakeGamePreview(name = "Descubra su siguiente viaje") {
                     onClickShakeGame()
                 }
-//                ImageWithBrush(
-//                    name = "Descubra su siguiente viaje",
-//                    photoUrl = R.drawable.ic_launcher_foreground,
-//                    padding = 8.dp,
-//                    textCenter = true,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(200.dp)
-//                        .clickable {
-//                            onClickShakeGame()
-//                        }
-//                )
             }
             item {
                 Column {
@@ -243,7 +231,7 @@ fun HomeScreen(
 
         FloatingActionButton(
             onClick = {
-                //onClickFloatingBottom()
+                onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier
