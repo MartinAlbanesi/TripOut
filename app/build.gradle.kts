@@ -7,6 +7,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    // id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -143,6 +144,9 @@ dependencies {
 
     // ZXING (QR Code)
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // Kotlin Serialization
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 kapt {

@@ -1,6 +1,5 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import com.google.gson.Gson
 import org.joda.time.DateTime
@@ -102,15 +102,11 @@ fun TripItem(
         }
         Spacer(modifier = Modifier.heightIn(8.dp))
 
-        val jsonTrip = gson.toJson(trip)
         QRButton(
-            onQRButtonClick = {
-                Log.d("TripItem", "TripItem: $jsonTrip")
-                onQRButtonClick()
-            },
+            onQRButtonClick = onQRButtonClick,
             isDialogOpen = isDialogOpen,
             onDismissDialog = { onDismissDialog() },
-            dataQR = jsonTrip,
+            dataQR = gson.toJson(trip.toDataQRModel()),
         )
     }
     Spacer(modifier = Modifier.heightIn(4.dp))

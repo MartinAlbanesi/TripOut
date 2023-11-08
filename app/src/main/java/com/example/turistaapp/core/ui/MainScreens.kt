@@ -1,7 +1,6 @@
 package com.example.turistaapp.core.ui
 
-import android.content.ContentValues
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab
@@ -16,12 +15,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.turistaapp.core.utils.enums.Routes
+import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
+import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.setting.ui.SettingsScreen
+import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -30,6 +32,7 @@ fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
+    createTripViewModel: CreateTripViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickChangeTheme: () -> Unit,
 ) {
@@ -56,7 +59,23 @@ fun MainScreen(
 
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
-        onResult = { result -> Log.i(ContentValues.TAG, "scanned code: ${result.contents}") },
+        onResult = { result ->
+            val dataQR = Gson().fromJson(result.contents, DataQRModel::class.java)
+            if (dataQR != null) {
+                createTripViewModel.createTripFromQR(dataQR)
+                Toast.makeText(
+                    navController.context,
+                    "Viaje ${dataQR.name} creado con exito",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            } else {
+                Toast.makeText(
+                    navController.context,
+                    "Error al leer el codigo QR",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        },
     )
 
     var state by remember { mutableIntStateOf(0) }
@@ -87,7 +106,12 @@ fun MainScreen(
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onClickShakeGame = { navController.navigate(Routes.ShakeGame.route) },
                     onQRButtonClick = {
-                        scanLauncher.launch(ScanOptions())
+                        val options = ScanOptions()
+                        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+                        options.setPrompt("Scan a barcode")
+                        options.setBarcodeImageEnabled(true)
+                        options.setOrientationLocked(true)
+                        scanLauncher.launch(options)
                     },
                 )
             }
