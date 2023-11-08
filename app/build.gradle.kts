@@ -140,6 +140,9 @@ dependencies {
 
     //Accompanist-Permissions
     implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+
+    //Lottie
+    implementation ("com.airbnb.android:lottie-compose:6.1.0")
 }
 
 kapt {
