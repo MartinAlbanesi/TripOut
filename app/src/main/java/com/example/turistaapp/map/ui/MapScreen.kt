@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -51,11 +52,17 @@ fun MapScreen(
         )
     }
 
+    var isLastLocation by remember{
+        mutableStateOf(false)
+    }
+
     val unlam = lastLocation ?: LatLng(-34.67112967722258, -58.56390981764954)
 
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(unlam, 10f)
     }
+
+
 
     BottomSheetScaffold(
         sheetContent = {
@@ -73,7 +80,15 @@ fun MapScreen(
                 locations = locations,
                 directionSelect = directionSelect,
                 markerSelect = markerSelect,
-                onClickMarker = { onMarkerSelected(it) }
+                isLastLocation = isLastLocation,
+                lastLocation = lastLocation,
+                onClickMarker = { onMarkerSelected(it) },
+                onClickLocation = {
+                    isLastLocation = !isLastLocation
+                    if(isLastLocation){
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(unlam, 10f)
+                    }
+                }
             )
             TopAppBarScreen(
                 title = "Mis Destinos",

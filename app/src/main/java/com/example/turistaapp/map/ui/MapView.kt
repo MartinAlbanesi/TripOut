@@ -29,7 +29,10 @@ fun MapView(
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
     directionSelect: List<LatLng>,
     markerSelect: Boolean,
+    lastLocation: LatLng?,
+    isLastLocation: Boolean,
     onClickMarker: (Int) -> Unit,
+    onClickLocation: (Boolean) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -70,11 +73,20 @@ fun MapView(
                     )
                 }
             }
+            if(lastLocation != null && isLastLocation){
+                Marker(
+                    state = MarkerState(
+                        position = lastLocation,
+                    ),
+                    title = "Mi ubicación",
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
+                )
+            }
         }
 
         FloatingActionButton(
             onClick = {
-
+                onClickLocation(true)
             },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
