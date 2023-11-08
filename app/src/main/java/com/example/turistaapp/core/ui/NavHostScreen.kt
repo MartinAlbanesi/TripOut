@@ -48,6 +48,7 @@ fun NavHostScreen(
         composable(Routes.ShakeGame.route){
             ShakeGameScreen(
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
+                onNavigateToHome = { navController.navigate(Routes.Home.route) }
             )
         }
     }

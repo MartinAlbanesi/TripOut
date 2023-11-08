@@ -55,6 +55,7 @@ import kotlin.math.sqrt
 fun ShakeGameScreen(
     shakeViewModel: ShakeViewModel = hiltViewModel(),
     onCreateTripDialog: (String) -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
 
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.world))
@@ -124,7 +125,7 @@ fun ShakeGameScreen(
                 title = "Shake'n Descover",
                 isMarkerSelected = true,
                 onClickNavigationBack = {
-                    //TODO: Volver a home
+                    onNavigateToHome()
                 }
             )
         }
