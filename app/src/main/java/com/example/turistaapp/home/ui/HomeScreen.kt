@@ -52,32 +52,42 @@ import com.example.turistaapp.my_trips.ui.screens.components.TripItem
 
 
 @Composable
-fun ShakeGamePreview(
-    name: String,
-    onClickShakeGame:() -> Unit,
+fun LottiePreview(
+    title: String,
+    res: Int,
+    isBrush: Boolean = false,
+    onClickAnimation: () -> Unit,
 ) {
-    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.world))
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
+
+    val brush = if (isBrush) {
+        Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
+    } else {
+        Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
+    }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
             .clickable {
-                onClickShakeGame()
+                onClickAnimation()
             },
         contentAlignment = Alignment.BottomStart,
     ) {
         LottieAnimation(
             composition = lottie.value,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
-        )
-        Row (
             modifier = Modifier
-                .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black))),
+                .fillMaxWidth()
+                .align(Alignment.Center),
+        )
+        Row(
+            modifier = Modifier
+                .background(brush = brush),
         ) {
             Text(
-                text = name,
+                text = title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 8.dp, bottom = 4.dp),
@@ -111,9 +121,13 @@ fun HomeScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn() {
+        LazyColumn {
             item {
-                ShakeGamePreview(name = "Descubra su siguiente viaje") {
+                LottiePreview(
+                    title = "Descubra su siguiente viaje",
+                    res = R.raw.world,
+                    isBrush = true
+                ) {
                     onClickShakeGame()
                 }
             }
@@ -124,47 +138,52 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 8.dp),
                     )
-                    Text(
-                        text = "Cerca de $locationSelect",
-                        modifier = Modifier
-                            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-                    )
-                }
-            }
-            item {
-                when (nearbyLocations) {
-                    is ResponseUiState.Success<*> -> {
-                        NearbySearchView(
-                            nearbyLocations = nearbyLocations.values as List<LocationModel>,
-                            onClickCard = {
-                                showDialog = true
-                                onCardSelection(it)
-                            },
-                        )
-                    }
 
-                    is ResponseUiState.Loading -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                .size(240.dp, 360.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(Modifier.size(100.dp))
+                    when (nearbyLocations) {
+                        is ResponseUiState.Success<*> -> {
+                            Text(
+                                text = "Cerca de $locationSelect",
+                                modifier = Modifier
+                                    .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                            )
+                            NearbySearchView(
+                                nearbyLocations = nearbyLocations.values as List<LocationModel>,
+                                onClickCard = {
+                                    showDialog = true
+                                    onCardSelection(it)
+                                },
+                            )
                         }
-                    }
 
-                    is ResponseUiState.Error -> {
-                        Column(
-                            Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(text = nearbyLocations.message)
+                        is ResponseUiState.Loading -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp)
+                                    .size(240.dp, 360.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(Modifier.size(100.dp))
+                            }
                         }
+
+                        is ResponseUiState.Error -> {
+                            LottiePreview(
+                                title = "No se encontraron resultados",
+                                res = R.raw.marker
+                            ) {
+
+                            }
+//                            Column(
+//                                Modifier
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(text = nearbyLocations.message)
+//                            }
+                        }
+
+
                     }
-
-
                 }
             }
             item {
@@ -176,6 +195,14 @@ fun HomeScreen(
                     fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 )
+                if (myTrips.isEmpty()) {
+                    LottiePreview(
+                        title = "No tienes viajes guardados",
+                        res = R.raw.map
+                    ) {
+
+                    }
+                }
             }
             items(myTrips) { trip ->
                 TripItem(
@@ -210,9 +237,6 @@ fun HomeScreen(
                     icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
                     text = { Text(text = "Sample") },
                     modifier = Modifier
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-80).dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
@@ -220,9 +244,6 @@ fun HomeScreen(
                     icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
                     text = { Text(text = "Sample") },
                     modifier = Modifier
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-160).dp)
                 )
             }
 
