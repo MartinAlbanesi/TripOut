@@ -1,6 +1,5 @@
 package com.example.turistaapp.map.ui
 
-import android.Manifest
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,14 +18,12 @@ import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.setting.ui.TripDetails
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
@@ -86,7 +82,7 @@ fun MapScreen(
                 onClickLocation = {
                     isLastLocation = !isLastLocation
                     if(isLastLocation){
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(unlam, 10f)
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(unlam, 14f)
                     }
                 }
             )
