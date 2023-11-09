@@ -1,6 +1,7 @@
 package com.example.turistaapp.map.ui
 
 import com.example.turistaapp.core.utils.ResponseUiState
+import com.example.turistaapp.home.domain.GetLastLocationUseCase
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.domain.GetRandomLocationFromDB
@@ -36,43 +37,45 @@ class MapViewModelTest {
     @RelaxedMockK
     private lateinit var getRouteModel: GetRouteModel
 
+    @RelaxedMockK
+    private lateinit var getLastLocationUseCase: GetLastLocationUseCase
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         mapViewModel = MapViewModel(
             dispatcher,
-            getNearbyLocationsUseCase,
-            getRandomLocationFromDB,
             getTripsUseCase,
-            getRouteModel
+            getRouteModel,
+            getLastLocationUseCase
         )
     }
 
-    @Test
-    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnNull_thenNearbyLocationsIsError() = runTest {
-        coEvery { getNearbyLocationsUseCase(any()) } returns null
-
-        mapViewModel.setNearbyLocations(0.0, 0.0)
-
-        val actual = mapViewModel.nearbyLocations.value
-
-        val expected = ResponseUiState.Error("No se encontraron lugares cercanos")
-
-        assertEquals(expected.message, (actual as ResponseUiState.Error).message)
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnList_thenNearbyLocationsIsSuccess() = runTest {
-        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
-
-        coEvery { getNearbyLocationsUseCase(any()) } returns fakeNearbyLocations
-
-        mapViewModel.setNearbyLocations(0.0, 0.0)
-
-        val expected = ResponseUiState.Success(FakeDataSource.fakeNearbyLocations)
-
-        val actual = mapViewModel.nearbyLocations.value
-        assertEquals(expected, actual)
-    }
+//    @Test
+//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnNull_thenNearbyLocationsIsError() = runTest {
+//        coEvery { getNearbyLocationsUseCase(any()) } returns null
+//
+//        mapViewModel.setNearbyLocations(0.0, 0.0)
+//
+//        val actual = mapViewModel.nearbyLocations.value
+//
+//        val expected = ResponseUiState.Error("No se encontraron lugares cercanos")
+//
+//        assertEquals(expected.message, (actual as ResponseUiState.Error).message)
+//        assertEquals(expected, actual)
+//    }
+//
+//    @Test
+//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnList_thenNearbyLocationsIsSuccess() = runTest {
+//        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
+//
+//        coEvery { getNearbyLocationsUseCase(any()) } returns fakeNearbyLocations
+//
+//        mapViewModel.setNearbyLocations(0.0, 0.0)
+//
+//        val expected = ResponseUiState.Success(FakeDataSource.fakeNearbyLocations)
+//
+//        val actual = mapViewModel.nearbyLocations.value
+//        assertEquals(expected, actual)
+//    }
 }
