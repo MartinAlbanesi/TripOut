@@ -1,13 +1,11 @@
 package com.example.turistaapp.map.data
 
-import com.example.turistaapp.home.data.api.models.NearbySearchLocationApi
 import com.example.turistaapp.map.data.api.model.DirectionsApi
 import com.example.turistaapp.map.data.api.model.directions.DistanceDurationApi
 import com.example.turistaapp.map.data.api.model.directions.LegApi
 import com.example.turistaapp.map.data.api.model.directions.OverviewPolylineApi
 import com.example.turistaapp.map.data.api.model.directions.RouteApi
 import com.example.turistaapp.map.data.api.service.DirectionsApiService
-import com.example.turistaapp.map.domain.models.RouteModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
