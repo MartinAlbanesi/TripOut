@@ -116,6 +116,10 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    //chips
+    //implementation ("com.google.accompanist:accompanist-chip:0.25.0")
+
+
     //kotlin corrutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
@@ -125,7 +129,6 @@ dependencies {
 
     //Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
-
 }
 
 kapt {
