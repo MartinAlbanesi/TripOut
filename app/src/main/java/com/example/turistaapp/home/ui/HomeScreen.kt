@@ -41,6 +41,8 @@ import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.ImageWithBrush
 import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+import com.example.turistaapp.qr_code.domain.models.toDataQRModel
+import com.google.gson.Gson
 
 @Composable
 fun HomeScreen(
@@ -64,6 +66,10 @@ fun HomeScreen(
 
     var isQRDialogOpen by remember {
         mutableStateOf(false)
+    }
+
+    var dataQRSelected by remember {
+        mutableStateOf("")
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -143,15 +149,17 @@ fun HomeScreen(
             items(myTrips) { trip ->
                 TripItem(
                     trip = trip,
+                    selectedDataQR = dataQRSelected,
                     isDialogOpen = isQRDialogOpen,
                     onDismissDialog = { isQRDialogOpen = false },
                     onQRButtonClick = {
                         isQRDialogOpen = true
+                        dataQRSelected = Gson().toJson(trip.toDataQRModel())
                     },
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
-//                        .clickable { },
+//                       .clickable { },
                 )
             }
         }

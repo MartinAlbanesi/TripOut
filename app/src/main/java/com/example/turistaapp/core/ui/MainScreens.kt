@@ -111,6 +111,7 @@ fun MainScreen(
                         options.setPrompt("Scan a barcode")
                         options.setBarcodeImageEnabled(true)
                         options.setOrientationLocked(true)
+                        options.setBeepEnabled(false)
                         scanLauncher.launch(options)
                     },
                 )

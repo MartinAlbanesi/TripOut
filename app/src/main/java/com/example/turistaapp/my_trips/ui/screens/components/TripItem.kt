@@ -30,9 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.turistaapp.create_trip.domain.models.TripModel
-import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.example.turistaapp.qr_code.ui.QRDialog
-import com.google.gson.Gson
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
@@ -40,12 +38,11 @@ import org.joda.time.format.DateTimeFormat
 fun TripItem(
     trip: TripModel,
     isDialogOpen: Boolean,
+    selectedDataQR: String,
     onQRButtonClick: () -> Unit,
     onDismissDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val gson = Gson()
-
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp,
@@ -106,7 +103,7 @@ fun TripItem(
             onQRButtonClick = onQRButtonClick,
             isDialogOpen = isDialogOpen,
             onDismissDialog = { onDismissDialog() },
-            dataQR = gson.toJson(trip.toDataQRModel()),
+            selectedDataQR = selectedDataQR,
         )
     }
     Spacer(modifier = Modifier.heightIn(4.dp))
@@ -162,7 +159,7 @@ fun QRButton(
     onQRButtonClick: () -> Unit,
     isDialogOpen: Boolean,
     onDismissDialog: () -> Unit,
-    dataQR: String,
+    selectedDataQR: String,
     modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
@@ -191,7 +188,7 @@ fun QRButton(
     if (isDialogOpen) {
         QRDialog(
             onDismiss = { onDismissDialog() },
-            data = dataQR,
+            data = selectedDataQR,
         )
     }
 }
