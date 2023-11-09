@@ -50,32 +50,4 @@ class MapViewModelTest {
             getLastLocationUseCase
         )
     }
-
-//    @Test
-//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnNull_thenNearbyLocationsIsError() = runTest {
-//        coEvery { getNearbyLocationsUseCase(any()) } returns null
-//
-//        mapViewModel.setNearbyLocations(0.0, 0.0)
-//
-//        val actual = mapViewModel.nearbyLocations.value
-//
-//        val expected = ResponseUiState.Error("No se encontraron lugares cercanos")
-//
-//        assertEquals(expected.message, (actual as ResponseUiState.Error).message)
-//        assertEquals(expected, actual)
-//    }
-//
-//    @Test
-//    fun setNearbyLocations_whenGetNearbyLocationUseCaseReturnList_thenNearbyLocationsIsSuccess() = runTest {
-//        val fakeNearbyLocations = FakeDataSource.fakeNearbyLocations
-//
-//        coEvery { getNearbyLocationsUseCase(any()) } returns fakeNearbyLocations
-//
-//        mapViewModel.setNearbyLocations(0.0, 0.0)
-//
-//        val expected = ResponseUiState.Success(FakeDataSource.fakeNearbyLocations)
-//
-//        val actual = mapViewModel.nearbyLocations.value
-//        assertEquals(expected, actual)
-//    }
 }
