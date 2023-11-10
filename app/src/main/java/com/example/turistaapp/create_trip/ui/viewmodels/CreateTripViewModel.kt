@@ -9,13 +9,12 @@ import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.qr_code.domain.models.DataQRModel
+import com.example.turistaapp.qr_code.domain.models.toTripModel
 import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -236,7 +235,6 @@ class CreateTripViewModel @Inject constructor(
             val destination =
                 getPlaceDetailsUseCase(_selectedDestinationLocation.value!!.placeId)
 
-
             val trip = TripModel(
                 name = name,
                 origin = origin!!,
@@ -253,6 +251,13 @@ class CreateTripViewModel @Inject constructor(
                 isFavorite = false,
                 isFinished = false,
             )
+            insertTripUseCase.execute(trip)
+        }
+    }
+
+    fun createTripFromQR(dataQR: DataQRModel) {
+        viewModelScope.launch {
+            val trip = dataQR.toTripModel(getPlaceDetailsUseCase)
             insertTripUseCase.execute(trip)
         }
     }

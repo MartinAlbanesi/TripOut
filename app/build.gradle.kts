@@ -86,7 +86,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // Location
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
@@ -127,19 +127,22 @@ dependencies {
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 
     // Joda Time
-    implementation ("joda-time:joda-time:2.10.12")
+    implementation("joda-time:joda-time:2.10.12")
 
     // HORIZONTAL PAGER
     implementation("androidx.compose.foundation:foundation:1.5.4")
 
-    //datastore preferences
+    // datastore preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    //splash screen
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+    // splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Accompanist-Permissions
-    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+    // Accompanist-Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+
+    // ZXING (QR Code)
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     //Lottie
     implementation ("com.airbnb.android:lottie-compose:6.1.0")

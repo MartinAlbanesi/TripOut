@@ -1,5 +1,7 @@
 package com.example.turistaapp.core.ui
 
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -13,30 +15,35 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.turistaapp.core.utils.enums.Routes
+import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import com.example.turistaapp.home.ui.HomeScreen
 import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
-import com.example.turistaapp.setting.ui.SettingViewModel
+import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.setting.ui.SettingsScreen
+import com.google.gson.Gson
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun MainScreen(
     mapViewModel: MapViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
+    createTripViewModel: CreateTripViewModel = hiltViewModel(),
     navController: NavHostController,
-    onClickChangeTheme: () -> Unit
+    onClickChangeTheme: () -> Unit,
 ) {
-    //Home
+    // Home
     val nearbyLocations by homeViewModel.nearbyLocations.collectAsStateWithLifecycle()
 
     val nearbyLocationSelect by homeViewModel.nearbyLocationSelect.collectAsStateWithLifecycle()
 
     val locationSelect by homeViewModel.locationSelect.collectAsStateWithLifecycle()
 
-    //Map
+    // Map
     val destinationLocations by mapViewModel.destinationLocations.collectAsStateWithLifecycle()
 
     val directionSelect by mapViewModel.polyLinesPoints.collectAsStateWithLifecycle()
@@ -47,8 +54,29 @@ fun MainScreen(
 
     val routeModel by mapViewModel.tripSelected.collectAsStateWithLifecycle()
 
-    //Trips
+    // Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
+
+    val scanLauncher = rememberLauncherForActivityResult(
+        contract = ScanContract(),
+        onResult = { result ->
+            val dataQR = Gson().fromJson(result.contents, DataQRModel::class.java)
+            if (dataQR != null) {
+                createTripViewModel.createTripFromQR(dataQR)
+                Toast.makeText(
+                    navController.context,
+                    "Viaje ${dataQR.name} creado con exito",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            } else {
+                Toast.makeText(
+                    navController.context,
+                    "Error al leer el codigo QR",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        },
+    )
 
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
@@ -77,6 +105,15 @@ fun MainScreen(
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onClickShakeGame = { navController.navigate(Routes.ShakeGame.route) },
+                    onQRButtonClick = {
+                        val options = ScanOptions()
+                        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+                        options.setPrompt("Scan a barcode")
+                        options.setBarcodeImageEnabled(true)
+                        options.setOrientationLocked(true)
+                        options.setBeepEnabled(false)
+                        scanLauncher.launch(options)
+                    },
                 )
             }
 
@@ -88,12 +125,12 @@ fun MainScreen(
                     lastLocation = lastLocation,
                     routeModel = routeModel,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
-                    onMarkerSelected = { mapViewModel.getTripById(it)},
+                    onMarkerSelected = { mapViewModel.getTripById(it) },
                 )
             }
 
             Routes.Settings.route -> {
-                SettingsScreen(){
+                SettingsScreen() {
                     onClickChangeTheme()
                 }
             }

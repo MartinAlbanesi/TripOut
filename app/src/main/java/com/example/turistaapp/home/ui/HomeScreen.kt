@@ -3,11 +3,9 @@ package com.example.turistaapp.home.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
@@ -49,6 +48,8 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+import com.example.turistaapp.qr_code.domain.models.toDataQRModel
+import com.google.gson.Gson
 
 
 @Composable
@@ -111,6 +112,7 @@ fun HomeScreen(
     onCardSelection: (String) -> Unit,
     onClickFloatingBottom: () -> Unit,
     onClickShakeGame: () -> Unit,
+    onQRButtonClick: () -> Unit,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -118,6 +120,14 @@ fun HomeScreen(
 
     var showFloatingButtons by remember {
         mutableStateOf(false)
+    }
+
+    var isQRDialogOpen by remember {
+        mutableStateOf(false)
+    }
+
+    var dataQRSelected by remember {
+        mutableStateOf("")
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -206,16 +216,18 @@ fun HomeScreen(
             }
             items(myTrips) { trip ->
                 TripItem(
-                    name = trip.name,
-                    photoUrl = trip.destination.photoUrl ?: "",
-                    startDate = trip.startDate,
-                    endDate = trip.endDate,
-                    originName = trip.origin.name,
-                    destinationName = trip.destination.name,
+                    trip = trip,
+                    selectedDataQR = dataQRSelected,
+                    isDialogOpen = isQRDialogOpen,
+                    onDismissDialog = { isQRDialogOpen = false },
+                    onQRButtonClick = {
+                        isQRDialogOpen = true
+                        dataQRSelected = Gson().toJson(trip.toDataQRModel())
+                    },
                     modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-//                        .clickable { },
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+//                       .clickable { },
                 )
             }
         }
@@ -228,36 +240,41 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
                 .align(Alignment.BottomEnd)
-                .offset(y = (-80).dp)
+                .offset(y = (-80).dp),
         ) {
             Column {
-
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Screen") },
+                    text = { Text(text = "Formulario") },
+                    modifier = Modifier,
+//                    .padding(bottom = 16.dp, end = 16.dp)
+//                    .align(Alignment.BottomEnd),
+//                    .offset(y = (-80).dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
-                    onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    onClick = {
+                        onQRButtonClick()
+                    },
+                    icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "QR Scanner") },
+                    text = { Text(text = "Escanear QR") },
+                    modifier = Modifier,
+//                    .padding(bottom = 16.dp, end = 16.dp)
+//                    .align(Alignment.BottomEnd),
+//                    .offset(y = (-160).dp)
                 )
             }
-
-
         }
 
         FloatingActionButton(
             onClick = {
-                onClickFloatingBottom()
+                // onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add")
         }

@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -49,14 +50,14 @@ fun ExposedDropdownMenuBoxInput(
             },
             colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
             modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
+                .fillMaxSize()
+                .menuAnchor(),
         )
 
         ExposedDropdownMenu(
             expanded = isExpanded,
             onDismissRequest = { onExpanded(false) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.exposedDropdownSize(),
         ) {
             values.forEach { item ->
                 DropdownMenuItem(
