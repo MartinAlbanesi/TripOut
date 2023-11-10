@@ -27,15 +27,17 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapScreen(
     locations: Pair<List<LocationModel>, List<LocationModel>>?,
-    directionSelect : List<LatLng>,
-    markerSelect : Boolean,
+    directionSelect: List<LatLng>,
+    markerSelect: Boolean,
     lastLocation: LatLng?,
     routeModel: RouteModel?,
+    isTutorialComplete: Boolean?,
     onClickArrowBack: () -> Unit,
-    onMarkerSelected : (Int) -> Unit,
+    onMarkerSelected: (Int) -> Unit,
+    onClickFinishTutorial: () -> Unit,
 ) {
     val sheetPeekHeight by animateDpAsState(
-        targetValue = if(markerSelect) 200.dp else 0.dp,
+        targetValue = if (markerSelect) 200.dp else 0.dp,
         label = "sheetPeekHeight",
         animationSpec = tween(1000)
     )
@@ -48,7 +50,7 @@ fun MapScreen(
         )
     }
 
-    var isLastLocation by remember{
+    var isLastLocation by remember {
         mutableStateOf(false)
     }
 
@@ -62,12 +64,18 @@ fun MapScreen(
 
     BottomSheetScaffold(
         sheetContent = {
-            if(markerSelect){
+            if (markerSelect) {
                 TripDetails(routeModel)
             }
         },
         sheetPeekHeight = sheetPeekHeight
     ) { paddingValues ->
+
+        if(isTutorialComplete == null){
+            MapTutorial(){
+                onClickFinishTutorial()
+            }
+        }
 
         Box(Modifier.fillMaxSize()) {
             MapView(
@@ -81,7 +89,7 @@ fun MapScreen(
                 onClickMarker = { onMarkerSelected(it) },
                 onClickLocation = {
                     isLastLocation = !isLastLocation
-                    if(isLastLocation){
+                    if (isLastLocation) {
                         cameraPositionState.position = CameraPosition.fromLatLngZoom(unlam, 14f)
                     }
                 }
@@ -90,7 +98,7 @@ fun MapScreen(
                 title = "Mis Destinos",
                 isMarkerSelected = markerSelect,
                 color = Color.Black,
-                onClickNavigationBack = {onClickArrowBack()}
+                onClickNavigationBack = { onClickArrowBack() }
             )
         }
     }

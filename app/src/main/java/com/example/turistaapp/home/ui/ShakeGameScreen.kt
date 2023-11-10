@@ -122,7 +122,7 @@ fun ShakeGameScreen(
     Scaffold(
         topBar = {
             TopAppBarScreen(
-                title = "Shake'n Descover",
+                title = "Shake'n Discover",
                 isMarkerSelected = true,
                 onClickNavigationBack = {
                     onNavigateToHome()

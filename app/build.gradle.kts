@@ -144,11 +144,8 @@ dependencies {
     // ZXING (QR Code)
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
-    // Kotlin Serialization
-    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
-    //Lottie
-    implementation ("com.airbnb.android:lottie-compose:6.1.0")
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:6.1.0")
 }
 
 kapt {

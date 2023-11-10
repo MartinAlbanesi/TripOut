@@ -3,7 +3,11 @@ package com.example.compose
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF006686)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+
+// val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+val md_theme_light_onPrimary = Color(0xFF6ED2FF)
+
+// val md_theme_light_primaryContainer = Color(0xFFBFE8FF)
 val md_theme_light_primaryContainer = Color(0xFFBFE8FF)
 val md_theme_light_onPrimaryContainer = Color(0xFF001F2B)
 val md_theme_light_secondary = Color(0xFF4D616C)
@@ -29,8 +33,12 @@ val md_theme_light_outlineVariant = Color(0xFFC0C7CD)
 val md_theme_light_scrim = Color(0xFF000000)
 val md_theme_light_surface = Color(0xFFF8F9FB)
 val md_theme_light_onSurface = Color(0xFF191C1E)
-val md_theme_light_surfaceVariant = Color(0xFFDCE3E9)
+
+// val md_theme_light_surfaceVariant = Color(0xFFDCE3E9)
+val md_theme_light_surfaceVariant = Color(0xFFFFE39B)
 val md_theme_light_onSurfaceVariant = Color(0xFF40484C)
+
+
 
 val md_theme_dark_primary = Color(0xFF6ED2FF)
 val md_theme_dark_onPrimary = Color(0xFF003547)
@@ -63,12 +71,3 @@ val md_theme_dark_surfaceVariant = Color(0xFF40484C)
 val md_theme_dark_onSurfaceVariant = Color(0xFFC0C7CD)
 
 val seed = Color(0xFF44A4CC)
-val CustomColor1 = Color(0xFFAAB629)
-val light_CustomColor1 = Color(0xFF5C6300)
-val light_onCustomColor1 = Color(0xFFFFFFFF)
-val light_CustomColor1Container = Color(0xFFDFEC5B)
-val light_onCustomColor1Container = Color(0xFF1B1D00)
-val dark_CustomColor1 = Color(0xFFC3CF42)
-val dark_onCustomColor1 = Color(0xFF2F3300)
-val dark_CustomColor1Container = Color(0xFF454B00)
-val dark_onCustomColor1Container = Color(0xFFDFEC5B)
