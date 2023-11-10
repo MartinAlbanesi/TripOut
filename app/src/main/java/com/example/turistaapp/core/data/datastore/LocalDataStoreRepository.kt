@@ -25,6 +25,18 @@ class LocalDataStoreRepository @Inject constructor(
         }
     }
 
+    suspend fun setIsMapTutorialComplete(isComplete: Boolean){
+        dataStore.edit {pref ->
+            pref[booleanPreferencesKey(DataStoreNames.IsMapTutorialComplete.name)] = isComplete
+        }
+    }
+
+    suspend fun setIsShakeGameTutorialComplete(isComplete: Boolean){
+        dataStore.edit {pref ->
+            pref[booleanPreferencesKey(DataStoreNames.IsShakeGameTutorialComplete.name)] = isComplete
+        }
+    }
+
     fun getName() : Flow<String?>{
         return dataStore.data.map { pref ->
             pref[stringPreferencesKey(DataStoreNames.Name.name)]
@@ -34,6 +46,18 @@ class LocalDataStoreRepository @Inject constructor(
     fun getIsDarkMode() : Flow<Boolean?>{
         return dataStore.data.map { pref ->
             pref[booleanPreferencesKey(DataStoreNames.IsDarkMode.name)]
+        }
+    }
+
+    fun getIsMapTutorialComplete() : Flow<Boolean?>{
+        return dataStore.data.map { pref ->
+            pref[booleanPreferencesKey(DataStoreNames.IsMapTutorialComplete.name)]
+        }
+    }
+
+    fun getIsShakeGameTutorialComplete() : Flow<Boolean?>{
+        return dataStore.data.map { pref ->
+            pref[booleanPreferencesKey(DataStoreNames.IsShakeGameTutorialComplete.name)]
         }
     }
 

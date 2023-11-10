@@ -19,8 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,6 +50,8 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+import com.example.turistaapp.qr_code.domain.models.toDataQRModel
+import com.google.gson.Gson
 
 
 @Composable
@@ -60,10 +63,12 @@ fun LottiePreview(
 ) {
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
 
-    val brush = if (isBrush) {
-        Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
-    } else {
-        Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
+    var brush by remember{
+        mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
+    }
+
+    if (isBrush) {
+        brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
     }
 
     Box(
@@ -111,6 +116,7 @@ fun HomeScreen(
     onCardSelection: (String) -> Unit,
     onClickFloatingBottom: () -> Unit,
     onClickShakeGame: () -> Unit,
+    onQRButtonClick: () -> Unit,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -118,6 +124,14 @@ fun HomeScreen(
 
     var showFloatingButtons by remember {
         mutableStateOf(false)
+    }
+
+    var isQRDialogOpen by remember {
+        mutableStateOf(false)
+    }
+
+    var dataQRSelected by remember {
+        mutableStateOf("")
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -171,18 +185,8 @@ fun HomeScreen(
                             LottiePreview(
                                 title = "No se encontraron resultados",
                                 res = R.raw.marker
-                            ) {
-
-                            }
-//                            Column(
-//                                Modifier
-//                                    .fillMaxWidth()
-//                            ) {
-//                                Text(text = nearbyLocations.message)
-//                            }
+                            ) {}
                         }
-
-
                     }
                 }
             }
@@ -199,23 +203,23 @@ fun HomeScreen(
                     LottiePreview(
                         title = "No tienes viajes guardados",
                         res = R.raw.map
-                    ) {
-
-                    }
+                    ) {}
                 }
             }
             items(myTrips) { trip ->
                 TripItem(
-                    name = trip.name,
-                    photoUrl = trip.destination.photoUrl ?: "",
-                    startDate = trip.startDate,
-                    endDate = trip.endDate,
-                    originName = trip.origin.name,
-                    destinationName = trip.destination.name,
+                    trip = trip,
+                    selectedDataQR = dataQRSelected,
+                    isDialogOpen = isQRDialogOpen,
+                    onDismissDialog = { isQRDialogOpen = false },
+                    onQRButtonClick = {
+                        isQRDialogOpen = true
+                        dataQRSelected = Gson().toJson(trip.toDataQRModel())
+                    },
                     modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-//                        .clickable { },
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+//                       .clickable { },
                 )
             }
         }
@@ -228,36 +232,34 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
                 .align(Alignment.BottomEnd)
-                .offset(y = (-80).dp)
+                .offset(y = (-80).dp),
         ) {
             Column {
-
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Screen") },
+                    text = { Text(text = "Formulario") },
+                    modifier = Modifier,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
-                    onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    onClick = {
+                        onQRButtonClick()
+                    },
+                    icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "QR Scanner") },
+                    text = { Text(text = "Escanear QR") },
+                    modifier = Modifier,
                 )
             }
-
-
         }
 
         FloatingActionButton(
             onClick = {
-                onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add")
         }

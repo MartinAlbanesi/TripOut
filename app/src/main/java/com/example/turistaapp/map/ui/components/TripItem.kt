@@ -30,7 +30,6 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.shimmerBrush
 
-
 @Composable
 fun TripItem(
     name: String,
@@ -43,7 +42,7 @@ fun TripItem(
 
     val showShimmer = remember { mutableStateOf(true) }
     Card(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = name,
@@ -69,7 +68,7 @@ fun TripItem(
             model = photoUrl ?: R.drawable.placeholder,
             contentDescription = name,
             contentScale = ContentScale.FillBounds,
-            //placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            // placeholder = painterResource(id = R.drawable.ic_launcher_background),
             modifier = Modifier
                 .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))
                 .fillMaxSize()

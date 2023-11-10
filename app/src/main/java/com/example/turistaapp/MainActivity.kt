@@ -16,9 +16,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.core.ui.NavHostScreen
 import com.example.turistaapp.setting.ui.SettingViewModel
-import com.example.turistaapp.ui.theme.TuristaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
