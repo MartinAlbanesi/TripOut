@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -19,10 +18,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,16 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.airbnb.lottie.model.content.CircleShape
 import com.example.turistaapp.R
-import com.example.turistaapp.welcome.ui.components.DrawCircle
 import com.example.turistaapp.welcome.ui.components.PagerViewOne
 import com.example.turistaapp.welcome.ui.components.PagerViewTwo
 import com.example.turistaapp.welcome.utils.validateName
@@ -53,6 +48,8 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
+
+    var showAlertDialog by remember { mutableStateOf(false) }
 
     val configuration = LocalConfiguration.current
 
@@ -79,10 +76,30 @@ fun WelcomeScreen(
     var isError by remember { mutableStateOf(false) }
 
     val offsetY by animateFloatAsState(
-        targetValue = if(pagerState.currentPage == 0) 0f else (screenHeight / 3 - 40),
+        targetValue = if (pagerState.currentPage == 0) 0f else (screenHeight / 3 - 40),
         label = "offsetY",
         animationSpec = tween(1000)
     )
+
+    if (showAlertDialog) {
+        AlertDialog(
+            onDismissRequest = { /*TODO*/ },
+            confirmButton = {
+                TextButton(onClick = { onClickSaveName(value) }) {
+                    Text(text = "Aceptar")
+                }
+            },
+            title = {
+                Text(text = "Aviso de permisos")
+            },
+            text = {
+                Text(
+                    text = "Pedimos la ubicación para poder mostrarte los lugares cercanos a ti" +
+                            " y para mostrar tu ubicación en el mapa"
+                )
+            },
+        )
+    }
 
 
     Box(
@@ -99,7 +116,6 @@ fun WelcomeScreen(
                     .weight(1f)
                     .align(Alignment.CenterHorizontally)
                     .offset(y = offsetY.dp)
-//                    .padding(bottom = 16.dp)
             )
 
             HorizontalPager(
@@ -129,12 +145,6 @@ fun WelcomeScreen(
                 CircleBox(color = circleFirst)
                 Spacer(modifier = Modifier.size(16.dp))
                 CircleBox(color = circleSecond)
-//                DrawCircle(
-//                    color = circleFirst,
-//                )
-//                DrawCircle(
-//                    color = circleSecond,
-//                )
             }
 
             Button(
@@ -150,7 +160,8 @@ fun WelcomeScreen(
                     if (pagerState.currentPage == 1) {
                         if (validateName(value)) {
                             isError = false
-                            onClickSaveName(value)
+//                            onClickSaveName(value)
+                            showAlertDialog = true
                         } else {
                             isError = true
                         }
@@ -166,16 +177,18 @@ fun WelcomeScreen(
             }
         }
     }
+
 }
 
 @Composable
 fun CircleBox(
     color: Color,
 ) {
-    Box(modifier = Modifier
-        .clip(CircleShape)
-        .size(40.dp)
-        .background(color)
+    Box(
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(40.dp)
+            .background(color)
     )
 }
 
