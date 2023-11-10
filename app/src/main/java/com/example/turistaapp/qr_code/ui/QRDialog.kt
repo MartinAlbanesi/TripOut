@@ -39,7 +39,7 @@ fun QRDialog(data: String = "default", onDismiss: () -> Unit = {}) {
         title = { Text(text = "Código QR") },
         text = {
             Column() {
-                Text(text = "Escanea el siguiente código QR para ver la información:")
+                Text(text = "Escanea el siguiente código QR para copiar el viaje:")
                 Image(
                     painter = rememberQrBitmapPainter(data),
                     contentDescription = "Info QR",

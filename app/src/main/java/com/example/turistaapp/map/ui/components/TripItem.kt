@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.turistaapp.R
 
-
 @Composable
 fun TripItem(
     name: String,
@@ -37,7 +36,7 @@ fun TripItem(
     modifier: Modifier = Modifier,
 ) {
     Card(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = name,
@@ -47,10 +46,12 @@ fun TripItem(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
-        if(rating != null && userRating != null){
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)) {
+        if (rating != null && userRating != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+            ) {
                 Icon(Icons.Default.Star, contentDescription = null, tint = Color.Yellow)
                 Spacer(modifier = Modifier.size(4.dp))
                 Text(text = "$rating")
@@ -63,16 +64,16 @@ fun TripItem(
             model = photoUrl ?: R.drawable.placeholder,
             contentDescription = name,
             contentScale = ContentScale.FillBounds,
-            //placeholder = painterResource(id = R.drawable.ic_launcher_background),
+            // placeholder = painterResource(id = R.drawable.ic_launcher_background),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(8.dp)
                 .clip(RoundedCornerShape(12.dp)),
             loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(modifier = Modifier.size(80.dp))
                 }
-            }
+            },
         )
     }
 }

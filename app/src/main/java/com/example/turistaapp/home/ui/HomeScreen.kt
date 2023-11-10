@@ -157,7 +157,7 @@ fun HomeScreen(
                         dataQRSelected = Gson().toJson(trip.toDataQRModel())
                     },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(10.dp)
                         .fillMaxWidth(),
 //                       .clickable { },
                 )
