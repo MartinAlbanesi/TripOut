@@ -2,6 +2,7 @@ package com.example.turistaapp.my_trips.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.turistaapp.create_trip.domain.DeleteTripUseCase
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MyTripsViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getTripsUseCase: GetTripsUseCase,
+    private val deleteTripUseCase: DeleteTripUseCase,
 ) : ViewModel() {
     init {
         getTrips()
@@ -29,6 +31,12 @@ class MyTripsViewModel @Inject constructor(
                 .collect { tripList ->
                     _trips.value = tripList
                 }
+        }
+    }
+
+    fun deleteTrip(trip: TripModel) {
+        viewModelScope.launch(dispatcher) {
+            deleteTripUseCase.execute(trip)
         }
     }
 }

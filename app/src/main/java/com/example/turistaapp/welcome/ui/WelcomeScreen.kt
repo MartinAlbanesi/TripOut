@@ -122,7 +122,7 @@ fun WelcomeScreen(
                 modifier = Modifier
                     .weight(5f),
                 state = pagerState,
-                userScrollEnabled = false,
+                // userScrollEnabled = false,
             ) { pager ->
                 when (pager) {
                     0 -> {

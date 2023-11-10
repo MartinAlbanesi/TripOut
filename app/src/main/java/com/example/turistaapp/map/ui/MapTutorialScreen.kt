@@ -3,6 +3,7 @@ package com.example.turistaapp.map.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -45,9 +47,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MapTutorial(
-    onClickFinishTutorial: () -> Unit
+    onClickFinishTutorial: () -> Unit,
 ) {
-
     val pagerState = rememberPagerState { 3 }
 
     val scope = rememberCoroutineScope()
@@ -67,24 +68,28 @@ fun MapTutorial(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.7f),
-            contentAlignment = Alignment.Center
+                .fillMaxHeight(0.6f),
+            contentAlignment = Alignment.Center,
         ) {
-            Card {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ),
+            ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Column(
                         Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
                     ) {
                         Text(
                             text = "Tutorial",
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(16.dp),
-                            fontSize = 24.sp
+                                .padding(8.dp),
+                            fontSize = 32.sp,
                         )
                         LinearProgressIndicator(
                             progress = progressBar,
@@ -95,9 +100,9 @@ fun MapTutorial(
                                 .border(
                                     shape = MaterialTheme.shapes.small,
                                     width = 1.dp,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.primary,
                                 ),
-                            strokeCap = StrokeCap.Round
+                            strokeCap = StrokeCap.Round,
                         )
                     }
                 }
@@ -107,22 +112,22 @@ fun MapTutorial(
                     state = pagerState,
                 ) {
                     when (it) {
-                        0 -> {MapPagerOne()}
+                        0 -> { MapPagerOne() }
 
-                        1 -> {MapPagerTwo()}
+                        1 -> { MapPagerTwo() }
 
-                        2 -> {MapPagerThree()}
+                        2 -> { MapPagerThree() }
                     }
                 }
                 Button(
                     onClick = {
 //                        if (pagerState.currentPage == 0) {
-                            scope.launch {
-                                pagerState.animateScrollToPage(
-                                    pagerState.currentPage + 1,
-                                    animationSpec = tween(500)
-                                )
-                            }
+                        scope.launch {
+                            pagerState.animateScrollToPage(
+                                pagerState.currentPage + 1,
+                                animationSpec = tween(500),
+                            )
+                        }
 //                        }
                         if (pagerState.currentPage == 2) {
                             onClickFinishTutorial()
@@ -130,6 +135,8 @@ fun MapTutorial(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .fillMaxHeight(0.18f)
+                        .padding(16.dp),
                 ) {
                     Text(text = buttonText)
                 }
@@ -143,11 +150,12 @@ private fun MapPagerThree() {
     Column(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceAround,
     ) {
-        Text(text = "Puedes ver tu ubicación tocando el botón de ubicación",
+        Text(
+            text = "Puedes ver tu ubicación tocando el botón de ubicación",
             fontSize = 24.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         LottiePreview(title = "", res = R.raw.mylocation) {}
     }
@@ -158,7 +166,7 @@ private fun MapPagerTwo() {
     Column(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceAround,
     ) {
         Text(text = "Puedes ver los detalles de cada viaje tocando los marcadores rojos", fontSize = 24.sp, textAlign = TextAlign.Center)
         LottiePreview(title = "", res = R.raw.mapmap) {}
@@ -170,11 +178,11 @@ private fun MapPagerOne() {
     Column(
         modifier = Modifier
             .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         Text(
             text = "Distintos colores representan distintos tipos de ubicaciones",
-            fontSize = 24.sp,
+            fontSize = 20.sp,
             textAlign = TextAlign.Center,
         )
         IconWithText(
@@ -210,12 +218,12 @@ private fun IconWithText(
             tint = color,
             modifier = Modifier
                 .weight(1f)
-                .size(48.dp)
+                .size(48.dp),
         )
         Text(
             text = text,
             modifier = Modifier.weight(2f),
-            fontSize = 32.sp
+            fontSize = 32.sp,
         )
     }
 }

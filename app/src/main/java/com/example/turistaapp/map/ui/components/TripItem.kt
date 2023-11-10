@@ -1,7 +1,6 @@
 package com.example.turistaapp.map.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,13 +11,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -39,9 +38,11 @@ fun TripItem(
     address: String? = null,
     modifier: Modifier = Modifier,
 ) {
-
     val showShimmer = remember { mutableStateOf(true) }
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
         modifier = modifier,
     ) {
         Text(
@@ -52,10 +53,12 @@ fun TripItem(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
         )
-        if(rating != null && userRating != null){
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)) {
+        if (rating != null && userRating != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+            ) {
                 Icon(Icons.Default.Star, contentDescription = null, tint = Color.Yellow)
                 Spacer(modifier = Modifier.size(4.dp))
                 Text(text = "$rating")
@@ -79,7 +82,7 @@ fun TripItem(
 //                    CircularProgressIndicator(modifier = Modifier.size(80.dp))
 //                }
 //            },
-            onSuccess = {showShimmer.value = false}
+            onSuccess = { showShimmer.value = false },
         )
     }
 }

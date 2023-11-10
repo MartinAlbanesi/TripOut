@@ -5,6 +5,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,10 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -53,22 +55,46 @@ import com.example.turistaapp.my_trips.ui.screens.components.TripItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
 
-
 @Composable
 fun LottiePreview(
-    title: String,
+    title: String = "",
     res: Int,
-    isBrush: Boolean = false,
+    isBackgroundColored: Boolean = false,
+    // isTextBackgroundColored: Boolean = false,
+    isBottomBrush: Boolean = false,
+    isTopBrush: Boolean = false,
     onClickAnimation: () -> Unit,
 ) {
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
 
-    var brush by remember{
+    var background by remember {
+        mutableStateOf(Color.Transparent)
+    }
+
+    var textBackground by remember {
+        mutableStateOf(Color.Transparent)
+    }
+
+    var bottomBrush by remember {
         mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
     }
 
-    if (isBrush) {
-        brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
+    var topBrush by remember {
+        mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
+    }
+
+    if (isBackgroundColored) {
+        background = MaterialTheme.colorScheme.onPrimary
+    }
+
+    if (isBottomBrush) {
+        bottomBrush =
+            Brush.verticalGradient(listOf(Color.Transparent, MaterialTheme.colorScheme.background))
+    }
+
+    if (isTopBrush) {
+        topBrush =
+            Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, Color.Transparent))
     }
 
     Box(
@@ -77,9 +103,20 @@ fun LottiePreview(
             .height(200.dp)
             .clickable {
                 onClickAnimation()
-            },
+            }
+            .background(background),
         contentAlignment = Alignment.BottomStart,
     ) {
+        Row(
+            modifier = Modifier
+                .background(brush = topBrush)
+                .height(100.dp)
+                .fillMaxWidth()
+                .align(Alignment.TopCenter),
+        ) {
+            Spacer(modifier = Modifier.size(8.dp))
+//
+        }
         LottieAnimation(
             composition = lottie.value,
             iterations = LottieConstants.IterateForever,
@@ -87,23 +124,31 @@ fun LottiePreview(
                 .fillMaxWidth()
                 .align(Alignment.Center),
         )
-        Row(
-            modifier = Modifier
-                .background(brush = brush),
-        ) {
-            Text(
-                text = title,
+        if (title.isNotEmpty()) {
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, bottom = 4.dp),
-                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
+                    .background(brush = bottomBrush),
+            ) {
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 50.dp, vertical = 12.dp)
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
+                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                    textAlign = TextAlign.Center,
+                )
+                Icon(
+                    imageVector = Icons.Default.ArrowOutward,
+                    contentDescription = "Add",
+                    modifier = Modifier
+                        .size(40.dp),
+                )
+            }
         }
     }
-
 }
 
 @Composable
@@ -117,6 +162,7 @@ fun HomeScreen(
     onClickFloatingBottom: () -> Unit,
     onClickShakeGame: () -> Unit,
     onQRButtonClick: () -> Unit,
+    onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -138,9 +184,10 @@ fun HomeScreen(
         LazyColumn {
             item {
                 LottiePreview(
-                    title = "Descubra su siguiente viaje",
+                    title = "Shake'n Discover",
                     res = R.raw.world,
-                    isBrush = true
+                    isBackgroundColored = true,
+                    isBottomBrush = true,
                 ) {
                     onClickShakeGame()
                 }
@@ -175,7 +222,7 @@ fun HomeScreen(
                                     .fillMaxWidth()
                                     .padding(4.dp)
                                     .size(240.dp, 360.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator(Modifier.size(100.dp))
                             }
@@ -184,8 +231,9 @@ fun HomeScreen(
                         is ResponseUiState.Error -> {
                             LottiePreview(
                                 title = "No se encontraron resultados",
-                                res = R.raw.marker
-                            ) {}
+                                res = R.raw.marker,
+                            ) {
+                            }
                         }
                     }
                 }
@@ -201,8 +249,10 @@ fun HomeScreen(
                 )
                 if (myTrips.isEmpty()) {
                     LottiePreview(
-                        title = "No tienes viajes guardados",
-                        res = R.raw.map
+                        title = "¡Crea tu primer viaje!",
+                        res = R.raw.map,
+                        isBackgroundColored = true,
+                        isTopBrush = true,
                     ) {}
                 }
             }
@@ -211,6 +261,9 @@ fun HomeScreen(
                     trip = trip,
                     selectedDataQR = dataQRSelected,
                     isDialogOpen = isQRDialogOpen,
+                    onDeleteButtonClick = {
+                        onDeleteTripButtonClick(it)
+                    },
                     onDismissDialog = { isQRDialogOpen = false },
                     onQRButtonClick = {
                         isQRDialogOpen = true
@@ -237,16 +290,19 @@ fun HomeScreen(
             Column {
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Screen") },
-                    text = { Text(text = "Formulario") },
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Form") },
+                    text = { Text(text = "Crear Viaje") },
                     modifier = Modifier,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
-                    onClick = {
-                        onQRButtonClick()
+                    onClick = { onQRButtonClick() },
+                    icon = {
+                        Icon(
+                            Icons.Default.QrCodeScanner,
+                            contentDescription = "QR Code Scanner",
+                        )
                     },
-                    icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "QR Scanner") },
                     text = { Text(text = "Escanear QR") },
                     modifier = Modifier,
                 )
@@ -255,6 +311,7 @@ fun HomeScreen(
 
         FloatingActionButton(
             onClick = {
+                // onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier

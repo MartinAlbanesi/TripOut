@@ -1,6 +1,7 @@
 package com.example.turistaapp.create_trip.data.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -21,9 +22,12 @@ interface TripDao {
     @Query("SELECT * FROM trips_table")
     suspend fun getTripList(): List<TripEntity>
 
-    @Query("select destination from trips_table")
+    @Query("SELECT destination FROM trips_table")
     suspend fun getLocationsFromDestination(): List<String>
 
-    @Query("select destination from trips_table")
+    @Query("SELECT destination FROM trips_table")
     fun getFlowLocationsFromDestination(): Flow<List<String>>
+
+    @Delete
+    fun deleteTrip(trip: TripEntity)
 }

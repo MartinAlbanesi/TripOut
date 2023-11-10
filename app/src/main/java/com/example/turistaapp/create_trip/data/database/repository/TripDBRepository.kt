@@ -11,4 +11,6 @@ interface TripDBRepository {
     suspend fun getLocationsFromDestination(): List<String>
 
     suspend fun getFlowLocationsFromDestination(): Flow<List<String>>
+
+    suspend fun deleteTrip(trip: TripEntity)
 }
