@@ -76,7 +76,7 @@ fun WelcomeScreen(
     var isError by remember { mutableStateOf(false) }
 
     val offsetY by animateFloatAsState(
-        targetValue = if (pagerState.currentPage == 0) 0f else (screenHeight / 3 - 40),
+        targetValue = if (pagerState.currentPage == 0) 0f else (screenHeight / 4),
         label = "offsetY",
         animationSpec = tween(1000)
     )
