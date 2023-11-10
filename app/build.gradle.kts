@@ -7,7 +7,6 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    // id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -147,6 +146,9 @@ dependencies {
 
     // Kotlin Serialization
     // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    //Lottie
+    implementation ("com.airbnb.android:lottie-compose:6.1.0")
 }
 
 kapt {

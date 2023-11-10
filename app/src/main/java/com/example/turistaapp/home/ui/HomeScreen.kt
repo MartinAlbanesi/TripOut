@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,17 +33,74 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.turistaapp.R
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
-import com.example.turistaapp.my_trips.ui.screens.components.ImageWithBrush
 import com.example.turistaapp.my_trips.ui.screens.components.TripItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
+
+
+@Composable
+fun LottiePreview(
+    title: String,
+    res: Int,
+    isBrush: Boolean = false,
+    onClickAnimation: () -> Unit,
+) {
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
+
+    val brush = if (isBrush) {
+        Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
+    } else {
+        Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .clickable {
+                onClickAnimation()
+            },
+        contentAlignment = Alignment.BottomStart,
+    ) {
+        LottieAnimation(
+            composition = lottie.value,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+        )
+        Row(
+            modifier = Modifier
+                .background(brush = brush),
+        ) {
+            Text(
+                text = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, bottom = 4.dp),
+                fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
+                color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+}
 
 @Composable
 fun HomeScreen(
@@ -73,20 +131,15 @@ fun HomeScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn() {
+        LazyColumn {
             item {
-                ImageWithBrush(
-                    name = "Descubra su siguiente viaje",
-                    photoUrl = R.drawable.ic_launcher_foreground,
-                    padding = 8.dp,
-                    textCenter = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .clickable {
-                            onClickShakeGame()
-                        },
-                )
+                LottiePreview(
+                    title = "Descubra su siguiente viaje",
+                    res = R.raw.world,
+                    isBrush = true
+                ) {
+                    onClickShakeGame()
+                }
             }
             item {
                 Column {
@@ -95,44 +148,51 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 8.dp),
                     )
-                    Text(
-                        text = "Cerca de $locationSelect",
-                        modifier = Modifier
-                            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-                    )
-                }
-            }
-            item {
-                when (nearbyLocations) {
-                    is ResponseUiState.Success<*> -> {
-                        NearbySearchView(
-                            nearbyLocations = nearbyLocations.values as List<LocationModel>,
-                            onClickCard = {
-                                showDialog = true
-                                onCardSelection(it)
-                            },
-                        )
-                    }
 
-                    is ResponseUiState.Loading -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(4.dp)
-                                .size(240.dp, 360.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(Modifier.size(100.dp))
+                    when (nearbyLocations) {
+                        is ResponseUiState.Success<*> -> {
+                            Text(
+                                text = "Cerca de $locationSelect",
+                                modifier = Modifier
+                                    .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                            )
+                            NearbySearchView(
+                                nearbyLocations = nearbyLocations.values as List<LocationModel>,
+                                onClickCard = {
+                                    showDialog = true
+                                    onCardSelection(it)
+                                },
+                            )
                         }
-                    }
 
-                    is ResponseUiState.Error -> {
-                        Column(
-                            Modifier
-                                .fillMaxWidth(),
-                        ) {
-                            Text(text = nearbyLocations.message)
+                        is ResponseUiState.Loading -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp)
+                                    .size(240.dp, 360.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(Modifier.size(100.dp))
+                            }
                         }
+
+                        is ResponseUiState.Error -> {
+                            LottiePreview(
+                                title = "No se encontraron resultados",
+                                res = R.raw.marker
+                            ) {
+
+                            }
+//                            Column(
+//                                Modifier
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(text = nearbyLocations.message)
+//                            }
+                        }
+
+
                     }
                 }
             }
@@ -145,6 +205,14 @@ fun HomeScreen(
                     fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
                     fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 )
+                if (myTrips.isEmpty()) {
+                    LottiePreview(
+                        title = "No tienes viajes guardados",
+                        res = R.raw.map
+                    ) {
+
+                    }
+                }
             }
             items(myTrips) { trip ->
                 TripItem(
@@ -177,24 +245,16 @@ fun HomeScreen(
             Column {
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Screen") },
-                    text = { Text(text = "Formulario") },
-                    modifier = Modifier,
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-80).dp)
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
+                    text = { Text(text = "Sample") },
+                    modifier = Modifier
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
-                    onClick = {
-                        onQRButtonClick()
-                    },
-                    icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "QR Scanner") },
-                    text = { Text(text = "Escanear QR") },
-                    modifier = Modifier,
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-160).dp)
+                    onClick = { onClickFloatingBottom() },
+                    icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
+                    text = { Text(text = "Sample") },
+                    modifier = Modifier
                 )
             }
         }

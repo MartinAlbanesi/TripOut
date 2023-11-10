@@ -5,6 +5,7 @@ import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
+import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -28,6 +29,9 @@ class CreateTripViewModelTest {
     @RelaxedMockK
     private lateinit var getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 
+    @RelaxedMockK
+    private lateinit var  getNameFromDataStore: GetNameFromDataStore
+
     @get:Rule
     var rule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -42,6 +46,7 @@ class CreateTripViewModelTest {
             insertTripUseCase,
             getPlaceAutocompleteLocationsUseCase,
             getPlaceDetailsUseCase,
+            getNameFromDataStore
         )
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
