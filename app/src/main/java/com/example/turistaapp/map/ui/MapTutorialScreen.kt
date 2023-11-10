@@ -1,5 +1,6 @@
 package com.example.turistaapp.map.ui
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
@@ -55,6 +56,11 @@ fun MapTutorial(
         mutableStateOf("Siguiente")
     }
 
+    val progressBar by animateFloatAsState(
+        targetValue = pagerState.currentPage.toFloat() / 2,
+        label = ""
+    )
+
     buttonText = if (pagerState.currentPage == 2) "Finalizar" else "Siguiente"
 
     Dialog(onDismissRequest = { /*TODO*/ }) {
@@ -81,7 +87,7 @@ fun MapTutorial(
                             fontSize = 24.sp
                         )
                         LinearProgressIndicator(
-                            progress = pagerState.currentPage.toFloat() / 2,
+                            progress = progressBar,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(16.dp)
