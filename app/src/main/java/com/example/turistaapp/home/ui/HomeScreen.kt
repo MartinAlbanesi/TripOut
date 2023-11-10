@@ -60,7 +60,7 @@ fun LottiePreview(
     title: String = "",
     res: Int,
     isBackgroundColored: Boolean = false,
-    // isTextBackgroundColored: Boolean = false,
+    isClickable: Boolean = false,
     isBottomBrush: Boolean = false,
     isTopBrush: Boolean = false,
     onClickAnimation: () -> Unit,
@@ -97,13 +97,19 @@ fun LottiePreview(
             Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, Color.Transparent))
     }
 
+    val boxClickable : Modifier by remember {
+        mutableStateOf(if (isClickable) Modifier.clickable { onClickAnimation() } else { Modifier })
+    }
+
+//    boxClickable = if (isClickable) Modifier.clickable { onClickAnimation() } else { Modifier }
+
     Box(
-        modifier = Modifier
+        modifier = boxClickable
             .fillMaxWidth()
             .height(200.dp)
-            .clickable {
-                onClickAnimation()
-            }
+//            .clickable {
+//                onClickAnimation()
+//            }
             .background(background),
         contentAlignment = Alignment.BottomStart,
     ) {
@@ -188,6 +194,7 @@ fun HomeScreen(
                     res = R.raw.world,
                     isBackgroundColored = true,
                     isBottomBrush = true,
+                    isClickable = true
                 ) {
                     onClickShakeGame()
                 }
@@ -232,8 +239,7 @@ fun HomeScreen(
                             LottiePreview(
                                 title = "No se encontraron resultados",
                                 res = R.raw.marker,
-                            ) {
-                            }
+                            ) {}
                         }
                     }
                 }
@@ -253,6 +259,7 @@ fun HomeScreen(
                         res = R.raw.map,
                         isBackgroundColored = true,
                         isTopBrush = true,
+                        isClickable = true,
                     ) {}
                 }
             }

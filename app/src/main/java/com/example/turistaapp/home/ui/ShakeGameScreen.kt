@@ -211,7 +211,7 @@ fun ShakeGameScreen(
 }
 
 @Composable
-fun ItemShake(
+private fun ItemShake(
     text: String,
     onDelete: () -> Unit
 ) {
