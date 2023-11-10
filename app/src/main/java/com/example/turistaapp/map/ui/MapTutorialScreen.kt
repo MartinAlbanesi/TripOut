@@ -43,7 +43,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MapTutorial() {
+fun MapTutorial(
+    onClickFinishTutorial: () -> Unit
+) {
 
     val pagerState = rememberPagerState { 3 }
 
@@ -108,16 +110,16 @@ fun MapTutorial() {
                 }
                 Button(
                     onClick = {
-                        if (pagerState.currentPage == 0) {
+//                        if (pagerState.currentPage == 0) {
                             scope.launch {
                                 pagerState.animateScrollToPage(
                                     pagerState.currentPage + 1,
                                     animationSpec = tween(500)
                                 )
                             }
-                        }
-                        if (pagerState.currentPage == 1) {
-
+//                        }
+                        if (pagerState.currentPage == 2) {
+                            onClickFinishTutorial()
                         }
                     },
                     modifier = Modifier

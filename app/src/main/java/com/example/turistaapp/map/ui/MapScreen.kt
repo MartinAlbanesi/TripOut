@@ -31,8 +31,10 @@ fun MapScreen(
     markerSelect: Boolean,
     lastLocation: LatLng?,
     routeModel: RouteModel?,
+    isTutorialComplete: Boolean?,
     onClickArrowBack: () -> Unit,
     onMarkerSelected: (Int) -> Unit,
+    onClickFinishTutorial: () -> Unit,
 ) {
     val sheetPeekHeight by animateDpAsState(
         targetValue = if (markerSelect) 200.dp else 0.dp,
@@ -69,7 +71,11 @@ fun MapScreen(
         sheetPeekHeight = sheetPeekHeight
     ) { paddingValues ->
 
-        MapTutorial()
+        if(isTutorialComplete == null){
+            MapTutorial(){
+                onClickFinishTutorial()
+            }
+        }
 
         Box(Modifier.fillMaxSize()) {
             MapView(

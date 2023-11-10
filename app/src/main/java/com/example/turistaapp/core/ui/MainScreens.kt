@@ -54,6 +54,8 @@ fun MainScreen(
 
     val routeModel by mapViewModel.tripSelected.collectAsStateWithLifecycle()
 
+    val isTutorialComplete by mapViewModel.isMapTutorialComplete.collectAsStateWithLifecycle(false)
+
     // Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
 
@@ -124,8 +126,10 @@ fun MainScreen(
                     markerSelect = markerSelect,
                     lastLocation = lastLocation,
                     routeModel = routeModel,
+                    isTutorialComplete = isTutorialComplete,
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it) },
+                    onClickFinishTutorial = { mapViewModel.setMapTutorial() },
                 )
             }
 
