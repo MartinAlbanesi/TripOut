@@ -3,9 +3,11 @@ package com.example.turistaapp.home.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,10 +63,12 @@ fun LottiePreview(
 ) {
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
 
-    val brush = if (isBrush) {
-        Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
-    } else {
-        Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
+    var brush by remember{
+        mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
+    }
+
+    if (isBrush) {
+        brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
     }
 
     Box(
@@ -181,18 +185,8 @@ fun HomeScreen(
                             LottiePreview(
                                 title = "No se encontraron resultados",
                                 res = R.raw.marker
-                            ) {
-
-                            }
-//                            Column(
-//                                Modifier
-//                                    .fillMaxWidth()
-//                            ) {
-//                                Text(text = nearbyLocations.message)
-//                            }
+                            ) {}
                         }
-
-
                     }
                 }
             }
@@ -209,9 +203,7 @@ fun HomeScreen(
                     LottiePreview(
                         title = "No tienes viajes guardados",
                         res = R.raw.map
-                    ) {
-
-                    }
+                    ) {}
                 }
             }
             items(myTrips) { trip ->
@@ -248,9 +240,6 @@ fun HomeScreen(
                     icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Screen") },
                     text = { Text(text = "Formulario") },
                     modifier = Modifier,
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-80).dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
@@ -260,16 +249,12 @@ fun HomeScreen(
                     icon = { Icon(Icons.Default.QrCodeScanner, contentDescription = "QR Scanner") },
                     text = { Text(text = "Escanear QR") },
                     modifier = Modifier,
-//                    .padding(bottom = 16.dp, end = 16.dp)
-//                    .align(Alignment.BottomEnd),
-//                    .offset(y = (-160).dp)
                 )
             }
         }
 
         FloatingActionButton(
             onClick = {
-                // onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier
