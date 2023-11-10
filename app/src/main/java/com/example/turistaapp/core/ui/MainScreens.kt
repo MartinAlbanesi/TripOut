@@ -114,6 +114,14 @@ fun MainScreen(
                         options.setBeepEnabled(false)
                         scanLauncher.launch(options)
                     },
+                    onDeleteTripButtonClick = {
+                        myTripsViewModel.deleteTrip(it)
+                        Toast.makeText(
+                            navController.context,
+                            "Viaje eliminado con exito",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
                 )
             }
 

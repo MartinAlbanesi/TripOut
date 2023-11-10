@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -55,6 +56,7 @@ fun TripItem(
     isDialogOpen: Boolean,
     selectedDataQR: String,
     onQRButtonClick: () -> Unit,
+    onDeleteButtonClick: (TripModel) -> Unit,
     onDismissDialog: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -117,22 +119,40 @@ fun TripItem(
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "Options Button",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .background(
+                            Brush.radialGradient(
+                                listOf(
+                                    Color.Black,
+                                    Color.Transparent,
+                                ),
+                                radius = 46f,
+                            ),
+                        ),
                 )
                 DropdownMenu(expanded = menuAnchor, onDismissRequest = { menuAnchor = false }) {
                     DropdownMenuItem(
                         text = { Text(text = "Compartir") },
-                        onClick = { onQRButtonClick() },
+                        onClick = {
+                            onQRButtonClick()
+                            menuAnchor = false
+                        },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.QrCode,
                                 contentDescription = "QR Button",
-                                tint = Color.White,
+                                tint = MaterialTheme.colorScheme.onSurface,
                             )
                         },
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Borrar") },
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            onDeleteButtonClick(trip)
+                            menuAnchor = false
+                        },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Delete,

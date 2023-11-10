@@ -3,9 +3,11 @@ package com.example.turistaapp.home.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,7 +52,6 @@ import com.example.turistaapp.my_trips.ui.screens.components.TripItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
 
-
 @Composable
 fun LottiePreview(
     title: String,
@@ -62,7 +62,7 @@ fun LottiePreview(
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
 
     val brush = if (isBrush) {
-        Brush.verticalGradient(listOf(Color.Transparent, Color.Black))
+        Brush.verticalGradient(listOf(Color.Transparent, MaterialTheme.colorScheme.background))
     } else {
         Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent))
     }
@@ -73,7 +73,8 @@ fun LottiePreview(
             .height(200.dp)
             .clickable {
                 onClickAnimation()
-            },
+            }
+            .background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.BottomStart,
     ) {
         LottieAnimation(
@@ -94,12 +95,10 @@ fun LottiePreview(
                     .padding(start = 8.dp, bottom = 4.dp),
                 fontSize = MaterialTheme.typography.headlineLarge.fontSize,
                 fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-                color = Color.White,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
-
 }
 
 @Composable
@@ -113,6 +112,7 @@ fun HomeScreen(
     onClickFloatingBottom: () -> Unit,
     onClickShakeGame: () -> Unit,
     onQRButtonClick: () -> Unit,
+    onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     var showDialog by remember {
         mutableStateOf(false)
@@ -136,7 +136,7 @@ fun HomeScreen(
                 LottiePreview(
                     title = "Descubra su siguiente viaje",
                     res = R.raw.world,
-                    isBrush = true
+                    isBrush = true,
                 ) {
                     onClickShakeGame()
                 }
@@ -171,7 +171,7 @@ fun HomeScreen(
                                     .fillMaxWidth()
                                     .padding(4.dp)
                                     .size(240.dp, 360.dp),
-                                contentAlignment = Alignment.Center
+                                contentAlignment = Alignment.Center,
                             ) {
                                 CircularProgressIndicator(Modifier.size(100.dp))
                             }
@@ -180,9 +180,8 @@ fun HomeScreen(
                         is ResponseUiState.Error -> {
                             LottiePreview(
                                 title = "No se encontraron resultados",
-                                res = R.raw.marker
+                                res = R.raw.marker,
                             ) {
-
                             }
 //                            Column(
 //                                Modifier
@@ -191,8 +190,6 @@ fun HomeScreen(
 //                                Text(text = nearbyLocations.message)
 //                            }
                         }
-
-
                     }
                 }
             }
@@ -208,9 +205,8 @@ fun HomeScreen(
                 if (myTrips.isEmpty()) {
                     LottiePreview(
                         title = "No tienes viajes guardados",
-                        res = R.raw.map
+                        res = R.raw.map,
                     ) {
-
                     }
                 }
             }
@@ -219,6 +215,9 @@ fun HomeScreen(
                     trip = trip,
                     selectedDataQR = dataQRSelected,
                     isDialogOpen = isQRDialogOpen,
+                    onDeleteButtonClick = {
+                        onDeleteTripButtonClick(it)
+                    },
                     onDismissDialog = { isQRDialogOpen = false },
                     onQRButtonClick = {
                         isQRDialogOpen = true
@@ -245,16 +244,21 @@ fun HomeScreen(
             Column {
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.Map, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Form") },
+                    text = { Text(text = "Formulario") },
+                    modifier = Modifier,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
-                    onClick = { onClickFloatingBottom() },
-                    icon = { Icon(Icons.Default.CameraAlt, contentDescription = "Add") },
-                    text = { Text(text = "Sample") },
-                    modifier = Modifier
+                    onClick = { onQRButtonClick() },
+                    icon = {
+                        Icon(
+                            Icons.Default.QrCodeScanner,
+                            contentDescription = "QR Code Scanner",
+                        )
+                    },
+                    text = { Text(text = "Escanear QR") },
+                    modifier = Modifier,
                 )
             }
         }
