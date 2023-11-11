@@ -59,10 +59,6 @@ fun TextInputField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = Color.LightGray,
-        ),
         leadingIcon = {
             if (!isError) {
                 leadingIcon?.invoke()

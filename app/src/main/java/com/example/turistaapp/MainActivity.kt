@@ -11,9 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.core.ui.NavHostScreen
 import com.example.turistaapp.setting.ui.SettingViewModel
-import com.example.turistaapp.ui.theme.TuristaAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

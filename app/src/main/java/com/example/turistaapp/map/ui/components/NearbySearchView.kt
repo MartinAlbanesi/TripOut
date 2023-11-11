@@ -1,10 +1,12 @@
 package com.example.turistaapp.map.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,7 +26,7 @@ fun NearbySearchView(
                 modifier = Modifier
                     .size(240.dp, 360.dp)
                     .padding(4.dp)
-                    .clickable { onClickCard(it.name) }
+                    .clickable { onClickCard(it.name) },
             )
         }
     }

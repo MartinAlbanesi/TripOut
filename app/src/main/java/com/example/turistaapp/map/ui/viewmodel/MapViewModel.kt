@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.domain.GetLastLocationUseCase
+import com.example.turistaapp.map.domain.GetIsMapTutorialComplete
 import com.example.turistaapp.map.domain.GetRouteModel
+import com.example.turistaapp.map.domain.SetIsMapTutorialComplete
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import com.google.android.gms.maps.model.LatLng
@@ -23,7 +25,9 @@ class MapViewModel @Inject constructor(
     private val dispatcher: CoroutineDispatcher,
     private val getGetTripsUseCase: GetTripsUseCase,
     private val getRouteModel: GetRouteModel,
-    private val getLastLocationUseCase: GetLastLocationUseCase
+    private val getLastLocationUseCase: GetLastLocationUseCase,
+    private val getIsMapTutorialComplete: GetIsMapTutorialComplete,
+    private val setIsMapTutorialComplete: SetIsMapTutorialComplete,
 ) : ViewModel() {
 
     private val _destinationLocations =
@@ -42,14 +46,35 @@ class MapViewModel @Inject constructor(
     private val _tripSelected = MutableStateFlow<RouteModel?>(null)
     val tripSelected = _tripSelected.asStateFlow()
 
+    private val _isMapTutorialComplete = MutableStateFlow<Boolean?>(false)
+    val isMapTutorialComplete = _isMapTutorialComplete.asStateFlow()
+
     init {
         getFlowLocationFromDB()
         getLastLocation()
+        getTutorialComplete()
     }
 
-    private fun getLastLocation(){
+    fun setMapTutorial() {
         viewModelScope.launch(dispatcher) {
-            if(getLastLocationUseCase() != null) {
+            setIsMapTutorialComplete(true)
+        }
+    }
+
+    private fun getTutorialComplete() {
+        viewModelScope.launch(dispatcher) {
+//            if (getIsMapTutorialComplete().first() != null){
+//                _isMapTutorialComplete.value = getIsMapTutorialComplete().first()!!
+                getIsMapTutorialComplete().collect {
+                    _isMapTutorialComplete.value = it
+                }
+//            }
+        }
+    }
+
+    private fun getLastLocation() {
+        viewModelScope.launch(dispatcher) {
+            if (getLastLocationUseCase() != null) {
                 _lastLocation.value = LatLng(
                     getLastLocationUseCase()!!.latitude,
                     getLastLocationUseCase()!!.longitude

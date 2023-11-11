@@ -18,13 +18,13 @@ fun DrawCircle(
             radius = 40f,
         )
     }
-    Canvas(modifier = modifier) {
-        drawCircle(
-            color = Color.White,
-            radius = 41f,
-            style = Stroke(
-                width = 1.dp.toPx()
-            )
-        )
-    }
+//    Canvas(modifier = modifier) {
+//        drawCircle(
+//            color = Color.White,
+//            radius = 41f,
+//            style = Stroke(
+//                width = 1.dp.toPx()
+//            )
+//        )
+//    }
 }
