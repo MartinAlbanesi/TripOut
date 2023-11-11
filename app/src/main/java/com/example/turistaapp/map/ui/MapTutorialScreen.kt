@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +51,7 @@ import kotlinx.coroutines.launch
 fun MapTutorial(
     onClickFinishTutorial: () -> Unit,
 ) {
-    val pagerState = rememberPagerState { 3 }
+    val pagerState = rememberPagerState { 4 }
 
     val scope = rememberCoroutineScope()
 
@@ -58,11 +60,19 @@ fun MapTutorial(
     }
 
     val progressBar by animateFloatAsState(
-        targetValue = pagerState.currentPage.toFloat() / 2,
+        targetValue = pagerState.currentPage.toFloat() / 3,
         label = ""
     )
 
-    buttonText = if (pagerState.currentPage == 2) "Finalizar" else "Siguiente"
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp.value
+
+    val offsetY by animateFloatAsState(
+        targetValue = if (pagerState.currentPage == 0) (screenHeight / 5) else 0f ,
+        label = "offsetY",
+        animationSpec = tween(200)
+    )
+
+    buttonText = if (pagerState.currentPage == 3) "Finalizar" else "Siguiente"
 
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Box(
@@ -76,35 +86,31 @@ fun MapTutorial(
                     containerColor = MaterialTheme.colorScheme.surface,
                 ),
             ) {
-                Box(
-                    modifier = Modifier
+                Column(
+                    Modifier
                         .fillMaxWidth(),
                 ) {
-                    Column(
-                        Modifier
-                            .fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = "Tutorial",
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(8.dp),
-                            fontSize = 32.sp,
-                        )
-                        LinearProgressIndicator(
-                            progress = progressBar,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(16.dp)
-                                .padding(horizontal = 16.dp)
-                                .border(
-                                    shape = MaterialTheme.shapes.small,
-                                    width = 1.dp,
-                                    color = MaterialTheme.colorScheme.primary,
-                                ),
-                            strokeCap = StrokeCap.Round,
-                        )
-                    }
+                    Text(
+                        text = "Tutorial",
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(8.dp)
+                            .offset(y = offsetY.dp),
+                        fontSize = 32.sp,
+                    )
+                    LinearProgressIndicator(
+                        progress = progressBar,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(16.dp)
+                            .padding(horizontal = 16.dp)
+                            .border(
+                                shape = MaterialTheme.shapes.small,
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                            ),
+                        strokeCap = StrokeCap.Round,
+                    )
                 }
                 HorizontalPager(
                     modifier = Modifier
@@ -112,30 +118,37 @@ fun MapTutorial(
                     state = pagerState,
                 ) {
                     when (it) {
-                        0 -> { MapPagerOne() }
+                        0 -> {
+                            MapPagerZero()
+                        }
 
-                        1 -> { MapPagerTwo() }
+                        1 -> {
+                            MapPagerOne()
+                        }
 
-                        2 -> { MapPagerThree() }
+                        2 -> {
+                            MapPagerTwo()
+                        }
+
+                        3 -> {
+                            MapPagerThree()
+                        }
                     }
                 }
                 Button(
                     onClick = {
-//                        if (pagerState.currentPage == 0) {
+                        if (pagerState.currentPage == 3) {
+                            onClickFinishTutorial()
+                        }
                         scope.launch {
                             pagerState.animateScrollToPage(
                                 pagerState.currentPage + 1,
                                 animationSpec = tween(500),
                             )
                         }
-//                        }
-                        if (pagerState.currentPage == 2) {
-                            onClickFinishTutorial()
-                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.18f)
                         .padding(16.dp),
                 ) {
                     Text(text = buttonText)
@@ -168,7 +181,11 @@ private fun MapPagerTwo() {
             .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceAround,
     ) {
-        Text(text = "Puedes ver los detalles de cada viaje tocando los marcadores rojos", fontSize = 24.sp, textAlign = TextAlign.Center)
+        Text(
+            text = "Puedes ver los detalles de cada viaje tocando los marcadores rojos",
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center
+        )
         LottiePreview(title = "", res = R.raw.mapmap) {}
     }
 }
@@ -224,6 +241,21 @@ private fun IconWithText(
             text = text,
             modifier = Modifier.weight(2f),
             fontSize = 32.sp,
+        )
+    }
+}
+
+@Composable
+private fun MapPagerZero() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = "Bienvenido al mapa",
+            fontSize = 24.sp,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
     }
 }
