@@ -100,6 +100,7 @@ fun ShakeGameScreen(
                 }
             }
         }
+
         override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
         }
     }, sensor, SensorManager.SENSOR_DELAY_FASTEST)
@@ -143,7 +144,7 @@ fun ShakeGameScreen(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .weight(3f),
+                    .weight(2f),
                 contentAlignment = Alignment.Center
             ) {
                 Column(Modifier.fillMaxWidth()) {
@@ -163,34 +164,42 @@ fun ShakeGameScreen(
                     )
                 }
             }
-            PlaceAutocompleteField(
-                label = "Ingrese una ubicación",
-                query = value,
-                onQueryChange = {
-                    value = it
-                    shakeViewModel.searchOriginPlaces(value)
-                },
-                isDropdownVisible = isMenuVisible,
-                onDropdownVisibilityChange = {
-                    isMenuVisible = it
-                },
-                predictions = originPredictions,
-                focusRequester = focusRequest,
-                imeAction = androidx.compose.ui.text.input.ImeAction.Done,
-                onClearField = {
-                    value = ""
-                },
-                onItemClick = {
-                    value = it.description ?: ""
-                    shakeViewModel.onClickSelectedLocation(it.placeId)
-                    value = ""
-                    isMenuVisible = false
-                    focusRequest.freeFocus()
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Map, contentDescription = null)
-                }
-            )
+            Column(modifier = Modifier.weight(2f)) {
+                Text(
+                    text = "Ingrese al menos 2 ubicaciones",
+                    modifier = Modifier
+                        .fillMaxWidth().padding(bottom = 8.dp),
+                    textAlign = TextAlign.Center
+                )
+                PlaceAutocompleteField(
+                    label = "Ingrese una ubicación",
+                    query = value,
+                    onQueryChange = {
+                        value = it
+                        shakeViewModel.searchOriginPlaces(value)
+                    },
+                    isDropdownVisible = isMenuVisible,
+                    onDropdownVisibilityChange = {
+                        isMenuVisible = it
+                    },
+                    predictions = originPredictions,
+                    focusRequester = focusRequest,
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Done,
+                    onClearField = {
+                        value = ""
+                    },
+                    onItemClick = {
+                        value = it.description ?: ""
+                        shakeViewModel.onClickSelectedLocation(it.placeId)
+                        value = ""
+                        isMenuVisible = false
+                        focusRequest.freeFocus()
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Map, contentDescription = null)
+                    }
+                )
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
