@@ -2,7 +2,8 @@ package com.example.turistaapp.core.di
 
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
-import com.example.turistaapp.home.data.api.NearbySearchLocationApiService
+import com.example.turistaapp.map.data.api.service.DirectionsApiService
+import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +18,7 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com")
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,20 +27,25 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideGooglePlacesApiService(retrofit: Retrofit) : NearbySearchLocationApiService {
+    fun provideGooglePlacesApiService(retrofit: Retrofit): NearbySearchLocationApiService {
         return retrofit.create(NearbySearchLocationApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDirectionsApiService(retrofit: Retrofit) : DirectionsApiService{
+        return retrofit.create(DirectionsApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGooglePlaceAutocompleteApiService(retrofit: Retrofit) : PlacesAutocompleteApiService {
+    fun provideGooglePlaceAutocompleteApiService(retrofit: Retrofit): PlacesAutocompleteApiService {
         return retrofit.create(PlacesAutocompleteApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideGooglePlaceDetailsApiService(retrofit: Retrofit) : PlaceDetailsApiService {
+    fun provideGooglePlaceDetailsApiService(retrofit: Retrofit): PlaceDetailsApiService {
         return retrofit.create(PlaceDetailsApiService::class.java)
     }
-
 }

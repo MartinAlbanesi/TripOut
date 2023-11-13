@@ -1,15 +1,17 @@
-package com.example.turistaapp.create_trip.data.mapper
+package com.example.turistaapp.create_trip.data.mapper // ktlint-disable package-name
 
 import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.example.turistaapp.create_trip.data.database.entities.TripEntity
+import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 
 fun TripEntity.toTripModel() = TripModel(
+    tripId = id,
     name = name,
-    origin = origin.toLocationModel(),
-    destination = destination.toLocationModel(),
-    stops = stops?.map { it.toLocationModel() }?.toMutableList(),
+    origin = origin.toLocationModel(name, isFinished),
+    destination = destination.toLocationModel(name, isFinished),
+    stops = stops?.map { it.toLocationModel(name, isFinished) }?.toMutableList(),
     startDate = startDate,
     endDate = endDate,
     members = members,
@@ -19,32 +21,31 @@ fun TripEntity.toTripModel() = TripModel(
     isFavorite = isFavorite,
     isFinished = isFinished,
     images = images,
-    comments = comments
+    comments = comments,
 )
 
-fun TripModel.toTripEntity() = origin?.let {
-    destination?.let { it1 ->
-        TripEntity(
-        id = 0,
-        name = name,
-        origin = it.toLocationEntity(),
-        destination = it1.toLocationEntity(),
-        stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
-        startDate = startDate,
-        endDate = endDate,
-        members = members,
-        transport = transport,
-        description = description,
-        author = author,
-        isFavorite = isFavorite,
-        isFinished = isFinished,
-        images = images,
-        comments = comments
-    )
-    }
-}
+fun TripModel.toTripEntity() = TripEntity(
+    id = tripId,
+    name = name,
+    origin = this.origin.toLocationEntity(), // toLocationEntity(),
+    destination = this.destination.toLocationEntity(),
+    stops = stops?.map { it.toLocationEntity() }?.toMutableList(),
+    startDate = startDate,
+    endDate = endDate,
+    members = members,
+    transport = transport,
+    description = description,
+    author = author,
+    isFavorite = isFavorite,
+    isFinished = isFinished,
+    images = images,
+    comments = comments,
+)
 
-fun LocationEntity.toLocationModel() = LocationModel(
+fun LocationEntity.toLocationModel(
+    tripName: String = "",
+    isFinished: Boolean = false,
+) = LocationModel(
     placeID = placeID,
     name = name,
     photoUrl = photo,
@@ -53,7 +54,9 @@ fun LocationEntity.toLocationModel() = LocationModel(
     address = address,
     lat = lat,
     lng = lng,
-    types = types
+    types = types,
+    tripName = tripName,
+    isFinished = isFinished,
 )
 
 fun LocationModel.toLocationEntity() = LocationEntity(
@@ -66,6 +69,17 @@ fun LocationModel.toLocationEntity() = LocationEntity(
     address = address,
     lat = lat,
     lng = lng,
-    types = types
+    types = types,
 )
 
+fun PlaceApi.toLocationModel() = LocationModel(
+    lat = geometryApi.locationApi.lat,
+    lng = geometryApi.locationApi.lng,
+    name = name,
+    photoUrl = getPhoto(),
+    rating = rating,
+    userRating = userRatings,
+    address = address,
+    types = types,
+    placeID = placeID,
+)

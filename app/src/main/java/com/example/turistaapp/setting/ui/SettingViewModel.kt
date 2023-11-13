@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class SettingViewModel:ViewModel() {
 
-    private val _darkTheme = MutableLiveData<Boolean>(false)
+    private val _darkTheme = MutableLiveData<Boolean>(true)
       val darkTheme: LiveData<Boolean> = _darkTheme
 
     private val _listLanguage = listOf<String>("Español" , "Ingles" , "Portuges")

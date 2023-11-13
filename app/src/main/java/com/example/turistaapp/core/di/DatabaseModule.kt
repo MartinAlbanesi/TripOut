@@ -2,7 +2,7 @@ package com.example.turistaapp.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.turistaapp.core.database.TripDataBase
+import com.example.turistaapp.core.data.database.TripDataBase
 import com.example.turistaapp.create_trip.data.database.dao.TripDao
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepositoryImpl
@@ -23,7 +23,7 @@ class DatabaseModule {
         Room.databaseBuilder(
             applicationContext,
             TripDataBase::class.java,
-            "app_database"
+            "app_database",
         ).build()
 
     @Singleton
@@ -34,7 +34,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideTripDBRepository(tripDao: TripDao) : TripDBRepository {
+    fun provideTripDBRepository(tripDao: TripDao): TripDBRepository {
         return TripDBRepositoryImpl(tripDao)
     }
 }

@@ -3,7 +3,6 @@ package com.example.turistaapp.create_trip.domain
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
-import com.example.turistaapp.create_trip.domain.models.LocationModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -13,7 +12,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class GetDestinationLocationsFromDataBaseTest{
+class GetDestinationLocationsFromDataBaseTest {
 
     @RelaxedMockK
     private lateinit var tripDBRepository: TripDBRepository
@@ -29,7 +28,6 @@ class GetDestinationLocationsFromDataBaseTest{
 
     @Test
     fun invoke_locationsListIsEmpty_returnEmptyList() = runTest {
-
         coEvery { tripDBRepository.getLocationsFromDestination() } returns emptyList()
 
         val result = getDestinationLocationsFromDataBase()
@@ -40,7 +38,6 @@ class GetDestinationLocationsFromDataBaseTest{
 
     @Test
     fun invoke_locationsReturnLocationList_returnLocationModelList() = runTest {
-
         val expected = listOf(
             FakeDataBaseSource.locationModel,
             FakeDataBaseSource.locationModel,

@@ -1,375 +1,433 @@
-package com.example.turistaapp.create_trip.ui.screens
+package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.widget.Toast
-import androidx.compose.foundation.layout.PaddingValues
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddHome
+import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.TripOrigin
 import androidx.compose.material3.Button
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
+import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
+import kotlinx.coroutines.launch
 import java.util.*
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(
-    innerPadding: PaddingValues,
-    createTripViewModel: CreateTripViewModel = hiltViewModel()
+    address: String?,
+    createTripViewModel: CreateTripViewModel = hiltViewModel(),
+    onClickCreateTrip: () -> Unit,
 ) {
+    LaunchedEffect(true) {
+        if (address != null) {
+            createTripViewModel.setDestination(address)
+        }
+    }
 
-    //Nombre del Viaje
-    val tripName by createTripViewModel.name.observeAsState("")
+    // Nombre del Viaje
+    var tripName by rememberSaveable {
+        mutableStateOf("")
+    }
 
-    //Origen
-    val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
-    val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
-        false
-    )
+    // Origen
+    var originAutocompleteQuery by rememberSaveable {
+        mutableStateOf("")
+    }
+    var isOriginAutocompleteDropdownVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
     val originPredictions by createTripViewModel.originPredictions.observeAsState(emptyList())
 
-    //Destino
-    val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
-    val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
-        false
-    )
+    // val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
+    // val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
+    //     false,
+    // )
+
+    // Destino
+    var destinationAutocompleteQuery by rememberSaveable {
+        mutableStateOf(address ?: "")
+    }
+    var isDestinationAutocompleteDropdownVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
-        emptyList()
+        emptyList(),
     )
 
-    //Fechas
+    // val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
+    // val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
+    //     false,
+    // )
+    // val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState( emptyList() )
+
+    // Fechas
     val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
     val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis)
-    //FALTA IMPLEMENTAR EL DATE RANGE PICKER STATE EN EL VIEWMODEL
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = startDate,
-        initialSelectedEndDateMillis = endDate
+        initialSelectedEndDateMillis = endDate,
     )
     val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
-        false
+        false,
     )
 
-    //Acompañantes
+    // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-    val isMemberDialogOpen by createTripViewModel.isMemberDialogOpen.observeAsState(false)
+    /*
+        // Paradas
+        val stops by createTripViewModel.stops.observeAsState(emptyList())
+        val stopName by createTripViewModel.stopName.observeAsState("")
+    */
 
-    //Paradas
-    val stops by createTripViewModel.stops.observeAsState(emptyList())
-    val stopName by createTripViewModel.stopName.observeAsState("")
-    val isStopDialogOpen by createTripViewModel.isStopDialogOpen.observeAsState(false)
-
-    //Transporte
+    // Transporte
     val transports by createTripViewModel.transports.observeAsState(
-        emptyList()
+        emptyList(),
     )
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
     val transport by createTripViewModel.transport.observeAsState("")
-    //Descripción
-    val description by createTripViewModel.description.observeAsState("")
-    //Focus Requesters
+
+    // Descripción
+//    val description by createTripViewModel.description.observeAsState("")
+    var description by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    // Focus Requesters
     val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
     val destinationFocusRequester by createTripViewModel.destinationFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
     val descriptionFocusRequester by createTripViewModel.descriptionFocusRequester.observeAsState(
-        FocusRequester()
+        FocusRequester(),
     )
 
-    val context = LocalContext.current
+    // Validaciones
+    var isTripNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
 
+    var isOriginValid by rememberSaveable {
+        mutableStateOf(true)
+    }
 
-    TripFormContent(
-        innerPadding,
-        tripName = tripName,
-        onNameChange = { createTripViewModel.onNameChange(it) },
-        startDate = startDate,
-        endDate = endDate,
-        dateRangePickerState = dateRangePickerState,
-        showDateRangePickerDialog = showDateRangePickerDialog,
-        onDismissDateRangePickerDialog = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
-        onConfirmDateRangePickerDialog = {
-            dateRangePickerState.selectedStartDateMillis?.let {
-                createTripViewModel.onStartDateChange(
-                    it
-                )
+    var isDestinationValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isMemberNameValid by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        topBar = {
+            TopAppBarScreen(
+                title = "Crear Viaje",
+                isMarkerSelected = true,
+            ) {
+                onClickCreateTrip()
             }
-            dateRangePickerState.selectedEndDateMillis?.let { createTripViewModel.onEndDateChange(it) }
-            createTripViewModel.onShowDateRangePickerDialogChange(it)
         },
-        members = members,
-        memberName = memberName,
-        isMemberDialogOpen = isMemberDialogOpen,
-        onMemberNameChange = { createTripViewModel.onMemberNameChange(it) },
-        onMemberDialogOpenChange = {
-            createTripViewModel.onMemberDialogOpenChange(it)
-            createTripViewModel.resetMemberNameValue()
+        bottomBar = {
+            // Botón para guardar
+            Button(
+                onClick = {
+                    isTripNameValid = createTripViewModel.validateTripName(tripName)
+                    isOriginValid = createTripViewModel.validateTripOrigin()
+                    isDestinationValid = createTripViewModel.validateTripDestination()
+
+                    Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
+                    Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
+                    Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
+
+                    if (isTripNameValid && isOriginValid && isDestinationValid) {
+                        createTripViewModel.onCreateTripClick(tripName, description)
+                        scope.launch {
+                            snackbarHostState
+                                .showSnackbar(
+                                    message = "Viaje creado con éxito",
+                                    actionLabel = "Cancelar",
+                                    duration = SnackbarDuration.Indefinite,
+                                )
+                        }
+                    } else {
+                        scope.launch {
+                            snackbarHostState
+                                .showSnackbar(
+                                    message = "Error al crear el viaje",
+                                    actionLabel = "Cancelar",
+                                    duration = SnackbarDuration.Short,
+                                )
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                    .size(45.dp),
+            ) {
+                Text("Guardar")
+            }
         },
-        onAddMember = { createTripViewModel.onAddMember(it) },
-        onRemoveMember = { createTripViewModel.onRemoveMember(it) },
-        stops = stops,
-        stopName = stopName,
-        isStopDialogOpen = isStopDialogOpen,
-        onStopNameChange = { createTripViewModel.onStopNameChange(it) },
-        onStopDialogOpenChange = {
-            createTripViewModel.onStopDialogOpenChange(it)
-            createTripViewModel.resetStopNameValue()
-        },
-        onAddStop = { createTripViewModel.onAddStop(it) },
-        onRemoveStop = { createTripViewModel.onRemoveStop(it) },
-        transports = transports,
-        isExpanded = isExpanded,
-        onIsExpandedChange = { createTripViewModel.onIsExpandedChange(it) },
-        transport = transport,
-        onTransportChange = { createTripViewModel.onTransportChange(it) },
-        description = description,
-        onDescriptionChange = { createTripViewModel.onDescriptionChange(it) },
-        onCreateTripClick = {
-            if(createTripViewModel.onCreateTripClick())
-                Toast.makeText(context, "Viaje creado con éxito", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(context, "Error al crear el viaje", Toast.LENGTH_SHORT).show()
+    ) { paddingValues ->
 
-        },
-        originFocusRequester = originFocusRequester,
-        destinationFocusRequester = destinationFocusRequester,
-        descriptionFocusRequester = descriptionFocusRequester,
-        originAutocompleteQuery = originAutocompleteQuery,
-        onOriginAutocompleteQueryValueChange = {
-            createTripViewModel.onOriginAutocompleteQueryValueChange(it)
-        },
-        isOriginAutocompleteDropdownVisible = isOriginAutocompleteDropdownVisible,
-        onOriginAutocompleteDropdownVisibilityChange = {
-            createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(it)
-        },
-        originAutocompletePredictions = originPredictions,
-        onOriginAutocompletePredictionSelect = {
-            createTripViewModel.onOriginAutocompletePredictionSelect(it)
-        },
-        onClearOriginField = { createTripViewModel.onClearOriginField() },
-        onSelectedOriginLocationChange = { createTripViewModel.onSelectedOriginLocationChange(it) },
-        destinationAutocompleteQuery = destinationAutocompleteQuery,
-        onDestinationAutocompleteQueryValueChange = {
-            createTripViewModel.onDestinationAutocompleteQueryValueChange(it)
-        },
-        isDestinationAutocompleteDropdownVisible = isDestinationAutocompleteDropdownVisible,
-        onDestinationAutocompleteDropdownVisibilityChange = {
-            createTripViewModel.onDestinationAutocompleteDropdownVisibilityChange(it)
-        },
-        destinationAutocompletePredictions = destinationPredictions,
-        onDestinationAutocompletePredictionSelect = {
-            createTripViewModel.onDestinationAutocompletePredictionSelect(it)
-        },
-        onClearDestinationField = { createTripViewModel.onClearDestinationField() },
-        onSelectedDestinationLocationChange = {
-            createTripViewModel.onSelectedDestinationLocationChange(
-                it
-            )
-        }
-    )
-}
+        LazyColumn(
+            modifier = Modifier.padding(
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding(),
+                end = 8.dp,
+                start = 8.dp,
+            ),
+        ) {
+            item {
+                // Nombre del Viaje
+                TextInputField(
+                    label = "Nombre del Viaje *",
+                    textValue = tripName,
+                    onValueChange = {
+                        tripName = it
+                        isTripNameValid = true
+                    },
+                    focusRequester = originFocusRequester,
+                    imeAction = ImeAction.Next,
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.AddHome, contentDescription = "Trip Title")
+                    },
+                    onClearField = { tripName = "" },
+                    isError = !isTripNameValid,
+                )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TripFormContent(
-    innerPadding: PaddingValues,
-    tripName: String,
-    onNameChange: (String) -> Unit,
-    startDate: Long,
-    endDate: Long,
-    dateRangePickerState: DateRangePickerState,
-    showDateRangePickerDialog: Boolean,
-    onDismissDateRangePickerDialog: (Boolean) -> Unit,
-    onConfirmDateRangePickerDialog: (Boolean) -> Unit,
-    members: List<String>,
-    memberName: String,
-    isMemberDialogOpen: Boolean,
-    onMemberNameChange: (String) -> Unit,
-    onMemberDialogOpenChange: (Boolean) -> Unit,
-    onAddMember: (String) -> Unit,
-    onRemoveMember: (String) -> Unit,
-    stops: List<String>,
-    stopName: String,
-    isStopDialogOpen: Boolean,
-    onStopNameChange: (String) -> Unit,
-    onStopDialogOpenChange: (Boolean) -> Unit,
-    onAddStop: (String) -> Unit,
-    onRemoveStop: (String) -> Unit,
-    transports: List<String>,
-    isExpanded: Boolean,
-    onIsExpandedChange: (Boolean) -> Unit,
-    transport: String,
-    onTransportChange: (String) -> Unit,
-    description: String,
-    onDescriptionChange: (String) -> Unit,
-    onCreateTripClick: () -> Unit,
-    originFocusRequester: FocusRequester,
-    destinationFocusRequester: FocusRequester,
-    descriptionFocusRequester: FocusRequester,
-    originAutocompleteQuery: String,
-    onOriginAutocompleteQueryValueChange: (String) -> Unit,
-    isOriginAutocompleteDropdownVisible: Boolean,
-    onOriginAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
-    originAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
-    onOriginAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
-    onClearOriginField: () -> Unit,
-    onSelectedOriginLocationChange: (PlaceAutocompletePredictionModel) -> Unit,
-    destinationAutocompleteQuery: String,
-    onDestinationAutocompleteQueryValueChange: (String) -> Unit,
-    isDestinationAutocompleteDropdownVisible: Boolean,
-    onDestinationAutocompleteDropdownVisibilityChange: (Boolean) -> Unit,
-    destinationAutocompletePredictions: List<PlaceAutocompletePredictionModel>,
-    onDestinationAutocompletePredictionSelect: (PlaceAutocompletePredictionModel) -> Unit,
-    onClearDestinationField: () -> Unit,
-    onSelectedDestinationLocationChange: (PlaceAutocompletePredictionModel) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .padding(8.dp)
-    ) {
-        item {
+                Spacer(modifier = Modifier.size(8.dp))
+            }
 
-            // Nombre del Viaje
-            TextInputField(
-                label = "Nombre del Viaje",
-                textValue = tripName,
-                onValueChange = onNameChange,
-                focusRequester = originFocusRequester,
-                imeAction = ImeAction.Next
-            )
+            item {
+                // Origen
+                PlaceAutocompleteField(
+                    label = "Origen *",
+                    query = originAutocompleteQuery,
+                    onQueryChange = {
+                        originAutocompleteQuery = it
+                        isOriginValid = true
+                        createTripViewModel.searchOriginPlaces(originAutocompleteQuery)
+                    },
+                    isDropdownVisible = isOriginAutocompleteDropdownVisible,
+                    onDropdownVisibilityChange = {
+                        isOriginAutocompleteDropdownVisible = it
+                    },
+                    predictions = originPredictions,
+                    focusRequester = originFocusRequester,
+                    imeAction = ImeAction.Next,
+                    onClearField = {
+                        originAutocompleteQuery = ""
+                        createTripViewModel.clearSelectedOriginLocation()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.TripOrigin,
+                            contentDescription = "Origin",
+                        )
+                    },
+                    onItemClick = {
+                        originAutocompleteQuery = it.description ?: ""
+                        isOriginAutocompleteDropdownVisible = false
+                        createTripViewModel.onSelectedOriginLocationChange(it)
+                        // createTripViewModel.onOriginAutocompletePredictionSelect(it)
+                        // createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(false)
+                    },
+                    isError = !isOriginValid,
+                )
 
-            Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
+                // Destino
+                PlaceAutocompleteField(
+                    label = "Destino *",
+                    query = destinationAutocompleteQuery,
+                    onQueryChange = {
+                        destinationAutocompleteQuery = it
+                        isDestinationValid = true
+                        createTripViewModel.searchDestinationPlaces(destinationAutocompleteQuery)
+                    },
+                    isDropdownVisible = isDestinationAutocompleteDropdownVisible,
+                    onDropdownVisibilityChange = {
+                        isDestinationAutocompleteDropdownVisible = it
+                    },
+                    predictions = destinationPredictions,
+                    focusRequester = destinationFocusRequester,
+                    imeAction = ImeAction.Next,
+                    onClearField = {
+                        destinationAutocompleteQuery = ""
+                        createTripViewModel.clearSelectedDestinationLocation()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Flag,
+                            contentDescription = "Destination",
+                        )
+                    },
+                    onItemClick = {
+                        destinationAutocompleteQuery = it.description ?: ""
+                        isDestinationAutocompleteDropdownVisible = false
+                        createTripViewModel.onSelectedDestinationLocationChange(it)
+                    },
+                    isError = !isDestinationValid,
+                )
 
-            // Origen y Destino
-            //Buscador de lugares
-            PlaceAutocompleteField(
-                label = "Origen",
-                query = originAutocompleteQuery,
-                onQueryChange = onOriginAutocompleteQueryValueChange,
-                isDropdownVisible = isOriginAutocompleteDropdownVisible,
-                onDropdownVisibilityChange = onOriginAutocompleteDropdownVisibilityChange,
-                predictions = originAutocompletePredictions,
-                onPredictionSelect = onOriginAutocompletePredictionSelect,
-                focusRequester = originFocusRequester,
-                imeAction = ImeAction.Next,
-                onClearField = onClearOriginField,
-                onSelectedLocationChange = onSelectedOriginLocationChange
-            )
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
+                // Fechas
+                DateRangePickerInput(
+                    label = "Fechas",
+                    startDate = startDate,
+                    endDate = endDate,
+                    dateRangePickerState = dateRangePickerState,
+                    showDateRangePicker = showDateRangePickerDialog,
+                    onDismiss = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
+                    onConfirm = {
+                        dateRangePickerState.selectedStartDateMillis?.let { long ->
+                            createTripViewModel.onStartDateChange(
+                                long,
+                            )
+                        }
+                        dateRangePickerState.selectedEndDateMillis?.let { long ->
+                            createTripViewModel.onEndDateChange(
+                                long,
+                            )
+                        }
+                        createTripViewModel.onShowDateRangePickerDialogChange(it)
+                    },
+                    onClickable = {
+                        createTripViewModel.onShowDateRangePickerDialogChange(true)
+                    },
+                )
 
-            Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
+                // Transporte
+                ExposedDropdownMenuBoxInput(
+                    label = "Transporte",
+                    values = transports,
+                    isExpanded = isExpanded,
+                    transport = transport,
+                    onExpanded = { createTripViewModel.onIsExpandedChange(it) },
+                    onClickable = { createTripViewModel.onTransportChange(it) },
+                )
 
-            PlaceAutocompleteField(
-                label = "Destino",
-                query = destinationAutocompleteQuery,
-                onQueryChange = onDestinationAutocompleteQueryValueChange,
-                isDropdownVisible = isDestinationAutocompleteDropdownVisible,
-                onDropdownVisibilityChange = onDestinationAutocompleteDropdownVisibilityChange,
-                predictions = destinationAutocompletePredictions,
-                onPredictionSelect = onDestinationAutocompletePredictionSelect,
-                focusRequester = destinationFocusRequester,
-                imeAction = ImeAction.Next,
-                onClearField = onClearDestinationField,
-                onSelectedLocationChange = onSelectedDestinationLocationChange
-            )
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
+                // Acompañantes
+                AddList(
+                    label = "Acompañantes",
+                    name = memberName,
+                    values = members,
+                    onValueNameChange = {
+                        createTripViewModel.onMemberNameChange(it)
+                        isMemberNameValid = true
+                    },
+                    onAdd = {
+                        if (memberName.isBlank()) {
+                            isMemberNameValid = false
+                        }
+                        createTripViewModel.onAddMember(it)
+                    },
+                    onRemove = { createTripViewModel.onRemoveMember(it) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Contacts,
+                            contentDescription = "Member Name",
+                        )
+                    },
+                    isError = !isMemberNameValid,
+                )
 
-            Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+            }
 
-            //Fechas
-            DateRangePickerInput(
-                label = "Fechas",
-                startDate = startDate,
-                endDate = endDate,
-                dateRangePickerState = dateRangePickerState,
-                showDateRangePicker = showDateRangePickerDialog,
-                onDismiss = { onDismissDateRangePickerDialog(it) },
-                onConfirm = { onConfirmDateRangePickerDialog(it) }
-            ) { onDismissDateRangePickerDialog(true) }
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            // Transporte
-            ExposedDropdownMenuBoxInput(
-                label = "Transporte",
-                values = transports,
-                isExpanded = isExpanded,
-                transport = transport,
-                onExpanded = onIsExpandedChange,
-                onClickable = onTransportChange
-            )
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            // Descripción Opcional
-            TextInputField(
-                label = "Descripción (Opcional)",
-                textValue = description,
-                onValueChange = onDescriptionChange,
-                focusRequester = descriptionFocusRequester,
-                imeAction = ImeAction.Done
-            )
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            // Lista de Integrantes
-            AddList(
-                label = "Acompañantes",
-                name = memberName,
-                values = members,
-                isDialogOpen = isMemberDialogOpen,
-                onValueNameChange = { onMemberNameChange(it) },
-                onDialogOpenChange = { onMemberDialogOpenChange(it) },
-                onAdd = onAddMember,
-                onRemove = onRemoveMember
-            )
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            // Lista de Paradas
+            /*
+            // Paradas
             AddList(
                 label = "Puntos de Parada",
                 name = stopName,
                 values = stops,
-                isDialogOpen = isStopDialogOpen,
-                onValueNameChange = { onStopNameChange(it) },
-                onDialogOpenChange = { onStopDialogOpenChange(it) },
-                onAdd = onAddStop,
-                onRemove = onRemoveStop
+                onValueNameChange = { createTripViewModel.onStopNameChange(it) },
+                onAdd = { createTripViewModel.onAddStop(it) },
+                onRemove = { createTripViewModel.onRemoveStop(it) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.AddLocation,
+                        contentDescription = "Member Name",
+                    )
+                },
             )
 
             Spacer(modifier = Modifier.size(8.dp))
-
-            // Botón para guardar
-            Button(
-                onClick = onCreateTripClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                //.align(Alignment.CenterHorizontally)
-            ) {
-                Text("Guardar")
+            */
+            item {
+                // Descripción
+                TextInputField(
+                    label = "Descripción",
+                    textValue = description,
+                    onValueChange = {
+                        description = it
+                    },
+                    focusRequester = descriptionFocusRequester,
+                    imeAction = ImeAction.Done,
+                    singleLine = false,
+                    maxLines = 3,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Description,
+                            contentDescription = "Trip Title",
+                        )
+                    },
+                    onClearField = { description = "" },
+                )
             }
         }
     }

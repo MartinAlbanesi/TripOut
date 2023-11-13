@@ -5,7 +5,6 @@ Aplicación creada para la materia Programación Móvil 3
 - [Albanesi Martin](https://github.com/MartinAlbanesi)
 - [Gomez Gabriel](https://github.com/GabrielGomezGG)
 - [Nappio Ariel](https://github.com/ArielNappio)
-- [Vargas Ariana](https://github.com/Ariana23)
 
 ## Tecnologías usadas:
 * [Android Compose](https://developer.android.com/jetpack/compose?hl=es-419)

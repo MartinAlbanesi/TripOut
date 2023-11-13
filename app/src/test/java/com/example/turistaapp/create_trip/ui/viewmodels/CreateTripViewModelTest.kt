@@ -5,18 +5,15 @@ import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
-import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import okhttp3.Dispatcher
 import org.junit.After
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,6 +29,9 @@ class CreateTripViewModelTest {
     @RelaxedMockK
     private lateinit var getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 
+    @RelaxedMockK
+    private lateinit var  getNameFromDataStore: GetNameFromDataStore
+
     @get:Rule
     var rule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -45,7 +45,8 @@ class CreateTripViewModelTest {
         createTripViewModel = CreateTripViewModel(
             insertTripUseCase,
             getPlaceAutocompleteLocationsUseCase,
-            getPlaceDetailsUseCase
+            getPlaceDetailsUseCase,
+            getNameFromDataStore
         )
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
@@ -56,18 +57,21 @@ class CreateTripViewModelTest {
     }
 
     @Test
-    fun cuandoElCasoDeUsoGetPlaceDetailsRetorneLocationModelEntoncesSeteaEnUnaVariableLiveData() = runTest {
-        //Given
+    fun `onCreateTripClick - SaveTripClicked - return true`() = runTest {
+        // Given
         val expected = FakeDataBaseSource.locationModel
         coEvery {
             getPlaceDetailsUseCase(any())
         }.returns(expected)
 
-        //When
-        createTripViewModel.onCreateTripClick()
+        // When
+        val result = createTripViewModel.onCreateTripClick("test", "test")
 
-        //Then
-        val result = createTripViewModel.originLocation.value
-        assertEquals(expected, result)
+        // Then
+        assertEquals(true, result)
     }
+//    @Test
+//    fun `searchOriginPlaces - onOriginAutocompleteQueryValueChange - originPrediction get PlaceAutocompletePredictionModel list`() {
+//        TODO("Not yet implemented")
+//    }
 }
