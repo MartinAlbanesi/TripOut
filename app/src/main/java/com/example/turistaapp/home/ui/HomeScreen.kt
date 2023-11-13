@@ -5,7 +5,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -60,7 +59,7 @@ fun LottiePreview(
     title: String = "",
     res: Int,
     isBackgroundColored: Boolean = false,
-    // isTextBackgroundColored: Boolean = false,
+    isClickable: Boolean = false,
     isBottomBrush: Boolean = false,
     isTopBrush: Boolean = false,
     onClickAnimation: () -> Unit,
@@ -97,13 +96,25 @@ fun LottiePreview(
             Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, Color.Transparent))
     }
 
+    val boxClickable: Modifier by remember {
+        mutableStateOf(
+            if (isClickable) {
+                Modifier.clickable { onClickAnimation() }
+            } else {
+                Modifier
+            },
+        )
+    }
+
+//    boxClickable = if (isClickable) Modifier.clickable { onClickAnimation() } else { Modifier }
+
     Box(
-        modifier = Modifier
+        modifier = boxClickable
             .fillMaxWidth()
             .height(200.dp)
-            .clickable {
-                onClickAnimation()
-            }
+//            .clickable {
+//                onClickAnimation()
+//            }
             .background(background),
         contentAlignment = Alignment.BottomStart,
     ) {
@@ -162,6 +173,7 @@ fun HomeScreen(
     onClickFloatingBottom: () -> Unit,
     onClickShakeGame: () -> Unit,
     onQRButtonClick: () -> Unit,
+    onTripClick: (Int) -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     var showDialog by remember {
@@ -188,6 +200,7 @@ fun HomeScreen(
                     res = R.raw.world,
                     isBackgroundColored = true,
                     isBottomBrush = true,
+                    isClickable = true,
                 ) {
                     onClickShakeGame()
                 }
@@ -232,8 +245,7 @@ fun HomeScreen(
                             LottiePreview(
                                 title = "No se encontraron resultados",
                                 res = R.raw.marker,
-                            ) {
-                            }
+                            ) {}
                         }
                     }
                 }
@@ -253,6 +265,7 @@ fun HomeScreen(
                         res = R.raw.map,
                         isBackgroundColored = true,
                         isTopBrush = true,
+                        isClickable = true,
                     ) {}
                 }
             }
@@ -269,10 +282,12 @@ fun HomeScreen(
                         isQRDialogOpen = true
                         dataQRSelected = Gson().toJson(trip.toDataQRModel())
                     },
+                    onMapButtonClick = {
+                        onTripClick(it)
+                    },
                     modifier = Modifier
                         .padding(10.dp)
                         .fillMaxWidth(),
-//                       .clickable { },
                 )
             }
         }
