@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.TripOrigin
@@ -58,6 +59,7 @@ fun TripItem(
     onQRButtonClick: () -> Unit,
     onDeleteButtonClick: (TripModel) -> Unit,
     onDismissDialog: () -> Unit,
+    onMapButtonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box {
@@ -133,6 +135,17 @@ fun TripItem(
                         ),
                 )
                 DropdownMenu(expanded = menuAnchor, onDismissRequest = { menuAnchor = false }) {
+                    DropdownMenuItem(
+                        text = { Text(text = "Ver Mapa") },
+                        onClick = { onMapButtonClick(trip.tripId) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Map,
+                                contentDescription = "Map Button",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            )
+                        },
+                    )
                     DropdownMenuItem(
                         text = { Text(text = "Compartir") },
                         onClick = {

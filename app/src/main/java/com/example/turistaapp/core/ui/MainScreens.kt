@@ -107,6 +107,10 @@ fun MainScreen(
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
                     onClickShakeGame = { navController.navigate(Routes.ShakeGame.route) },
+                    onTripClick = {
+                        state = 1
+                        mapViewModel.getTripById(it)
+                    },
                     onQRButtonClick = {
                         val options = ScanOptions()
                         options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)

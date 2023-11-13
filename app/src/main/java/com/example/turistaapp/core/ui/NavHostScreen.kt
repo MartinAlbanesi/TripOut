@@ -29,12 +29,12 @@ import com.example.turistaapp.welcome.ui.WelcomeViewModel
 fun NavHostScreen(
     welcomeViewModel: WelcomeViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
-    onClickChangeTheme: () -> Unit
+    onClickChangeTheme: () -> Unit,
 ) {
     val navController = rememberNavController()
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
             homeViewModel.getNearbyLocationsWithLastLocation()
@@ -43,7 +43,6 @@ fun NavHostScreen(
             navController.navigate(Routes.Home.route)
         }
     }
-
 
     val name by welcomeViewModel.name.collectAsStateWithLifecycle()
 
@@ -72,7 +71,7 @@ fun NavHostScreen(
                 slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
                     IntOffset(fullSize.width, fullSize.height)
                 }
-            }
+            },
         ) {
             CreateTripScreen(address = it.arguments?.getString("address")) {
                 navController.navigate(Routes.Home.route)
@@ -89,30 +88,53 @@ fun NavHostScreen(
             enterTransition = {
                 slideInVertically(
                     animationSpec = tween(
-                        durationMillis = 500
+                        durationMillis = 500,
                     ),
                 )
             },
             exitTransition = {
                 slideOutVertically(
                     animationSpec = tween(
-                        durationMillis = 200
+                        durationMillis = 200,
                     ),
-                    targetOffsetY = { -it }
+                    targetOffsetY = { -it },
                 )
             },
             popEnterTransition = {
                 slideInVertically(
                     animationSpec = tween(
-                        durationMillis = 500
+                        durationMillis = 500,
                     ),
                 )
-            }
-        ){
+            },
+        ) {
             ShakeGameScreen(
                 onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
-                onNavigateToHome = { navController.navigate(Routes.Home.route) }
+                onNavigateToHome = { navController.navigate(Routes.Home.route) },
             )
         }
+//        composable(
+//            Routes.Map.route,
+//            arguments = listOf(navArgument("TripID") { defaultValue = "0" }),
+//            enterTransition = {
+//                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
+//                    IntOffset(fullSize.width, fullSize.height)
+//                }
+//            },
+//            exitTransition = {
+//                slideOut(tween(200, easing = LinearOutSlowInEasing)) {
+//                    IntOffset(it.width, it.height)
+//                }
+//            },
+//            popEnterTransition = {
+//                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
+//                    IntOffset(fullSize.width, fullSize.height)
+//                }
+//            }
+//        ) {
+//            MapScreen() {
+//                navController.navigate(Routes.Home.route)
+//            }
+//        }
     }
 }
