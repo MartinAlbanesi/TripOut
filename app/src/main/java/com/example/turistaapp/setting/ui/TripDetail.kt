@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.PermIdentity
@@ -71,6 +72,8 @@ fun TripDetail() {
                 "30/10/2023",
                 "Martin",
                 "Name",
+                "San justo",
+                "Unlam",
                 "Address",
                 "DRIVING",
                 "Un viaje espectacular para conocer mis destinos favoritos",
@@ -102,6 +105,8 @@ fun BottomScaffoldBody(
     fechaFin: String,
     nombreDelUsuario: String,
     nombre: String,
+    valoracionIda : String,
+    valoracionFin : String,
     direccion: String,
     tipoTransporte: String,
     descripcionDelViaje: String,
@@ -166,13 +171,13 @@ fun BottomScaffoldBody(
                                 onClick = {},
                                 label = {
                                     Icon(
-                                        imageVector = Icons.Default.Save, contentDescription = "",
+                                        imageVector = Icons.Default.ImageSearch, contentDescription = "",
                                         tint = Color.White,
                                         modifier = Modifier
                                             .padding(horizontal = 5.dp, vertical = 1.dp)
                                             .size(20.dp),
                                     )
-                                    Text("Guardar", color = Color.White)
+                                    Text("Imagen", color = Color.White)
                                 },
                                 modifier = Modifier
                                     .padding(8.dp)
@@ -262,7 +267,6 @@ fun BottomScaffoldBody(
                     Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
                     Row {
-
                         Icon(
                             imageVector = Icons.Default.AddLocationAlt, contentDescription = "",
                             tint = Color.White,
@@ -286,18 +290,37 @@ fun BottomScaffoldBody(
                                     modifier = Modifier
                                         .size(width = 43.dp, height = 60.dp)
                                 )
-
                                 Column(
                                     modifier = Modifier
                                         .padding(vertical = 1.dp)
                                 ) {
-                                    Text(
-                                        text = nombre,
-                                        fontSize = 23.sp,
-                                        color = Color.Black,
-                                        modifier = Modifier
-                                            .padding(10.dp)
-                                    )
+
+                                    Row {
+                                        Text(
+                                            text = nombre,
+                                            fontSize = 23.sp,
+                                            color = Color.Black,
+                                            modifier = Modifier
+                                                .padding(10.dp)
+                                        )
+
+                                        Spacer(modifier = Modifier.padding(horizontal = 12.dp))
+                                        Row {
+                                            Text(
+                                                text = valoracionIda,                                                fontSize = 21.sp,
+                                                color = Color.Black,
+                                                modifier = Modifier
+                                                    .padding(10.dp)
+                                            )
+                                            Icon(
+                                                imageVector = Icons.Default.Star,
+                                                contentDescription = "",
+                                                tint = Color.Yellow,
+                                                modifier = Modifier
+                                                    .padding(10.dp)
+                                            )
+                                        }
+                                    }
                                     Text(
                                         text = direccion,
                                         fontSize = 19.sp,
@@ -305,24 +328,6 @@ fun BottomScaffoldBody(
                                         modifier = Modifier
                                             .padding(horizontal = 12.dp)
                                     )
-                                    Spacer(modifier = Modifier.padding(horizontal = 12.dp))
-                                    Row {
-                                        Text(
-                                            text = "4,9",
-                                            fontSize = 21.sp,
-                                            color = Color.Black,
-                                            modifier = Modifier
-                                                //arreglar xD
-                                                .padding(10.dp)
-                                        )
-                                        Icon(
-                                            imageVector = Icons.Default.Star,
-                                            contentDescription = "",
-                                            tint = Color.Yellow,
-                                            modifier = Modifier
-                                                .padding(10.dp)
-                                        )
-                                    }
                                 }
                             }
                         }
@@ -369,7 +374,7 @@ fun BottomScaffoldBody(
                                         Spacer(modifier = Modifier.padding(horizontal = 12.dp))
                                         Row {
                                             Text(
-                                                text = "4,1",
+                                                text = valoracionFin,
                                                 fontSize = 21.sp,
                                                 color = Color.Black,
                                                 modifier = Modifier
