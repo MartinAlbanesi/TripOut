@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -41,6 +42,7 @@ fun PagerViewTwo(
             singleLine = true,
             maxLines = 1,
             modifier = Modifier
+                .testTag("nameTextField")
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
             isError = isError
@@ -56,7 +58,7 @@ fun PagerViewTwo(
             Text(
                 text = "El nombre debe comenzar con mayúscula y no contener números ni caracteres especiales",
                 color = Color.Red,
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(start = 4.dp).testTag("errorText")
             )
         }
     }
