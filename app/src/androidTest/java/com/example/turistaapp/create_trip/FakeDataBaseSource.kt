@@ -33,7 +33,7 @@ object FakeDataBaseSource {
             author = "",
             isFavorite = false,
             isFinished = false,
-            images = null,
+            images = listOf("image1", "image2"),
             comments = null,
         ),
         TripEntity(

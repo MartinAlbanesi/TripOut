@@ -95,4 +95,18 @@ class TripDaoTest {
         assertTrue(actual.isEmpty())
         assertEquals(emptyList<Any>(), actual)
     }
+
+    @Test
+    fun updateImages() = runTest{
+        val expected = listOf("image3", "image4")
+        val tripEntityList = FakeDataBaseSource.tripEntityList
+
+        tripDao.insertTripList(tripEntityList)
+
+        tripDao.updateImages(1, listOf("image3", "image4"))
+
+        val actual = tripDao.getTripList()
+
+        assertEquals(expected, actual[0].images)
+    }
 }
