@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,6 +31,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,12 +49,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.turistaapp.map.domain.models.RouteModel
+import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
 
-
-//@Preview
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun TripDetail() {
+// @Preview
+// @OptIn(ExperimentalMaterial3Api::class)
+// @Composable
+// fun TripDetail() {
 //    BottomSheetScaffold(
 //        sheetContent = {
 //            BottomScaffoldBody(
@@ -83,7 +86,7 @@ import com.example.turistaapp.map.domain.models.RouteModel
 //    )
 //    {
 //    }
-//}
+// }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,7 +104,7 @@ fun TripDetails(
 //    listaImagenes: List<String>,
 //    miembros: List<String>
     routeModel: RouteModel? = null,
-    settingViewModel: SettingViewModel = hiltViewModel()
+    settingViewModel: SettingViewModel = hiltViewModel(),
 ) {
 //    Column(
 //        verticalArrangement = Arrangement.Center,
@@ -111,7 +114,6 @@ fun TripDetails(
 //            modifier = Modifier.height(800.dp)  // aca es el largo del deslizante
 //        ) {
 
-
     var selectedImageUris by remember {
         mutableStateOf<List<String>>(emptyList())
     }
@@ -120,51 +122,85 @@ fun TripDetails(
         onResult = { uris ->
             selectedImageUris += uris.map { it.toString() }
             settingViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
-        }
+        },
     )
 
     LaunchedEffect(routeModel) {
         Log.i("titi", routeModel?.trip?.images.toString())
     }
 
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 16.dp),
             ) {
-                Text(text = routeModel!!.trip!!.name, fontSize = 26.sp)
-
+                Text(
+                    text = routeModel!!.trip!!.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                )
             }
-            Spacer(modifier = Modifier.padding(8.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 1.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
             ) {
-                Icon(
-                    imageVector = Icons.Default.CalendarMonth,
-                    "",
-                )
-                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                Text(text = "${routeModel!!.trip!!.startDate}  -", fontSize = 15.sp)
-                Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                Text(text = routeModel.trip!!.endDate, fontSize = 15.sp)
+                Box(
+                    contentAlignment = Alignment.CenterStart,
+                    modifier = Modifier.fillMaxHeight().weight(0.6f),
+                ) {
+                    Row {
+                        Icon(
+                            imageVector = Icons.Default.CalendarMonth,
+                            "Trip Dates",
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically),
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 3.dp))
+                        Text(
+                            text = "${
+                                formatMilisToDateString(
+                                    routeModel?.trip!!.startDate,
+                                    "dd/MM/yy",
+                                )
+                            } - ",
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        )
+                        Text(
+                            text = formatMilisToDateString(
+                                routeModel.trip.endDate,
+                                "dd/MM/yy",
+                            ),
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                }
 
-                Spacer(modifier = Modifier.padding(horizontal = 25.dp))
-                Row {
-                    Icon(
-                        imageVector = Icons.Default.PermIdentity, contentDescription = "",
-                        modifier = Modifier
-                            .padding(horizontal = 5.dp, vertical = 1.dp)
-                            .size(20.dp),
-                    )
-                    Text(
-                        text = "Por ${routeModel.trip.author}",
-                        fontSize = 15.sp,
-                    )
+                Box(
+                    contentAlignment = Alignment.CenterEnd,
+                    modifier = Modifier.fillMaxHeight().weight(0.5f),
+                ) {
+                    Row {
+                        Icon(
+                            imageVector = Icons.Default.PermIdentity,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(horizontal = 5.dp, vertical = 1.dp)
+                                .size(20.dp)
+                                .align(Alignment.CenterVertically),
+                        )
+                        Text(
+                            text = "Por ${routeModel?.trip?.author ?: "Nadie"}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        )
+                    }
                 }
             }
 
@@ -173,27 +209,31 @@ fun TripDetails(
                     AssistChip(
                         onClick = {
                             multiplePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                             )
                         },
                         label = {
                             Icon(
-                                imageVector = Icons.Default.ImageSearch, contentDescription = "",
+                                imageVector = Icons.Default.ImageSearch,
+                                contentDescription = "",
                                 modifier = Modifier
                                     .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
                             )
-                            Text("Imagen")
+                            Text("Galeria")
                         },
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(8.dp),
 
                     )
                     AssistChip(
-                        onClick = {},
+                        onClick = {
+                                  // onShareButtonClick(routeModel!!.trip)
+                        },
                         label = {
                             Icon(
-                                imageVector = Icons.Default.Share, contentDescription = "",
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "",
                                 modifier = Modifier
                                     .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
@@ -201,7 +241,7 @@ fun TripDetails(
                             Text("Compartir")
                         },
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(8.dp),
                     )
                     AssistChip(
                         onClick = {},
@@ -216,14 +256,15 @@ fun TripDetails(
                             Text("camara")
                         },
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(8.dp),
                     )
 
                     AssistChip(
                         onClick = {},
                         label = {
                             Icon(
-                                imageVector = Icons.Default.Delete, contentDescription = "",
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "",
                                 modifier = Modifier
                                     .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
@@ -231,17 +272,16 @@ fun TripDetails(
                             Text("Eliminar")
                         },
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(8.dp),
                     )
                 }
             }
-
 
             Spacer(modifier = Modifier.padding(7.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "Origen y destino",
@@ -252,7 +292,7 @@ fun TripDetails(
                 Icon(
                     imageVector = Icons.Default.DirectionsCar,
                     contentDescription = "Auto",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(30.dp),
                 )
                 Spacer(modifier = Modifier.padding(start = 5.dp))
                 Text(
@@ -261,44 +301,41 @@ fun TripDetails(
                 )
             }
 
-
-
-
             Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
             Row {
                 Icon(
-                    imageVector = Icons.Default.AddLocationAlt, contentDescription = "",
+                    imageVector = Icons.Default.AddLocationAlt,
+                    contentDescription = "",
                     modifier = Modifier
                         .padding(horizontal = 9.dp, vertical = 8.dp)
                         .size(40.dp),
                 )
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
-                        defaultElevation = 8.dp
+                        defaultElevation = 8.dp,
                     ),
                     modifier = Modifier
                         .size(310.dp, height = 80.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Row(Modifier.fillMaxWidth()) {
                         Icon(
                             imageVector = Icons.Default.ImageSearch,
                             "",
                             modifier = Modifier
-                                .size(width = 43.dp, height = 60.dp)
+                                .size(width = 43.dp, height = 60.dp),
                         )
                         Column(
                             modifier = Modifier
-                                .padding(vertical = 1.dp)
+                                .padding(vertical = 1.dp),
                         ) {
-
                             Row {
                                 Text(
                                     text = routeModel!!.trip!!.origin.name,
                                     fontSize = 23.sp,
                                     modifier = Modifier
-                                        .padding(10.dp)
+                                        .padding(10.dp),
                                 )
 
                                 Spacer(modifier = Modifier.padding(horizontal = 12.dp))
@@ -306,13 +343,13 @@ fun TripDetails(
                                     Text(
                                         text = routeModel!!.trip!!.origin.rating.toString(),
                                         modifier = Modifier
-                                            .padding(10.dp)
+                                            .padding(10.dp),
                                     )
                                     Icon(
                                         imageVector = Icons.Default.Star,
                                         contentDescription = "",
                                         modifier = Modifier
-                                            .padding(10.dp)
+                                            .padding(10.dp),
                                     )
                                 }
                             }
@@ -320,7 +357,7 @@ fun TripDetails(
                                 text = routeModel!!.trip!!.origin.address.toString(),
                                 fontSize = 19.sp,
                                 modifier = Modifier
-                                    .padding(horizontal = 12.dp)
+                                    .padding(horizontal = 12.dp),
                             )
                         }
                     }
@@ -329,37 +366,37 @@ fun TripDetails(
             Spacer(modifier = Modifier.size(15.dp))
             Row {
                 Icon(
-                    imageVector = Icons.Default.AddLocationAlt, contentDescription = "",
+                    imageVector = Icons.Default.AddLocationAlt,
+                    contentDescription = "",
                     modifier = Modifier
                         .padding(horizontal = 9.dp, vertical = 8.dp)
                         .size(40.dp),
                 )
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
-                        defaultElevation = 8.dp
+                        defaultElevation = 8.dp,
                     ),
                     modifier = Modifier
                         .size(310.dp, height = 80.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Row(Modifier.fillMaxWidth()) {
                         Icon(
                             imageVector = Icons.Default.ImageSearch,
                             "",
                             modifier = Modifier
-                                .size(width = 43.dp, height = 60.dp)
+                                .size(width = 43.dp, height = 60.dp),
                         )
                         Column(
                             modifier = Modifier
-                                .padding(vertical = 1.dp)
+                                .padding(vertical = 1.dp),
                         ) {
-
                             Row {
                                 Text(
                                     text = routeModel!!.trip!!.destination.name,
                                     fontSize = 23.sp,
                                     modifier = Modifier
-                                        .padding(10.dp)
+                                        .padding(10.dp),
                                 )
 
                                 Spacer(modifier = Modifier.padding(horizontal = 12.dp))
@@ -368,13 +405,13 @@ fun TripDetails(
                                         text = routeModel.trip!!.destination.rating.toString(),
                                         fontSize = 21.sp,
                                         modifier = Modifier
-                                            .padding(10.dp)
+                                            .padding(10.dp),
                                     )
                                     Icon(
                                         imageVector = Icons.Default.Star,
                                         contentDescription = "",
                                         modifier = Modifier
-                                            .padding(10.dp)
+                                            .padding(10.dp),
                                     )
                                 }
                             }
@@ -382,7 +419,7 @@ fun TripDetails(
                                 text = routeModel!!.trip!!.destination.address.toString(),
                                 fontSize = 19.sp,
                                 modifier = Modifier
-                                    .padding(horizontal = 12.dp)
+                                    .padding(horizontal = 12.dp),
                             )
                         }
                     }
@@ -396,10 +433,9 @@ fun TripDetails(
             Card(
                 modifier = Modifier
                     .padding(horizontal = 13.dp)
-                    .size(360.dp, height = 130.dp)
+                    .size(360.dp, height = 130.dp),
 
             ) {
-
                 Text(
                     text = routeModel!!.trip!!.description.toString(),
                     modifier = Modifier,
@@ -413,17 +449,16 @@ fun TripDetails(
                     modifier = Modifier,
                     fontSize = 26.sp,
                 )
-
             }
         }
-        //imagenes
+        // imagenes
 
 //            LazyRow(
 //                Modifier.fillMaxWidth()
 //            ) {
         item {
             LazyRow(
-                Modifier.fillMaxWidth()
+                Modifier.fillMaxWidth(),
             ) {
                 items(routeModel!!.trip!!.images ?: emptyList()) { imagen ->
 //            Log.i("titi", imagen)
@@ -433,7 +468,7 @@ fun TripDetails(
                             .size(300, 300)
                             .crossfade(true)
                             .build(),
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                 }
             }
@@ -451,7 +486,7 @@ fun TripDetails(
                 onClick = {},
                 label = { Text(chipValue, color = Color.White) },
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(8.dp),
             )
         }
     }
@@ -467,10 +502,10 @@ fun TripDetails(
 //            )
 //        }
 //    }
-//}
+// }
 //            }
 //
 //        }
 
-//}
-//}
+// }
+// }
