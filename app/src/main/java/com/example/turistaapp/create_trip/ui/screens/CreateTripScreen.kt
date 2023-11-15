@@ -34,7 +34,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
+import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
@@ -81,7 +83,7 @@ fun CreateTripScreen(
         mutableStateOf(address ?: "")
     }
     var isDestinationAutocompleteDropdownVisible by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
         emptyList(),
@@ -187,6 +189,7 @@ fun CreateTripScreen(
                                     duration = SnackbarDuration.Indefinite,
                                 )
                         }
+                        onClickCreateTrip()
                     } else {
                         scope.launch {
                             snackbarHostState

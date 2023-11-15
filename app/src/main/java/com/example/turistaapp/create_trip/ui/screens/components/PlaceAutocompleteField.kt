@@ -1,5 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -58,11 +60,7 @@ fun PlaceAutocompleteField(
         value = query,
         onValueChange = {
             onQueryChange(it)
-            if (it.isEmpty()) {
-                onDropdownVisibilityChange(false)
-            } else {
-                onDropdownVisibilityChange(true)
-            }
+            onDropdownVisibilityChange(true)
         },
         leadingIcon = {
             if (!isError) {
