@@ -207,7 +207,7 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun validateTripName(tripName: String): Boolean {
-        if (tripName.isBlank()) {
+        if (tripName.isBlank() || tripName.length < 3 || tripName.length > 30 || !tripName[0].isUpperCase()) {
             return false
         }
         return true

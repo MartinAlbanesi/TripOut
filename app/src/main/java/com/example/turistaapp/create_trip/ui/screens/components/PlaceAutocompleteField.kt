@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 
 @Composable
@@ -70,7 +71,7 @@ fun PlaceAutocompleteField(
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "Error",
-                    tint = Color.Red,
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         },
@@ -135,7 +136,8 @@ fun PlaceAutocompleteField(
     ) {
         Text(
             text = "Introduzca una ubicación válida",
-            color = Color.Red,
+            color = MaterialTheme.colorScheme.error,
+            fontSize = 14.sp,
             modifier = Modifier.padding(start = 4.dp),
         )
     }
