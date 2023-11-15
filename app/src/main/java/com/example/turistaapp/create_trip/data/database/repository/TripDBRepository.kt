@@ -13,4 +13,6 @@ interface TripDBRepository {
     suspend fun getFlowLocationsFromDestination(): Flow<List<String>>
 
     suspend fun deleteTrip(trip: TripEntity)
+
+    suspend fun updateImages(id: Int, images: List<String>)
 }

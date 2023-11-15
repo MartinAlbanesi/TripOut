@@ -30,4 +30,7 @@ interface TripDao {
 
     @Delete
     fun deleteTrip(trip: TripEntity)
+
+    @Query("UPDATE trips_table SET images = :images WHERE id = :id")
+    fun updateImages(id: Int, images: List<String>)
 }

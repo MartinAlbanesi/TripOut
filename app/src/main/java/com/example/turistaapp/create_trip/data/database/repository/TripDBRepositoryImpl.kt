@@ -27,4 +27,8 @@ class TripDBRepositoryImpl @Inject constructor(
     override suspend fun deleteTrip(trip: TripEntity) {
         tripDao.deleteTrip(trip)
     }
+
+    override suspend fun updateImages(id: Int, images: List<String>) {
+        tripDao.updateImages(id, images)
+    }
 }
