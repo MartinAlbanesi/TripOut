@@ -47,7 +47,7 @@ data class TripEntity(
     val isFinished: Boolean,
 
     @ColumnInfo(name = "images")
-    val images: MutableList<String>?,
+    val images: List<String>?,
 
     @ColumnInfo(name = "comments")
     val comments: MutableList<String>?,

@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -164,7 +166,7 @@ fun ShakeGameScreen(
                     )
                 }
             }
-            Column(modifier = Modifier.weight(2f)) {
+            Column(modifier = Modifier) {
                 Text(
                     text = "Ingrese al menos 2 ubicaciones",
                     modifier = Modifier
@@ -224,7 +226,7 @@ private fun ItemShake(
     text: String,
     onDelete: () -> Unit
 ) {
-    Row(Modifier.fillMaxWidth()) {
+    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Text(text = text, modifier = Modifier.weight(1f))
         IconButton(
             onClick = { onDelete() },
