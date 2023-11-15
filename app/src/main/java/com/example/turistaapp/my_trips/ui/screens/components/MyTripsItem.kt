@@ -1,5 +1,8 @@
 package com.example.turistaapp.my_trips.ui.screens.components
 
+import android.icu.util.Calendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -49,7 +52,10 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripItem(
@@ -81,15 +87,59 @@ fun TripItem(
                     .heightIn(0.dp, 120.dp), // mention max height here)
             )
 
-            ItemText(
-                icon = Icons.Default.CalendarMonth,
-                name = "${
-                    formatMilisToDateString(
-                        trip.startDate,
-                        "dd/MM/yyyy",
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
+                ItemText(
+                    icon = Icons.Default.CalendarMonth,
+                    name = "${
+                        formatMilisToDateString(
+                            trip.startDate,
+                            "dd/MM/yyyy",
+                        )
+                    } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically),
+                ) {
+                    val daysLeft = obtenerDiferenciaFechas(
+                        formatMilisToDateString(trip.startDate, "yyyy-MM-dd"),
+                        formatMilisToDateString(
+                            Calendar.getInstance().timeInMillis.toString(),
+                            "yyyy-MM-dd",
+                        ),
                     )
-                } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
-            )
+                    when {
+                        daysLeft.toInt() < 0 -> Text(
+                            text = "El viaje ya terminó",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+
+                        daysLeft.toInt() == 0 -> Text(
+                            text = "Hoy",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+
+                        daysLeft.toInt() == 1 -> Text(
+                            text = "Mañana",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+
+                        else -> Text(
+                            text = "En $daysLeft días",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
 
             ItemText(
                 icon = Icons.Default.TripOrigin,
@@ -188,7 +238,7 @@ fun TripItem(
 }
 
 fun formatMilisToDateString(milisegundosString: String, formato: String): String {
-    val milisegundos = milisegundosString.toLong()
+    val milisegundos = milisegundosString.toLong() + 85400000L
     val dateTime = DateTime(milisegundos)
     val formatter = DateTimeFormat.forPattern(formato)
     return formatter.print(dateTime)
@@ -266,4 +316,17 @@ fun ItemText(icon: ImageVector, name: String) {
                 .padding(start = 8.dp),
         )
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun obtenerDiferenciaFechas(fechaInicio: String, fechaFin: String): String {
+    // Convertir las fechas de String a objetos LocalDate
+    val fechaInicioObj = LocalDate.parse(fechaInicio)
+    val fechaFinObj = LocalDate.parse(fechaFin)
+
+    // Calcular la diferencia en días
+    val diferenciaDias = ChronoUnit.DAYS.between(fechaFinObj, fechaInicioObj)
+
+    // Devolver la diferencia en un formato legible
+    return "${diferenciaDias + 1}"
 }
