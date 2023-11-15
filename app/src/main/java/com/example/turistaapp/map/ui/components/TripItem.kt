@@ -69,9 +69,9 @@ fun TripItem(
             Text(text = "$address", modifier = Modifier.padding(horizontal = 8.dp))
         }
         SubcomposeAsyncImage(
-            model = photoUrl ?: R.drawable.placeholder,
+            model = photoUrl ?: R.drawable.baseline_image_24,
             contentDescription = name,
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Crop,
             // placeholder = painterResource(id = R.drawable.ic_launcher_background),
             modifier = Modifier
                 .background(shimmerBrush(targetValue = 1300f, showShimmer = showShimmer.value))

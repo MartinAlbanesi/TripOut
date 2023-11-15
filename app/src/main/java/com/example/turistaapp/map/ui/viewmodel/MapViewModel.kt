@@ -55,6 +55,10 @@ class MapViewModel @Inject constructor(
         getTutorialComplete()
     }
 
+    fun onMarkerSelectChange(markerSelect: Boolean) {
+        _markerSelect.value = markerSelect
+    }
+
     fun setMapTutorial() {
         viewModelScope.launch(dispatcher) {
             setIsMapTutorialComplete(true)
@@ -65,9 +69,9 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
 //            if (getIsMapTutorialComplete().first() != null){
 //                _isMapTutorialComplete.value = getIsMapTutorialComplete().first()!!
-                getIsMapTutorialComplete().collect {
-                    _isMapTutorialComplete.value = it
-                }
+            getIsMapTutorialComplete().collect {
+                _isMapTutorialComplete.value = it
+            }
 //            }
         }
     }
@@ -77,7 +81,7 @@ class MapViewModel @Inject constructor(
             if (getLastLocationUseCase() != null) {
                 _lastLocation.value = LatLng(
                     getLastLocationUseCase()!!.latitude,
-                    getLastLocationUseCase()!!.longitude
+                    getLastLocationUseCase()!!.longitude,
                 )
             }
         }
@@ -91,7 +95,7 @@ class MapViewModel @Inject constructor(
                     origin = selectTrip.getLatLngOrigin(),
                     destination = selectTrip.getLatLngDestination(),
                     transport = selectTrip.transport,
-                    trip = selectTrip
+                    trip = selectTrip,
                 )
                 _tripSelected.value = selectRoute
                 decoPoints(selectRoute!!.points)
@@ -111,7 +115,7 @@ class MapViewModel @Inject constructor(
                 .map { item ->
                     Pair(
                         item.map { it.getOriginWithTripId() },
-                        item.map { it.getDestinationWithTripId() }
+                        item.map { it.getDestinationWithTripId() },
                     )
                 }
                 .collect {
@@ -119,7 +123,6 @@ class MapViewModel @Inject constructor(
                 }
         }
     }
-
 
     private fun decoPoints(points: String) {
         _polyLinesPoints.value = decodePoly(points)
@@ -160,7 +163,7 @@ class MapViewModel @Inject constructor(
 
             val p = LatLng(
                 lat.toDouble() / 1E5,
-                lng.toDouble() / 1E5
+                lng.toDouble() / 1E5,
             )
             poly.add(p)
         }

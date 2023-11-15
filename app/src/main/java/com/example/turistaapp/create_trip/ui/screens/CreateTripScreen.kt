@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,7 +34,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
+import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
@@ -82,7 +83,7 @@ fun CreateTripScreen(
         mutableStateOf(address ?: "")
     }
     var isDestinationAutocompleteDropdownVisible by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
         emptyList(),
@@ -178,10 +179,6 @@ fun CreateTripScreen(
                     isOriginValid = createTripViewModel.validateTripOrigin()
                     isDestinationValid = createTripViewModel.validateTripDestination()
 
-                    Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
-                    Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
-                    Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
-
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
                         createTripViewModel.onCreateTripClick(tripName, description)
                         scope.launch {
@@ -192,6 +189,7 @@ fun CreateTripScreen(
                                     duration = SnackbarDuration.Indefinite,
                                 )
                         }
+                        onClickCreateTrip()
                     } else {
                         scope.launch {
                             snackbarHostState
@@ -333,11 +331,11 @@ fun CreateTripScreen(
                                 long,
                             )
                         }
+
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
-                            createTripViewModel.onEndDateChange(
-                                long,
-                            )
+                            createTripViewModel.onEndDateChange(long)
                         }
+                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
                     onClickable = {

@@ -109,7 +109,7 @@ fun WelcomeScreen(
         Column(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.size(16.dp))
             AsyncImage(
-                model = R.drawable.tripout,
+                model = R.drawable.logo_name,
                 contentDescription = null,
                 modifier = Modifier
                     .size(240.dp)

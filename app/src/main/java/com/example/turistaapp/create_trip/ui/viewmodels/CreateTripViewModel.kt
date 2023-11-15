@@ -161,10 +161,11 @@ class CreateTripViewModel @Inject constructor(
     }
 
     // Origen seleccionado en las predicciones
-    private val _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel?>(null)
+    private var _selectedOriginLocation = MutableLiveData<PlaceAutocompletePredictionModel?>(null)
     fun clearSelectedOriginLocation() {
         _selectedOriginLocation.value = null
     }
+
     fun onSelectedOriginLocationChange(selectedLocation: PlaceAutocompletePredictionModel) {
         _selectedOriginLocation.value = selectedLocation
     }
@@ -181,6 +182,16 @@ class CreateTripViewModel @Inject constructor(
             _destinationPredictions.value = newPredictions
         }
     }
+
+//    fun searchDestinationFromRecommendation(query: String) {
+//        viewModelScope.launch {
+//            val newQuery = query.dropLast(1)
+//            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(newQuery)
+//            if (newPredictions != null) {
+//                _selectedOriginLocation.value = newPredictions.get(0)
+//            }
+//        }
+//    }
 
     // Setea
     fun setDestination(address: String?) {
@@ -207,7 +218,7 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun validateTripName(tripName: String): Boolean {
-        if (tripName.isBlank()) {
+        if (tripName.isBlank() || tripName.length < 3 || tripName.length > 30 || !tripName[0].isUpperCase()) {
             return false
         }
         return true
