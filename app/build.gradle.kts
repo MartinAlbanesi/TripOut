@@ -86,14 +86,14 @@ dependencies {
 
     //CameraX
 
-    implementation ("androidx.camera:camera-camera2:1.4.0-alpha02")
-    implementation ("androidx.camera:camera-lifecycle:1.4.0-alpha02")
-    implementation ("androidx.camera:camera-view:1.4.0-alpha02")
-    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
-
-    implementation ("androidx.compose.runtime:runtime:1.5.4")
-
-    implementation ("androidx.compose.ui:ui:1.5.4")
+//    implementation ("androidx.camera:camera-camera2:1.4.0-alpha02")
+//    implementation ("androidx.camera:camera-lifecycle:1.4.0-alpha02")
+//    implementation ("androidx.camera:camera-view:1.4.0-alpha02")
+//    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+//
+//    implementation ("androidx.compose.runtime:runtime:1.5.4")
+//
+//    implementation ("androidx.compose.ui:ui:1.5.4")
 
 
     // Google maps
