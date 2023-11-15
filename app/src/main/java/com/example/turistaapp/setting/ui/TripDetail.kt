@@ -1,5 +1,8 @@
 package com.example.turistaapp.setting.ui
 
+import android.Manifest
+import android.content.Intent
+import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -25,6 +28,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,11 +37,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
@@ -129,8 +137,39 @@ fun TripDetails(
         },
     )
 
+    var deniedPermission by remember {
+        mutableStateOf(false)
+    }
+
+    var isShowDialog by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            multiplePhotoPickerLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+            )
+        } else {
+            if (!deniedPermission) {
+                deniedPermission = true
+                isShowDialog = true
+            } else {
+//                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+        }
+    }
+
     LaunchedEffect(routeModel) {
         Log.i("titi", routeModel?.trip?.images.toString())
+    }
+
+    DialogShouldShowRationale(isShowDialog = isShowDialog) {
+        isShowDialog = !isShowDialog
     }
 
     LazyColumn(
@@ -156,7 +195,9 @@ fun TripDetails(
             ) {
                 Box(
                     contentAlignment = Alignment.CenterStart,
-                    modifier = Modifier.fillMaxHeight().weight(0.6f),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.6f),
                 ) {
                     Row {
                         Icon(
@@ -188,7 +229,9 @@ fun TripDetails(
 
                 Box(
                     contentAlignment = Alignment.CenterEnd,
-                    modifier = Modifier.fillMaxHeight().weight(0.5f),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.5f),
                 ) {
                     Row {
                         Icon(
@@ -212,9 +255,10 @@ fun TripDetails(
                 item {
                     AssistChip(
                         onClick = {
-                            multiplePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-                            )
+//                            multiplePhotoPickerLauncher.launch(
+//                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+//                            )
+                            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                         },
                         label = {
                             Icon(
@@ -229,7 +273,7 @@ fun TripDetails(
                         modifier = Modifier
                             .padding(8.dp),
 
-                    )
+                        )
                     AssistChip(
                         onClick = {
                             onClickQR()
@@ -441,7 +485,7 @@ fun TripDetails(
                     .padding(horizontal = 13.dp)
                     .size(360.dp, height = 130.dp),
 
-            ) {
+                ) {
                 Text(
                     text = routeModel!!.trip!!.description.toString(),
                     modifier = Modifier,
@@ -515,3 +559,30 @@ fun TripDetails(
 
 // }
 // }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DialogShouldShowRationale(
+    isShowDialog: Boolean,
+    onDismiss: () -> Unit,
+) {
+    if(isShowDialog){
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            confirmButton = {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(text = "Aceptar")
+                }
+            },
+            title = {
+                Text(text = "Aviso de permisos")
+            },
+            text = {
+                Text(
+                    text = "Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje."
+                )
+            },
+        )
+    }
+
+}
