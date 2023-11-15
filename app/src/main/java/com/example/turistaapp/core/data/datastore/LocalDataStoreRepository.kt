@@ -8,17 +8,16 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.turistaapp.core.utils.enums.DataStoreNames
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
+ import javax.inject.Inject
 
 class LocalDataStoreRepository @Inject constructor(
-    private val dataStore : DataStore<Preferences>
+    private val dataStore : DataStore<androidx.datastore.preferences.core.Preferences>
 ) {
     suspend fun setName(name : String){
         dataStore.edit {pref ->
             pref[stringPreferencesKey(DataStoreNames.Name.name)] = name
         }
     }
-
     suspend fun setIsDarkMode(isDarkMode: Boolean){
         dataStore.edit {pref ->
             pref[booleanPreferencesKey(DataStoreNames.IsDarkMode.name)] = isDarkMode

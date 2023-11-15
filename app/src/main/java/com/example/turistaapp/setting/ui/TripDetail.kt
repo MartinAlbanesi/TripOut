@@ -1,12 +1,23 @@
 package com.example.turistaapp.setting.ui
 
-import android.content.Context
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
-import androidx.compose.foundation.background
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,87 +25,87 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocationAlt
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CameraEnhance
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageSearch
-import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.PermIdentity
-import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
-import coil.size.Size
-import com.example.turistaapp.setting.colors.DarkGrayPlusPlus
-import com.google.android.material.chip.Chip
-import com.google.maps.android.compose.GoogleMap
-import org.jetbrains.annotations.ApiStatus.Experimental
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
-import java.nio.file.WatchEvent
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.Executor
 
 
 @Preview
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripDetail() {
-    BottomSheetScaffold(
-        sheetContent = {
-            BottomScaffoldBody(
-                "Titulo viaje",
-                "27/10/2023",
-                "30/10/2023",
-                "Martin",
-                "Name",
-                "San justo",
-                "Unlam",
-                "Address",
-                "DRIVING",
-                "Un viaje espectacular para conocer mis destinos favoritos",
-                listOf(
-                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-                ),
-                listOf(
-                    "Martin",
-                    "Titi",
-                    "Ariel"
-                )
-            )
-        },
-        scaffoldState = rememberBottomSheetScaffoldState(),
-        sheetPeekHeight = 100.dp,
-        sheetContainerColor = DarkGrayPlusPlus
-    )
-    {
-    }
+    /* BottomSheetScaffold(
+         sheetContent = {
+             BottomScaffoldBody(
+                 "Titulo viaje",
+                 "27/10/2023",
+                 "30/10/2023",
+                 "Martin",
+                 "Name",
+                 "San justo",
+                 "Unlam",
+                 "Address",
+                 "DRIVING",
+                 "Un viaje espectacular para conocer mis destinos favoritos",
+                 listOf(
+                     "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
+                     "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
+                     "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
+                 ),
+                 listOf(
+                     "Martin",
+                     "Titi",
+                     "Ariel"
+                 )
+             )
+         },
+         scaffoldState = rememberBottomSheetScaffoldState(),
+         sheetPeekHeight = 100.dp,
+         sheetContainerColor = DarkGrayPlusPlus
+     )
+     {
+     }*/
+
+    Camera(viewModel = CameraViewModel())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,8 +116,8 @@ fun BottomScaffoldBody(
     fechaFin: String,
     nombreDelUsuario: String,
     nombre: String,
-    valoracionIda : String,
-    valoracionFin : String,
+    valoracionIda: String,
+    valoracionFin: String,
     direccion: String,
     tipoTransporte: String,
     descripcionDelViaje: String,
@@ -171,7 +182,8 @@ fun BottomScaffoldBody(
                                 onClick = {},
                                 label = {
                                     Icon(
-                                        imageVector = Icons.Default.ImageSearch, contentDescription = "",
+                                        imageVector = Icons.Default.ImageSearch,
+                                        contentDescription = "",
                                         tint = Color.White,
                                         modifier = Modifier
                                             .padding(horizontal = 5.dp, vertical = 1.dp)
@@ -199,7 +211,8 @@ fun BottomScaffoldBody(
                                     .padding(8.dp)
                             )
                             AssistChip(
-                                onClick = {},
+                                onClick = {
+                                },
                                 label = {
                                     Icon(
                                         imageVector = Icons.Default.CameraEnhance,
@@ -307,7 +320,7 @@ fun BottomScaffoldBody(
                                         Spacer(modifier = Modifier.padding(horizontal = 12.dp))
                                         Row {
                                             Text(
-                                                text = valoracionIda,                                                fontSize = 21.sp,
+                                                text = valoracionIda, fontSize = 21.sp,
                                                 color = Color.Black,
                                                 modifier = Modifier
                                                     .padding(10.dp)
@@ -463,3 +476,121 @@ fun BottomScaffoldBody(
 
     }
 }
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun Camera(viewModel: CameraViewModel) {
+    val permissionState = rememberPermissionState(permission = android.Manifest.permission.CAMERA)
+    LaunchedEffect(Unit) {
+        permissionState.launchPermissionRequest()
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.5.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        if (permissionState.status.isGranted) {
+            val context = LocalContext.current
+
+            val cameraController = remember {
+                LifecycleCameraController(context)
+            }
+
+            val lifecycleCamera = LocalLifecycleOwner.current
+
+            LaunchedEffect(Unit) {
+                permissionState.launchPermissionRequest()
+            }
+
+            cameraController.bindToLifecycle(lifecycleCamera) //ciclo de vida de la camera , si sale de la app cierra la camara
+            AndroidView(factory = { contexts ->
+                val previewView = PreviewView(contexts).apply {//uso layaouts con compose
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+                }
+                previewView.controller = cameraController
+                previewView
+            })
+
+            Button(
+                onClick = {
+                    val execut = ContextCompat.getMainExecutor(context)
+                    takePicture(cameraController, execut)
+                },
+                modifier = Modifier
+                    .padding(17.dp)
+                    .size(90.dp)
+                    .align(Alignment.BottomCenter),
+                shape = CircleShape
+            ) {
+                Icon(
+                    Icons.Default.CameraAlt, contentDescription = "Tomar Foto",
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+
+        } else {
+            Text("error")
+        }
+    }
+}
+
+fun takePicture(cameraController: LifecycleCameraController, executor: Executor) {
+    val file = File.createTempFile("image", ".jpg") // a la bdd
+    val outputDirectory = ImageCapture.OutputFileOptions.Builder(file).build()
+    cameraController.takePicture(outputDirectory, executor,
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                println(outputFileResults.savedUri)
+                Log.i("Titi ayuda", outputFileResults.savedUri.toString())
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                Log.i("Titi ayuda", "o me mato")
+            }
+        }
+    )
+
+}
+
+/*
+private fun photo(){
+
+    val imageCapture = imageCapture
+
+     val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+        .format(System.currentTimeMillis())
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+        }
+    }
+
+     val outputOptions = ImageCapture.OutputFileOptions
+        .Builder(contentResolver,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues)
+        .build()
+
+    imageCapture.takePicture(
+        outputOptions,
+        ContextCompat.getMainExecutor(this),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onError(exc: ImageCaptureException) {
+                Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+            }
+
+            override fun
+                    onImageSaved(output: ImageCapture.OutputFileResults){
+                val msg = "Photo capture succeeded: ${output.savedUri}"
+                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, msg)
+            }
+        }
+    )
+}*/
