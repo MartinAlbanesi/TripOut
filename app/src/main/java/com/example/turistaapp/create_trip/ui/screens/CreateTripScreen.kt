@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -178,10 +177,6 @@ fun CreateTripScreen(
                     isOriginValid = createTripViewModel.validateTripOrigin()
                     isDestinationValid = createTripViewModel.validateTripDestination()
 
-                    Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
-                    Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
-                    Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
-
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
                         createTripViewModel.onCreateTripClick(tripName, description)
                         scope.launch {
@@ -333,11 +328,11 @@ fun CreateTripScreen(
                                 long,
                             )
                         }
+
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
-                            createTripViewModel.onEndDateChange(
-                                long,
-                            )
+                            createTripViewModel.onEndDateChange(long)
                         }
+                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
                     onClickable = {
