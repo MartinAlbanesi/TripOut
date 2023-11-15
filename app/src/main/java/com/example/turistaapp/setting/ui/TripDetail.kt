@@ -48,8 +48,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
+import com.example.turistaapp.qr_code.ui.QRDialog
 
 // @Preview
 // @OptIn(ExperimentalMaterial3Api::class)
@@ -105,6 +107,8 @@ fun TripDetails(
 //    miembros: List<String>
     routeModel: RouteModel? = null,
     settingViewModel: SettingViewModel = hiltViewModel(),
+    onClickQR: () -> Unit,
+    onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
 //    Column(
 //        verticalArrangement = Arrangement.Center,
@@ -228,7 +232,7 @@ fun TripDetails(
                     )
                     AssistChip(
                         onClick = {
-                                  // onShareButtonClick(routeModel!!.trip)
+                            onClickQR()
                         },
                         label = {
                             Icon(
@@ -260,7 +264,9 @@ fun TripDetails(
                     )
 
                     AssistChip(
-                        onClick = {},
+                        onClick = {
+                            onDeleteTripButtonClick(routeModel!!.trip!!)
+                        },
                         label = {
                             Icon(
                                 imageVector = Icons.Default.Delete,

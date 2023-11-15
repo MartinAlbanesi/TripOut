@@ -16,10 +16,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
+import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
+import com.example.turistaapp.qr_code.domain.models.toDataQRModel
+import com.example.turistaapp.qr_code.ui.QRDialog
 import com.example.turistaapp.setting.ui.TripDetails
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 
@@ -32,14 +36,21 @@ fun MapScreen(
     lastLocation: LatLng?,
     routeModel: RouteModel?,
     isTutorialComplete: Boolean?,
+    isQRDialogOpen: Boolean,
+    dataQRSelected: String,
+    onMarkerSelectChange: (Boolean) -> Unit,
+    onIsQRDialogOpenChange: (Boolean) -> Unit,
+    onDataQRSelectedChange: (String) -> Unit,
+    onDismissQRDialog: () -> Unit,
     onClickArrowBack: () -> Unit,
     onMarkerSelected: (Int) -> Unit,
     onClickFinishTutorial: () -> Unit,
+    onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     val sheetPeekHeight by animateDpAsState(
         targetValue = if (markerSelect) 200.dp else 0.dp,
         label = "sheetPeekHeight",
-        animationSpec = tween(1000)
+        animationSpec = tween(1000),
     )
 
     val mapUiSettings by remember {
@@ -60,19 +71,27 @@ fun MapScreen(
         position = CameraPosition.fromLatLngZoom(unlam, 10f)
     }
 
-
-
     BottomSheetScaffold(
         sheetContent = {
             if (markerSelect) {
-                TripDetails(routeModel)
+                TripDetails(
+                    routeModel = routeModel,
+                    onClickQR = {
+                        onIsQRDialogOpenChange(true)
+                        onDataQRSelectedChange(Gson().toJson(routeModel?.trip?.toDataQRModel()))
+                    },
+                    onDeleteTripButtonClick = {
+                        onDeleteTripButtonClick(routeModel?.trip!!)
+                        onMarkerSelectChange(false)
+                    },
+                )
             }
         },
-        sheetPeekHeight = sheetPeekHeight
+        sheetPeekHeight = sheetPeekHeight,
     ) { paddingValues ->
 
-        if(isTutorialComplete == null){
-            MapTutorial(){
+        if (isTutorialComplete == null) {
+            MapTutorial() {
                 onClickFinishTutorial()
             }
         }
@@ -92,14 +111,21 @@ fun MapScreen(
                     if (isLastLocation) {
                         cameraPositionState.position = CameraPosition.fromLatLngZoom(unlam, 14f)
                     }
-                }
+                },
             )
             TopAppBarScreen(
                 title = "Mis Destinos",
                 isMarkerSelected = markerSelect,
                 color = Color.Black,
-                onClickNavigationBack = { onClickArrowBack() }
+                onClickNavigationBack = { onClickArrowBack() },
             )
+
+            if (isQRDialogOpen) {
+                QRDialog(
+                    onDismiss = { onDismissQRDialog() },
+                    data = dataQRSelected,
+                )
+            }
         }
     }
 }

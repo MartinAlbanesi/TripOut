@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,6 +23,7 @@ import com.example.turistaapp.map.ui.MapScreen
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
 import com.example.turistaapp.qr_code.domain.models.DataQRModel
+import com.example.turistaapp.qr_code.ui.QRViewModel
 import com.example.turistaapp.setting.ui.SettingsScreen
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
@@ -33,6 +35,7 @@ fun MainScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
+    qrViewModel: QRViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickChangeTheme: () -> Unit,
 ) {
@@ -58,6 +61,10 @@ fun MainScreen(
 
     // Trips
     val myTrips by myTripsViewModel.trips.collectAsStateWithLifecycle()
+
+    val isQRDialogOpen by qrViewModel.isQRDialogOpen.collectAsStateWithLifecycle()
+
+    val dataQRSelected by qrViewModel.dataQRSelected.collectAsStateWithLifecycle()
 
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
@@ -103,6 +110,10 @@ fun MainScreen(
                     nearbyLocationSelect = nearbyLocationSelect,
                     myTrips = myTrips,
                     locationSelect = locationSelect,
+                    isQRDialogOpen = isQRDialogOpen,
+                    dataQRSelected = dataQRSelected,
+                    onIsQRDialogOpenChange = { qrViewModel.onIsQRDialogOpenChange(it) },
+                    onDataQRSelectedChange = { qrViewModel.onDataQRSelectedChange(it) },
                     onCreateTripDialog = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
                     onCardSelection = { homeViewModel.setNearbyLocationSelect(it) },
                     onClickFloatingBottom = { navController.navigate(Routes.CreateTrip.route) },
@@ -139,9 +150,23 @@ fun MainScreen(
                     lastLocation = lastLocation,
                     routeModel = routeModel,
                     isTutorialComplete = isTutorialComplete,
+                    isQRDialogOpen = isQRDialogOpen,
+                    dataQRSelected = dataQRSelected,
+                    onMarkerSelectChange = { mapViewModel.onMarkerSelectChange(it) },
+                    onDismissQRDialog = { qrViewModel.onIsQRDialogOpenChange(false) },
+                    onIsQRDialogOpenChange = { qrViewModel.onIsQRDialogOpenChange(it) },
+                    onDataQRSelectedChange = { qrViewModel.onDataQRSelectedChange(it) },
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it) },
                     onClickFinishTutorial = { mapViewModel.setMapTutorial() },
+                    onDeleteTripButtonClick = {
+                        myTripsViewModel.deleteTrip(it)
+                        Toast.makeText(
+                            navController.context,
+                            "Viaje eliminado con exito",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
                 )
             }
 

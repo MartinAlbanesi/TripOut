@@ -168,6 +168,10 @@ fun HomeScreen(
     nearbyLocationSelect: LocationModel?,
     myTrips: List<TripModel>,
     locationSelect: String = "",
+    isQRDialogOpen: Boolean = false,
+    dataQRSelected: String = "",
+    onIsQRDialogOpenChange: (Boolean) -> Unit,
+    onDataQRSelectedChange: (String) -> Unit,
     onCreateTripDialog: (String) -> Unit,
     onCardSelection: (String) -> Unit,
     onClickFloatingBottom: () -> Unit,
@@ -184,13 +188,6 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-    var isQRDialogOpen by remember {
-        mutableStateOf(false)
-    }
-
-    var dataQRSelected by remember {
-        mutableStateOf("")
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
@@ -279,10 +276,10 @@ fun HomeScreen(
                     onDeleteButtonClick = {
                         onDeleteTripButtonClick(it)
                     },
-                    onDismissDialog = { isQRDialogOpen = false },
+                    onDismissDialog = { onIsQRDialogOpenChange(false) },
                     onQRButtonClick = {
-                        isQRDialogOpen = true
-                        dataQRSelected = Gson().toJson(trip.toDataQRModel())
+                        onIsQRDialogOpenChange(true)
+                        onDataQRSelectedChange(Gson().toJson(trip.toDataQRModel()))
                     },
                     onMapButtonClick = {
                         onTripClick(it)
