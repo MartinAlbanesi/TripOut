@@ -220,7 +220,7 @@ fun TripItem(
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Delete Button",
-                                tint = Color.Red,
+                                tint = MaterialTheme.colorScheme.error,
                             )
                         },
                     )

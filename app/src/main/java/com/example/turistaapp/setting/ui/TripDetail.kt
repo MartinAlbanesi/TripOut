@@ -1,8 +1,6 @@
 package com.example.turistaapp.setting.ui
 
 import android.Manifest
-import android.content.Intent
-import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -21,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocationAlt
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.CameraEnhance
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.ImageSearch
@@ -41,7 +38,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -55,11 +51,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
-import com.example.turistaapp.qr_code.ui.QRDialog
 
 // @Preview
 // @OptIn(ExperimentalMaterial3Api::class)
@@ -273,7 +267,7 @@ fun TripDetails(
                         modifier = Modifier
                             .padding(8.dp),
 
-                        )
+                    )
                     AssistChip(
                         onClick = {
                             onClickQR()
@@ -291,6 +285,7 @@ fun TripDetails(
                         modifier = Modifier
                             .padding(8.dp),
                     )
+                    /*
                     AssistChip(
                         onClick = {},
                         label = {
@@ -306,6 +301,7 @@ fun TripDetails(
                         modifier = Modifier
                             .padding(8.dp),
                     )
+                     */
 
                     AssistChip(
                         onClick = {
@@ -485,7 +481,7 @@ fun TripDetails(
                     .padding(horizontal = 13.dp)
                     .size(360.dp, height = 130.dp),
 
-                ) {
+            ) {
                 Text(
                     text = routeModel!!.trip!!.description.toString(),
                     modifier = Modifier,
@@ -566,7 +562,7 @@ fun DialogShouldShowRationale(
     isShowDialog: Boolean,
     onDismiss: () -> Unit,
 ) {
-    if(isShowDialog){
+    if (isShowDialog) {
         AlertDialog(
             onDismissRequest = { onDismiss() },
             confirmButton = {
@@ -579,10 +575,9 @@ fun DialogShouldShowRationale(
             },
             text = {
                 Text(
-                    text = "Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje."
+                    text = "Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.",
                 )
             },
         )
     }
-
 }
