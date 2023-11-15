@@ -266,7 +266,9 @@ fun HomeScreen(
                         isBackgroundColored = true,
                         isTopBrush = true,
                         isClickable = true,
-                    ) {}
+                    ) {
+                        onClickFloatingBottom()
+                    }
                 }
             }
             items(myTrips) { trip ->
