@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
@@ -65,7 +66,7 @@ fun SettingsScreen(darkTheme: Boolean = false, changeTheme: () -> Unit) {
 //        SettingMore("MAS")
         Spacer(modifier = Modifier.size(15.dp))
         About()
-        Spacer(modifier = Modifier.size(560.dp))
+         Spacer(modifier = Modifier.size(560.dp))
         SettingVersion()
     }
 }
@@ -108,71 +109,6 @@ fun SettingAppearance(darkTheme: Boolean, changeTheme: () -> Unit) {
 
 
 @Composable
-fun About() {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.Gray)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-    ) {
-        Text(text = "Acerca de nosotros", fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
-        Spacer(modifier = Modifier.size(10.dp))
-        LazyColumn {
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .clip(RoundedCornerShape(16.dp))
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "¡Bienvenido a TripOut, tu compañero de viaje!",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "En TripOut, nos apasiona descubrir el mundo . Somos alumnos de la Universidad de la Matanza",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "¿Te preguntas por dónde empezar tu próximo viaje? Deja que TripOut te guíe con sugerencias adaptadas a tus intereses y preferencias. Ya sea que busques escapadas relajantes o aventuras llenas de adrenalina.",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Descubre nuevos horizontes, conéctate con otros apasionados por los viajes y comparte tus propias historias. En TripOut, creemos que cada viaje es una oportunidad para enriquecer nuestras vidas y crear recuerdos duraderos.",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "¡Vamos juntos a explorar el mundo!",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Martin, Gabriel y Ariel\nCreadores de TripOut",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun SettingVersion() {
     Text(
         "Version 1.1",
@@ -180,4 +116,89 @@ fun SettingVersion() {
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
     )
+}
+
+
+@Composable
+fun About() {
+    var isExpanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.Gray)
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { isExpanded = !isExpanded }
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Acerca de nosotros", fontSize = 24.sp, color = Color.Black.copy(alpha = 0.3f))
+            Icon(
+                imageVector = if (isExpanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                contentDescription = null
+            )
+        }
+
+        if (isExpanded) {
+            LazyColumn {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .clip(RoundedCornerShape(16.dp))
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        )
+                        {
+                            Text(
+                                text = "¡Bienvenido a TripOut, tu compañero de viaje!",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "En TripOut, nos apasiona descubrir el mundo . Somos alumnos de la Universidad de la Matanza",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "¿Te preguntas por dónde empezar tu próximo viaje? Deja que TripOut te guíe con sugerencias adaptadas a tus intereses y preferencias. Ya sea que busques escapadas relajantes o aventuras llenas de adrenalina.",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Descubre nuevos horizontes, conéctate con otros apasionados por los viajes y comparte tus propias historias. En TripOut, creemos que cada viaje es una oportunidad para enriquecer nuestras vidas y crear recuerdos duraderos.",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "¡Vamos juntos a explorar el mundo!",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Martin, Gabriel y Ariel\nCreadores de TripOut",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
 }
