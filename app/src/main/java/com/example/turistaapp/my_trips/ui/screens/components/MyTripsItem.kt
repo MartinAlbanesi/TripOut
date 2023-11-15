@@ -238,7 +238,7 @@ fun TripItem(
 }
 
 fun formatMilisToDateString(milisegundosString: String, formato: String): String {
-    val milisegundos = milisegundosString.toLong() + 85400000L
+    val milisegundos = milisegundosString.toLong()
     val dateTime = DateTime(milisegundos)
     val formatter = DateTimeFormat.forPattern(formato)
     return formatter.print(dateTime)
@@ -328,5 +328,5 @@ fun obtenerDiferenciaFechas(fechaInicio: String, fechaFin: String): String {
     val diferenciaDias = ChronoUnit.DAYS.between(fechaFinObj, fechaInicioObj)
 
     // Devolver la diferencia en un formato legible
-    return "${diferenciaDias + 1}"
+    return "$diferenciaDias"
 }
