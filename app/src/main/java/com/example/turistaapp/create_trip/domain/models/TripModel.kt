@@ -12,7 +12,7 @@ data class TripModel(
     val stops: MutableList<LocationModel>?,
     val description: String?,
     val author: String,
-    val images: MutableList<String>?,
+    val images: List<String>?,
     val comments: MutableList<String>?,
     val isFavorite: Boolean,
     val isFinished: Boolean,

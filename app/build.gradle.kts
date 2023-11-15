@@ -7,6 +7,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -71,6 +72,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.media3:media3-common:1.1.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -81,12 +83,25 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+
+    //CameraX
+
+//    implementation ("androidx.camera:camera-camera2:1.4.0-alpha02")
+//    implementation ("androidx.camera:camera-lifecycle:1.4.0-alpha02")
+//    implementation ("androidx.camera:camera-view:1.4.0-alpha02")
+//    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+//
+//    implementation ("androidx.compose.runtime:runtime:1.5.4")
+//
+//    implementation ("androidx.compose.ui:ui:1.5.4")
+
+
     // Google maps
     implementation("com.google.maps.android:maps-compose:2.11.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     // Location
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
@@ -127,19 +142,25 @@ dependencies {
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 
     // Joda Time
-    implementation ("joda-time:joda-time:2.10.12")
+    implementation("joda-time:joda-time:2.10.12")
 
     // HORIZONTAL PAGER
     implementation("androidx.compose.foundation:foundation:1.5.4")
 
-    //datastore preferences
+    // datastore preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    //splash screen
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+    // splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Accompanist-Permissions
-    implementation ("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+    // Accompanist-Permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+
+    // ZXING (QR Code)
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:6.1.0")
 }
 
 kapt {

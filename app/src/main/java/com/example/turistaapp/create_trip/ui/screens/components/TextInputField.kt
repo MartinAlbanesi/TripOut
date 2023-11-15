@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,10 +60,6 @@ fun TextInputField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
-        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = Color.LightGray,
-        ),
         leadingIcon = {
             if (!isError) {
                 leadingIcon?.invoke()
@@ -70,7 +67,7 @@ fun TextInputField(
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "Error",
-                    tint = Color.Red,
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         },
@@ -98,8 +95,11 @@ fun TextInputField(
         modifier = Modifier.padding(top = 4.dp),
     ) {
         Text(
-            text = "Introduzca un nombre válido",
-            color = Color.Red,
+            text = "Requisitos necesarios:\n" +
+                "- Comenzar con mayúscula\n" +
+                "- Mayor a 3 caracteres y menor a 30",
+            color = MaterialTheme.colorScheme.error,
+            fontSize = 14.sp,
             modifier = Modifier.padding(start = 4.dp),
         )
     }

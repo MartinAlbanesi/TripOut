@@ -12,7 +12,7 @@ class GetRouteModel @Inject constructor(
         origin: String,
         destination: String,
         transport: String,
-        trip: TripModel
+        trip: TripModel? = null
     ): RouteModel? {
         return directionsRepository.getDirections(origin, destination, transport)?.copy(trip = trip)
     }

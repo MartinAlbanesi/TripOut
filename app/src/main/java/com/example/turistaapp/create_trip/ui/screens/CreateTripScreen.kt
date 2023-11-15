@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,13 +34,15 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.turistaapp.core.ui.components.TopAppBarScreen
+import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
-import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -82,7 +83,7 @@ fun CreateTripScreen(
         mutableStateOf(address ?: "")
     }
     var isDestinationAutocompleteDropdownVisible by rememberSaveable {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
         emptyList(),
@@ -170,12 +171,50 @@ fun CreateTripScreen(
                 onClickCreateTrip()
             }
         },
+        bottomBar = {
+            // Botón para guardar
+            Button(
+                onClick = {
+                    isTripNameValid = createTripViewModel.validateTripName(tripName)
+                    isOriginValid = createTripViewModel.validateTripOrigin()
+                    isDestinationValid = createTripViewModel.validateTripDestination()
+
+                    if (isTripNameValid && isOriginValid && isDestinationValid) {
+                        createTripViewModel.onCreateTripClick(tripName, description)
+                        scope.launch {
+                            snackbarHostState
+                                .showSnackbar(
+                                    message = "Viaje creado con éxito",
+                                    actionLabel = "Cancelar",
+                                    duration = SnackbarDuration.Indefinite,
+                                )
+                        }
+                        onClickCreateTrip()
+                    } else {
+                        scope.launch {
+                            snackbarHostState
+                                .showSnackbar(
+                                    message = "Error al crear el viaje",
+                                    actionLabel = "Cancelar",
+                                    duration = SnackbarDuration.Short,
+                                )
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                    .size(45.dp),
+            ) {
+                Text("Guardar")
+            }
+        },
     ) { paddingValues ->
 
         LazyColumn(
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
-                bottom = 8.dp,
+                bottom = paddingValues.calculateBottomPadding(),
                 end = 8.dp,
                 start = 8.dp,
             ),
@@ -198,8 +237,10 @@ fun CreateTripScreen(
                     isError = !isTripNameValid,
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+            }
 
+            item {
                 // Origen
                 PlaceAutocompleteField(
                     label = "Origen *",
@@ -236,8 +277,9 @@ fun CreateTripScreen(
                     isError = !isOriginValid,
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
-
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
                 // Destino
                 PlaceAutocompleteField(
                     label = "Destino *",
@@ -272,8 +314,9 @@ fun CreateTripScreen(
                     isError = !isDestinationValid,
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
-
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
                 // Fechas
                 DateRangePickerInput(
                     label = "Fechas",
@@ -288,11 +331,11 @@ fun CreateTripScreen(
                                 long,
                             )
                         }
+
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
-                            createTripViewModel.onEndDateChange(
-                                long,
-                            )
+                            createTripViewModel.onEndDateChange(long)
                         }
+                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
                     onClickable = {
@@ -300,8 +343,9 @@ fun CreateTripScreen(
                     },
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
-
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
                 // Transporte
                 ExposedDropdownMenuBoxInput(
                     label = "Transporte",
@@ -312,8 +356,9 @@ fun CreateTripScreen(
                     onClickable = { createTripViewModel.onTransportChange(it) },
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
-
+                Spacer(modifier = Modifier.size(8.dp))
+            }
+            item {
                 // Acompañantes
                 AddList(
                     label = "Acompañantes",
@@ -339,28 +384,29 @@ fun CreateTripScreen(
                     isError = !isMemberNameValid,
                 )
 
-                Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(8.dp))
+            }
 
-                /*
-                // Paradas
-                AddList(
-                    label = "Puntos de Parada",
-                    name = stopName,
-                    values = stops,
-                    onValueNameChange = { createTripViewModel.onStopNameChange(it) },
-                    onAdd = { createTripViewModel.onAddStop(it) },
-                    onRemove = { createTripViewModel.onRemoveStop(it) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.AddLocation,
-                            contentDescription = "Member Name",
-                        )
-                    },
-                )
+            /*
+            // Paradas
+            AddList(
+                label = "Puntos de Parada",
+                name = stopName,
+                values = stops,
+                onValueNameChange = { createTripViewModel.onStopNameChange(it) },
+                onAdd = { createTripViewModel.onAddStop(it) },
+                onRemove = { createTripViewModel.onRemoveStop(it) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.AddLocation,
+                        contentDescription = "Member Name",
+                    )
+                },
+            )
 
-                Spacer(modifier = Modifier.size(4.dp))
-                */
-
+            Spacer(modifier = Modifier.size(8.dp))
+            */
+            item {
                 // Descripción
                 TextInputField(
                     label = "Descripción",
@@ -380,46 +426,6 @@ fun CreateTripScreen(
                     },
                     onClearField = { description = "" },
                 )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                // Botón para guardar
-                Button(
-                    onClick = {
-                        isTripNameValid = createTripViewModel.validateTripName(tripName)
-                        isOriginValid = createTripViewModel.validateTripOrigin()
-                        isDestinationValid = createTripViewModel.validateTripDestination()
-
-                        Log.d("CreateTripScreen", "Trip Name: $isTripNameValid")
-                        Log.d("CreateTripScreen", "Trip Name: $isOriginValid")
-                        Log.d("CreateTripScreen", "Trip Name: $isDestinationValid")
-
-                        if (isTripNameValid && isOriginValid && isDestinationValid) {
-                            createTripViewModel.onCreateTripClick(tripName, description)
-                            scope.launch {
-                                snackbarHostState
-                                    .showSnackbar(
-                                        message = "Viaje creado con éxito",
-                                        actionLabel = "Cancelar",
-                                        duration = SnackbarDuration.Indefinite,
-                                    )
-                            }
-                        } else {
-                            scope.launch {
-                                snackbarHostState
-                                    .showSnackbar(
-                                        message = "Error al crear el viaje",
-                                        actionLabel = "Cancelar",
-                                        duration = SnackbarDuration.Short,
-                                    )
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                ) {
-                    Text("Guardar")
-                }
             }
         }
     }

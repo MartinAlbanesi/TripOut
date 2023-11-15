@@ -1,34 +1,43 @@
 package com.example.turistaapp.welcome.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.turistaapp.R
-import com.example.turistaapp.welcome.ui.components.DrawCircle
 import com.example.turistaapp.welcome.ui.components.PagerViewOne
 import com.example.turistaapp.welcome.ui.components.PagerViewTwo
 import com.example.turistaapp.welcome.utils.validateName
@@ -39,7 +48,14 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
-    var pagerState = rememberPagerState { 2 }
+
+    var showAlertDialog by remember { mutableStateOf(false) }
+
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp.dp.value
+
+    val pagerState = rememberPagerState { 2 }
 
     val scope = rememberCoroutineScope()
 
@@ -59,27 +75,54 @@ fun WelcomeScreen(
 
     var isError by remember { mutableStateOf(false) }
 
+    val offsetY by animateFloatAsState(
+        targetValue = if (pagerState.currentPage == 0) 0f else (screenHeight / 4),
+        label = "offsetY",
+        animationSpec = tween(1000)
+    )
+
+    if (showAlertDialog) {
+        AlertDialog(
+            onDismissRequest = { /*TODO*/ },
+            confirmButton = {
+                TextButton(onClick = { onClickSaveName(value) }) {
+                    Text(text = "Aceptar")
+                }
+            },
+            title = {
+                Text(text = "Aviso de permisos")
+            },
+            text = {
+                Text(
+                    text = "Pedimos la ubicación para poder mostrarte los lugares cercanos a ti" +
+                            " y para mostrar tu ubicación en el mapa"
+                )
+            },
+        )
+    }
+
 
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Text(
-                text = "TRIP OUT",
+            Spacer(modifier = Modifier.size(16.dp))
+            AsyncImage(
+                model = R.drawable.logo_name,
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .size(240.dp)
                     .weight(1f)
-                    .padding(top = 40.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 40.sp
+                    .align(Alignment.CenterHorizontally)
+                    .offset(y = offsetY.dp)
             )
 
             HorizontalPager(
                 modifier = Modifier
                     .weight(5f),
                 state = pagerState,
-                userScrollEnabled = false,
+                // userScrollEnabled = false,
             ) { pager ->
                 when (pager) {
                     0 -> {
@@ -88,24 +131,21 @@ fun WelcomeScreen(
 
                     1 -> {
                         PagerViewTwo(value, isError) {
+                            if (isError) isError = false
                             value = it
                         }
                     }
                 }
             }
 
-            DrawCircle(
-                color = circleFirst,
-                Modifier
-                    .align(CenterHorizontally)
-                    .offset(x = (-20).dp)
-            )
-            DrawCircle(
-                color = circleSecond,
-                Modifier
-                    .align(CenterHorizontally)
-                    .offset(x = (20).dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CircleBox(color = circleFirst)
+                Spacer(modifier = Modifier.size(16.dp))
+                CircleBox(color = circleSecond)
+            }
 
             Button(
                 onClick = {
@@ -118,10 +158,10 @@ fun WelcomeScreen(
                         }
                     }
                     if (pagerState.currentPage == 1) {
-                        //TODO: Navigate to main screen, save name, permissions
                         if (validateName(value)) {
                             isError = false
-                            onClickSaveName(value)
+//                            onClickSaveName(value)
+                            showAlertDialog = true
                         } else {
                             isError = true
                         }
@@ -137,6 +177,19 @@ fun WelcomeScreen(
             }
         }
     }
+
+}
+
+@Composable
+fun CircleBox(
+    color: Color,
+) {
+    Box(
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(40.dp)
+            .background(color)
+    )
 }
 
 

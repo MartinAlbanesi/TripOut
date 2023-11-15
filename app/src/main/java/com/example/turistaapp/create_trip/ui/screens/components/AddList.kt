@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.InputChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -68,7 +69,7 @@ fun AddList(
             unfocusedContainerColor = Color.Transparent,
             focusedContainerColor = Color.Transparent,
             errorContainerColor = Color.Transparent,
-            errorLeadingIconColor = Color.Red,
+            errorLeadingIconColor = MaterialTheme.colorScheme.error,
         ),
     )
 
@@ -83,7 +84,7 @@ fun AddList(
     ) {
         Text(
             text = "Introduzca un miembro válido",
-            color = Color.Red,
+            color = MaterialTheme.colorScheme.error,
             modifier = Modifier.padding(start = 4.dp),
         )
     }

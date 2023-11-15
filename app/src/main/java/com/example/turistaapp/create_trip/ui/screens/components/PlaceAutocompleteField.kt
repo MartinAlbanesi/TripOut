@@ -1,5 +1,7 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -32,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 
 @Composable
@@ -57,11 +60,7 @@ fun PlaceAutocompleteField(
         value = query,
         onValueChange = {
             onQueryChange(it)
-            if (it.isEmpty()) {
-                onDropdownVisibilityChange(false)
-            } else {
-                onDropdownVisibilityChange(true)
-            }
+            onDropdownVisibilityChange(true)
         },
         leadingIcon = {
             if (!isError) {
@@ -70,7 +69,7 @@ fun PlaceAutocompleteField(
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "Error",
-                    tint = Color.Red,
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         },
@@ -135,7 +134,8 @@ fun PlaceAutocompleteField(
     ) {
         Text(
             text = "Introduzca una ubicación válida",
-            color = Color.Red,
+            color = MaterialTheme.colorScheme.error,
+            fontSize = 14.sp,
             modifier = Modifier.padding(start = 4.dp),
         )
     }
