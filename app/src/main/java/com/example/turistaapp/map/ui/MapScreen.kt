@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.map.domain.models.RouteModel
-import com.example.turistaapp.setting.ui.TripDetail
+import com.example.turistaapp.setting.ui.TripDetails
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapUiSettings
@@ -65,8 +65,7 @@ fun MapScreen(
     BottomSheetScaffold(
         sheetContent = {
             if (markerSelect) {
-               // TripDetail(routeModel)
-                //llamar
+                TripDetails(routeModel)
             }
         },
         sheetPeekHeight = sheetPeekHeight
