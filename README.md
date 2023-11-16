@@ -1,13 +1,11 @@
 # Trip Out
 
-
+![Trip Out](https://github.com/MartinAlbanesi/TripOut/blob/feature/home/img/Mockup.png)
 
 ## Miembros
 - [Albanesi Martin](https://github.com/MartinAlbanesi)
 - [Gomez Gabriel](https://github.com/GabrielGomezGG)
 - [Nappio Ariel](https://github.com/ArielNappio)
-
-![Trip Out](https://github.com/MartinAlbanesi/TripOut/blob/feature/home/img/Mockup.png)
 
 ## Tecnologías usadas:
 <details>
