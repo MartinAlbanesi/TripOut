@@ -37,13 +37,13 @@ class CreateTripViewModel @Inject constructor(
     // Fechas del viaje
     val calendar: Calendar = Calendar.getInstance()
 
-    private var _startDate = MutableLiveData(calendar.timeInMillis)
+    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
     val startDate: LiveData<Long> = _startDate
     fun onStartDateChange(startDate: Long) {
         _startDate.value = startDate
     }
 
-    private var _endDate = MutableLiveData(calendar.timeInMillis)
+    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
     val endDate: LiveData<Long> = _endDate
     fun onEndDateChange(endDate: Long) {
         _endDate.value = endDate

@@ -73,11 +73,6 @@ fun CreateTripScreen(
     }
     val originPredictions by createTripViewModel.originPredictions.observeAsState(emptyList())
 
-    // val originAutocompleteQuery by createTripViewModel.originQuery.observeAsState("")
-    // val isOriginAutocompleteDropdownVisible by createTripViewModel.isOriginAutocompleteDropdownVisible.observeAsState(
-    //     false,
-    // )
-
     // Destino
     var destinationAutocompleteQuery by rememberSaveable {
         mutableStateOf(address ?: "")
@@ -89,15 +84,9 @@ fun CreateTripScreen(
         emptyList(),
     )
 
-    // val destinationAutocompleteQuery by createTripViewModel.destinationQuery.observeAsState("")
-    // val isDestinationAutocompleteDropdownVisible by createTripViewModel.isDestinationAutocompleteDropdownVisible.observeAsState(
-    //     false,
-    // )
-    // val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState( emptyList() )
-
     // Fechas
-    val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis)
-    val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis)
+    val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
+    val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = startDate,
         initialSelectedEndDateMillis = endDate,
@@ -123,7 +112,6 @@ fun CreateTripScreen(
     val transport by createTripViewModel.transport.observeAsState("")
 
     // Descripción
-//    val description by createTripViewModel.description.observeAsState("")
     var description by rememberSaveable {
         mutableStateOf("")
     }
@@ -271,8 +259,6 @@ fun CreateTripScreen(
                         originAutocompleteQuery = it.description ?: ""
                         isOriginAutocompleteDropdownVisible = false
                         createTripViewModel.onSelectedOriginLocationChange(it)
-                        // createTripViewModel.onOriginAutocompletePredictionSelect(it)
-                        // createTripViewModel.onOriginAutocompleteDropdownVisibilityChange(false)
                     },
                     isError = !isOriginValid,
                 )

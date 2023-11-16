@@ -102,7 +102,7 @@ fun DateRangePickerInput(
                     val endCalenderDate = Calendar.getInstance()
                     endCalenderDate.timeInMillis = timeInMillis
                     endCalenderDate.set(Calendar.DATE, Calendar.DATE + 27)
-                    timeInMillis > Calendar.getInstance().timeInMillis - 86400000 && timeInMillis < endCalenderDate.timeInMillis
+                    timeInMillis > Calendar.getInstance().timeInMillis - 172800000 && timeInMillis < endCalenderDate.timeInMillis
                 },
                 modifier =
                 Modifier.height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing
