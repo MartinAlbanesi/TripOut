@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +18,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddLocationAlt
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.EmojiTransportation
+import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.TripOrigin
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
@@ -44,6 +49,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -55,71 +61,13 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
 
-// @Preview
-// @OptIn(ExperimentalMaterial3Api::class)
-// @Composable
-// fun TripDetail() {
-//    BottomSheetScaffold(
-//        sheetContent = {
-//            BottomScaffoldBody(
-//                "Titulo viaje",
-//                "27/10/2023",
-//                "30/10/2023",
-//                "Martin",
-//                "Name",
-//                "San justo",
-//                "Unlam",
-//                "Address",
-//                "DRIVING",
-//                "Un viaje espectacular para conocer mis destinos favoritos",
-//                listOf(
-//                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-//                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-//                    "https://i.pinimg.com/236x/5a/5f/d0/5a5fd0dc0f7810ef3aeaf58883d66113.jpg",
-//                ),
-//                listOf(
-//                    "Martin",
-//                    "Titi",
-//                    "Ariel"
-//                )
-//            )
-//        },
-//        scaffoldState = rememberBottomSheetScaffoldState(),
-//        sheetPeekHeight = 100.dp,
-//        sheetContainerColor = DarkGrayPlusPlus
-//    )
-//    {
-//    }
-// }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripDetails(
-//    titulo: String,
-//    fechaInicio: String,
-//    fechaFin: String,
-//    nombreDelUsuario: String,
-//    nombre: String,
-//    valoracionIda : String,
-//    valoracionFin : String,
-//    direccion: String,
-//    tipoTransporte: String,
-//    descripcionDelViaje: String,
-//    listaImagenes: List<String>,
-//    miembros: List<String>
     routeModel: RouteModel? = null,
     settingViewModel: SettingViewModel = hiltViewModel(),
     onClickQR: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
-//    Column(
-//        verticalArrangement = Arrangement.Center,
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Column(
-//            modifier = Modifier.height(800.dp)  // aca es el largo del deslizante
-//        ) {
-
     var selectedImageUris by remember {
         mutableStateOf<List<String>>(emptyList())
     }
@@ -323,185 +271,300 @@ fun TripDetails(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(7.dp))
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+            Box(
+                contentAlignment = Alignment.CenterStart,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
             ) {
-                Text(
-                    text = "Origen y destino",
-                    fontSize = 19.sp,
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Origen y destino",
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.EmojiTransportation,
+                        contentDescription = "Auto",
+                        modifier = Modifier.size(30.dp),
+                    )
+                    Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                    when (routeModel?.trip?.transport) {
+                        "driving" -> {
+                            Text(
+                                text = "Auto",
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
+                        }
 
-                Spacer(modifier = Modifier.weight(0.5f))
-                Icon(
-                    imageVector = Icons.Default.DirectionsCar,
-                    contentDescription = "Auto",
-                    modifier = Modifier.size(30.dp),
-                )
-                Spacer(modifier = Modifier.padding(start = 5.dp))
-                Text(
-                    text = routeModel!!.trip!!.transport,
-                    fontSize = 19.sp,
-                )
+                        "walking" -> {
+                            Text(
+                                text = "Caminando",
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
+                        }
+
+                        "bicycling" -> {
+                            Text(
+                                text = "Bicicleta",
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
+                        }
+
+                        else -> Text("No hay transporte")
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.padding(vertical = 10.dp))
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-            Row {
-                Icon(
-                    imageVector = Icons.Default.AddLocationAlt,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(horizontal = 9.dp, vertical = 8.dp)
-                        .size(40.dp),
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 8.dp,
                     ),
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                     modifier = Modifier
-                        .size(310.dp, height = 80.dp)
                         .fillMaxWidth(),
                 ) {
-                    Row(Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.ImageSearch,
-                            "",
+                            imageVector = Icons.Default.TripOrigin,
+                            contentDescription = "Trip Origin",
                             modifier = Modifier
-                                .size(width = 43.dp, height = 60.dp),
+                                .size(40.dp)
+                                .align(Alignment.CenterVertically)
+                                .padding(horizontal = 4.dp),
                         )
                         Column(
+                            verticalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .padding(vertical = 1.dp),
+                                .background(MaterialTheme.colorScheme.surfaceVariant),
                         ) {
-                            Row {
-                                Text(
-                                    text = routeModel!!.trip!!.origin.name,
-                                    fontSize = 23.sp,
-                                    modifier = Modifier
-                                        .padding(10.dp),
-                                )
-
-                                Spacer(modifier = Modifier.padding(horizontal = 12.dp))
-                                Row {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .padding(start = 8.dp, top = 4.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier.weight(0.9f),
+                                ) {
                                     Text(
-                                        text = routeModel!!.trip!!.origin.rating.toString(),
-                                        modifier = Modifier
-                                            .padding(10.dp),
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Default.Star,
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .padding(10.dp),
+                                        text = routeModel!!.trip!!.origin.name,
+                                        style = MaterialTheme.typography.titleLarge,
                                     )
                                 }
+                                Box(
+                                    modifier = Modifier.weight(0.2f)
+                                        .align(Alignment.Top),
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.End,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(
+                                                shape = RoundedCornerShape(
+                                                    15.dp,
+                                                    0.dp,
+                                                    0.dp,
+                                                    15.dp,
+                                                ),
+                                            )
+                                            .background(MaterialTheme.colorScheme.inversePrimary),
+                                    ) {
+                                        Text(
+                                            text = routeModel!!.trip!!.origin.rating.toString(),
+                                            modifier = Modifier
+                                                .padding(horizontal = 4.dp)
+                                                .align(Alignment.CenterVertically),
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Default.Star,
+                                            contentDescription = "Rating",
+                                            tint = Color.Yellow,
+                                        )
+                                    }
+                                }
                             }
+
                             Text(
                                 text = routeModel!!.trip!!.origin.address.toString(),
-                                fontSize = 19.sp,
+                                style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier
-                                    .padding(horizontal = 12.dp),
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
                             )
                         }
                     }
                 }
-            }
-            Spacer(modifier = Modifier.size(15.dp))
-            Row {
-                Icon(
-                    imageVector = Icons.Default.AddLocationAlt,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(horizontal = 9.dp, vertical = 8.dp)
-                        .size(40.dp),
-                )
+
+                Spacer(modifier = Modifier.size(16.dp))
+
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 8.dp,
                     ),
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
                     modifier = Modifier
-                        .size(310.dp, height = 80.dp)
                         .fillMaxWidth(),
                 ) {
-                    Row(Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
                         Icon(
-                            imageVector = Icons.Default.ImageSearch,
-                            "",
+                            imageVector = Icons.Default.Flag,
+                            contentDescription = "Trip Destination",
                             modifier = Modifier
-                                .size(width = 43.dp, height = 60.dp),
+                                .size(40.dp)
+                                .align(Alignment.CenterVertically)
+                                .padding(horizontal = 4.dp),
                         )
                         Column(
+                            verticalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .padding(vertical = 1.dp),
+                                .background(MaterialTheme.colorScheme.surfaceVariant),
                         ) {
-                            Row {
-                                Text(
-                                    text = routeModel!!.trip!!.destination.name,
-                                    fontSize = 23.sp,
-                                    modifier = Modifier
-                                        .padding(10.dp),
-                                )
-
-                                Spacer(modifier = Modifier.padding(horizontal = 12.dp))
-                                Row {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                modifier = Modifier
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .padding(start = 8.dp, top = 4.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier.weight(0.9f),
+                                ) {
                                     Text(
-                                        text = routeModel.trip!!.destination.rating.toString(),
-                                        fontSize = 21.sp,
-                                        modifier = Modifier
-                                            .padding(10.dp),
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Default.Star,
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .padding(10.dp),
+                                        text = routeModel!!.trip!!.destination.name,
+                                        style = MaterialTheme.typography.titleLarge,
                                     )
                                 }
+                                Box(
+                                    modifier = Modifier.weight(0.2f)
+                                        .align(Alignment.Top),
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.End,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(
+                                                shape = RoundedCornerShape(
+                                                    15.dp,
+                                                    0.dp,
+                                                    0.dp,
+                                                    15.dp,
+                                                ),
+                                            )
+                                            .background(MaterialTheme.colorScheme.inversePrimary),
+                                    ) {
+                                        Text(
+                                            text = routeModel!!.trip!!.destination.rating.toString(),
+                                            modifier = Modifier
+                                                .padding(horizontal = 4.dp)
+                                                .align(Alignment.CenterVertically),
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Default.Star,
+                                            contentDescription = "Rating",
+                                            tint = Color.Yellow,
+                                        )
+                                    }
+                                }
                             }
+
                             Text(
                                 text = routeModel!!.trip!!.destination.address.toString(),
-                                fontSize = 19.sp,
+                                style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier
-                                    .padding(horizontal = 12.dp),
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
                             )
                         }
                     }
                 }
             }
-            Spacer(modifier = Modifier.size(40.dp))
+
+            Spacer(modifier = Modifier.padding(vertical = 8.dp))
+
             Text(
                 text = "Acerca de",
-                fontSize = 19.sp,
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
+
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
+
             Card(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 8.dp,
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ),
                 modifier = Modifier
-                    .padding(horizontal = 13.dp)
-                    .size(360.dp, height = 130.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
 
             ) {
-                Text(
-                    text = routeModel!!.trip!!.description.toString(),
-                    modifier = Modifier,
-                    fontSize = 20.sp,
-                )
+                Row {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Description,
+                            contentDescription = "Trip Destination",
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(horizontal = 4.dp),
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .padding(4.dp),
+                    ) {
+                        Text(
+                            text = routeModel!!.trip!!.description.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(6.dp),
+                        )
+                    }
+                }
             }
-            Spacer(modifier = Modifier.size(9.dp))
-            Row() {
-                Text(
-                    text = "Imagenes",
-                    modifier = Modifier,
-                    fontSize = 26.sp,
-                )
-            }
+
+            Spacer(modifier = Modifier.size(10.dp))
+
+            Text(
+                text = "Imagenes",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
         }
         // imagenes
-
-//            LazyRow(
-//                Modifier.fillMaxWidth()
-//            ) {
         item {
             LazyRow(
                 Modifier.fillMaxWidth(),
