@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
  import javax.inject.Inject
 
 class LocalDataStoreRepository @Inject constructor(
-    private val dataStore : DataStore<androidx.datastore.preferences.core.Preferences>
+    private val dataStore : DataStore<Preferences>
 ) {
     suspend fun setName(name : String){
         dataStore.edit {pref ->
