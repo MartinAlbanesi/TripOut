@@ -70,5 +70,6 @@
     <string name="there_are_no_members">There are no members</string>
     <string name="there_is_no_direction">There is no direction</string>
     <string name="storage_permission_message">We ask for storage permission to be able to save the images of the trip.</string>
+    <string name="gallery">Gallery</string>
 
 </resources>

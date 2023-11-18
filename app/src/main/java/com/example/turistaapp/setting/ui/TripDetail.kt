@@ -9,13 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,9 +34,7 @@ import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.TripOrigin
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
@@ -48,7 +42,6 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,11 +52,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -72,6 +62,10 @@ import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
+import com.example.turistaapp.setting.ui.components.DialogShouldShowRationale
+import com.example.turistaapp.setting.ui.components.IconWithText
+import com.example.turistaapp.setting.ui.components.LocationCard
+import com.example.turistaapp.setting.ui.components.TextWithComposable
 
 @Composable
 fun TripDetails(
@@ -116,17 +110,39 @@ fun TripDetails(
         }
     }
 
-    LaunchedEffect(routeModel) {
-        Log.i("titi", routeModel?.trip?.images.toString())
-    }
-
     DialogShouldShowRationale(isShowDialog = isShowDialog) {
         isShowDialog = !isShowDialog
     }
 
+    val assistChipItems = listOf(
+        AssistChipItem(
+            icon = Icons.Default.ImageSearch,
+            text = stringResource(R.string.gallery),
+            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
+        ),
+        AssistChipItem(
+            icon = Icons.Default.Share,
+            text = stringResource(R.string.share),
+            onClick = { onClickQR() }
+        ),
+        AssistChipItem(
+            icon = Icons.Default.Delete,
+            text = stringResource(id = R.string.delete),
+            onClick = { onDeleteTripButtonClick(routeModel!!.trip!!) }
+        ),
+    )
+
+    val transportIcon = when (routeModel?.trip?.transport) {
+        "driving" -> Icons.Default.DirectionsCar
+        "walking" -> Icons.Default.DirectionsWalk
+        "bicycling" -> Icons.Default.DirectionsBike
+        else -> Icons.Default.Error
+    }
+
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(8.dp),
     ) {
         // Trip Name
         item {
@@ -135,225 +151,85 @@ fun TripDetails(
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(bottom = 8.dp),
             )
         }
 
         // Trip Dates and Author
         item {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                    .padding(bottom = 8.dp),
             ) {
                 // Dates
-                Box(
-                    contentAlignment = Alignment.CenterStart,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.6f),
-                ) {
-                    Row {
-                        Icon(
-                            imageVector = Icons.Default.CalendarMonth,
-                            "Trip Dates",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically),
-                        )
-                        Spacer(modifier = Modifier.padding(horizontal = 3.dp))
-                        Text(
-                            text = "${
-                                formatMilisToDateString(
-                                    routeModel?.trip!!.startDate,
-                                    "dd/MM/yy",
-                                )
-                            } - ",
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center,
-                        )
-                        Text(
-                            text = formatMilisToDateString(
-                                routeModel.trip.endDate,
-                                "dd/MM/yy",
-                            ),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                    }
-                }
-
+                IconWithText(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    icon = Icons.Default.CalendarMonth,
+                    text = "${formatMilisToDateString(
+                            routeModel?.trip!!.startDate,
+                            "dd/MM/yy",
+                        )} - ${formatMilisToDateString(
+                        routeModel.trip.endDate,
+                        "dd/MM/yy",)}"
+                )
                 // Author
-                Box(
-                    contentAlignment = Alignment.CenterEnd,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .weight(0.5f),
-                ) {
-                    Row {
-                        Icon(
-                            imageVector = Icons.Default.PermIdentity,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .padding(horizontal = 5.dp, vertical = 1.dp)
-                                .size(20.dp)
-                                .align(Alignment.CenterVertically),
-                        )
-                        Text(
-                            text = stringResource(
-                                R.string.for_,
-                                routeModel?.trip?.author ?: stringResource(R.string.anonymous)
-                            ),
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
+                IconWithText(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    icon = Icons.Default.PermIdentity,
+                    text = stringResource(
+                        R.string.for_,
+                        routeModel.trip.author
+                    )
+                )
             }
         }
 
         // Buttons
         item {
-            LazyRow {
-                item {
+            LazyRow(modifier = Modifier.padding(bottom = 8.dp)) {
+                items(assistChipItems) {
                     AssistChip(
-                        onClick = {
-                            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        },
+                        onClick = it.onClick,
                         label = {
                             Icon(
-                                imageVector = Icons.Default.ImageSearch,
-                                contentDescription = "",
+                                imageVector = it.icon,
+                                contentDescription = it.text,
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier
-                                    .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
                             )
-                            Text("Galeria")
+                            Spacer(Modifier.size(8.dp))
+                            Text(it.text)
                         },
                         modifier = Modifier
-                            .padding(8.dp),
-
+                            .padding(end = 16.dp),
                     )
-
-                    AssistChip(
-                        onClick = {
-                            onClickQR()
-                        },
-                        label = {
-                            Icon(
-                                imageVector = Icons.Default.Share,
-                                contentDescription = "",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp, vertical = 1.dp)
-                                    .size(20.dp),
-                            )
-                            Text(stringResource(id = R.string.share))
-                        },
-                        modifier = Modifier
-                            .padding(8.dp),
-                    )
-
-                    AssistChip(
-                        onClick = {
-                            onDeleteTripButtonClick(routeModel!!.trip!!)
-                        },
-                        label = {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "",
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp, vertical = 1.dp)
-                                    .size(20.dp),
-                            )
-                            Text(stringResource(id = R.string.delete))
-                        },
-                        modifier = Modifier
-                            .padding(8.dp),
-                    )
-                    /*
-                    AssistChip(
-                        onClick = {},
-                        label = {
-                            Icon(
-                                imageVector = Icons.Default.CameraEnhance,
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .padding(horizontal = 5.dp, vertical = 1.dp)
-                                    .size(20.dp),
-                            )
-                            Text("camara")
-                        },
-                        modifier = Modifier
-                            .padding(8.dp),
-                    )
-                     */
                 }
             }
-            Spacer(modifier = Modifier.padding(vertical = 4.dp))
         }
 
         // Origin and Destination Label with Transport Icon
         item {
             Box(
-                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = stringResource(R.string.origin_and_destination),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-                    when (routeModel?.trip?.transport) {
-                        "driving" -> {
-                            Icon(
-                                imageVector = Icons.Default.DirectionsCar,
-                                contentDescription = "Driving",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-
-                        "walking" -> {
-                            Icon(
-                                imageVector = Icons.Default.DirectionsWalk,
-                                contentDescription = "Walking",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-
-                        "bicycling" -> {
-                            Icon(
-                                imageVector = Icons.Default.DirectionsBike,
-                                contentDescription = "Biking",
-                                modifier = Modifier.size(30.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-
-                        else -> Icon(
-                            imageVector = Icons.Default.Error,
-                            contentDescription = "No transport",
-                            modifier = Modifier.size(30.dp),
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                    }
-                }
+                Text(
+                    text = stringResource(R.string.origin_and_destination),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.align(Alignment.CenterStart),
+                )
+                Icon(
+                    imageVector = transportIcon,
+                    contentDescription = transportIcon.name,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.CenterEnd),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
             }
-
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
         }
 
         // Origin and Destination Cards
@@ -361,7 +237,7 @@ fun TripDetails(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(bottom = 8.dp),
             ) {
                 // Origin
                 LocationCard(
@@ -376,29 +252,20 @@ fun TripDetails(
                 // Destination
                 LocationCard(
                     icon = Icons.Default.Flag,
-                    locationName = routeModel!!.trip!!.destination.name,
+                    locationName = routeModel.trip.destination.name,
                     locationRating = routeModel.trip.destination.rating,
                     locationAddress = routeModel.trip.destination.address,
                 )
             }
-
-            Spacer(modifier = Modifier.padding(vertical = 8.dp))
         }
 
         // About Label
         item {
-            Text(
-                text = stringResource(R.string.about),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = 4.dp))
-        }
-
-        // About Card
-        item {
-            if (routeModel!!.trip!!.description!!.isNotEmpty()) {
+            TextWithComposable(
+                title = stringResource(R.string.about),
+                errorMessage = stringResource(R.string.there_is_no_description),
+                isShowComposable = routeModel!!.trip!!.description!!.isNotEmpty()
+            ) {
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 8.dp,
@@ -408,82 +275,47 @@ fun TripDetails(
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
 
                 ) {
-                    Row {
-                        Column(
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Description,
+                            contentDescription = "Trip Destination",
                             modifier = Modifier
-                                .align(Alignment.CenterVertically),
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Description,
-                                contentDescription = "Trip Destination",
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .padding(horizontal = 4.dp),
-                            )
-                        }
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(4.dp),
-                        ) {
-                            Text(
-                                text = routeModel!!.trip!!.description.toString(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(6.dp),
-                            )
-                        }
+                                .size(40.dp)
+                                .padding(horizontal = 4.dp),
+                        )
+                        Text(
+                            text = routeModel.trip!!.description.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(6.dp),
+                        )
                     }
                 }
-            } else {
-                PlaceholderElevatedCard(
-                    text = stringResource(R.string.there_is_no_description),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .padding(horizontal = 16.dp),
-                )
             }
-
-            Spacer(modifier = Modifier.size(10.dp))
         }
 
         // Images Label
         item {
-            Text(
-                text = stringResource(R.string.images),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.size(10.dp))
-        }
-
-        // Photo Gallery
-        item {
-            if (!routeModel?.trip?.images.isNullOrEmpty()) {
+            TextWithComposable(
+                title = stringResource(R.string.images),
+                errorMessage = stringResource(R.string.no_pictures),
+                isShowComposable = !routeModel?.trip?.images.isNullOrEmpty()
+            ) {
                 LazyRow(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clip(
-                            shape = RoundedCornerShape(
-                                15.dp,
-                                15.dp,
-                                15.dp,
-                                15.dp,
-                            ),
-                        )
+                        .clip(shape = RoundedCornerShape(15.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                 ) {
-                    items(routeModel!!.trip!!.images ?: emptyList()) { imagen ->
+                    items(routeModel!!.trip!!.images ?: emptyList()) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(imagen)
+                                .data(it)
                                 .size(300, 300)
                                 .crossfade(true)
                                 .build(),
@@ -491,32 +323,17 @@ fun TripDetails(
                         )
                     }
                 }
-            } else {
-                PlaceholderElevatedCard(
-                    text = stringResource(R.string.no_pictures),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .padding(horizontal = 16.dp),
-                )
             }
-            Spacer(modifier = Modifier.size(10.dp))
         }
 
         // Members Label
         item {
-            Text(
-                text = stringResource(R.string.member),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-            )
-        }
-
-        if (!routeModel?.trip?.members.isNullOrEmpty()) {
-            item {
+            TextWithComposable(
+                title = stringResource(R.string.member),
+                errorMessage = stringResource(R.string.there_are_no_members),
+                isShowComposable = !routeModel?.trip?.members.isNullOrEmpty()
+            ) {
                 LazyVerticalGrid(
-                    contentPadding = PaddingValues(10.dp),
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
                         .heightIn(max = 170.dp),
@@ -549,169 +366,6 @@ fun TripDetails(
                     }
                 }
             }
-        } else {
-            item {
-                PlaceholderElevatedCard(
-                    text = stringResource(R.string.there_are_no_members),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .padding(horizontal = 16.dp),
-                )
-            }
         }
-
-        item {
-            Spacer(modifier = Modifier.size(10.dp))
-        }
-    }
-}
-
-@Composable
-fun PlaceholderElevatedCard(
-    text: String,
-    modifier: Modifier,
-) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp,
-        ),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        modifier = modifier,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-        }
-    }
-}
-
-@Composable
-fun LocationCard(
-    icon: ImageVector,
-    locationName: String,
-    locationRating: Double,
-    locationAddress: String?,
-) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp,
-        ),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        modifier = Modifier
-            .fillMaxWidth(),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = "Location Icon",
-                modifier = Modifier
-                    .size(40.dp)
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 4.dp),
-            )
-            Column(
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(start = 8.dp, top = 4.dp),
-                ) {
-                    Box(
-                        modifier = Modifier.weight(0.9f),
-                    ) {
-                        Text(
-                            text = locationName,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .weight(0.2f)
-                            .align(Alignment.Top),
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.End,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(
-                                    shape = RoundedCornerShape(
-                                        15.dp,
-                                        0.dp,
-                                        0.dp,
-                                        15.dp,
-                                    ),
-                                )
-                                .background(MaterialTheme.colorScheme.inversePrimary),
-                        ) {
-                            Text(
-                                text = locationRating.toString(),
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .align(Alignment.CenterVertically),
-                            )
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = "Rating",
-                                tint = Color.Yellow,
-                            )
-                        }
-                    }
-                }
-
-                Text(
-                    text = locationAddress ?: stringResource(R.string.there_is_no_direction),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun DialogShouldShowRationale(
-    isShowDialog: Boolean,
-    onDismiss: () -> Unit,
-) {
-    if (isShowDialog) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
-            confirmButton = {
-                TextButton(onClick = { onDismiss() }) {
-                    Text(text = stringResource(R.string.accept))
-                }
-            },
-            title = {
-                Text(text = stringResource(id = R.string.permission_required))
-            },
-            text = {
-                Text(
-                    text = stringResource(R.string.storage_permission_message),
-                )
-            },
-        )
     }
 }
