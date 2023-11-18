@@ -33,12 +33,13 @@
     <string name="gps_no_activated">You do not have GPS activated</string>
     <string name="error_location">An error occurred while obtaining your location</string>
     <string name="my_location">My location</string>
+    <string name="confirm_trip">Confirm Trip</string>
 
     <string name="finish">Finish</string>
     <string name="tutorial">Tutorial</string>
     <string name="tutorial_message_0">Welcome to the map</string>
     <string name="tutorial_message_1">Different colors represent different types of locations</string>
-    <string name="destiny">destiny</string>
+    <string name="destiny">Destiny</string>
     <string name="origen">Origen</string>
     <string name="tutorial_message_2">You can see the details of each trip by tapping the red markers</string>
     <string name="tutorial_message_3">You can see your location by tapping the location button</string>
@@ -59,14 +60,15 @@
 
     <!--TRIP DETAILS    -->
     <string name="anonymous">Anónimo</string>
-    <string name="for_">Por %1$s</string>
-    <string name="origin_and_destination">Origen y destino</string>
+    <string name="for_">For %1$s</string>
+    <string name="origin_and_destination">Origin and destination</string>
     <string name="about">Acerca de</string>
-    <string name="there_is_no_description">No hay descripción</string>
-    <string name="images">Imagenes</string>
-    <string name="no_pictures">No hay imágenes</string>
-    <string name="member">Miembros</string>
-    <string name="there_are_no_members">No hay miembros</string>
-    <string name="there_is_no_direction">No hay direccion</string>
-    <string name="storage_permission_message">Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.</string>
+    <string name="there_is_no_description">There is no description</string>
+    <string name="images">Images</string>
+    <string name="no_pictures">No Pictures</string>
+    <string name="member">Members</string>
+    <string name="there_are_no_members">There are no members</string>
+    <string name="there_is_no_direction">There is no direction</string>
+    <string name="storage_permission_message">We ask for storage permission to be able to save the images of the trip.</string>
+
 </resources>

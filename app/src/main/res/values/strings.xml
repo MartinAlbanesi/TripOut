@@ -33,6 +33,7 @@
     <string name="gps_no_activated">No tienes el GPS activado</string>
     <string name="error_location">Ocurrio un error al obtener tu ubicación</string>
     <string name="my_location">Mi ubicación</string>
+    <string name="confirm_trip">Confirmar Viaje</string>
 
     <string name="finish">Finalizar</string>
     <string name="tutorial">Tutorial</string>
@@ -69,4 +70,5 @@
     <string name="there_are_no_members">No hay miembros</string>
     <string name="there_is_no_direction">No hay direccion</string>
     <string name="storage_permission_message">Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.</string>
+
 </resources>
