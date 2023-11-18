@@ -34,9 +34,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
-import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
@@ -85,8 +83,16 @@ fun CreateTripScreen(
     )
 
     // Fechas
-    val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
-    val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
+    val startDate by createTripViewModel.startDate.observeAsState(
+        createTripViewModel.calendar.timeInMillis.minus(
+            86400000,
+        ),
+    )
+    val endDate by createTripViewModel.endDate.observeAsState(
+        createTripViewModel.calendar.timeInMillis.minus(
+            86400000,
+        ),
+    )
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = startDate,
         initialSelectedEndDateMillis = endDate,
@@ -355,10 +361,11 @@ fun CreateTripScreen(
                         isMemberNameValid = true
                     },
                     onAdd = {
-                        if (memberName.isBlank()) {
+                        if (memberName.isBlank() || memberName.length < 3 || memberName.length > 20 || members.contains(memberName)) {
                             isMemberNameValid = false
+                        } else {
+                            createTripViewModel.onAddMember(it)
                         }
-                        createTripViewModel.onAddMember(it)
                     },
                     onRemove = { createTripViewModel.onRemoveMember(it) },
                     leadingIcon = {
