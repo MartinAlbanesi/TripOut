@@ -2,7 +2,9 @@ package com.example.turistaapp.map.ui
 
 import android.location.Location
 import com.example.turistaapp.home.domain.GetLastLocationUseCase
+import com.example.turistaapp.map.domain.GetIsMapTutorialComplete
 import com.example.turistaapp.map.domain.GetRouteModel
+import com.example.turistaapp.map.domain.SetIsMapTutorialComplete
 import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import io.mockk.MockKAnnotations
@@ -32,6 +34,12 @@ class MapViewModelTest {
     @RelaxedMockK
     private lateinit var getLastLocationUseCase: GetLastLocationUseCase
 
+    @RelaxedMockK
+    private lateinit var getIsMapTutorialComplete: GetIsMapTutorialComplete
+
+    @RelaxedMockK
+    private lateinit var setIsMapTutorialComplete: SetIsMapTutorialComplete
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -39,7 +47,9 @@ class MapViewModelTest {
             dispatcher,
             getTripsUseCase,
             getRouteModel,
-            getLastLocationUseCase
+            getLastLocationUseCase,
+            getIsMapTutorialComplete,
+            setIsMapTutorialComplete
         )
     }
 
