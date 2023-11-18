@@ -1,5 +1,6 @@
 package com.example.turistaapp.home.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -164,6 +166,7 @@ fun LottiePreview(
     }
 }
 
+@SuppressLint("NewApi")
 @Composable
 fun HomeScreen(
     nearbyLocations: ResponseUiState,
@@ -194,7 +197,7 @@ fun HomeScreen(
         LazyColumn {
             item {
                 LottiePreview(
-                    title = "Shake'n Discover",
+                    title = stringResource(R.string.shake_n_discover),
                     res = R.raw.world,
                     isBackgroundColored = true,
                     isBottomBrush = true,
@@ -206,7 +209,7 @@ fun HomeScreen(
             item {
                 Column {
                     Text(
-                        text = "Descubre más viajes",
+                        text = stringResource(R.string.discover_more_trips),
                         style = MaterialTheme.typography.headlineLarge,
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 8.dp),
@@ -215,7 +218,7 @@ fun HomeScreen(
                     when (nearbyLocations) {
                         is ResponseUiState.Success<*> -> {
                             Text(
-                                text = "Cerca de $locationSelect",
+                                text = stringResource(R.string.nearly, locationSelect),
                                 style = MaterialTheme.typography.labelLarge,
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
@@ -243,7 +246,7 @@ fun HomeScreen(
 
                         is ResponseUiState.Error -> {
                             LottiePreview(
-                                title = "No se encontraron resultados",
+                                title = stringResource(R.string.no_results_found),
                                 res = R.raw.marker,
                             ) {}
                         }
@@ -252,7 +255,7 @@ fun HomeScreen(
             }
             item {
                 Text(
-                    text = "Mis viajes",
+                    text = stringResource(R.string.my_trips),
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
@@ -260,7 +263,7 @@ fun HomeScreen(
                 )
                 if (myTrips.isEmpty()) {
                     LottiePreview(
-                        title = "¡Crea tu primer viaje!",
+                        title = stringResource(R.string.create_your_first_trip),
                         res = R.raw.map,
                         isBackgroundColored = true,
                         isTopBrush = true,
@@ -296,7 +299,6 @@ fun HomeScreen(
         AnimatedVisibility(
             visible = showFloatingButtons,
             enter = expandVertically(expandFrom = Alignment.Top) { 0 },
-            // Shrinks the content to half of its full height via an animation.
             exit = shrinkVertically(shrinkTowards = Alignment.Bottom) { 0 },
             modifier = Modifier
                 .padding(bottom = 16.dp, end = 16.dp)
@@ -307,7 +309,7 @@ fun HomeScreen(
                 ExtendedFloatingActionButton(
                     onClick = { onClickFloatingBottom() },
                     icon = { Icon(Icons.Default.Map, contentDescription = "Create Trip Form") },
-                    text = { Text(text = "Crear Viaje") },
+                    text = { Text(text = stringResource(R.string.create_trip)) },
                     modifier = Modifier,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -319,7 +321,7 @@ fun HomeScreen(
                             contentDescription = "QR Code Scanner",
                         )
                     },
-                    text = { Text(text = "Escanear QR") },
+                    text = { Text(text = stringResource(R.string.scan_qr)) },
                     modifier = Modifier,
                 )
             }

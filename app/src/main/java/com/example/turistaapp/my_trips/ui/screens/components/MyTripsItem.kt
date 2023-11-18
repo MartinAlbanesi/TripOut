@@ -43,10 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import org.joda.time.DateTime
@@ -114,25 +116,25 @@ fun MyTripsItem(
                     )
                     when {
                         daysLeft.toInt() < 0 -> Text(
-                            text = "El viaje ya terminó",
+                            text = stringResource(R.string.trip_is_over),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 0 -> Text(
-                            text = "Hoy",
+                            text = stringResource(R.string.today),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 1 -> Text(
-                            text = "Mañana",
+                            text = stringResource(R.string.tomorrow),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         else -> Text(
-                            text = "En $daysLeft días",
+                            text = stringResource(R.string.in_days, daysLeft),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -184,7 +186,7 @@ fun MyTripsItem(
                 )
                 DropdownMenu(expanded = menuAnchor, onDismissRequest = { menuAnchor = false }) {
                     DropdownMenuItem(
-                        text = { Text(text = "Ver Mapa") },
+                        text = { Text(text = stringResource(R.string.see_map)) },
                         onClick = { onMapButtonClick(trip.tripId) },
                         leadingIcon = {
                             Icon(
@@ -195,7 +197,7 @@ fun MyTripsItem(
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text(text = "Compartir") },
+                        text = { Text(text = stringResource(R.string.share)) },
                         onClick = {
                             onQRButtonClick()
                             menuAnchor = false
@@ -203,13 +205,13 @@ fun MyTripsItem(
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.QrCode,
-                                contentDescription = "QR Button",
+                                contentDescription = Icons.Default.QrCode.name,
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text(text = "Borrar") },
+                        text = { Text(text = stringResource(R.string.delete)) },
                         onClick = {
                             onDeleteButtonClick(trip)
                             menuAnchor = false
@@ -217,7 +219,7 @@ fun MyTripsItem(
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete Button",
+                                contentDescription = Icons.Default.Delete.name,
                                 tint = MaterialTheme.colorScheme.error,
                             )
                         },

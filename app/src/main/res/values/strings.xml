@@ -1,4 +1,72 @@
 <resources>
+    <!-- WELCOME    -->
     <string name="app_name">Trip Out</string>
-    <string name="Welcome1">Una aplicación donde puedes organizar y planificar tus viajes soñados!</string>
+    <string name="welcome_message">Una aplicación donde puedes organizar y planificar tus viajes soñados!</string>
+    <string name="next">Siguiente</string>
+    <string name="start">Empezar</string>
+    <string name="accept">Aceptar</string>
+    <string name="permission_required">Aviso de permisos</string>
+    <string name="location_permission_message">Pedimos la ubicación para poder mostrarte los lugares cercanos a ti y para mostrar tu ubicación en el mapa</string>
+    <string name="say_you_name">Dinos tu nombre para comenzar</string>
+    <string name="name_welcome">Nombre</string>
+    <string name="error_message_welcome">El nombre debe comenzar con mayúscula y no contener números ni caracteres especiales</string>
+
+    <!--HOME    -->
+    <string name="shake_n_discover">Shake\'n Discover</string>
+    <string name="discover_more_trips">Descubre más viajes</string>
+    <string name="nearly">Cerca de %1$s</string>
+    <string name="no_results_found">No se encontraron resultados</string>
+    <string name="my_trips">Mis viajes</string>
+    <string name="create_your_first_trip">¡Crea tu primer viaje!</string>
+    <string name="create_trip">Crear Viaje</string>
+    <string name="scan_qr">Escanear QR</string>
+
+    <!--SHAKE GAME    -->
+    <string name="shake_to_discover">¡Agite para una descubrir una ubicación!</string>
+    <string name="enter_at_least_2_locations">Ingrese al menos 2 ubicaciones</string>
+    <string name="enter_a_location">Ingrese una ubicación</string>
+
+    <!--MAPS    -->
+    <string name="my_destinations">Mis Destinos</string>
+    <string name="no_permission_location">No tienes permisos para acceder a la ubicación</string>
+    <string name="activate">Activar</string>
+    <string name="gps_no_activated">No tienes el GPS activado</string>
+    <string name="error_location">Ocurrio un error al obtener tu ubicación</string>
+    <string name="my_location">Mi ubicación</string>
+
+    <string name="finish">Finalizar</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_message_0">Bienvenido al mapa</string>
+    <string name="tutorial_message_1">Distintos colores representan distintos tipos de ubicaciones</string>
+    <string name="destiny">Destino</string>
+    <string name="origen">Origen</string>
+    <string name="tutorial_message_2">Puedes ver los detalles de cada viaje tocando los marcadores rojos</string>
+    <string name="tutorial_message_3">Puedes ver tu ubicación tocando el botón de ubicación</string>
+
+    <!--MY TRIPS    -->
+    <string name="trip_is_over">El viaje ya terminó</string>
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+    <string name="in_days">En %1$s días</string>
+    <string name="see_map">Ver Mapa</string>
+    <string name="share">Compartir</string>
+    <string name="delete">Borrar</string>
+
+    <!--QR CODE    -->
+    <string name="qr_code">Código QR</string>
+    <string name="scan_the_following_QR_code">Escanea el siguiente código QR para copiar el viaje:</string>
+    <string name="close">Cerrar</string>
+
+    <!--TRIP DETAILS    -->
+    <string name="anonymous">Anónimo</string>
+    <string name="for_">Por %1$s</string>
+    <string name="origin_and_destination">Origen y destino</string>
+    <string name="about">Acerca de</string>
+    <string name="there_is_no_description">No hay descripción</string>
+    <string name="images">Imagenes</string>
+    <string name="no_pictures">No hay imágenes</string>
+    <string name="member">Miembros</string>
+    <string name="there_are_no_members">No hay miembros</string>
+    <string name="there_is_no_direction">No hay direccion</string>
+    <string name="storage_permission_message">Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.</string>
 </resources>

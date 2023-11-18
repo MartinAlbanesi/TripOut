@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.turistaapp.R
 
 @Composable
 fun PagerViewTwo(
@@ -32,7 +34,7 @@ fun PagerViewTwo(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Dinos tu nombre para comenzar",
+            text = stringResource(R.string.say_you_name),
             Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
@@ -40,7 +42,7 @@ fun PagerViewTwo(
         OutlinedTextField(
             value = value,
             onValueChange = { onValueChange(it) },
-            label = { Text(text = "Nombre") },
+            label = { Text(text = stringResource(R.string.name_welcome)) },
             singleLine = true,
             maxLines = 1,
             modifier = Modifier
@@ -59,10 +61,12 @@ fun PagerViewTwo(
         ) {
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "El nombre debe comenzar con mayúscula y no contener números ni caracteres especiales",
+                    text = stringResource(R.string.error_message_welcome),
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 30.dp).testTag("errorText"),
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                        .testTag("errorText"),
                 )
             }
         }

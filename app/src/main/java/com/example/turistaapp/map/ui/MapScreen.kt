@@ -13,7 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
@@ -114,7 +116,7 @@ fun MapScreen(
                 },
             )
             TopAppBarScreen(
-                title = "Mis Destinos",
+                title = stringResource(R.string.my_destinations),
                 isMarkerSelected = markerSelect,
                 color = Color.Black,
                 onClickNavigationBack = { onClickArrowBack() },

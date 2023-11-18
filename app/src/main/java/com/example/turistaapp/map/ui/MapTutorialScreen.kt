@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,7 +73,7 @@ fun MapTutorial(
         animationSpec = tween(200)
     )
 
-    buttonText = if (pagerState.currentPage == 3) "Finalizar" else "Siguiente"
+    buttonText = if (pagerState.currentPage == 3) stringResource(R.string.finish) else stringResource(R.string.next)
 
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Box(
@@ -91,7 +92,7 @@ fun MapTutorial(
                         .fillMaxWidth(),
                 ) {
                     Text(
-                        text = "Tutorial",
+                        text = stringResource(R.string.tutorial),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(8.dp)
@@ -166,7 +167,7 @@ private fun MapPagerThree() {
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Text(
-            text = "Puedes ver tu ubicación tocando el botón de ubicación",
+            text = stringResource(R.string.tutorial_message_3),
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
         )
@@ -182,7 +183,7 @@ private fun MapPagerTwo() {
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Text(
-            text = "Puedes ver los detalles de cada viaje tocando los marcadores rojos",
+            text = stringResource(R.string.tutorial_message_2),
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )
@@ -198,24 +199,24 @@ private fun MapPagerOne() {
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         Text(
-            text = "Distintos colores representan distintos tipos de ubicaciones",
+            text = stringResource(R.string.tutorial_message_1),
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
         )
         IconWithText(
             modifier = Modifier,
             color = Color.Red,
-            text = "Destino",
+            text = stringResource(R.string.destiny),
         )
         IconWithText(
             modifier = Modifier,
             color = Color.Green,
-            text = "Origen",
+            text = stringResource(R.string.origen),
         )
         IconWithText(
             modifier = Modifier,
             color = Color(0xFF3535ea),
-            text = "Mi Ubicación",
+            text = stringResource(R.string.my_location),
         )
     }
 }
@@ -252,7 +253,7 @@ private fun MapPagerZero() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = "Bienvenido al mapa",
+        Text(text = stringResource(R.string.tutorial_message_0),
             fontSize = 24.sp,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center

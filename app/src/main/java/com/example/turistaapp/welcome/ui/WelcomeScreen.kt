@@ -69,7 +69,9 @@ fun WelcomeScreen(
         label = "circleSecond"
     )
 
-    val buttonText = if (pagerState.currentPage == 0) "Siguiente" else "Empezar"
+    val buttonText = if (pagerState.currentPage == 0)
+        stringResource(R.string.next)
+    else stringResource(R.string.start)
 
     var value by remember { mutableStateOf("") }
 
@@ -86,16 +88,15 @@ fun WelcomeScreen(
             onDismissRequest = { /*TODO*/ },
             confirmButton = {
                 TextButton(onClick = { onClickSaveName(value) }) {
-                    Text(text = "Aceptar")
+                    Text(text = stringResource(R.string.accept))
                 }
             },
             title = {
-                Text(text = "Aviso de permisos")
+                Text(text = stringResource(R.string.permission_required))
             },
             text = {
                 Text(
-                    text = "Pedimos la ubicación para poder mostrarte los lugares cercanos a ti" +
-                            " y para mostrar tu ubicación en el mapa"
+                    text = stringResource(R.string.location_permission_message)
                 )
             },
         )
@@ -126,7 +127,7 @@ fun WelcomeScreen(
             ) { pager ->
                 when (pager) {
                     0 -> {
-                        PagerViewOne(stringResource(R.string.Welcome1))
+                        PagerViewOne(stringResource(R.string.welcome_message))
                     }
 
                     1 -> {

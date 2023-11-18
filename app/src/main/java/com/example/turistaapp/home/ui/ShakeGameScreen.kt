@@ -5,7 +5,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -35,7 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -125,7 +123,7 @@ fun ShakeGameScreen(
     Scaffold(
         topBar = {
             TopAppBarScreen(
-                title = "Shake'n Discover",
+                title = stringResource(R.string.shake_n_discover),
                 isMarkerSelected = true,
                 onClickNavigationBack = {
                     onNavigateToHome()
@@ -152,7 +150,7 @@ fun ShakeGameScreen(
                 Column(Modifier.fillMaxWidth()) {
 
                     Text(
-                        text = "¡Agite para una descubrir una ubicación!",
+                        text = stringResource(R.string.shake_to_discover),
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Center
@@ -168,13 +166,14 @@ fun ShakeGameScreen(
             }
             Column(modifier = Modifier) {
                 Text(
-                    text = "Ingrese al menos 2 ubicaciones",
+                    text = stringResource(R.string.enter_at_least_2_locations),
                     modifier = Modifier
-                        .fillMaxWidth().padding(bottom = 8.dp),
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     textAlign = TextAlign.Center
                 )
                 PlaceAutocompleteField(
-                    label = "Ingrese una ubicación",
+                    label = stringResource(R.string.enter_a_location),
                     query = value,
                     onQueryChange = {
                         value = it
@@ -226,7 +225,10 @@ private fun ItemShake(
     text: String,
     onDelete: () -> Unit
 ) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)) {
         Text(text = text, modifier = Modifier.weight(1f))
         IconButton(
             onClick = { onDelete() },

@@ -62,11 +62,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
@@ -167,7 +169,7 @@ fun TripDetails(
                                 )
                             } - ",
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            textAlign = TextAlign.Center,
                         )
                         Text(
                             text = formatMilisToDateString(
@@ -196,9 +198,12 @@ fun TripDetails(
                                 .align(Alignment.CenterVertically),
                         )
                         Text(
-                            text = "Por ${routeModel?.trip?.author ?: "Nadie"}",
+                            text = stringResource(
+                                R.string.for_,
+                                routeModel?.trip?.author ?: stringResource(R.string.anonymous)
+                            ),
                             style = MaterialTheme.typography.bodyLarge,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
@@ -211,9 +216,6 @@ fun TripDetails(
                 item {
                     AssistChip(
                         onClick = {
-//                            multiplePhotoPickerLauncher.launch(
-//                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-//                            )
                             launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                         },
                         label = {
@@ -245,7 +247,7 @@ fun TripDetails(
                                     .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
                             )
-                            Text("Compartir")
+                            Text(stringResource(id = R.string.share))
                         },
                         modifier = Modifier
                             .padding(8.dp),
@@ -264,7 +266,7 @@ fun TripDetails(
                                     .padding(horizontal = 5.dp, vertical = 1.dp)
                                     .size(20.dp),
                             )
-                            Text("Eliminar")
+                            Text(stringResource(id = R.string.delete))
                         },
                         modifier = Modifier
                             .padding(8.dp),
@@ -304,7 +306,7 @@ fun TripDetails(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "Origen y destino",
+                        text = stringResource(R.string.origin_and_destination),
                         style = MaterialTheme.typography.headlineSmall,
                     )
                 }
@@ -386,7 +388,7 @@ fun TripDetails(
         // About Label
         item {
             Text(
-                text = "Acerca de",
+                text = stringResource(R.string.about),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -438,7 +440,7 @@ fun TripDetails(
                 }
             } else {
                 PlaceholderElevatedCard(
-                    text = "No hay descripción",
+                    text = stringResource(R.string.there_is_no_description),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
@@ -452,7 +454,7 @@ fun TripDetails(
         // Images Label
         item {
             Text(
-                text = "Imagenes",
+                text = stringResource(R.string.images),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
@@ -491,7 +493,7 @@ fun TripDetails(
                 }
             } else {
                 PlaceholderElevatedCard(
-                    text = "No hay imágenes",
+                    text = stringResource(R.string.no_pictures),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
@@ -504,7 +506,7 @@ fun TripDetails(
         // Members Label
         item {
             Text(
-                text = "Miembros",
+                text = stringResource(R.string.member),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
@@ -550,7 +552,7 @@ fun TripDetails(
         } else {
             item {
                 PlaceholderElevatedCard(
-                    text = "No hay miembros",
+                    text = stringResource(R.string.there_are_no_members),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
@@ -679,7 +681,7 @@ fun LocationCard(
                 }
 
                 Text(
-                    text = locationAddress ?: "No hay direccion",
+                    text = locationAddress ?: stringResource(R.string.there_is_no_direction),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -699,15 +701,15 @@ fun DialogShouldShowRationale(
             onDismissRequest = { onDismiss() },
             confirmButton = {
                 TextButton(onClick = { onDismiss() }) {
-                    Text(text = "Aceptar")
+                    Text(text = stringResource(R.string.accept))
                 }
             },
             title = {
-                Text(text = "Aviso de permisos")
+                Text(text = stringResource(id = R.string.permission_required))
             },
             text = {
                 Text(
-                    text = "Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.",
+                    text = stringResource(R.string.storage_permission_message),
                 )
             },
         )

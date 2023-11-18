@@ -47,15 +47,9 @@ fun SettingsScreen(changeTheme: () -> Unit) {
             .padding(8.dp)
             .fillMaxSize(),
     ) {
-//        SettingUser()
-//        Spacer(modifier = Modifier.size(21.dp))
-        // Divider( thickness = 2.dp , modifier = Modifier.padding(4.dp))
         SettingAppearance { changeTheme() }
         Spacer(modifier = Modifier.size(16.dp))
         About()
-
-//        Spacer(modifier = Modifier.size(21.dp))
-//        SettingMore("MAS")
         Box(
             contentAlignment = BottomCenter,
             modifier = Modifier
