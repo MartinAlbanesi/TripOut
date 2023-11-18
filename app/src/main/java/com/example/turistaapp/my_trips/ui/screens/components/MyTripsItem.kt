@@ -8,7 +8,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -58,7 +57,7 @@ import java.time.temporal.ChronoUnit
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TripItem(
+fun MyTripsItem(
     trip: TripModel,
     isDialogOpen: Boolean,
     selectedDataQR: String,
@@ -106,7 +105,7 @@ fun TripItem(
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically),
                 ) {
-                    val daysLeft = obtenerDiferenciaFechas(
+                    val daysLeft = getDaysBetweenDates(
                         formatMilisToDateString(trip.startDate, "yyyy-MM-dd"),
                         formatMilisToDateString(
                             Calendar.getInstance().timeInMillis.toString(),
@@ -116,19 +115,19 @@ fun TripItem(
                     when {
                         daysLeft.toInt() < 0 -> Text(
                             text = "El viaje ya terminó",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 0 -> Text(
                             text = "Hoy",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 1 -> Text(
                             text = "Mañana",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
@@ -151,7 +150,6 @@ fun TripItem(
                 name = trip.destination.name,
             )
         }
-        Spacer(modifier = Modifier.heightIn(4.dp))
 
         var menuAnchor by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
@@ -307,11 +305,12 @@ fun IconButton(
 fun ItemText(icon: ImageVector, name: String) {
     Row(
         modifier = Modifier
-            .padding(8.dp),
+            .padding(6.dp),
     ) {
         Icon(imageVector = icon, contentDescription = name)
         Text(
             text = name,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(start = 8.dp),
         )
@@ -319,14 +318,14 @@ fun ItemText(icon: ImageVector, name: String) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun obtenerDiferenciaFechas(fechaInicio: String, fechaFin: String): String {
-    // Convertir las fechas de String a objetos LocalDate
-    val fechaInicioObj = LocalDate.parse(fechaInicio)
-    val fechaFinObj = LocalDate.parse(fechaFin)
+fun getDaysBetweenDates(startDate: String, endDate: String): String {
+    // Convert the dates from String to LocalDate objects
+    val firstDateObj = LocalDate.parse(startDate)
+    val secondDateObj = LocalDate.parse(endDate)
 
-    // Calcular la diferencia en días
-    val diferenciaDias = ChronoUnit.DAYS.between(fechaFinObj, fechaInicioObj)
+    // Calculate the difference in days
+    val daysDiff = ChronoUnit.DAYS.between(secondDateObj, firstDateObj)
 
-    // Devolver la diferencia en un formato legible
-    return "${diferenciaDias + 1}"
+    // Return the difference in days
+    return "${daysDiff + 1}"
 }

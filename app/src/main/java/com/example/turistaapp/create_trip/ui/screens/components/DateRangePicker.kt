@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +101,7 @@ fun DateRangePickerInput(
                     val endCalenderDate = Calendar.getInstance()
                     endCalenderDate.timeInMillis = timeInMillis
                     endCalenderDate.set(Calendar.DATE, Calendar.DATE + 27)
-                    timeInMillis > Calendar.getInstance().timeInMillis - 172800000 && timeInMillis < endCalenderDate.timeInMillis
+                    timeInMillis > Calendar.getInstance().timeInMillis - 172799999 && timeInMillis < endCalenderDate.timeInMillis
                 },
                 modifier =
                 Modifier.height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing

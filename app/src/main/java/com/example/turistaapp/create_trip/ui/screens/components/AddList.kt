@@ -82,11 +82,31 @@ fun AddList(
         ),
         modifier = Modifier.padding(top = 4.dp),
     ) {
-        Text(
-            text = "Introduzca un miembro válido",
-            color = MaterialTheme.colorScheme.error,
-            modifier = Modifier.padding(start = 4.dp),
-        )
+        if (name.isEmpty()) {
+            Text(
+                text = "Introduzca un miembro válido",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        } else if (name.length < 3) {
+            Text(
+                text = "El nombre debe tener al menos 3 caracteres",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        } else if (name.length > 20) {
+            Text(
+                text = "El nombre debe tener menos de 20 caracteres",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        } else if (values.contains(name)) {
+            Text(
+                text = "El nombre ya existe",
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 4.dp),
+            )
+        }
     }
 
     Spacer(modifier = Modifier.size(4.dp))

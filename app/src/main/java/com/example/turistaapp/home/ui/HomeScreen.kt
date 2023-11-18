@@ -50,7 +50,7 @@ import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
-import com.example.turistaapp.my_trips.ui.screens.components.TripItem
+import com.example.turistaapp.my_trips.ui.screens.components.MyTripsItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
 
@@ -70,9 +70,11 @@ fun LottiePreview(
         mutableStateOf(Color.Transparent)
     }
 
+    /*
     var textBackground by remember {
         mutableStateOf(Color.Transparent)
     }
+     */
 
     var bottomBrush by remember {
         mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
@@ -188,7 +190,6 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
@@ -206,6 +207,7 @@ fun HomeScreen(
                 Column {
                     Text(
                         text = "Descubre más viajes",
+                        style = MaterialTheme.typography.headlineLarge,
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 8.dp),
                     )
@@ -214,6 +216,7 @@ fun HomeScreen(
                         is ResponseUiState.Success<*> -> {
                             Text(
                                 text = "Cerca de $locationSelect",
+                                style = MaterialTheme.typography.labelLarge,
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
                             )
@@ -253,8 +256,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth(),
-                    fontWeight = MaterialTheme.typography.headlineLarge.fontWeight,
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
+                    style = MaterialTheme.typography.headlineLarge,
                 )
                 if (myTrips.isEmpty()) {
                     LottiePreview(
@@ -269,7 +271,7 @@ fun HomeScreen(
                 }
             }
             items(myTrips) { trip ->
-                TripItem(
+                MyTripsItem(
                     trip = trip,
                     selectedDataQR = dataQRSelected,
                     isDialogOpen = isQRDialogOpen,
