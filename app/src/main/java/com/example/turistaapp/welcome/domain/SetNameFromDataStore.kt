@@ -9,5 +9,4 @@ class SetNameFromDataStore @Inject constructor(
     suspend operator fun invoke(name : String)  {
         dataStore.setName(name)
     }
-
 }
