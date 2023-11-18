@@ -23,7 +23,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                settingViewModel.isLoading.value
+            }
+        }
         setContent {
             val isDarkTheme by settingViewModel.darkTheme.observeAsState(false)
 

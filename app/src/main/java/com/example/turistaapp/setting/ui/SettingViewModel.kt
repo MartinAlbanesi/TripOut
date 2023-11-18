@@ -9,6 +9,8 @@ import com.example.turistaapp.setting.domain.UpdateImagesFromDBUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,12 +25,16 @@ class SettingViewModel @Inject constructor(
     private val _darkTheme = MutableLiveData<Boolean>(true)
     val darkTheme: LiveData<Boolean> = _darkTheme
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.Main) {
             localDataStoreRepository.getIsDarkMode().collect {
                 if (it != null) {
                     _darkTheme.value = it
                 }
+                _isLoading.value = false
             }
         }
     }
