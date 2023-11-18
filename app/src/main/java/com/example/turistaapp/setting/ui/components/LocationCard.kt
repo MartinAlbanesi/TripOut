@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,65 +58,46 @@ fun LocationCard(
                     .align(Alignment.CenterVertically)
                     .padding(horizontal = 4.dp),
             )
-            Column(
-                verticalArrangement = Arrangement.Center,
+            Box(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(8.dp)
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(start = 8.dp, top = 4.dp),
-                ) {
-                    Box(
-                        modifier = Modifier.weight(0.9f),
-                    ) {
-                        Text(
-                            text = locationName,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-                    Box(
+                Column {
+                    Text(
+                        text = locationName,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    Spacer(modifier = Modifier.size(4.dp))
+                    Text(
+                        text = locationAddress ?: stringResource(R.string.there_is_no_direction),
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
-                            .weight(0.2f)
-                            .align(Alignment.Top),
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.End,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(
-                                    shape = RoundedCornerShape(
-                                        15.dp,
-                                        0.dp,
-                                        0.dp,
-                                        15.dp,
-                                    ),
-                                )
-                                .background(MaterialTheme.colorScheme.inversePrimary),
-                        ) {
-                            Text(
-                                text = locationRating.toString(),
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .align(Alignment.CenterVertically),
-                            )
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = "Rating",
-                                tint = Color.Yellow,
-                            )
-                        }
-                    }
+                    )
                 }
-
-                Text(
-                    text = locationAddress ?: stringResource(R.string.there_is_no_direction),
-                    style = MaterialTheme.typography.bodyLarge,
+                Row(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                )
+                        .align(Alignment.TopEnd)
+                        .offset(y = (-8).dp, x = 8.dp)
+                        .clip(shape = RoundedCornerShape(topStart = 15.dp, bottomStart = 15.dp))
+                        .background(MaterialTheme.colorScheme.inversePrimary)
+                        .padding(2.dp)
+                ) {
+                    Text(
+                        text = locationRating.toString(),
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .align(Alignment.CenterVertically),
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Rating",
+                        tint = Color.Yellow,
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
         }
     }
