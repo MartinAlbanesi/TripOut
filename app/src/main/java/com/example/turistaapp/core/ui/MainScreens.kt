@@ -3,6 +3,7 @@ package com.example.turistaapp.core.ui
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -89,21 +90,24 @@ fun MainScreen(
 
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
-        Routes.Home.route,
-        Routes.Map.route,
-        Routes.Settings.route,
+        Routes.Home,
+        Routes.Map,
+        Routes.Settings,
     )
     Column {
-        TabRow(selectedTabIndex = state) {
+        TabRow(
+            selectedTabIndex = state,
+        ) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    text = { Text(title) },
+                    icon = { Icon(title.icon!!, contentDescription = null)},
+//                    text = { Text(title.route) },
                     selected = state == index,
                     onClick = { state = index },
                 )
             }
         }
-        when (titles[state]) {
+        when (titles[state].route) {
             Routes.Home.route -> {
                 HomeScreen(
                     nearbyLocations = nearbyLocations,
