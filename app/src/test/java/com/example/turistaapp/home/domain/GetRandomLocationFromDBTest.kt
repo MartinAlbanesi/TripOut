@@ -1,8 +1,7 @@
-package com.example.turistaapp.map.domain
+package com.example.turistaapp.home.domain
 
 import com.example.turistaapp.create_trip.FakeDataBaseSource
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase
-import com.example.turistaapp.home.domain.GetRandomLocationFromDB
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK

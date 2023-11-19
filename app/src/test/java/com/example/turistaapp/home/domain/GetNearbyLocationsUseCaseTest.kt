@@ -1,4 +1,4 @@
-package com.example.turistaapp.map.domain
+package com.example.turistaapp.home.domain
 
 import com.example.turistaapp.home.domain.GetNearbyLocationsUseCase
 import com.example.turistaapp.home.data.NearbySearchLocationRepository

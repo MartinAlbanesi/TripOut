@@ -1,4 +1,4 @@
-package com.example.turistaapp.map.data
+package com.example.turistaapp.home.data
 
 import com.example.turistaapp.home.data.NearbySearchLocationRepository
 import com.example.turistaapp.home.data.api.service.NearbySearchLocationApiService
