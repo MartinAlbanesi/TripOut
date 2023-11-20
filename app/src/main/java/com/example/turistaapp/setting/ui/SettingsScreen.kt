@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,11 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.R
 import com.example.turistaapp.welcome.utils.validateName
 
@@ -61,16 +59,20 @@ fun SettingsScreen(
     changeName: (String) -> Unit = {},
     changeTheme: () -> Unit,
 ) {
-
-    var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
-
-    var isChangeName by remember { mutableStateOf(false) }
+    //Name
+    var isClickedNameChange by remember { mutableStateOf(false) }
 
     var nameValue by remember { mutableStateOf(userName) }
 
     var isErrorName by remember { mutableStateOf(false) }
 
     val nameIsSuccess = stringResource(R.string.name_changed_successfully)
+
+    //Theme
+    var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
+
+    //Version
+    var isClickedVersion by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -103,15 +105,14 @@ fun SettingsScreen(
 
             TextWithArrow(
                 text = stringResource(R.string.rename),
-                isClicked = isChangeName,
+                isClicked = isClickedNameChange,
                 onClick = {
-                    isChangeName = !isChangeName
+                    isClickedNameChange = !isClickedNameChange
                 },
             ){
                 ChangeNameView(
                     value = nameValue,
                     isError = isErrorName,
-                    userName = nameValue,
                     onValueChange = {
                         nameValue = it
                         if (isErrorName) isErrorName = false
@@ -152,7 +153,21 @@ fun SettingsScreen(
 
             TextWithArrow(text = stringResource(R.string.about_us))
 
-            TextWithArrow(text = stringResource(R.string.version))
+            TextWithArrow(
+                text = stringResource(R.string.version),
+                isClicked = isClickedVersion,
+                onClick = {
+                    isClickedVersion = !isClickedVersion
+                },
+            ){
+                Text(
+                    text = BuildConfig.VERSION_NAME,
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
         }
     }
 }
@@ -161,7 +176,6 @@ fun SettingsScreen(
 fun ChangeNameView(
     value: String,
     isError: Boolean,
-    userName: String,
     onValueChange: (String) -> Unit,
     onImeAction: () -> Unit
 ) {
@@ -308,202 +322,3 @@ fun PhotoProfileWithName(
         )
     }
 }
-
-/*
-@Composable
-fun SettingsScreen(changeTheme: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize(),
-    ) {
-        SettingAppearance { changeTheme() }
-        Spacer(modifier = Modifier.size(16.dp))
-        About()
-        Box(
-            contentAlignment = BottomCenter,
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            SettingVersion()
-        }
-    }
-}
-
-@Composable
-fun SettingAppearance(changeTheme: () -> Unit) {
-    var checked by rememberSaveable { mutableStateOf(true) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-    ) {
-        Text(
-            text = "Aparencia",
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.headlineLarge,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            if (!checked) {
-                Text(
-                    "Modo oscuro",
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .weight(5f)
-                        .align(CenterVertically),
-                )
-            } else {
-                Text(
-                    "Modo claro",
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .weight(5f)
-                        .align(CenterVertically),
-                )
-            }
-
-            Switch(
-                checked = checked,
-                onCheckedChange = {
-                    changeTheme()
-                    checked = it
-                },
-                modifier = Modifier.weight(1f),
-            )
-        }
-    }
-}
-
-@Composable
-fun SettingVersion() {
-    Text(
-        "Version 1.1",
-        fontSize = 20.sp,
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-    )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun About() {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(color = MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 8.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { isExpanded = !isExpanded }
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = CenterVertically,
-        ) {
-            Text("Conoce nuestro equipo", fontSize = 24.sp)
-            Icon(
-                imageVector = if (isExpanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                contentDescription = null,
-            )
-        }
-
-        if (isExpanded) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)
-                    .fillMaxWidth(),
-            ) {
-                item {
-                    ElevatedCard(
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 6.dp,
-                        ),
-                        colors = CardDefaults.elevatedCardColors(
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        modifier = Modifier
-                            .fillParentMaxHeight(0.98f),
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.33f)
-                                .background(Color.Green)
-//                                .combinedClickable(
-//                                    onClick = { },
-//                                    onLongClick = { },
-//                                ),
-                        ) {
-                            Text(
-                                text = "TripOut",
-                                style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(8.dp),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.33f)
-                                .background(Color.Red)
-//                                .combinedClickable(
-//                                    onClick = { },
-//                                    onLongClick = { },
-//                                ),
-                        ) {
-                            Text(
-                                text = "TripOut",
-                                style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(8.dp),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillParentMaxHeight(0.33f)
-                                .background(Color.Blue)
-//                                .combinedClickable(
-//                                    onClick = { },
-//                                    onLongClick = { },
-//                                ),
-                        ) {
-                            Text(
-                                text = "TripOut",
-                                style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(8.dp),
-                            )
-                        }
-                    }
-                }
-                /*
-                item {
-                    Text(
-                        text = "Somos un pequeño grupo de estudiantes apasionados por el desarrollo de aplicaciones móviles modernas e intuitivas\n" +
-                            "En TripOut te ofrecemos la posibilidad de planificar tus viajes de la manera mas organizada posible, brindandote todas las herramientas necesarias para cumplir con tus objetivos.\n" +
-                            "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!\n" +
-                            "Martín, Gabriel y Ariel\n" +
-                            "Equipo de TripOut",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                }
-                 */
-            }
-        }
-    }
-}
- */
