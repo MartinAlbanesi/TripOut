@@ -263,7 +263,7 @@ fun TripDetails(
         // About Label
         item {
             TextWithComposable(
-                title = stringResource(R.string.about),
+                title = stringResource(R.string.description),
                 errorMessage = stringResource(R.string.there_is_no_description),
                 isShowComposable = routeModel!!.trip!!.description!!.isNotEmpty()
             ) {

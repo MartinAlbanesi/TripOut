@@ -1,26 +1,24 @@
 package com.example.turistaapp.setting.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -31,15 +29,172 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment.Companion.BottomCenter
-import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.turistaapp.R
 
+
+@Composable
+fun SettingsScreen(
+    isDarkTheme: Boolean = true,
+    changeTheme: () -> Unit,
+) {
+
+    var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
+
+    var isChangeName by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.surfaceVariant)
+    ) {
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
+                .fillMaxWidth()
+                .height(260.dp)
+                .background(MaterialTheme.colorScheme.primary)
+        )
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background,
+            ),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+        ) {
+            PhotoProfileWithName(name = "Titi")
+
+            Divider()
+
+            //Configuraciones de la cuenta
+            SubTitleSetting(text = stringResource(R.string.account_settings))
+
+            TextWithArrow(
+                text = stringResource(R.string.rename),
+                isClicked = isChangeName,
+            ){
+                isChangeName = !isChangeName
+            }
+
+            TextWithArrow(text = stringResource(R.string.change_language))
+
+            TextWithSwitch(
+                text = stringResource(R.string.dark_mode),
+                checked = checked,
+                onClickSwitch = {
+                    changeTheme()
+                    checked = !checked
+                },
+            )
+
+            Divider()
+
+            //More
+            SubTitleSetting(text = stringResource(R.string.more))
+
+            TextWithArrow(text = stringResource(R.string.about_us))
+
+            TextWithArrow(text = stringResource(R.string.version))
+        }
+    }
+}
+
+@Composable
+fun TextWithSwitch(
+    modifier: Modifier = Modifier,
+    text: String,
+    checked: Boolean,
+    onClickSwitch: (Boolean) -> Unit = {},
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(text = text, modifier = Modifier.align(Alignment.CenterStart))
+
+        Switch(
+            checked = checked,
+            onCheckedChange = {
+                onClickSwitch(it)
+            },
+            modifier = Modifier.align(Alignment.CenterEnd),
+        )
+    }
+}
+
+@Composable
+fun TextWithArrow(
+    modifier: Modifier = Modifier,
+    text: String,
+    isClicked: Boolean = false,
+    onClick: () -> Unit = {},
+) {
+    val icon = if (!isClicked) Icons.Outlined.KeyboardArrowRight else Icons.Outlined.KeyboardArrowDown
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick() }
+    ) {
+        Text(text = text, modifier = Modifier.align(Alignment.CenterStart))
+        Icon(
+            imageVector = icon,
+            contentDescription = icon.name,
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.CenterEnd)
+        )
+    }
+}
+
+@Composable
+fun SubTitleSetting(
+    text: String,
+) {
+    Text(
+        text = text,
+        modifier = Modifier.padding(16.dp),
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.outline,
+    )
+}
+
+@Composable
+fun PhotoProfileWithName(
+    modifier: Modifier = Modifier,
+    name: String,
+    icon: ImageVector = Icons.Default.Person,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = icon.name,
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+            text = name,
+            style = MaterialTheme.typography.titleLarge,
+        )
+    }
+}
+
+/*
 @Composable
 fun SettingsScreen(changeTheme: () -> Unit) {
     Column(
@@ -236,3 +391,4 @@ fun About() {
         }
     }
 }
+ */

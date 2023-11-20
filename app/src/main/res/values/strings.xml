@@ -62,7 +62,7 @@
     <string name="anonymous">Anónimo</string>
     <string name="for_">Por %1$s</string>
     <string name="origin_and_destination">Origen y destino</string>
-    <string name="about">Acerca de</string>
+    <string name="description">Descripcion del viaje</string>
     <string name="there_is_no_description">No hay descripción</string>
     <string name="images">Imagenes</string>
     <string name="no_pictures">No hay imágenes</string>
@@ -71,5 +71,14 @@
     <string name="there_is_no_direction">No hay direccion</string>
     <string name="storage_permission_message">Pedimos el permiso de almacenamiento para poder guardar las imagenes del viaje.</string>
     <string name="gallery">Galeria</string>
+
+    <!-- Settings   -->
+    <string name="account_settings">Configuraciones de la cuenta</string>
+    <string name="rename">Cambiar nombre</string>
+    <string name="change_language">Cambiar idioma</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="more">Más</string>
+    <string name="version">Versión</string>
+    <string name="about_us">Sobre nosotros</string>
 
 </resources>
