@@ -80,5 +80,6 @@
     <string name="more">Más</string>
     <string name="version">Versión</string>
     <string name="about_us">Sobre nosotros</string>
+    <string name="name_changed_successfully">Nombre cambiado con éxito</string>
 
 </resources>

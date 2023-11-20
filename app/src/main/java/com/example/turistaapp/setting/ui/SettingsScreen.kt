@@ -1,8 +1,15 @@
 package com.example.turistaapp.setting.ui
 
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +19,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
@@ -21,8 +30,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,22 +44,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.turistaapp.R
+import com.example.turistaapp.welcome.utils.validateName
 
 
 @Composable
 fun SettingsScreen(
-    isDarkTheme: Boolean = true,
+    isDarkTheme: Boolean ,
+    userName: String,
+    changeName: (String) -> Unit = {},
     changeTheme: () -> Unit,
 ) {
 
     var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
 
     var isChangeName by remember { mutableStateOf(false) }
+
+    var nameValue by remember { mutableStateOf(userName) }
+
+    var isErrorName by remember { mutableStateOf(false) }
+
+    val nameIsSuccess = stringResource(R.string.name_changed_successfully)
+
+    val context = LocalContext.current
+
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -69,7 +94,7 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp),
         ) {
-            PhotoProfileWithName(name = "Titi")
+            PhotoProfileWithName(name = userName)
 
             Divider()
 
@@ -79,8 +104,34 @@ fun SettingsScreen(
             TextWithArrow(
                 text = stringResource(R.string.rename),
                 isClicked = isChangeName,
+                onClick = {
+                    isChangeName = !isChangeName
+                },
             ){
-                isChangeName = !isChangeName
+                ChangeNameView(
+                    value = nameValue,
+                    isError = isErrorName,
+                    userName = nameValue,
+                    onValueChange = {
+                        nameValue = it
+                        if (isErrorName) isErrorName = false
+                    },
+                    onImeAction = {
+                        if (validateName(nameValue)) {
+                            isErrorName = false
+
+                            changeName(nameValue)
+
+                            Toast.makeText(
+                                context,
+                                nameIsSuccess,
+                                Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            isErrorName = true
+                        }
+                    }
+                )
             }
 
             TextWithArrow(text = stringResource(R.string.change_language))
@@ -106,6 +157,55 @@ fun SettingsScreen(
     }
 }
 
+@Composable
+fun ChangeNameView(
+    value: String,
+    isError: Boolean,
+    userName: String,
+    onValueChange: (String) -> Unit,
+    onImeAction: () -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { onValueChange(it) },
+            singleLine = true,
+            maxLines = 1,
+            modifier = Modifier
+                .fillMaxWidth(),
+            isError = isError,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = androidx.compose.ui.text.input.ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onImeAction()
+                }
+            ),
+        )
+        AnimatedVisibility(
+            visible = isError,
+            enter = expandVertically(
+                animationSpec = tween(500),
+                expandFrom = Alignment.Bottom,
+            ),
+            modifier = Modifier.padding(top = 4.dp),
+        ) {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(R.string.error_message_welcome),
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 30.dp)
+                )
+            }
+        }
+    }
+}
 @Composable
 fun TextWithSwitch(
     modifier: Modifier = Modifier,
@@ -136,6 +236,7 @@ fun TextWithArrow(
     text: String,
     isClicked: Boolean = false,
     onClick: () -> Unit = {},
+    composable: @Composable () -> Unit = {},
 ) {
     val icon = if (!isClicked) Icons.Outlined.KeyboardArrowRight else Icons.Outlined.KeyboardArrowDown
 
@@ -153,6 +254,20 @@ fun TextWithArrow(
                 .size(40.dp)
                 .align(Alignment.CenterEnd)
         )
+    }
+    AnimatedVisibility(
+        visible = isClicked,
+        enter = expandVertically(
+            animationSpec = tween(500),
+        ),
+        exit = shrinkVertically(
+            animationSpec = tween(500),
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ){
+        composable()
     }
 }
 

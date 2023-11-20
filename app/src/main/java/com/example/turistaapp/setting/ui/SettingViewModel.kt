@@ -1,11 +1,11 @@
 package com.example.turistaapp.setting.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.data.datastore.LocalDataStoreRepository
 import com.example.turistaapp.setting.domain.UpdateImagesFromDBUseCase
+import com.example.turistaapp.welcome.domain.GetNameFromDataStore
+import com.example.turistaapp.welcome.domain.SetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -19,16 +19,40 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val updateImagesFromDBUseCase: UpdateImagesFromDBUseCase,
     private val dispatcher: CoroutineDispatcher,
-    private val localDataStoreRepository: LocalDataStoreRepository
+    private val localDataStoreRepository: LocalDataStoreRepository,
+    private val getNameFromDataStore: GetNameFromDataStore,
+    private val setNameFromDataStore: SetNameFromDataStore
 ) : ViewModel() {
 
-    private val _darkTheme = MutableLiveData<Boolean>(true)
-    val darkTheme: LiveData<Boolean> = _darkTheme
+    private val _darkTheme = MutableStateFlow(true)
+    val darkTheme = _darkTheme.asStateFlow()
+
+    private val _userName = MutableStateFlow<String?>(null)
+    val userName = _userName.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
     init {
+        getIsDarkMode()
+        getUserName()
+    }
+
+    private fun getUserName() {
+        viewModelScope.launch(dispatcher) {
+            getNameFromDataStore.invoke().collect{
+                _userName.value = it
+            }
+        }
+    }
+
+    fun setUserName(name: String) {
+        viewModelScope.launch(dispatcher) {
+            setNameFromDataStore(name)
+        }
+    }
+
+    private fun getIsDarkMode() {
         viewModelScope.launch(Dispatchers.Main) {
             localDataStoreRepository.getIsDarkMode().collect {
                 if (it != null) {
@@ -38,7 +62,6 @@ class SettingViewModel @Inject constructor(
             }
         }
     }
-
 
     fun changeTheme() {
         _darkTheme.value = !_darkTheme.value!!

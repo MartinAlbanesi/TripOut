@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.core.ui.NavHostScreen
 import com.example.turistaapp.setting.ui.SettingViewModel
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContent {
-            val isDarkTheme by settingViewModel.darkTheme.observeAsState(false)
+            val isDarkTheme by settingViewModel.darkTheme.collectAsStateWithLifecycle(false)
 
             TuristaAppTheme(darkTheme = isDarkTheme) {
                 // A surface container using the 'background' color from the theme
