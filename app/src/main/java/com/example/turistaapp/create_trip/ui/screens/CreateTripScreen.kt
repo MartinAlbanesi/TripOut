@@ -173,7 +173,7 @@ fun CreateTripScreen(
         },
         topBar = {
             TopAppBarScreen(
-                title = "Crear Viaje",
+                title = stringResource(R.string.create_trip),
                 isMarkerSelected = true,
             ) {
                 onClickCreateTrip()
@@ -214,7 +214,7 @@ fun CreateTripScreen(
                     .padding(horizontal = 8.dp, vertical = 8.dp)
                     .size(45.dp),
             ) {
-                Text("Guardar")
+                Text(stringResource(R.string.save_trip))
             }
         },
     ) { paddingValues ->
@@ -230,7 +230,7 @@ fun CreateTripScreen(
             item {
                 // Nombre del Viaje
                 TextInputField(
-                    label = "Nombre del Viaje *",
+                    label = stringResource(R.string.trip_name),
                     textValue = tripName,
                     onValueChange = {
                         tripName = it
@@ -251,7 +251,7 @@ fun CreateTripScreen(
             item {
                 // Origen
                 PlaceAutocompleteField(
-                    label = "Origen *",
+                    label = "${ stringResource(R.string.origen) } *",
                     query = originAutocompleteQuery,
                     onQueryChange = {
                         originAutocompleteQuery = it
@@ -288,7 +288,7 @@ fun CreateTripScreen(
             item {
                 // Destino
                 PlaceAutocompleteField(
-                    label = "Destino *",
+                    label = stringResource(R.string.destination),
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
                         destinationAutocompleteQuery = it
@@ -325,7 +325,7 @@ fun CreateTripScreen(
             item {
                 // Fechas
                 DateRangePickerInput(
-                    label = "Fechas",
+                    label = stringResource(R.string.dates),
                     startDate = startDate,
                     endDate = endDate,
                     dateRangePickerState = dateRangePickerState,
@@ -354,7 +354,7 @@ fun CreateTripScreen(
             item {
                 // Transporte
                 ExposedDropdownMenuBoxInput(
-                    label = "Transporte",
+                    label = stringResource(R.string.transport),
                     values = transports,
                     isExpanded = isExpanded,
                     transport = transport,
@@ -367,7 +367,7 @@ fun CreateTripScreen(
             item {
                 // Acompañantes
                 AddList(
-                    label = "Acompañantes",
+                    label = stringResource(R.string.member),
                     name = memberName,
                     values = members,
                     onValueNameChange = {
@@ -393,30 +393,10 @@ fun CreateTripScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
             }
-
-            /*
-            // Paradas
-            AddList(
-                label = "Puntos de Parada",
-                name = stopName,
-                values = stops,
-                onValueNameChange = { createTripViewModel.onStopNameChange(it) },
-                onAdd = { createTripViewModel.onAddStop(it) },
-                onRemove = { createTripViewModel.onRemoveStop(it) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.AddLocation,
-                        contentDescription = "Member Name",
-                    )
-                },
-            )
-
-            Spacer(modifier = Modifier.size(8.dp))
-            */
             item {
                 // Descripción
                 TextInputField(
-                    label = "Descripción",
+                    label = stringResource(R.string.description),
                     textValue = description,
                     onValueChange = {
                         description = it

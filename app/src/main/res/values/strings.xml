@@ -90,5 +90,10 @@
     <string name="driving">Auto</string>
     <string name="walking">Caminando</string>
     <string name="bicycling">Bicicleta</string>
+    <string name="save_trip">Guardar</string>
+    <string name="trip_name">Nombre del Viaje *</string>
+    <string name="destination">Destino *</string>
+    <string name="dates">Fechas</string>
+    <string name="transport">Transporte</string>
 
 </resources>
