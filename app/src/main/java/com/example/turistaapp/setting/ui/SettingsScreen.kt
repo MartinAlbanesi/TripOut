@@ -1,5 +1,9 @@
 package com.example.turistaapp.setting.ui
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
@@ -18,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +44,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +60,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.LocaleListCompat
 import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.R
@@ -92,10 +99,29 @@ fun SettingsScreen(
     //Theme
     var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
 
+    //About us
+    var isClickedAboutUs by remember { mutableStateOf(false) }
+
+    // Reemplaza "tu_nombre_de_usuario" con tu nombre de usuario de LinkedIn o la ID de perfil
+//    val linkedInProfileUri = "https://www.linkedin.com/in/tu_nombre_de_usuario"
+//
+//    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkedInProfileUri))
+//    intent.setPackage("com.linkedin.android") // Esto especifica que quieres abrir la aplicación de LinkedIn si está instalada
+
+//    // Verifica si la aplicación de LinkedIn está instalada en el dispositivo antes de iniciar el intent
+//    if (intent.resolveActivity(packageManager) != null) {
+//        startActivity(intent)
+//    } else {
+//        // Si LinkedIn no está instalado, puedes abrir la página en el navegador web
+//        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(linkedInProfileUri)))
+//    }
+
     //Version
     var isClickedVersion by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+
+//    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/gabrielgomezgg/")))
 
 
     Box(
@@ -207,7 +233,41 @@ fun SettingsScreen(
             //More
             SubTitleSetting(text = stringResource(R.string.more))
 
-            TextWithArrow(text = stringResource(R.string.about_us))
+            TextWithArrow(
+                text = stringResource(R.string.about_us),
+                isClicked = isClickedAboutUs,
+                onClick = {
+                    isClickedAboutUs = !isClickedAboutUs
+                },
+            ) {
+                LazyColumn {
+                    item {
+                        Text(
+                            text = "Somos un pequeño grupo de estudiantes apasionados por el desarrollo de aplicaciones móviles modernas e intuitivas\n" +
+                                    "En TripOut te ofrecemos la posibilidad de planificar tus viajes de la manera mas organizada posible, brindandote todas las herramientas necesarias para cumplir con tus objetivos.\n" +
+                                    "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!\n" +
+                                    "Equipo de TripOut" +
+                                    "\n\n Contactanos:",
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+                        TextButton(onClick = {
+                            intentLinkedin(context, "martin-albanesi")
+                        }) {
+                            Text(text = "Albanesi Martin")
+                        }
+                        TextButton(onClick = {
+                            intentLinkedin(context, "gabrielgomezgg")
+                        }) {
+                            Text(text = "Gomez Gabriel")
+                        }
+                        TextButton(onClick = {
+                            intentLinkedin(context, "ariel-eduardo-nappio-7840071a4")
+                        }) {
+                            Text(text = "Nappio Ariel")
+                        }
+                    }
+                }
+            }
 
             TextWithArrow(
                 text = stringResource(R.string.version),
@@ -225,6 +285,17 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+}
+
+fun intentLinkedin(
+    context: Context,
+    user: String
+) {
+    try{
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/$user/")).setPackage("com.linkedin.android"))
+    }catch (e: Exception){
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/$user/")))
     }
 }
 
