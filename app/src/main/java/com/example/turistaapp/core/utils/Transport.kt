@@ -1,6 +1,9 @@
 package com.example.turistaapp.core.utils
 
-sealed class Transports(val type : String){
+class Transport(val type : String, val name: String){
+}
+
+sealed class Transports(val type: String) {
     object Driving : Transports("driving")
     object Walking : Transports("walking")
     object Bicycling : Transports("bicycling")

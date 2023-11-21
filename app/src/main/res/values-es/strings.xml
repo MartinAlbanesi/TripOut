@@ -86,4 +86,9 @@
     <!-- Languages -->
     <string name="english">Ingles</string>
     <string name="spanish">Español</string>
+
+    <!-- CREATE TRIP -->
+    <string name="driving">Auto</string>
+    <string name="walking">Caminando</string>
+    <string name="bicycling">Bicicleta</string>
 </resources>

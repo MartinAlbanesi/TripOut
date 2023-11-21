@@ -60,7 +60,7 @@ fun LocationCard(
             )
             Box(
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .padding(8.dp)
             ) {

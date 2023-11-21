@@ -31,10 +31,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
+import com.example.turistaapp.core.utils.Transport
+import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
@@ -111,11 +115,21 @@ fun CreateTripScreen(
     */
 
     // Transporte
-    val transports by createTripViewModel.transports.observeAsState(
-        emptyList(),
+//    val transports by createTripViewModel.transports.observeAsState(
+//        emptyList(),
+//    )
+
+    val transports = listOf(
+        Transport(Transports.Driving.type, stringResource(R.string.driving)),
+        Transport(Transports.Bicycling.type, stringResource(R.string.bicycling)),
+        Transport(Transports.Walking.type, stringResource(R.string.walking)),
     )
+
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
-    val transport by createTripViewModel.transport.observeAsState("")
+
+    var transport by remember {
+        mutableStateOf(transports[0])
+    }
 
     // Descripción
     var description by rememberSaveable {
@@ -174,7 +188,7 @@ fun CreateTripScreen(
                     isDestinationValid = createTripViewModel.validateTripDestination()
 
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
-                        createTripViewModel.onCreateTripClick(tripName, description)
+                        createTripViewModel.onCreateTripClick(tripName, description, transport.type)
                         scope.launch {
                             snackbarHostState
                                 .showSnackbar(
@@ -345,7 +359,7 @@ fun CreateTripScreen(
                     isExpanded = isExpanded,
                     transport = transport,
                     onExpanded = { createTripViewModel.onIsExpandedChange(it) },
-                    onClickable = { createTripViewModel.onTransportChange(it) },
+                    onClickable = { transport = it },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))

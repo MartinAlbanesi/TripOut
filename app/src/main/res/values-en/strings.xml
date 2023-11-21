@@ -86,4 +86,9 @@
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
 
+    <!-- CREATE TRIP -->
+    <string name="driving">Driving</string>
+    <string name="walking">Walking</string>
+    <string name="bicycling">Bicycling</string>
+
 </resources>

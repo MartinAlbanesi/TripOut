@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
@@ -115,14 +114,14 @@ class CreateTripViewModel @Inject constructor(
      */
 
     // Transportes
-    private var _transports = MutableLiveData(
-        listOf(
-            Transports.Driving.type,
-            Transports.Walking.type,
-            Transports.Bicycling.type,
-        ),
-    )
-    val transports: LiveData<List<String>> = _transports
+//    private var _transports = MutableLiveData(
+//        listOf(
+//            Transports.Driving.type,
+//            Transports.Walking.type,
+//            Transports.Bicycling.type,
+//        ),
+//    )
+//    val transports: LiveData<List<String>> = _transports
 
     private var _isExpanded = MutableLiveData(false)
     val isExpanded: LiveData<Boolean> = _isExpanded
@@ -130,11 +129,11 @@ class CreateTripViewModel @Inject constructor(
         _isExpanded.value = isExpanded
     }
 
-    private var _transport = MutableLiveData(Transports.Driving.type)
-    val transport: LiveData<String> = _transport
-    fun onTransportChange(transport: String) {
-        _transport.value = transport
-    }
+//    private var _transport = MutableLiveData("")
+//    val transport: LiveData<String> = _transport
+//    fun onTransportChange(transport: String) {
+//        _transport.value = transport
+//    }
 
     // Focus Requesters
     private var _originFocusRequester = MutableLiveData(FocusRequester())
@@ -240,7 +239,7 @@ class CreateTripViewModel @Inject constructor(
 
     // Crear viaje con los datos ingresados
 
-    fun onCreateTripClick(name: String, description: String) {
+    fun onCreateTripClick(name: String, description: String, transport: String) {
         viewModelScope.launch {
             val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
             val destination =
@@ -252,7 +251,7 @@ class CreateTripViewModel @Inject constructor(
                 destination = destination!!,
                 startDate = startDate.value.toString(),
                 endDate = endDate.value.toString(),
-                transport = _transport.value.toString(),
+                transport = transport,
                 members = _members.value,
                 stops = null,
                 description = description,
