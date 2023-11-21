@@ -15,13 +15,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+
+
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val updateImagesFromDBUseCase: UpdateImagesFromDBUseCase,
     private val dispatcher: CoroutineDispatcher,
     private val localDataStoreRepository: LocalDataStoreRepository,
     private val getNameFromDataStore: GetNameFromDataStore,
-    private val setNameFromDataStore: SetNameFromDataStore
+    private val setNameFromDataStore: SetNameFromDataStore,
 ) : ViewModel() {
 
     private val _darkTheme = MutableStateFlow(true)
@@ -33,9 +35,25 @@ class SettingViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _currentLanguage = MutableStateFlow("es")
+    val currentLanguage = _currentLanguage.asStateFlow()
+
     init {
         getIsDarkMode()
         getUserName()
+        getCurrentLanguage()
+    }
+
+    private fun getCurrentLanguage() {
+        viewModelScope.launch(dispatcher) {
+            _currentLanguage.value = localDataStoreRepository.getLanguage()
+        }
+    }
+
+    fun setCurrentLanguage(codeLanguage: String) {
+        viewModelScope.launch(dispatcher) {
+            _currentLanguage.value = codeLanguage
+        }
     }
 
     private fun getUserName() {
@@ -64,9 +82,9 @@ class SettingViewModel @Inject constructor(
     }
 
     fun changeTheme() {
-        _darkTheme.value = !_darkTheme.value!!
+        _darkTheme.value = !_darkTheme.value
         viewModelScope.launch(Dispatchers.Main) {
-            localDataStoreRepository.setIsDarkMode(_darkTheme.value!!)
+            localDataStoreRepository.setIsDarkMode(_darkTheme.value)
         }
     }
 

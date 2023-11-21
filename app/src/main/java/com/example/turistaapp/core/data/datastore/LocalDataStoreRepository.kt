@@ -1,5 +1,10 @@
 package com.example.turistaapp.core.data.datastore
 
+import android.app.LocaleManager
+import android.content.Context
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -11,7 +16,8 @@ import kotlinx.coroutines.flow.map
  import javax.inject.Inject
 
 class LocalDataStoreRepository @Inject constructor(
-    private val dataStore : DataStore<Preferences>
+    private val dataStore : DataStore<Preferences>,
+    private val context: Context
 ) {
     suspend fun setName(name : String){
         dataStore.edit {pref ->
@@ -46,6 +52,13 @@ class LocalDataStoreRepository @Inject constructor(
         return dataStore.data.map { pref ->
             pref[booleanPreferencesKey(DataStoreNames.IsMapTutorialComplete.name)]
         }
+    }
+
+    fun getLanguage() : String{
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            context.getSystemService(LocaleManager::class.java).applicationLocales.get(0).language
+        else
+            AppCompatDelegate.getApplicationLocales().get(0)?.language ?: "asd"
     }
 
 }

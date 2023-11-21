@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.ui
+package com.example.turistaapp.setting.domain
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

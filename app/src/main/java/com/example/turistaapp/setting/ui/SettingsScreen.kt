@@ -1,6 +1,7 @@
 package com.example.turistaapp.setting.ui
 
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -17,16 +18,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -47,16 +54,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.LocaleListCompat
 import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.R
+import com.example.turistaapp.setting.domain.LanguageApp
 import com.example.turistaapp.welcome.utils.validateName
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    isDarkTheme: Boolean ,
+    isDarkTheme: Boolean,
     userName: String,
+    codeLanguage: String = "es",
     changeName: (String) -> Unit = {},
+    setCurrentLanguage: (String) -> Unit,
     changeTheme: () -> Unit,
 ) {
     //Name
@@ -68,6 +80,15 @@ fun SettingsScreen(
 
     val nameIsSuccess = stringResource(R.string.name_changed_successfully)
 
+    //Language
+
+    var isClickedLanguageChange by remember { mutableStateOf(false) }
+
+    val languages = listOf(
+        LanguageApp(stringResource(id = R.string.spanish), "es", codeLanguage == "es"),
+        LanguageApp(stringResource(id = R.string.english), "en", codeLanguage == "en"),
+    )
+
     //Theme
     var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
 
@@ -77,9 +98,10 @@ fun SettingsScreen(
     val context = LocalContext.current
 
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.surfaceVariant)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Box(
             modifier = Modifier
@@ -109,7 +131,7 @@ fun SettingsScreen(
                 onClick = {
                     isClickedNameChange = !isClickedNameChange
                 },
-            ){
+            ) {
                 ChangeNameView(
                     value = nameValue,
                     isError = isErrorName,
@@ -126,7 +148,8 @@ fun SettingsScreen(
                             Toast.makeText(
                                 context,
                                 nameIsSuccess,
-                                Toast.LENGTH_SHORT).show()
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                         } else {
                             isErrorName = true
@@ -135,7 +158,40 @@ fun SettingsScreen(
                 )
             }
 
-            TextWithArrow(text = stringResource(R.string.change_language))
+            TextWithArrow(
+                text = stringResource(R.string.change_language),
+                isClicked = isClickedLanguageChange,
+                onClick = {
+                    isClickedLanguageChange = !isClickedLanguageChange
+                }
+            ) {
+                LazyRow {
+                    items(languages) {
+                        FilterChip(
+                            onClick = {
+                                val appLocale: LocaleListCompat =
+                                    LocaleListCompat.forLanguageTags(it.code)
+                                AppCompatDelegate.setApplicationLocales(appLocale)
+                                setCurrentLanguage(it.code)
+                            },
+                            label = {
+                                Text(it.name)
+                            },
+                            selected = codeLanguage == it.code,
+                            leadingIcon = if (it.isSelected) {
+                                {
+                                    Icon(
+                                        imageVector = Icons.Filled.Done,
+                                        contentDescription = "Done icon",
+                                        modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                    )
+                                }
+                            } else null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                    }
+                }
+            }
 
             TextWithSwitch(
                 text = stringResource(R.string.dark_mode),
@@ -159,7 +215,7 @@ fun SettingsScreen(
                 onClick = {
                     isClickedVersion = !isClickedVersion
                 },
-            ){
+            ) {
                 Text(
                     text = BuildConfig.VERSION_NAME,
                     modifier = Modifier.padding(16.dp),
@@ -220,6 +276,7 @@ fun ChangeNameView(
         }
     }
 }
+
 @Composable
 fun TextWithSwitch(
     modifier: Modifier = Modifier,
@@ -252,7 +309,8 @@ fun TextWithArrow(
     onClick: () -> Unit = {},
     composable: @Composable () -> Unit = {},
 ) {
-    val icon = if (!isClicked) Icons.Outlined.KeyboardArrowRight else Icons.Outlined.KeyboardArrowDown
+    val icon =
+        if (!isClicked) Icons.Outlined.KeyboardArrowRight else Icons.Outlined.KeyboardArrowDown
 
     Box(
         modifier = modifier
@@ -280,7 +338,7 @@ fun TextWithArrow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-    ){
+    ) {
         composable()
     }
 }

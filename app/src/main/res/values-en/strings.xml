@@ -82,4 +82,8 @@
     <string name="about_us">About us</string>
     <string name="name_changed_successfully">Name changed successfully</string>
 
+    <!-- Languages -->
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+
 </resources>

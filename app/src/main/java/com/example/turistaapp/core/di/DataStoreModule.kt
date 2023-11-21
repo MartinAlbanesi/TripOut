@@ -26,7 +26,7 @@ class DataStoreModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataStore(dataStore : DataStore<Preferences>) : LocalDataStoreRepository {
-        return LocalDataStoreRepository(dataStore)
+    fun provideLocalDataStore(dataStore : DataStore<Preferences>, @ApplicationContext context : Context) : LocalDataStoreRepository {
+        return LocalDataStoreRepository(dataStore, context)
     }
 }

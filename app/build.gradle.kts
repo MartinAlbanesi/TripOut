@@ -148,6 +148,11 @@ dependencies {
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.1.0")
+
+    //App compat
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    // For loading and tinting drawables on older versions of the platform
+    implementation ("androidx.appcompat:appcompat-resources:1.6.1")
 }
 
 kapt {

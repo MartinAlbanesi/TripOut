@@ -70,6 +70,7 @@ fun MainScreen(
     //Settings
     val darkTheme by settingViewModel.darkTheme.collectAsStateWithLifecycle()
     val userName by settingViewModel.userName.collectAsStateWithLifecycle()
+    val codeLanguage by settingViewModel.currentLanguage.collectAsStateWithLifecycle()
 
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
@@ -182,7 +183,9 @@ fun MainScreen(
                 SettingsScreen(
                     isDarkTheme = darkTheme,
                     userName = userName!!,
+                    codeLanguage = codeLanguage,
                     changeName = { settingViewModel.setUserName(it) },
+                    setCurrentLanguage = { settingViewModel.setCurrentLanguage(it) },
                 ) {
                     onClickChangeTheme()
                 }

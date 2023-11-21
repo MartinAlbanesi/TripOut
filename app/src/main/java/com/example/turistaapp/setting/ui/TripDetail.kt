@@ -1,7 +1,6 @@
 package com.example.turistaapp.setting.ui
 
 import android.Manifest
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,7 +43,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +61,7 @@ import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
+import com.example.turistaapp.setting.domain.AssistChipItem
 import com.example.turistaapp.setting.ui.components.DialogShouldShowRationale
 import com.example.turistaapp.setting.ui.components.IconWithText
 import com.example.turistaapp.setting.ui.components.LocationCard
