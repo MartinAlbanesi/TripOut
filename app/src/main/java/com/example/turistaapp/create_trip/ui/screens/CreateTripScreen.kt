@@ -108,16 +108,6 @@ fun CreateTripScreen(
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-    /*
-        // Paradas
-        val stops by createTripViewModel.stops.observeAsState(emptyList())
-        val stopName by createTripViewModel.stopName.observeAsState("")
-    */
-
-    // Transporte
-//    val transports by createTripViewModel.transports.observeAsState(
-//        emptyList(),
-//    )
 
     val transports = listOf(
         Transport(Transports.Driving.type, stringResource(R.string.driving)),

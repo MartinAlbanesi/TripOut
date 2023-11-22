@@ -3,7 +3,6 @@ package com.example.turistaapp.map.ui
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.turistaapp.R
-import com.example.turistaapp.home.ui.LottiePreview
+import com.example.turistaapp.home.ui.components.LottiePreview
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -62,18 +61,19 @@ fun MapTutorial(
 
     val progressBar by animateFloatAsState(
         targetValue = pagerState.currentPage.toFloat() / 3,
-        label = ""
+        label = "",
     )
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp.value
 
     val offsetY by animateFloatAsState(
-        targetValue = if (pagerState.currentPage == 0) (screenHeight / 5) else 0f ,
+        targetValue = if (pagerState.currentPage == 0) (screenHeight / 5) else 0f,
         label = "offsetY",
-        animationSpec = tween(200)
+        animationSpec = tween(200),
     )
 
-    buttonText = if (pagerState.currentPage == 3) stringResource(R.string.finish) else stringResource(R.string.next)
+    buttonText =
+        if (pagerState.currentPage == 3) stringResource(R.string.finish) else stringResource(R.string.next)
 
     Dialog(onDismissRequest = { /*TODO*/ }) {
         Box(
@@ -185,7 +185,7 @@ private fun MapPagerTwo() {
         Text(
             text = stringResource(R.string.tutorial_message_2),
             fontSize = 24.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         LottiePreview(title = "", res = R.raw.mapmap) {}
     }
@@ -253,10 +253,11 @@ private fun MapPagerZero() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text = stringResource(R.string.tutorial_message_0),
+        Text(
+            text = stringResource(R.string.tutorial_message_0),
             fontSize = 24.sp,
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }

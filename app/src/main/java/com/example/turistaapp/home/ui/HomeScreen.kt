@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
@@ -36,135 +32,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.turistaapp.R
 import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.home.ui.components.LottiePreview
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.MyTripsItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
-
-@Composable
-fun LottiePreview(
-    title: String = "",
-    res: Int,
-    isBackgroundColored: Boolean = false,
-    isClickable: Boolean = false,
-    isBottomBrush: Boolean = false,
-    isTopBrush: Boolean = false,
-    onClickAnimation: () -> Unit,
-) {
-    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
-
-    var background by remember {
-        mutableStateOf(Color.Transparent)
-    }
-
-    /*
-    var textBackground by remember {
-        mutableStateOf(Color.Transparent)
-    }
-     */
-
-    var bottomBrush by remember {
-        mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
-    }
-
-    var topBrush by remember {
-        mutableStateOf(Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)))
-    }
-
-    if (isBackgroundColored) {
-        background = MaterialTheme.colorScheme.onPrimary
-    }
-
-    if (isBottomBrush) {
-        bottomBrush =
-            Brush.verticalGradient(listOf(Color.Transparent, MaterialTheme.colorScheme.background))
-    }
-
-    if (isTopBrush) {
-        topBrush =
-            Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, Color.Transparent))
-    }
-
-    val boxClickable: Modifier by remember {
-        mutableStateOf(
-            if (isClickable) {
-                Modifier.clickable { onClickAnimation() }
-            } else {
-                Modifier
-            },
-        )
-    }
-
-//    boxClickable = if (isClickable) Modifier.clickable { onClickAnimation() } else { Modifier }
-
-    Box(
-        modifier = boxClickable
-            .fillMaxWidth()
-            .height(200.dp)
-//            .clickable {
-//                onClickAnimation()
-//            }
-            .background(background),
-        contentAlignment = Alignment.BottomStart,
-    ) {
-        Row(
-            modifier = Modifier
-                .background(brush = topBrush)
-                .height(100.dp)
-                .fillMaxWidth()
-                .align(Alignment.TopCenter),
-        ) {
-            Spacer(modifier = Modifier.size(8.dp))
-//
-        }
-        LottieAnimation(
-            composition = lottie.value,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-        )
-        if (title.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .background(brush = bottomBrush),
-            ) {
-                Text(
-                    text = title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 50.dp, vertical = 12.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
-                    fontSize = MaterialTheme.typography.headlineLarge.fontSize,
-                    fontWeight = MaterialTheme.typography.labelLarge.fontWeight,
-                    textAlign = TextAlign.Center,
-                )
-                Icon(
-                    imageVector = Icons.Default.ArrowOutward,
-                    contentDescription = "Add",
-                    modifier = Modifier
-                        .size(40.dp),
-                )
-            }
-        }
-    }
-}
 
 @SuppressLint("NewApi")
 @Composable
@@ -329,7 +208,6 @@ fun HomeScreen(
 
         FloatingActionButton(
             onClick = {
-                // onClickFloatingBottom()
                 showFloatingButtons = !showFloatingButtons
             },
             modifier = Modifier
