@@ -1,6 +1,8 @@
 package com.example.turistaapp.create_trip.data.database.repository
 
-import com.example.turistaapp.create_trip.data.database.dao.TripDao
+import com.example.turistaapp.core.data.database.TripDBRepository
+import com.example.turistaapp.core.data.database.TripDBRepositoryImpl
+import com.example.turistaapp.core.data.database.dao.TripDao
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

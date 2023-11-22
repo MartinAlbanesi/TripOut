@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetNameFromDataStore @Inject constructor(
-    private val dataStore: LocalDataStoreRepository
+    private val dataStore: LocalDataStoreRepository,
 ) {
-    operator fun invoke() : Flow<String?> {
+    operator fun invoke(): Flow<String?> {
         return dataStore.getName()
     }
 }

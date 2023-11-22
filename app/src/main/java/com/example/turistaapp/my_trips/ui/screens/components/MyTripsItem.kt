@@ -8,7 +8,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -44,10 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import org.joda.time.DateTime
@@ -58,7 +59,7 @@ import java.time.temporal.ChronoUnit
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TripItem(
+fun MyTripsItem(
     trip: TripModel,
     isDialogOpen: Boolean,
     selectedDataQR: String,
@@ -106,7 +107,7 @@ fun TripItem(
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically),
                 ) {
-                    val daysLeft = obtenerDiferenciaFechas(
+                    val daysLeft = getDaysBetweenDates(
                         formatMilisToDateString(trip.startDate, "yyyy-MM-dd"),
                         formatMilisToDateString(
                             Calendar.getInstance().timeInMillis.toString(),
@@ -115,25 +116,25 @@ fun TripItem(
                     )
                     when {
                         daysLeft.toInt() < 0 -> Text(
-                            text = "El viaje ya terminó",
-                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.trip_is_over),
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 0 -> Text(
-                            text = "Hoy",
-                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.today),
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         daysLeft.toInt() == 1 -> Text(
-                            text = "Mañana",
-                            style = MaterialTheme.typography.bodySmall,
+                            text = stringResource(R.string.tomorrow),
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
 
                         else -> Text(
-                            text = "En $daysLeft días",
+                            text = stringResource(R.string.in_days, daysLeft),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -151,7 +152,6 @@ fun TripItem(
                 name = trip.destination.name,
             )
         }
-        Spacer(modifier = Modifier.heightIn(4.dp))
 
         var menuAnchor by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
@@ -186,7 +186,7 @@ fun TripItem(
                 )
                 DropdownMenu(expanded = menuAnchor, onDismissRequest = { menuAnchor = false }) {
                     DropdownMenuItem(
-                        text = { Text(text = "Ver Mapa") },
+                        text = { Text(text = stringResource(R.string.see_map)) },
                         onClick = { onMapButtonClick(trip.tripId) },
                         leadingIcon = {
                             Icon(
@@ -197,7 +197,7 @@ fun TripItem(
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text(text = "Compartir") },
+                        text = { Text(text = stringResource(R.string.share)) },
                         onClick = {
                             onQRButtonClick()
                             menuAnchor = false
@@ -205,13 +205,13 @@ fun TripItem(
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.QrCode,
-                                contentDescription = "QR Button",
+                                contentDescription = Icons.Default.QrCode.name,
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                         },
                     )
                     DropdownMenuItem(
-                        text = { Text(text = "Borrar") },
+                        text = { Text(text = stringResource(R.string.delete)) },
                         onClick = {
                             onDeleteButtonClick(trip)
                             menuAnchor = false
@@ -219,7 +219,7 @@ fun TripItem(
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete Button",
+                                contentDescription = Icons.Default.Delete.name,
                                 tint = MaterialTheme.colorScheme.error,
                             )
                         },
@@ -307,11 +307,12 @@ fun IconButton(
 fun ItemText(icon: ImageVector, name: String) {
     Row(
         modifier = Modifier
-            .padding(8.dp),
+            .padding(6.dp),
     ) {
         Icon(imageVector = icon, contentDescription = name)
         Text(
             text = name,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(start = 8.dp),
         )
@@ -319,14 +320,14 @@ fun ItemText(icon: ImageVector, name: String) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun obtenerDiferenciaFechas(fechaInicio: String, fechaFin: String): String {
-    // Convertir las fechas de String a objetos LocalDate
-    val fechaInicioObj = LocalDate.parse(fechaInicio)
-    val fechaFinObj = LocalDate.parse(fechaFin)
+fun getDaysBetweenDates(startDate: String, endDate: String): String {
+    // Convert the dates from String to LocalDate objects
+    val firstDateObj = LocalDate.parse(startDate)
+    val secondDateObj = LocalDate.parse(endDate)
 
-    // Calcular la diferencia en días
-    val diferenciaDias = ChronoUnit.DAYS.between(fechaFinObj, fechaInicioObj)
+    // Calculate the difference in days
+    val daysDiff = ChronoUnit.DAYS.between(secondDateObj, firstDateObj)
 
-    // Devolver la diferencia en un formato legible
-    return "${diferenciaDias + 1}"
+    // Return the difference in days
+    return "${daysDiff + 1}"
 }

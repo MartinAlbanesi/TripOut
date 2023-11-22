@@ -16,8 +16,8 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun TopAppBarScreen(
     title: String,
-    isMarkerSelected : Boolean = false,
-    color : Color = LocalContentColor.current,
+    isMarkerSelected: Boolean = false,
+    color: Color = LocalContentColor.current,
     onClickNavigationBack: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
@@ -26,15 +26,15 @@ fun TopAppBarScreen(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent.copy(alpha = 0.3f),
-            titleContentColor = color
+            titleContentColor = color,
         ),
         navigationIcon = {
-            if(isMarkerSelected){
+            if (isMarkerSelected) {
                 IconButton(onClick = { onClickNavigationBack() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = Icons.Default.ArrowBack.name,
-                        tint = color
+                        tint = color,
                     )
                 }
             }

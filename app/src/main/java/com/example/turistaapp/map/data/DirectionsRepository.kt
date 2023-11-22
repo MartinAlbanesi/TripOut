@@ -14,15 +14,14 @@ interface IDirectionsRepository {
 }
 
 class DirectionsRepository @Inject constructor(
-    private val directionsApiService: DirectionsApiService
+    private val directionsApiService: DirectionsApiService,
 ) : IDirectionsRepository {
     override suspend fun getDirections(
         origin: String,
         destination: String,
-        mode: String
+        mode: String,
     ): RouteModel? {
         val api = directionsApiService.getDirection(origin, destination, mode)
         return api.body()?.routes?.get(0)?.toRouteModel()
     }
-
 }

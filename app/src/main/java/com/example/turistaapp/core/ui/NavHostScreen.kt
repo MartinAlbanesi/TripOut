@@ -1,7 +1,6 @@
 package com.example.turistaapp.core.ui
 
 import android.Manifest
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -114,28 +113,5 @@ fun NavHostScreen(
                 onNavigateToHome = { navController.navigate(Routes.Home.route) },
             )
         }
-//        composable(
-//            Routes.Map.route,
-//            arguments = listOf(navArgument("TripID") { defaultValue = "0" }),
-//            enterTransition = {
-//                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
-//                    IntOffset(fullSize.width, fullSize.height)
-//                }
-//            },
-//            exitTransition = {
-//                slideOut(tween(200, easing = LinearOutSlowInEasing)) {
-//                    IntOffset(it.width, it.height)
-//                }
-//            },
-//            popEnterTransition = {
-//                slideIn(tween(500, easing = LinearOutSlowInEasing)) { fullSize ->
-//                    IntOffset(fullSize.width, fullSize.height)
-//                }
-//            }
-//        ) {
-//            MapScreen() {
-//                navController.navigate(Routes.Home.route)
-//            }
-//        }
     }
 }

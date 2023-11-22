@@ -1,8 +1,8 @@
 package com.example.turistaapp.create_trip.domain
 
+import com.example.turistaapp.core.data.database.TripDBRepository
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.FakeDataBaseSource
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK

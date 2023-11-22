@@ -6,13 +6,13 @@ import com.example.turistaapp.map.domain.models.RouteModel
 import javax.inject.Inject
 
 class GetRouteModel @Inject constructor(
-    private val directionsRepository: IDirectionsRepository
-){
+    private val directionsRepository: IDirectionsRepository,
+) {
     suspend operator fun invoke(
         origin: String,
         destination: String,
         transport: String,
-        trip: TripModel? = null
+        trip: TripModel? = null,
     ): RouteModel? {
         return directionsRepository.getDirections(origin, destination, transport)?.copy(trip = trip)
     }

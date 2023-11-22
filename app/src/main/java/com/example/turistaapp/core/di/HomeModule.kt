@@ -51,25 +51,25 @@ class HomeModule {
 
     @Singleton
     @Provides
-    fun provideFusedLocationProviderClient(@ApplicationContext context: Context) : FusedLocationProviderClient {
+    fun provideFusedLocationProviderClient(@ApplicationContext context: Context): FusedLocationProviderClient {
         return LocationServices.getFusedLocationProviderClient(context)
     }
 
     @Singleton
     @Provides
-    fun provideGetLastLocation(@ApplicationContext context: Context, fusedLocationProviderClient: FusedLocationProviderClient) : GetLastLocationUseCase {
+    fun provideGetLastLocation(@ApplicationContext context: Context, fusedLocationProviderClient: FusedLocationProviderClient): GetLastLocationUseCase {
         return GetLastLocationUseCase(fusedLocationProviderClient, context)
     }
 
     @Singleton
     @Provides
-    fun provideSensorManager(@ApplicationContext context: Context) : SensorManager {
+    fun provideSensorManager(@ApplicationContext context: Context): SensorManager {
         return context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     }
 
     @Singleton
     @Provides
-    fun provideSensorAcceleration(sensorManager: SensorManager) : Sensor? {
+    fun provideSensorAcceleration(sensorManager: SensorManager): Sensor? {
         return sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
     }
 }

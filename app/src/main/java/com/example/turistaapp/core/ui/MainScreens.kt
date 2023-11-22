@@ -3,13 +3,12 @@ package com.example.turistaapp.core.ui
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +23,7 @@ import com.example.turistaapp.map.ui.viewmodel.MapViewModel
 import com.example.turistaapp.my_trips.ui.viewmodels.MyTripsViewModel
 import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.qr_code.ui.QRViewModel
+import com.example.turistaapp.setting.ui.SettingViewModel
 import com.example.turistaapp.setting.ui.SettingsScreen
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
@@ -36,6 +36,7 @@ fun MainScreen(
     myTripsViewModel: MyTripsViewModel = hiltViewModel(),
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     qrViewModel: QRViewModel = hiltViewModel(),
+    settingViewModel: SettingViewModel = hiltViewModel(),
     navController: NavHostController,
     onClickChangeTheme: () -> Unit,
 ) {
@@ -66,6 +67,11 @@ fun MainScreen(
 
     val dataQRSelected by qrViewModel.dataQRSelected.collectAsStateWithLifecycle()
 
+    // Settings
+    val darkTheme by settingViewModel.darkTheme.collectAsStateWithLifecycle()
+    val userName by settingViewModel.userName.collectAsStateWithLifecycle()
+    val codeLanguage by settingViewModel.currentLanguage.collectAsStateWithLifecycle()
+
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
         onResult = { result ->
@@ -89,21 +95,24 @@ fun MainScreen(
 
     var state by remember { mutableIntStateOf(0) }
     val titles = listOf(
-        Routes.Home.route,
-        Routes.Map.route,
-        Routes.Settings.route,
+        Routes.Home,
+        Routes.Map,
+        Routes.Settings,
     )
     Column {
-        TabRow(selectedTabIndex = state) {
+        TabRow(
+            selectedTabIndex = state,
+        ) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    text = { Text(title) },
+                    icon = { Icon(title.icon!!, contentDescription = null) },
+//                    text = { Text(title.route) },
                     selected = state == index,
                     onClick = { state = index },
                 )
             }
         }
-        when (titles[state]) {
+        when (titles[state].route) {
             Routes.Home.route -> {
                 HomeScreen(
                     nearbyLocations = nearbyLocations,
@@ -171,7 +180,13 @@ fun MainScreen(
             }
 
             Routes.Settings.route -> {
-                SettingsScreen() {
+                SettingsScreen(
+                    isDarkTheme = darkTheme,
+                    userName = userName!!,
+                    codeLanguage = codeLanguage,
+                    changeName = { settingViewModel.setUserName(it) },
+                    setCurrentLanguage = { settingViewModel.setCurrentLanguage(it) },
+                ) {
                     onClickChangeTheme()
                 }
             }

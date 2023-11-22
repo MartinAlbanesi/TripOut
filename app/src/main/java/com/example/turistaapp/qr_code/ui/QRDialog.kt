@@ -21,9 +21,11 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.turistaapp.R
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
@@ -36,10 +38,10 @@ import kotlinx.coroutines.launch
 fun QRDialog(data: String = "default", onDismiss: () -> Unit = {}) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Código QR") },
+        title = { Text(text = stringResource(R.string.qr_code)) },
         text = {
             Column() {
-                Text(text = "Escanea el siguiente código QR para copiar el viaje:")
+                Text(text = stringResource(R.string.scan_the_following_QR_code))
                 Image(
                     painter = rememberQrBitmapPainter(data),
                     contentDescription = "Info QR",
@@ -52,7 +54,7 @@ fun QRDialog(data: String = "default", onDismiss: () -> Unit = {}) {
         },
         confirmButton = {
             Button(onClick = onDismiss) {
-                Text(text = "Cerrar")
+                Text(text = stringResource(R.string.close))
             }
         },
     )

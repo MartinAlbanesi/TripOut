@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Trip Out</string>
+    <string name="welcome_message">An application where you can organize and plan your dream trips</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+    <string name="accept">Accept</string>
+    <string name="permission_required">Permissions notice</string>
+    <string name="location_permission_message">We ask for location so we can show you places near you and to show your location on the map</string>
+    <string name="say_you_name">Tell us your name to get started</string>
+    <string name="name_welcome">Name</string>
+    <string name="error_message_welcome">The name must begin with a capital letter and contain no numbers or special characters</string>
+
+    <!--HOME    -->
+    <string name="shake_n_discover">Shake\'n Discover</string>
+    <string name="discover_more_trips">Discover more trips</string>
+    <string name="nearly">Nearly %1$s</string>
+    <string name="no_results_found">No results found</string>
+    <string name="my_trips">My trips</string>
+    <string name="create_your_first_trip">Create your first trip!</string>
+    <string name="create_trip">Create trip</string>
+    <string name="scan_qr">Scan QR</string>
+
+    <!--SHAKE GAME    -->
+    <string name="shake_to_discover">Shake to discover a location!</string>
+    <string name="enter_at_least_2_locations">Enter at least 2 locations</string>
+    <string name="enter_a_location">Enter a location</string>
+
+    <!--MAPS    -->
+    <string name="my_destinations">My destinations</string>
+    <string name="no_permission_location">You do not have permissions to access the location</string>
+    <string name="activate">Activate</string>
+    <string name="gps_no_activated">You do not have GPS activated</string>
+    <string name="error_location">An error occurred while obtaining your location</string>
+    <string name="my_location">My location</string>
+    <string name="confirm_trip">Confirm Trip</string>
+
+    <string name="finish">Finish</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_message_0">Welcome to the map</string>
+    <string name="tutorial_message_1">Different colors represent different types of locations</string>
+    <string name="destiny">Destiny</string>
+    <string name="origen">Origen</string>
+    <string name="tutorial_message_2">You can see the details of each trip by tapping the red markers</string>
+    <string name="tutorial_message_3">You can see your location by tapping the location button</string>
+
+    <!--MY TRIPS    -->
+    <string name="trip_is_over">Trip os over</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="in_days">In %1$s days</string>
+    <string name="see_map">See map</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+
+    <!--QR CODE    -->
+    <string name="qr_code">QR code</string>
+    <string name="scan_the_following_QR_code">Scan the following QR code to copy the trip:</string>
+    <string name="close">Close</string>
+
+    <!--TRIP DETAILS    -->
+    <string name="anonymous">Anónimo</string>
+    <string name="for_">For %1$s</string>
+    <string name="origin_and_destination">Origin and destination</string>
+    <string name="description">Trip description</string>
+    <string name="there_is_no_description">There is no description</string>
+    <string name="images">Images</string>
+    <string name="no_pictures">No Pictures</string>
+    <string name="member">Members</string>
+    <string name="there_are_no_members">There are no members</string>
+    <string name="there_is_no_direction">There is no direction</string>
+    <string name="storage_permission_message">We ask for storage permission to be able to save the images of the trip.</string>
+    <string name="gallery">Gallery</string>
+
+    <!-- Settings -->
+    <string name="account_settings">Account settings</string>
+    <string name="rename">Rename</string>
+    <string name="change_language">Change language</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="more">More</string>
+    <string name="version">Version</string>
+    <string name="about_us">About us</string>
+    <string name="name_changed_successfully">Name changed successfully</string>
+    <string name="message_dialog_setting">Are you sure about changing the language?\nUpon accepting you will be redirected to the home screen</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Languages -->
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+
+    <!-- CREATE TRIP -->
+    <string name="driving">Driving</string>
+    <string name="walking">Walking</string>
+    <string name="bicycling">Bicycling</string>
+    <string name="save_trip">Save</string>
+    <string name="trip_name">Trip Name *</string>
+    <string name="destination">Destination *</string>
+    <string name="dates">Dates</string>
+    <string name="transport">Transport</string>
+    <string name="successfully_created_trip">Successfully created trip</string>
+    <string name="go_to_home">Go to home</string>
+    <string name="error_when_creating_the_trip">Error creating trip</string>
+
+</resources>

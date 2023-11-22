@@ -6,7 +6,6 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.FloatingActionButton
@@ -21,7 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.home.utils.isAccessCoarseLocationPermissionsGranted
 import com.example.turistaapp.home.utils.isGPSEnable
@@ -57,8 +57,13 @@ fun MapView(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val coarseLocation = rememberPermissionState(
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
+        android.Manifest.permission.ACCESS_COARSE_LOCATION,
     )
+
+    val permissionMessage = stringResource(R.string.no_permission_location)
+    val snackBarAction = stringResource(R.string.activate)
+    val gpsMessage = stringResource(R.string.gps_no_activated)
+    val errorLocation = stringResource(R.string.error_location)
 
     Scaffold(
         snackbarHost = {
@@ -71,8 +76,8 @@ fun MapView(
                         scope.launch {
                             val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "No tienes permisos para acceder a la ubicación",
-                                    actionLabel = "Activar",
+                                    message = permissionMessage,
+                                    actionLabel = snackBarAction,
                                     duration = SnackbarDuration.Indefinite,
                                     withDismissAction = true,
                                 )
@@ -81,6 +86,7 @@ fun MapView(
 //                                    onClickPermission()
                                     coarseLocation.launchPermissionRequest()
                                 }
+
                                 SnackbarResult.Dismissed -> {
                                     /* Handle snackbar dismissed */
                                 }
@@ -90,8 +96,8 @@ fun MapView(
                         scope.launch {
                             val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "No tienes el GPS activado",
-                                    actionLabel = "Activar",
+                                    message = gpsMessage,
+                                    actionLabel = snackBarAction,
                                     duration = SnackbarDuration.Indefinite,
                                     withDismissAction = true,
                                 )
@@ -99,6 +105,7 @@ fun MapView(
                                 SnackbarResult.ActionPerformed -> {
                                     context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                                 }
+
                                 SnackbarResult.Dismissed -> {
                                     /* Handle snackbar dismissed */
                                 }
@@ -107,18 +114,18 @@ fun MapView(
                     } else if (lastLocation == null) {
                         Toast.makeText(
                             context,
-                            "Ocurrio un error al obtener tu ubicación",
-                            Toast.LENGTH_SHORT
+                            errorLocation,
+                            Toast.LENGTH_SHORT,
                         ).show()
                     } else {
                         onClickLocation()
                     }
                 },
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 Icon(Icons.Default.MyLocation, contentDescription = "Add")
             }
-        }
+        },
     ) {
         Box(
             modifier = Modifier
@@ -140,12 +147,10 @@ fun MapView(
                         snippet = it.name,
                         icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
                         onClick = { _ ->
-                            //TODO: Abrir pantalla de detalles
                             onClickMarker(it.tripId)
                             false
                         },
                     )
-
                 }
                 if (markerSelect) {
                     locations?.first?.forEach {
@@ -164,7 +169,7 @@ fun MapView(
                         state = MarkerState(
                             position = lastLocation,
                         ),
-                        title = "Mi ubicación",
+                        title = stringResource(R.string.my_location),
                         icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
                     )
                 }

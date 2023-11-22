@@ -1,7 +1,7 @@
 package com.example.turistaapp.core.di
 
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
-import com.example.turistaapp.setting.domain.UpdateImagesFromDBUseCase
+import com.example.turistaapp.core.data.database.TripDBRepository
+import com.example.turistaapp.trip_details.domain.UpdateImagesFromDBUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +17,4 @@ class TripDetailsModule {
     fun provideUpdateImagesFromDBUseCase(tripDBRepository: TripDBRepository) : UpdateImagesFromDBUseCase {
         return UpdateImagesFromDBUseCase(tripDBRepository)
     }
-
 }

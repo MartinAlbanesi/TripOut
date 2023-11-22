@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 
 @Composable
@@ -49,7 +51,9 @@ fun TripDialog(
                     rating = nearbyLocationSelect.rating,
                     userRating = nearbyLocationSelect.userRating,
                     address = nearbyLocationSelect.address,
-                    modifier = Modifier.fillMaxSize().weight(1f)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
                 )
                 Button(
                     onClick = { onConfirm("${nearbyLocationSelect.name}, ${nearbyLocationSelect.address}") },
@@ -57,19 +61,20 @@ fun TripDialog(
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
                 ) {
-                    Text(text = "Confirmar Viaje")
+                    Text(text = stringResource(R.string.confirm_trip))
                 }
             }
 
             IconButton(
                 onClick = { onDismiss() },
                 modifier = Modifier
-                    .align(Alignment.TopEnd).offset(x = 12.dp, y = (-12).dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 12.dp, y = (-12).dp),
             ) {
                 Icon(
                     Icons.Outlined.Cancel,
                     contentDescription = Icons.Outlined.Cancel.toString(),
-                    Modifier.size(40.dp)
+                    Modifier.size(40.dp),
                 )
             }
         }

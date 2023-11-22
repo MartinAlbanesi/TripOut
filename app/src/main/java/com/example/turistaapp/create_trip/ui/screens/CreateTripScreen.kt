@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
@@ -31,12 +32,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
-import com.example.turistaapp.core.utils.enums.Routes
+import com.example.turistaapp.core.utils.Transport
+import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.ui.screens.components.AddList
 import com.example.turistaapp.create_trip.ui.screens.components.DateRangePickerInput
 import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownMenuBoxInput
@@ -85,8 +88,16 @@ fun CreateTripScreen(
     )
 
     // Fechas
-    val startDate by createTripViewModel.startDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
-    val endDate by createTripViewModel.endDate.observeAsState(createTripViewModel.calendar.timeInMillis.minus(86400000))
+    val startDate by createTripViewModel.startDate.observeAsState(
+        createTripViewModel.calendar.timeInMillis.minus(
+            86400000,
+        ),
+    )
+    val endDate by createTripViewModel.endDate.observeAsState(
+        createTripViewModel.calendar.timeInMillis.minus(
+            86400000,
+        ),
+    )
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = startDate,
         initialSelectedEndDateMillis = endDate,
@@ -98,18 +109,18 @@ fun CreateTripScreen(
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
     val memberName by createTripViewModel.memberName.observeAsState("")
-    /*
-        // Paradas
-        val stops by createTripViewModel.stops.observeAsState(emptyList())
-        val stopName by createTripViewModel.stopName.observeAsState("")
-    */
 
-    // Transporte
-    val transports by createTripViewModel.transports.observeAsState(
-        emptyList(),
+    val transports = listOf(
+        Transport(Transports.Driving.type, stringResource(R.string.driving)),
+        Transport(Transports.Bicycling.type, stringResource(R.string.bicycling)),
+        Transport(Transports.Walking.type, stringResource(R.string.walking)),
     )
+
     val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
-    val transport by createTripViewModel.transport.observeAsState("")
+
+    var transport by remember {
+        mutableStateOf(transports[0])
+    }
 
     // Descripción
     var description by rememberSaveable {
@@ -147,13 +158,17 @@ fun CreateTripScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val successMessage = stringResource(R.string.successfully_created_trip)
+    val goToHome = stringResource(R.string.go_to_home)
+    val errorCreateTrip = stringResource(R.string.error_when_creating_the_trip)
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
             TopAppBarScreen(
-                title = "Crear Viaje",
+                title = stringResource(R.string.create_trip),
                 isMarkerSelected = true,
             ) {
                 onClickCreateTrip()
@@ -168,23 +183,31 @@ fun CreateTripScreen(
                     isDestinationValid = createTripViewModel.validateTripDestination()
 
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
-                        createTripViewModel.onCreateTripClick(tripName, description)
+                        createTripViewModel.onCreateTripClick(tripName, description, transport.type)
                         scope.launch {
-                            snackbarHostState
+                            val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "Viaje creado con éxito",
-                                    actionLabel = "Cancelar",
+                                    message = successMessage,
+                                    actionLabel = goToHome,
                                     duration = SnackbarDuration.Indefinite,
+                                    withDismissAction = true,
                                 )
+                            when (result) {
+                                SnackbarResult.ActionPerformed -> {
+                                    onClickCreateTrip()
+                                }
+                                SnackbarResult.Dismissed -> {
+                                    /* Handle snackbar dismissed */
+                                }
+                            }
                         }
-                        onClickCreateTrip()
                     } else {
                         scope.launch {
                             snackbarHostState
                                 .showSnackbar(
-                                    message = "Error al crear el viaje",
-                                    actionLabel = "Cancelar",
+                                    message = errorCreateTrip,
                                     duration = SnackbarDuration.Short,
+                                    withDismissAction = true,
                                 )
                         }
                     }
@@ -194,7 +217,7 @@ fun CreateTripScreen(
                     .padding(horizontal = 8.dp, vertical = 8.dp)
                     .size(45.dp),
             ) {
-                Text("Guardar")
+                Text(stringResource(R.string.save_trip))
             }
         },
     ) { paddingValues ->
@@ -210,7 +233,7 @@ fun CreateTripScreen(
             item {
                 // Nombre del Viaje
                 TextInputField(
-                    label = "Nombre del Viaje *",
+                    label = stringResource(R.string.trip_name),
                     textValue = tripName,
                     onValueChange = {
                         tripName = it
@@ -231,7 +254,7 @@ fun CreateTripScreen(
             item {
                 // Origen
                 PlaceAutocompleteField(
-                    label = "Origen *",
+                    label = "${ stringResource(R.string.origen) } *",
                     query = originAutocompleteQuery,
                     onQueryChange = {
                         originAutocompleteQuery = it
@@ -268,7 +291,7 @@ fun CreateTripScreen(
             item {
                 // Destino
                 PlaceAutocompleteField(
-                    label = "Destino *",
+                    label = stringResource(R.string.destination),
                     query = destinationAutocompleteQuery,
                     onQueryChange = {
                         destinationAutocompleteQuery = it
@@ -305,7 +328,7 @@ fun CreateTripScreen(
             item {
                 // Fechas
                 DateRangePickerInput(
-                    label = "Fechas",
+                    label = stringResource(R.string.dates),
                     startDate = startDate,
                     endDate = endDate,
                     dateRangePickerState = dateRangePickerState,
@@ -334,12 +357,12 @@ fun CreateTripScreen(
             item {
                 // Transporte
                 ExposedDropdownMenuBoxInput(
-                    label = "Transporte",
+                    label = stringResource(R.string.transport),
                     values = transports,
                     isExpanded = isExpanded,
                     transport = transport,
                     onExpanded = { createTripViewModel.onIsExpandedChange(it) },
-                    onClickable = { createTripViewModel.onTransportChange(it) },
+                    onClickable = { transport = it },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -347,7 +370,7 @@ fun CreateTripScreen(
             item {
                 // Acompañantes
                 AddList(
-                    label = "Acompañantes",
+                    label = stringResource(R.string.member),
                     name = memberName,
                     values = members,
                     onValueNameChange = {
@@ -355,10 +378,11 @@ fun CreateTripScreen(
                         isMemberNameValid = true
                     },
                     onAdd = {
-                        if (memberName.isBlank()) {
+                        if (memberName.isBlank() || memberName.length < 3 || memberName.length > 20 || members.contains(memberName)) {
                             isMemberNameValid = false
+                        } else {
+                            createTripViewModel.onAddMember(it)
                         }
-                        createTripViewModel.onAddMember(it)
                     },
                     onRemove = { createTripViewModel.onRemoveMember(it) },
                     leadingIcon = {
@@ -372,30 +396,10 @@ fun CreateTripScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
             }
-
-            /*
-            // Paradas
-            AddList(
-                label = "Puntos de Parada",
-                name = stopName,
-                values = stops,
-                onValueNameChange = { createTripViewModel.onStopNameChange(it) },
-                onAdd = { createTripViewModel.onAddStop(it) },
-                onRemove = { createTripViewModel.onRemoveStop(it) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.AddLocation,
-                        contentDescription = "Member Name",
-                    )
-                },
-            )
-
-            Spacer(modifier = Modifier.size(8.dp))
-            */
             item {
                 // Descripción
                 TextInputField(
-                    label = "Descripción",
+                    label = stringResource(R.string.description),
                     textValue = description,
                     onValueChange = {
                         description = it

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.turistaapp.core.utils.Transports
 import com.example.turistaapp.create_trip.domain.GetPlaceAutocompleteLocationsUseCase
 import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
@@ -27,12 +26,6 @@ class CreateTripViewModel @Inject constructor(
     private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
     private val getNameFromDataStore: GetNameFromDataStore,
 ) : ViewModel() {
-
-    /*
-    // Viajes que se muestran en la lazy list
-    private var _trips = MutableLiveData<List<TripModel>>()
-    val trips: LiveData<List<TripModel>> = _trips
-     */
 
     // Fechas del viaje
     val calendar: Calendar = Calendar.getInstance()
@@ -84,56 +77,11 @@ class CreateTripViewModel @Inject constructor(
     fun resetMemberNameValue() {
         _memberName.value = ""
     }
-    /*
-        // Paradas
-        private var _stops = MutableLiveData(mutableListOf<String>())
-        val stops: LiveData<MutableList<String>> = _stops
-
-        private var _stopName = MutableLiveData("")
-        val stopName: LiveData<String> = _stopName
-
-        fun onStopNameChange(stopName: String) {
-            _stopName.value = stopName
-        }
-
-        fun onAddStop(stop: String) {
-            val updatedStops = _stops.value?.toMutableList() ?: mutableListOf()
-            updatedStops.add(stop)
-            _stops.value = updatedStops
-            resetStopNameValue()
-        }
-
-        fun onRemoveStop(index: Int) {
-            val updatedStops = _stops.value?.toMutableList()
-            updatedStops?.removeAt(index)
-            _stops.value = updatedStops
-        }
-
-        fun resetStopNameValue() {
-            _stopName.value = ""
-        }
-     */
-
-    // Transportes
-    private var _transports = MutableLiveData(
-        listOf(
-            Transports.Driving.type,
-            Transports.Walking.type,
-            Transports.Bicycling.type,
-        ),
-    )
-    val transports: LiveData<List<String>> = _transports
 
     private var _isExpanded = MutableLiveData(false)
     val isExpanded: LiveData<Boolean> = _isExpanded
     fun onIsExpandedChange(isExpanded: Boolean) {
         _isExpanded.value = isExpanded
-    }
-
-    private var _transport = MutableLiveData(Transports.Driving.type)
-    val transport: LiveData<String> = _transport
-    fun onTransportChange(transport: String) {
-        _transport.value = transport
     }
 
     // Focus Requesters
@@ -183,16 +131,6 @@ class CreateTripViewModel @Inject constructor(
         }
     }
 
-//    fun searchDestinationFromRecommendation(query: String) {
-//        viewModelScope.launch {
-//            val newQuery = query.dropLast(1)
-//            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(newQuery)
-//            if (newPredictions != null) {
-//                _selectedOriginLocation.value = newPredictions.get(0)
-//            }
-//        }
-//    }
-
     // Setea
     fun setDestination(address: String?) {
         searchDestinationPlaces(address!!)
@@ -240,7 +178,7 @@ class CreateTripViewModel @Inject constructor(
 
     // Crear viaje con los datos ingresados
 
-    fun onCreateTripClick(name: String, description: String) {
+    fun onCreateTripClick(name: String, description: String, transport: String) {
         viewModelScope.launch {
             val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
             val destination =
@@ -252,7 +190,7 @@ class CreateTripViewModel @Inject constructor(
                 destination = destination!!,
                 startDate = startDate.value.toString(),
                 endDate = endDate.value.toString(),
-                transport = _transport.value.toString(),
+                transport = transport,
                 members = _members.value,
                 stops = null,
                 description = description,

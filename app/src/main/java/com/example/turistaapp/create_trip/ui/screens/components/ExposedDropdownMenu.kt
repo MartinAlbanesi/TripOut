@@ -16,16 +16,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.turistaapp.core.utils.Transport
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExposedDropdownMenuBoxInput(
     label: String,
-    values: List<String>,
+    values: List<Transport>,
     isExpanded: Boolean,
-    transport: String = values[0],
+    transport: Transport,
     onExpanded: (Boolean) -> Unit,
-    onClickable: (String) -> Unit,
+    onClickable: (Transport) -> Unit,
 ) {
     ExposedDropdownMenuBox(
         expanded = isExpanded,
@@ -34,7 +35,7 @@ fun ExposedDropdownMenuBoxInput(
             .fillMaxWidth(),
     ) {
         OutlinedTextField(
-            value = transport,
+            value = transport.name,
             onValueChange = {},
             readOnly = true,
             label = { Text(label) },
@@ -62,12 +63,13 @@ fun ExposedDropdownMenuBoxInput(
             values.forEach { item ->
                 DropdownMenuItem(
                     text = {
-                        when (item) {
-                            "driving" -> Text(text = "Auto")
-                            "walking" -> Text(text = "Caminando")
-                            "bicycling" -> Text(text = "Bicicleta")
-                            else -> Text(text = item)
-                        }
+                        Text(text = item.name)
+//                        when (item) {
+// //                            "driving" -> Text(text = "Auto")
+// //                            "walking" -> Text(text = "Caminando")
+// //                            "bicycling" -> Text(text = "Bicicleta")
+// //                            else -> Text(text = item)
+//                        }
                     },
                     onClick = {
                         onClickable(item)
