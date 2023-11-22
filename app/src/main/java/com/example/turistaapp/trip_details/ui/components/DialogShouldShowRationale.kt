@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.ui.components
+package com.example.turistaapp.trip_details.ui.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.ui.components
+package com.example.turistaapp.trip_details.ui.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

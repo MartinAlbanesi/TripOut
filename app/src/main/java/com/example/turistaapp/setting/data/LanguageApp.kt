@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.domain
+package com.example.turistaapp.setting.data
 
 data class LanguageApp(
     val name: String,

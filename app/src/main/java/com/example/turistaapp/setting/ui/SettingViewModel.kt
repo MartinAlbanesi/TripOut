@@ -3,7 +3,6 @@ package com.example.turistaapp.setting.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.core.data.datastore.LocalDataStoreRepository
-import com.example.turistaapp.setting.domain.UpdateImagesFromDBUseCase
 import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import com.example.turistaapp.welcome.domain.SetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,12 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-
-
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-    private val updateImagesFromDBUseCase: UpdateImagesFromDBUseCase,
     private val dispatcher: CoroutineDispatcher,
     private val localDataStoreRepository: LocalDataStoreRepository,
     private val getNameFromDataStore: GetNameFromDataStore,
@@ -58,7 +53,7 @@ class SettingViewModel @Inject constructor(
 
     private fun getUserName() {
         viewModelScope.launch(dispatcher) {
-            getNameFromDataStore.invoke().collect{
+            getNameFromDataStore.invoke().collect {
                 _userName.value = it
             }
         }
@@ -85,12 +80,6 @@ class SettingViewModel @Inject constructor(
         _darkTheme.value = !_darkTheme.value
         viewModelScope.launch(Dispatchers.Main) {
             localDataStoreRepository.setIsDarkMode(_darkTheme.value)
-        }
-    }
-
-    fun updateImages(id: Int, images: List<String>) {
-        viewModelScope.launch(dispatcher) {
-            updateImagesFromDBUseCase(id, images)
         }
     }
 }
