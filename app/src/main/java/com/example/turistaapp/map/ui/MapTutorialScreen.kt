@@ -171,7 +171,7 @@ private fun MapPagerThree() {
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
         )
-        LottiePreview(title = "", res = R.raw.mylocation) {}
+        LottiePreview(title = "", lottieRes = R.raw.mylocation) {}
     }
 }
 
@@ -187,7 +187,7 @@ private fun MapPagerTwo() {
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
         )
-        LottiePreview(title = "", res = R.raw.mapmap) {}
+        LottiePreview(title = "", lottieRes = R.raw.mapmap) {}
     }
 }
 

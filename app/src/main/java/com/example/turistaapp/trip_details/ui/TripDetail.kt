@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.ui
+package com.example.turistaapp.trip_details.ui
 
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -61,16 +61,16 @@ import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
-import com.example.turistaapp.setting.domain.AssistChipItem
-import com.example.turistaapp.setting.ui.components.DialogShouldShowRationale
-import com.example.turistaapp.setting.ui.components.IconWithText
-import com.example.turistaapp.setting.ui.components.LocationCard
-import com.example.turistaapp.setting.ui.components.TextWithComposable
+import com.example.turistaapp.trip_details.data.AssistChipItem
+import com.example.turistaapp.trip_details.ui.components.DialogShouldShowRationale
+import com.example.turistaapp.trip_details.ui.components.IconWithText
+import com.example.turistaapp.trip_details.ui.components.LocationCard
+import com.example.turistaapp.trip_details.ui.components.TextWithComposable
 
 @Composable
 fun TripDetails(
     routeModel: RouteModel? = null,
-    settingViewModel: SettingViewModel = hiltViewModel(),
+    tripDetailsViewModel: TripDetailsViewModel = hiltViewModel(),
     onClickQR: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
@@ -81,7 +81,7 @@ fun TripDetails(
         contract = ActivityResultContracts.PickMultipleVisualMedia(),
         onResult = { uris ->
             selectedImageUris += uris.map { it.toString() }
-            settingViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
+            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
         },
     )
 

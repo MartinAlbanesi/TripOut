@@ -31,14 +31,13 @@ class MapModule {
 
     @Singleton
     @Provides
-    fun provideGetIsMapTutorialComplete(localDataStoreRepository: LocalDataStoreRepository) : GetIsMapTutorialComplete {
+    fun provideGetIsMapTutorialComplete(localDataStoreRepository: LocalDataStoreRepository): GetIsMapTutorialComplete {
         return GetIsMapTutorialComplete(localDataStoreRepository)
     }
 
     @Singleton
     @Provides
-    fun provideSetIsMapTutorialComplete(localDataStoreRepository: LocalDataStoreRepository) : SetIsMapTutorialComplete {
+    fun provideSetIsMapTutorialComplete(localDataStoreRepository: LocalDataStoreRepository): SetIsMapTutorialComplete {
         return SetIsMapTutorialComplete(localDataStoreRepository)
     }
-
 }

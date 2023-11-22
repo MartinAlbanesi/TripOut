@@ -1,4 +1,4 @@
-package com.example.turistaapp.setting.domain
+package com.example.turistaapp.trip_details.domain
 
 import com.example.turistaapp.core.data.database.TripDBRepository
 import javax.inject.Inject

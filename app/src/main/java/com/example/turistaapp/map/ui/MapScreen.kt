@@ -22,7 +22,7 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.example.turistaapp.qr_code.ui.QRDialog
-import com.example.turistaapp.setting.ui.TripDetails
+import com.example.turistaapp.trip_details.ui.TripDetails
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson

@@ -77,7 +77,7 @@ fun HomeScreen(
             item {
                 LottiePreview(
                     title = stringResource(R.string.shake_n_discover),
-                    res = R.raw.world,
+                    lottieRes = R.raw.world,
                     isBackgroundColored = true,
                     isBottomBrush = true,
                     isClickable = true,
@@ -126,7 +126,7 @@ fun HomeScreen(
                         is ResponseUiState.Error -> {
                             LottiePreview(
                                 title = stringResource(R.string.no_results_found),
-                                res = R.raw.marker,
+                                lottieRes = R.raw.marker,
                             ) {}
                         }
                     }
@@ -143,7 +143,7 @@ fun HomeScreen(
                 if (myTrips.isEmpty()) {
                     LottiePreview(
                         title = stringResource(R.string.create_your_first_trip),
-                        res = R.raw.map,
+                        lottieRes = R.raw.map,
                         isBackgroundColored = true,
                         isTopBrush = true,
                         isClickable = true,

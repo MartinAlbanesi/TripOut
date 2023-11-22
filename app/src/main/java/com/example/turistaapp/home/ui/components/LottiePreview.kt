@@ -34,14 +34,14 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 @Composable
 fun LottiePreview(
     title: String = "",
-    res: Int,
+    lottieRes: Int,
     isBackgroundColored: Boolean = false,
     isClickable: Boolean = false,
     isBottomBrush: Boolean = false,
     isTopBrush: Boolean = false,
-    onClickAnimation: () -> Unit,
+    onClickAnimation: () -> Unit = {},
 ) {
-    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(res))
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(lottieRes))
 
     var background by remember {
         mutableStateOf(Color.Transparent)

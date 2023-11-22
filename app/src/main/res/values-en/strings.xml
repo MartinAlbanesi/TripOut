@@ -81,6 +81,8 @@
     <string name="version">Version</string>
     <string name="about_us">About us</string>
     <string name="name_changed_successfully">Name changed successfully</string>
+    <string name="message_dialog_setting">Are you sure about changing the language?\nUpon accepting you will be redirected to the home screen</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Languages -->
     <string name="english">English</string>
@@ -95,5 +97,8 @@
     <string name="destination">Destination *</string>
     <string name="dates">Dates</string>
     <string name="transport">Transport</string>
+    <string name="successfully_created_trip">Successfully created trip</string>
+    <string name="go_to_home">Go to home</string>
+    <string name="error_when_creating_the_trip">Error creating trip</string>
 
 </resources>

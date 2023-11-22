@@ -61,9 +61,12 @@ class LocalDataStoreRepository @Inject constructor(
             } else {
                 context.getSystemService(LocaleManager::class.java).applicationLocales.get(0).language
             }
-            // context.getSystemService(LocaleManager::class.java).applicationLocales.get(0).language
         } else {
-            AppCompatDelegate.getApplicationLocales().get(0)?.language ?: "asd"
+            if (AppCompatDelegate.getApplicationLocales().isEmpty()) {
+                "es"
+            } else {
+                AppCompatDelegate.getApplicationLocales().get(0)?.language ?: "es"
+            }
         }
     }
 }
