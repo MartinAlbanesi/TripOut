@@ -20,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.turistaapp.R
 import com.example.turistaapp.setting.data.LanguageApp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,10 +72,10 @@ fun ChangeLanguageContent(
                 Icon(Icons.Default.Translate, contentDescription = Icons.Default.Translate.name)
             },
             title = {
-                Text(text = "Cambiar de idioma")
+                Text(text = stringResource(id = R.string.change_language))
             },
             text = {
-                Text(text = "¿Estas seguro de cambiar el idioma?\nAl aceptar se te redirigirá a la pantalla de inicio")
+                Text(text = stringResource(R.string.message_dialog_setting))
             },
             onDismissRequest = {
                 showDialog = false
@@ -85,7 +87,7 @@ fun ChangeLanguageContent(
                         onClick(selectedLanguage)
                     }
                 ) {
-                    Text("Confirm")
+                    Text(stringResource(R.string.accept))
                 }
             },
             dismissButton = {
@@ -94,7 +96,7 @@ fun ChangeLanguageContent(
                         showDialog = false
                     }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )

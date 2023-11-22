@@ -82,6 +82,8 @@
     <string name="version">Versión</string>
     <string name="about_us">Sobre nosotros</string>
     <string name="name_changed_successfully">Nombre cambiado con éxito</string>
+    <string name="message_dialog_setting">¿Estas seguro de cambiar el idioma?\nAl aceptar se te redirigirá a la pantalla de inicio</string>
+    <string name="cancel">Cancelar</string>
 
     <!-- Languages -->
     <string name="english">Ingles</string>
@@ -96,4 +98,7 @@
     <string name="destination">Destino *</string>
     <string name="dates">Fechas</string>
     <string name="transport">Transporte</string>
+    <string name="successfully_created_trip">Viaje creado con éxito</string>
+    <string name="go_to_home">Ir al inicio</string>
+    <string name="error_when_creating_the_trip">Error al crear el viaje</string>
 </resources>

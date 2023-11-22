@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
@@ -157,6 +158,10 @@ fun CreateTripScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val successMessage = stringResource(R.string.successfully_created_trip)
+    val goToHome = stringResource(R.string.go_to_home)
+    val errorCreateTrip = stringResource(R.string.error_when_creating_the_trip)
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -180,21 +185,29 @@ fun CreateTripScreen(
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
                         createTripViewModel.onCreateTripClick(tripName, description, transport.type)
                         scope.launch {
-                            snackbarHostState
+                            val result = snackbarHostState
                                 .showSnackbar(
-                                    message = "Viaje creado con éxito",
-                                    actionLabel = "Cancelar",
+                                    message = successMessage,
+                                    actionLabel = goToHome,
                                     duration = SnackbarDuration.Indefinite,
+                                    withDismissAction = true,
                                 )
+                            when (result) {
+                                SnackbarResult.ActionPerformed -> {
+                                    onClickCreateTrip()
+                                }
+                                SnackbarResult.Dismissed -> {
+                                    /* Handle snackbar dismissed */
+                                }
+                            }
                         }
-                        onClickCreateTrip()
                     } else {
                         scope.launch {
                             snackbarHostState
                                 .showSnackbar(
-                                    message = "Error al crear el viaje",
-                                    actionLabel = "Cancelar",
+                                    message = errorCreateTrip,
                                     duration = SnackbarDuration.Short,
+                                    withDismissAction = true,
                                 )
                         }
                     }
