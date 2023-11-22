@@ -4,7 +4,7 @@ import com.example.turistaapp.core.data.datastore.LocalDataStoreRepository
 import javax.inject.Inject
 
 class SetIsMapTutorialComplete @Inject constructor(
-    private val localDataStoreRepository: LocalDataStoreRepository
+    private val localDataStoreRepository: LocalDataStoreRepository,
 ) {
     suspend operator fun invoke(isComplete: Boolean) {
         localDataStoreRepository.setIsMapTutorialComplete(isComplete)

@@ -1,6 +1,6 @@
 package com.example.turistaapp.my_trips.domain // ktlint-disable package-name
 
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
+import com.example.turistaapp.core.data.database.TripDBRepository
 import com.example.turistaapp.create_trip.data.mapper.toTripModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import kotlinx.coroutines.flow.Flow

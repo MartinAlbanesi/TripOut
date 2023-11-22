@@ -1,7 +1,7 @@
 package com.example.turistaapp.create_trip.data.mapper // ktlint-disable package-name
 
-import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
-import com.example.turistaapp.create_trip.data.database.entities.TripEntity
+import com.example.turistaapp.core.data.database.entities.LocationEntity
+import com.example.turistaapp.core.data.database.entities.TripEntity
 import com.example.turistaapp.create_trip.data.network.place_details.models.PlaceApi
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel

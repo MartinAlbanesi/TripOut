@@ -1,10 +1,10 @@
 package com.example.turistaapp.core.di
 
+import com.example.turistaapp.core.data.database.TripDBRepository
 import com.example.turistaapp.create_trip.data.IPlaceAutocompleteLocationRepository
 import com.example.turistaapp.create_trip.data.IPlaceDetailsRepository
 import com.example.turistaapp.create_trip.data.PlaceAutocompleteLocationRepository
 import com.example.turistaapp.create_trip.data.PlaceDetailsRepository
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.data.network.place_details.PlaceDetailsApiService
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
 import com.example.turistaapp.create_trip.domain.GetDestinationLocationsFromDataBase

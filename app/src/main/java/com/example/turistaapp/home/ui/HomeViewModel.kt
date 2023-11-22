@@ -54,7 +54,6 @@ class HomeViewModel @Inject constructor(
 
             _nearbyLocationsApi.emit(ResponseUiState.Success(nearbyLocations))
         }
-
     }
 
     fun getRandomLocation() {

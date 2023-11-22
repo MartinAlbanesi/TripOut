@@ -1,12 +1,10 @@
 package com.example.turistaapp.trip_details.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -62,7 +60,7 @@ fun LocationCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(8.dp)
+                    .padding(8.dp),
             ) {
                 Column {
                     Text(
@@ -73,7 +71,7 @@ fun LocationCard(
                     Text(
                         text = locationAddress ?: stringResource(R.string.there_is_no_direction),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
+                        modifier = Modifier,
                     )
                 }
                 Row(
@@ -82,7 +80,7 @@ fun LocationCard(
                         .offset(y = (-8).dp, x = 8.dp)
                         .clip(shape = RoundedCornerShape(topStart = 15.dp, bottomStart = 15.dp))
                         .background(MaterialTheme.colorScheme.inversePrimary)
-                        .padding(2.dp)
+                        .padding(2.dp),
                 ) {
                     Text(
                         text = locationRating.toString(),
@@ -95,7 +93,7 @@ fun LocationCard(
                         contentDescription = "Rating",
                         tint = Color.Yellow,
                         modifier = Modifier
-                            .align(Alignment.CenterVertically)
+                            .align(Alignment.CenterVertically),
                     )
                 }
             }

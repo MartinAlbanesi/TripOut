@@ -5,9 +5,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turistaapp.core.data.database.TripDataBase
+import com.example.turistaapp.core.data.database.dao.TripDao
+import com.example.turistaapp.core.data.database.entities.LocationEntity
 import com.example.turistaapp.core.utils.GsonConverter
 import com.example.turistaapp.create_trip.FakeDataBaseSource
-import com.example.turistaapp.create_trip.data.database.entities.LocationEntity
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -97,7 +98,7 @@ class TripDaoTest {
     }
 
     @Test
-    fun updateImages() = runTest{
+    fun updateImages() = runTest {
         val expected = listOf("image3", "image4")
         val tripEntityList = FakeDataBaseSource.tripEntityList
 

@@ -20,12 +20,12 @@ fun IconWithText(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = icon.name,
-            modifier = Modifier
+            modifier = Modifier,
         )
         Spacer(modifier = Modifier.size(4.dp))
         Text(

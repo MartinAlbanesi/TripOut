@@ -7,5 +7,5 @@ data class RouteModel(
     val duration: String,
     val points: String,
     val summary: String,
-    val trip : TripModel? = null
+    val trip: TripModel? = null,
 )

@@ -48,7 +48,6 @@ import kotlinx.coroutines.launch
 fun WelcomeScreen(
     onClickSaveName: (String) -> Unit,
 ) {
-
     var showAlertDialog by remember { mutableStateOf(false) }
 
     val configuration = LocalConfiguration.current
@@ -61,17 +60,19 @@ fun WelcomeScreen(
 
     val circleFirst by animateColorAsState(
         targetValue = if (pagerState.currentPage == 0) MaterialTheme.colorScheme.primary else Color.Gray,
-        label = "circleFirst"
+        label = "circleFirst",
     )
 
     val circleSecond by animateColorAsState(
         targetValue = if (pagerState.currentPage == 1) MaterialTheme.colorScheme.primary else Color.Gray,
-        label = "circleSecond"
+        label = "circleSecond",
     )
 
-    val buttonText = if (pagerState.currentPage == 0)
+    val buttonText = if (pagerState.currentPage == 0) {
         stringResource(R.string.next)
-    else stringResource(R.string.start)
+    } else {
+        stringResource(R.string.start)
+    }
 
     var value by remember { mutableStateOf("") }
 
@@ -80,7 +81,7 @@ fun WelcomeScreen(
     val offsetY by animateFloatAsState(
         targetValue = if (pagerState.currentPage == 0) 0f else (screenHeight / 4),
         label = "offsetY",
-        animationSpec = tween(1000)
+        animationSpec = tween(1000),
     )
 
     if (showAlertDialog) {
@@ -96,16 +97,15 @@ fun WelcomeScreen(
             },
             text = {
                 Text(
-                    text = stringResource(R.string.location_permission_message)
+                    text = stringResource(R.string.location_permission_message),
                 )
             },
         )
     }
 
-
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Column(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.size(16.dp))
@@ -116,7 +116,7 @@ fun WelcomeScreen(
                     .size(240.dp)
                     .weight(1f)
                     .align(Alignment.CenterHorizontally)
-                    .offset(y = offsetY.dp)
+                    .offset(y = offsetY.dp),
             )
 
             HorizontalPager(
@@ -141,7 +141,7 @@ fun WelcomeScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 CircleBox(color = circleFirst)
                 Spacer(modifier = Modifier.size(16.dp))
@@ -154,7 +154,7 @@ fun WelcomeScreen(
                         scope.launch {
                             pagerState.animateScrollToPage(
                                 pagerState.currentPage + 1,
-                                animationSpec = tween(500)
+                                animationSpec = tween(500),
                             )
                         }
                     }
@@ -166,19 +166,17 @@ fun WelcomeScreen(
                         } else {
                             isError = true
                         }
-
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 32.dp, horizontal = 32.dp)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(text = buttonText)
             }
         }
     }
-
 }
 
 @Composable
@@ -189,8 +187,6 @@ fun CircleBox(
         modifier = Modifier
             .clip(CircleShape)
             .size(40.dp)
-            .background(color)
+            .background(color),
     )
 }
-
-

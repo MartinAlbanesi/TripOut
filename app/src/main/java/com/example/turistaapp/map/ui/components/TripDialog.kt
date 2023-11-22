@@ -53,7 +53,7 @@ fun TripDialog(
                     address = nearbyLocationSelect.address,
                     modifier = Modifier
                         .fillMaxSize()
-                        .weight(1f)
+                        .weight(1f),
                 )
                 Button(
                     onClick = { onConfirm("${nearbyLocationSelect.name}, ${nearbyLocationSelect.address}") },
@@ -69,12 +69,12 @@ fun TripDialog(
                 onClick = { onDismiss() },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .offset(x = 12.dp, y = (-12).dp)
+                    .offset(x = 12.dp, y = (-12).dp),
             ) {
                 Icon(
                     Icons.Outlined.Cancel,
                     contentDescription = Icons.Outlined.Cancel.toString(),
-                    Modifier.size(40.dp)
+                    Modifier.size(40.dp),
                 )
             }
         }

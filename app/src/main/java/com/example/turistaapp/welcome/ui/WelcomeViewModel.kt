@@ -13,10 +13,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
-    private val setNameFromDataStore : SetNameFromDataStore,
+    private val setNameFromDataStore: SetNameFromDataStore,
     private val getNameFromDataStore: GetNameFromDataStore,
-    private val dispatcher: CoroutineDispatcher
-) : ViewModel(){
+    private val dispatcher: CoroutineDispatcher,
+) : ViewModel() {
 
     private val _name = MutableStateFlow<String?>(null /*"titi"*/)
     val name = _name.asStateFlow()
@@ -25,7 +25,7 @@ class WelcomeViewModel @Inject constructor(
         getNameFromDataStore()
     }
 
-    fun setNameInDataStore(name : String) {
+    fun setNameInDataStore(name: String) {
         viewModelScope.launch(dispatcher) {
             setNameFromDataStore(name)
         }
@@ -33,12 +33,9 @@ class WelcomeViewModel @Inject constructor(
 
     private fun getNameFromDataStore() {
         viewModelScope.launch(dispatcher) {
-            getNameFromDataStore.invoke().collect{
-                 _name.value = it
+            getNameFromDataStore.invoke().collect {
+                _name.value = it
             }
         }
     }
-
-
-
 }

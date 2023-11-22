@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.database.entities // ktlint-disable package-name
+package com.example.turistaapp.core.data.database.entities // ktlint-disable package-name
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
@@ -7,8 +7,8 @@ import com.google.gson.reflect.TypeToken
 class Converters {
 
     @TypeConverter
-    fun fromListToString(lista: MutableList<String>?): String? {
-        return Gson().toJson(lista)
+    fun fromListToString(list: MutableList<String>?): String? {
+        return Gson().toJson(list)
     }
 
     @TypeConverter

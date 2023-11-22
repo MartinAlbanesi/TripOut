@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetIsMapTutorialComplete @Inject constructor(
-    private val localDataStoreRepository: LocalDataStoreRepository
+    private val localDataStoreRepository: LocalDataStoreRepository,
 ) {
     operator fun invoke(): Flow<Boolean?> {
         return localDataStoreRepository.getIsMapTutorialComplete()

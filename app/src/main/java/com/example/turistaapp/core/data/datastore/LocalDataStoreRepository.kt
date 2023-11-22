@@ -4,7 +4,6 @@ import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.getSystemService
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -24,6 +23,7 @@ class LocalDataStoreRepository @Inject constructor(
             pref[stringPreferencesKey(DataStoreNames.Name.name)] = name
         }
     }
+
     suspend fun setIsDarkMode(isDarkMode: Boolean) {
         dataStore.edit { pref ->
             pref[booleanPreferencesKey(DataStoreNames.IsDarkMode.name)] = isDarkMode
@@ -56,7 +56,7 @@ class LocalDataStoreRepository @Inject constructor(
 
     fun getLanguage(): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if(context.getSystemService(LocaleManager::class.java).applicationLocales.isEmpty) {
+            if (context.getSystemService(LocaleManager::class.java).applicationLocales.isEmpty) {
                 "es"
             } else {
                 context.getSystemService(LocaleManager::class.java).applicationLocales.get(0).language

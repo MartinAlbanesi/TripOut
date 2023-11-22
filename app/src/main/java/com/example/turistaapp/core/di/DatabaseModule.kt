@@ -2,10 +2,10 @@ package com.example.turistaapp.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.turistaapp.core.data.database.TripDBRepository
+import com.example.turistaapp.core.data.database.TripDBRepositoryImpl
 import com.example.turistaapp.core.data.database.TripDataBase
-import com.example.turistaapp.create_trip.data.database.dao.TripDao
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepositoryImpl
+import com.example.turistaapp.core.data.database.dao.TripDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
