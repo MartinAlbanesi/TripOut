@@ -3,7 +3,6 @@ package com.example.turistaapp.setting.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
@@ -29,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
@@ -40,6 +40,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
@@ -60,7 +61,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.LocaleListCompat
 import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.R
@@ -102,27 +102,10 @@ fun SettingsScreen(
     //About us
     var isClickedAboutUs by remember { mutableStateOf(false) }
 
-    // Reemplaza "tu_nombre_de_usuario" con tu nombre de usuario de LinkedIn o la ID de perfil
-//    val linkedInProfileUri = "https://www.linkedin.com/in/tu_nombre_de_usuario"
-//
-//    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkedInProfileUri))
-//    intent.setPackage("com.linkedin.android") // Esto especifica que quieres abrir la aplicación de LinkedIn si está instalada
-
-//    // Verifica si la aplicación de LinkedIn está instalada en el dispositivo antes de iniciar el intent
-//    if (intent.resolveActivity(packageManager) != null) {
-//        startActivity(intent)
-//    } else {
-//        // Si LinkedIn no está instalado, puedes abrir la página en el navegador web
-//        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(linkedInProfileUri)))
-//    }
-
     //Version
     var isClickedVersion by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-
-//    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/gabrielgomezgg/")))
-
 
     Box(
         modifier = Modifier
@@ -326,6 +309,13 @@ fun ChangeNameView(
                     onImeAction()
                 }
             ),
+            trailingIcon = {
+                IconButton(onClick = {
+                    onImeAction()
+                }) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = Icons.Default.Add.name)
+                }
+            }
         )
         AnimatedVisibility(
             visible = isError,
