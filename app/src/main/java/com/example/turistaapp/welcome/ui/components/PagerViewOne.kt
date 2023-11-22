@@ -14,7 +14,7 @@ import com.example.turistaapp.home.ui.components.LottiePreview
 fun PagerViewOne(text: String) {
     Column(
         Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center
     ) {
         LottiePreview("", R.raw.trip_out_logo)
         Text(
@@ -23,4 +23,5 @@ fun PagerViewOne(text: String) {
             textAlign = TextAlign.Center,
         )
     }
+
 }

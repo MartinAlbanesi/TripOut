@@ -40,6 +40,7 @@ import com.example.turistaapp.setting.ui.components.TextWithArrow
 import com.example.turistaapp.setting.ui.components.TextWithSwitch
 import com.example.turistaapp.welcome.utils.validateName
 
+
 @Composable
 fun SettingsScreen(
     isDarkTheme: Boolean,

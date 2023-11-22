@@ -14,7 +14,7 @@ class TripDetailsModule {
 
     @Singleton
     @Provides
-    fun provideUpdateImagesFromDBUseCase(tripDBRepository: TripDBRepository): UpdateImagesFromDBUseCase {
+    fun provideUpdateImagesFromDBUseCase(tripDBRepository: TripDBRepository) : UpdateImagesFromDBUseCase {
         return UpdateImagesFromDBUseCase(tripDBRepository)
     }
 }
