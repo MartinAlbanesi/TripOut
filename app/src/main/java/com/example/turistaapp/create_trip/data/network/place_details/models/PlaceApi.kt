@@ -12,10 +12,11 @@ data class PlaceApi(
     @SerializedName("vicinity") val address: String,
     @SerializedName("place_id") val placeID: String,
     @SerializedName("types") val types: List<String>,
-){
+) {
     fun getPhoto(): String? {
-        if(photoApi.isNullOrEmpty())
+        if (photoApi.isNullOrEmpty()) {
             return null
+        }
 
         return getPhotosFromMap(photoApi[0].photoUrl)
     }

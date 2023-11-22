@@ -11,33 +11,33 @@ import javax.inject.Inject
 
 class GetLastLocationUseCase @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val context: Context
+    private val context: Context,
 ) {
 
     @SuppressLint("MissingPermission")
     suspend operator fun invoke(): Location? {
-        if(!isGPSEnable(context) || !isAccessCoarseLocationPermissionsGranted(context) ){
+        if (!isGPSEnable(context) || !isAccessCoarseLocationPermissionsGranted(context)) {
             return null
         }
 
         return suspendCancellableCoroutine { cont ->
             fusedLocationProviderClient.lastLocation.apply {
-                if(isComplete){
-                    if(isSuccessful){
-                        cont.resume(result){}
-                    }else{
-                        cont.resume(null){}
+                if (isComplete) {
+                    if (isSuccessful) {
+                        cont.resume(result) {}
+                    } else {
+                        cont.resume(null) {}
                     }
                     return@suspendCancellableCoroutine
                 }
                 addOnSuccessListener {
-                    cont.resume(it){}
+                    cont.resume(it) {}
                 }
                 addOnFailureListener {
-                    cont.resume(null){}
+                    cont.resume(null) {}
                 }
                 addOnCanceledListener {
-                    cont.resume(null){}
+                    cont.resume(null) {}
                 }
             }
         }

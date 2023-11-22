@@ -49,15 +49,13 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.map.ui.components.TripDialog
 import kotlin.math.sqrt
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShakeGameScreen(
     shakeViewModel: ShakeViewModel = hiltViewModel(),
     onCreateTripDialog: (String) -> Unit,
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
 ) {
-
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.world))
 
     val originPredictions by shakeViewModel.originPredictions.observeAsState(emptyList())
@@ -82,32 +80,32 @@ fun ShakeGameScreen(
 
     var locationSelected: LocationModel? by remember { mutableStateOf(null) }
 
-    sensorManager.registerListener(object : SensorEventListener {
-        override fun onSensorChanged(event: SensorEvent?) {
-            event?.run {
-                x = this.values[0] * 2f;
-                y = this.values[1] * 2f;
-                z = this.values[2] * 2f;
+    sensorManager.registerListener(
+        object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent?) {
+                event?.run {
+                    x = this.values[0] * 2f
+                    y = this.values[1] * 2f
+                    z = this.values[2] * 2f
 
-                // Calcula la aceleración total
-                acceleration = sqrt((x * x + y * y + z * z).toDouble());
+                    // Calcula la aceleración total
+                    acceleration = sqrt((x * x + y * y + z * z).toDouble())
 
-                // Comprueba si la aceleración supera el umbral de agitación
-                if (acceleration > 60f && !isShake && selectedLocations.size >= 2) {
+                    // Comprueba si la aceleración supera el umbral de agitación
+                    if (acceleration > 60f && !isShake && selectedLocations.size >= 2) {
 //                    Toast.makeText(LocalContext.current, "Shake detected", Toast.LENGTH_SHORT).show()
-                    locationSelected = selectedLocations.random()
-                    isShake = true
+                        locationSelected = selectedLocations.random()
+                        isShake = true
+                    }
                 }
             }
-        }
 
-        override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        }
-    }, sensor, SensorManager.SENSOR_DELAY_FASTEST)
-
-
-
-
+            override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+            }
+        },
+        sensor,
+        SensorManager.SENSOR_DELAY_FASTEST,
+    )
 
     if (isShake) {
         TripDialog(
@@ -116,7 +114,7 @@ fun ShakeGameScreen(
             onConfirm = {
                 isShake = false
                 onCreateTripDialog(it)
-            }
+            },
         )
     }
 
@@ -127,9 +125,9 @@ fun ShakeGameScreen(
                 isMarkerSelected = true,
                 onClickNavigationBack = {
                     onNavigateToHome()
-                }
+                },
             )
-        }
+        },
     ) { paddingValue ->
         Column(
             Modifier
@@ -138,22 +136,21 @@ fun ShakeGameScreen(
                     top = paddingValue.calculateTopPadding(),
                     start = 8.dp,
                     end = 8.dp,
-                    bottom = 8.dp
-                )
+                    bottom = 8.dp,
+                ),
         ) {
             Box(
                 Modifier
                     .fillMaxWidth()
                     .weight(2f),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Column(Modifier.fillMaxWidth()) {
-
                     Text(
                         text = stringResource(R.string.shake_to_discover),
                         modifier = Modifier
                             .fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                     LottieAnimation(
                         composition = lottie.value,
@@ -170,7 +167,7 @@ fun ShakeGameScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 PlaceAutocompleteField(
                     label = stringResource(R.string.enter_a_location),
@@ -198,21 +195,21 @@ fun ShakeGameScreen(
                     },
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Map, contentDescription = null)
-                    }
+                    },
                 )
             }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(8.dp)
+                    .padding(8.dp),
             ) {
                 items(selectedLocations) {
                     ItemShake(
                         text = "${it.name} - ${it.address}",
                         onDelete = {
                             shakeViewModel.onClickDeletedLocation(it)
-                        }
+                        },
                     )
                 }
             }
@@ -223,19 +220,20 @@ fun ShakeGameScreen(
 @Composable
 private fun ItemShake(
     text: String,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)) {
+            .padding(vertical = 4.dp),
+    ) {
         Text(text = text, modifier = Modifier.weight(1f))
         IconButton(
             onClick = { onDelete() },
         ) {
             Icon(
                 Icons.Default.Delete,
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Spacer(modifier = Modifier.padding(8.dp))

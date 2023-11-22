@@ -14,9 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-
-
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val updateImagesFromDBUseCase: UpdateImagesFromDBUseCase,
@@ -58,7 +55,7 @@ class SettingViewModel @Inject constructor(
 
     private fun getUserName() {
         viewModelScope.launch(dispatcher) {
-            getNameFromDataStore.invoke().collect{
+            getNameFromDataStore.invoke().collect {
                 _userName.value = it
             }
         }

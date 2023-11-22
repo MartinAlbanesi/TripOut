@@ -3,7 +3,6 @@ package com.example.turistaapp.setting.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedVisibility
@@ -60,13 +59,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.LocaleListCompat
 import com.example.turistaapp.BuildConfig
 import com.example.turistaapp.R
 import com.example.turistaapp.setting.domain.LanguageApp
 import com.example.turistaapp.welcome.utils.validateName
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +75,7 @@ fun SettingsScreen(
     setCurrentLanguage: (String) -> Unit,
     changeTheme: () -> Unit,
 ) {
-    //Name
+    // Name
     var isClickedNameChange by remember { mutableStateOf(false) }
 
     var nameValue by remember { mutableStateOf(userName) }
@@ -87,7 +84,7 @@ fun SettingsScreen(
 
     val nameIsSuccess = stringResource(R.string.name_changed_successfully)
 
-    //Language
+    // Language
 
     var isClickedLanguageChange by remember { mutableStateOf(false) }
 
@@ -96,10 +93,10 @@ fun SettingsScreen(
         LanguageApp(stringResource(id = R.string.english), "en", codeLanguage == "en"),
     )
 
-    //Theme
+    // Theme
     var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
 
-    //About us
+    // About us
     var isClickedAboutUs by remember { mutableStateOf(false) }
 
     // Reemplaza "tu_nombre_de_usuario" con tu nombre de usuario de LinkedIn o la ID de perfil
@@ -116,25 +113,24 @@ fun SettingsScreen(
 //        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(linkedInProfileUri)))
 //    }
 
-    //Version
+    // Version
     var isClickedVersion by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
 //    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/gabrielgomezgg/")))
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.surfaceVariant),
     ) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(bottomStart = 50.dp, bottomEnd = 50.dp))
                 .fillMaxWidth()
                 .height(260.dp)
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.primary),
         )
         Card(
             colors = CardDefaults.cardColors(
@@ -148,7 +144,7 @@ fun SettingsScreen(
 
             Divider()
 
-            //Configuraciones de la cuenta
+            // Configuraciones de la cuenta
             SubTitleSetting(text = stringResource(R.string.account_settings))
 
             TextWithArrow(
@@ -174,13 +170,12 @@ fun SettingsScreen(
                             Toast.makeText(
                                 context,
                                 nameIsSuccess,
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_SHORT,
                             ).show()
-
                         } else {
                             isErrorName = true
                         }
-                    }
+                    },
                 )
             }
 
@@ -189,7 +184,7 @@ fun SettingsScreen(
                 isClicked = isClickedLanguageChange,
                 onClick = {
                     isClickedLanguageChange = !isClickedLanguageChange
-                }
+                },
             ) {
                 LazyRow {
                     items(languages) {
@@ -209,11 +204,13 @@ fun SettingsScreen(
                                     Icon(
                                         imageVector = Icons.Filled.Done,
                                         contentDescription = "Done icon",
-                                        modifier = Modifier.size(FilterChipDefaults.IconSize)
+                                        modifier = Modifier.size(FilterChipDefaults.IconSize),
                                     )
                                 }
-                            } else null,
-                            modifier = Modifier.padding(end = 8.dp)
+                            } else {
+                                null
+                            },
+                            modifier = Modifier.padding(end = 8.dp),
                         )
                     }
                 }
@@ -230,7 +227,7 @@ fun SettingsScreen(
 
             Divider()
 
-            //More
+            // More
             SubTitleSetting(text = stringResource(R.string.more))
 
             TextWithArrow(
@@ -244,10 +241,10 @@ fun SettingsScreen(
                     item {
                         Text(
                             text = "Somos un pequeño grupo de estudiantes apasionados por el desarrollo de aplicaciones móviles modernas e intuitivas\n" +
-                                    "En TripOut te ofrecemos la posibilidad de planificar tus viajes de la manera mas organizada posible, brindandote todas las herramientas necesarias para cumplir con tus objetivos.\n" +
-                                    "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!\n" +
-                                    "Equipo de TripOut" +
-                                    "\n\n Contactanos:",
+                                "En TripOut te ofrecemos la posibilidad de planificar tus viajes de la manera mas organizada posible, brindandote todas las herramientas necesarias para cumplir con tus objetivos.\n" +
+                                "Prepárate para embarcarte en un viaje único con TripOut. ¡Tu próxima aventura comienza aquí!\n" +
+                                "Equipo de TripOut" +
+                                "\n\n Contactanos:",
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
                         TextButton(onClick = {
@@ -290,12 +287,22 @@ fun SettingsScreen(
 
 fun intentLinkedin(
     context: Context,
-    user: String
+    user: String,
 ) {
-    try{
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/$user/")).setPackage("com.linkedin.android"))
-    }catch (e: Exception){
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/$user/")))
+    try {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.linkedin.com/in/$user/"),
+            ).setPackage("com.linkedin.android"),
+        )
+    } catch (e: Exception) {
+        context.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.linkedin.com/in/$user/"),
+            ),
+        )
     }
 }
 
@@ -304,7 +311,7 @@ fun ChangeNameView(
     value: String,
     isError: Boolean,
     onValueChange: (String) -> Unit,
-    onImeAction: () -> Unit
+    onImeAction: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -319,12 +326,12 @@ fun ChangeNameView(
                 .fillMaxWidth(),
             isError = isError,
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = androidx.compose.ui.text.input.ImeAction.Done
+                imeAction = androidx.compose.ui.text.input.ImeAction.Done,
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
                     onImeAction()
-                }
+                },
             ),
         )
         AnimatedVisibility(
@@ -341,7 +348,7 @@ fun ChangeNameView(
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp,
                     modifier = Modifier
-                        .padding(horizontal = 30.dp)
+                        .padding(horizontal = 30.dp),
                 )
             }
         }
@@ -358,7 +365,7 @@ fun TextWithSwitch(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         Text(text = text, modifier = Modifier.align(Alignment.CenterStart))
 
@@ -387,7 +394,7 @@ fun TextWithArrow(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClick() }
+            .clickable { onClick() },
     ) {
         Text(text = text, modifier = Modifier.align(Alignment.CenterStart))
         Icon(
@@ -395,7 +402,7 @@ fun TextWithArrow(
             contentDescription = icon.name,
             modifier = Modifier
                 .size(40.dp)
-                .align(Alignment.CenterEnd)
+                .align(Alignment.CenterEnd),
         )
     }
     AnimatedVisibility(
@@ -408,7 +415,7 @@ fun TextWithArrow(
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         composable()
     }
@@ -437,12 +444,12 @@ fun PhotoProfileWithName(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = icon,
             contentDescription = icon.name,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(48.dp),
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(

@@ -1,7 +1,7 @@
 package com.example.turistaapp.create_trip.domain // ktlint-disable package-name
 
+import com.example.turistaapp.core.data.database.TripDBRepository
 import com.example.turistaapp.core.utils.GsonConverter
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import javax.inject.Inject
 

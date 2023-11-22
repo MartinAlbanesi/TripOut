@@ -1,11 +1,11 @@
-package com.example.turistaapp.create_trip.data.database.dao
+package com.example.turistaapp.core.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.turistaapp.create_trip.data.database.entities.TripEntity
+import com.example.turistaapp.core.data.database.entities.TripEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

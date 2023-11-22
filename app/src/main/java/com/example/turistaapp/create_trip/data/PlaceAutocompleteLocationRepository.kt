@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.data // ktlint-disable package-name
 
-import android.util.Log
 import com.example.turistaapp.create_trip.data.network.places_autocomplete.PlacesAutocompleteApiService
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompleteStructuredFormatModel

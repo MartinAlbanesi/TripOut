@@ -67,7 +67,7 @@ fun MainScreen(
 
     val dataQRSelected by qrViewModel.dataQRSelected.collectAsStateWithLifecycle()
 
-    //Settings
+    // Settings
     val darkTheme by settingViewModel.darkTheme.collectAsStateWithLifecycle()
     val userName by settingViewModel.userName.collectAsStateWithLifecycle()
     val codeLanguage by settingViewModel.currentLanguage.collectAsStateWithLifecycle()
@@ -105,7 +105,7 @@ fun MainScreen(
         ) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    icon = { Icon(title.icon!!, contentDescription = null)},
+                    icon = { Icon(title.icon!!, contentDescription = null) },
 //                    text = { Text(title.route) },
                     selected = state == index,
                     onClick = { state = index },

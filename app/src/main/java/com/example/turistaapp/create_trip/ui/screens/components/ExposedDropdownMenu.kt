@@ -63,12 +63,12 @@ fun ExposedDropdownMenuBoxInput(
             values.forEach { item ->
                 DropdownMenuItem(
                     text = {
-                           Text(text = item.name)
+                        Text(text = item.name)
 //                        when (item) {
-////                            "driving" -> Text(text = "Auto")
-////                            "walking" -> Text(text = "Caminando")
-////                            "bicycling" -> Text(text = "Bicicleta")
-////                            else -> Text(text = item)
+// //                            "driving" -> Text(text = "Auto")
+// //                            "walking" -> Text(text = "Caminando")
+// //                            "bicycling" -> Text(text = "Bicicleta")
+// //                            else -> Text(text = item)
 //                        }
                     },
                     onClick = {

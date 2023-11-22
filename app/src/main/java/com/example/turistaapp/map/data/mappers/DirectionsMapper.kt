@@ -7,5 +7,5 @@ fun RouteApi.toRouteModel() = RouteModel(
     distance = this.legs[0].distance.text,
     duration = this.legs[0].duration.text,
     points = this.overviewPolyline.points,
-    summary = summary
+    summary = summary,
 )

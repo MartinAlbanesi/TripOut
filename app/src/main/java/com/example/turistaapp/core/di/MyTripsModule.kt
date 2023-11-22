@@ -1,6 +1,6 @@
 package com.example.turistaapp.core.di
 
-import com.example.turistaapp.create_trip.data.database.repository.TripDBRepository
+import com.example.turistaapp.core.data.database.TripDBRepository
 import com.example.turistaapp.create_trip.domain.DeleteTripUseCase
 import com.example.turistaapp.my_trips.domain.GetTripsUseCase
 import dagger.Module

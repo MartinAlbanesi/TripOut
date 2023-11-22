@@ -1,7 +1,5 @@
 package com.example.turistaapp.create_trip.ui.screens.components // ktlint-disable package-name
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically

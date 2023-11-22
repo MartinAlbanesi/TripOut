@@ -4,9 +4,9 @@ import com.example.turistaapp.core.data.datastore.LocalDataStoreRepository
 import javax.inject.Inject
 
 class SetNameFromDataStore @Inject constructor(
-    private val dataStore: LocalDataStoreRepository
+    private val dataStore: LocalDataStoreRepository,
 ) {
-    suspend operator fun invoke(name : String)  {
+    suspend operator fun invoke(name: String) {
         dataStore.setName(name)
     }
 }

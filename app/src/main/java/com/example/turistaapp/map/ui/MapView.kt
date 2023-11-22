@@ -57,7 +57,7 @@ fun MapView(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val coarseLocation = rememberPermissionState(
-        android.Manifest.permission.ACCESS_COARSE_LOCATION
+        android.Manifest.permission.ACCESS_COARSE_LOCATION,
     )
 
     val permissionMessage = stringResource(R.string.no_permission_location)
@@ -86,6 +86,7 @@ fun MapView(
 //                                    onClickPermission()
                                     coarseLocation.launchPermissionRequest()
                                 }
+
                                 SnackbarResult.Dismissed -> {
                                     /* Handle snackbar dismissed */
                                 }
@@ -104,6 +105,7 @@ fun MapView(
                                 SnackbarResult.ActionPerformed -> {
                                     context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                                 }
+
                                 SnackbarResult.Dismissed -> {
                                     /* Handle snackbar dismissed */
                                 }
@@ -113,17 +115,17 @@ fun MapView(
                         Toast.makeText(
                             context,
                             errorLocation,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     } else {
                         onClickLocation()
                     }
                 },
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 Icon(Icons.Default.MyLocation, contentDescription = "Add")
             }
-        }
+        },
     ) {
         Box(
             modifier = Modifier
@@ -149,7 +151,6 @@ fun MapView(
                             false
                         },
                     )
-
                 }
                 if (markerSelect) {
                     locations?.first?.forEach {

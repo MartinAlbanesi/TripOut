@@ -12,5 +12,5 @@ data class LocationModel(
     val types: List<String>?,
     val isFinished: Boolean = false,
     val tripName: String = "titi",
-    var tripId: Int = 0
+    var tripId: Int = 0,
 )

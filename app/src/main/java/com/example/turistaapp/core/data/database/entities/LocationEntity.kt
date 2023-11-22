@@ -1,4 +1,4 @@
-package com.example.turistaapp.create_trip.data.database.entities // ktlint-disable package-name
+package com.example.turistaapp.core.data.database.entities // ktlint-disable package-name
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

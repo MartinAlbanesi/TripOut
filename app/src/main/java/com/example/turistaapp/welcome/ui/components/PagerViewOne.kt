@@ -21,7 +21,7 @@ import com.example.turistaapp.R
 fun PagerViewOne(text: String) {
     Column(
         Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
@@ -30,7 +30,7 @@ fun PagerViewOne(text: String) {
             modifier = Modifier
                 .size(240.dp)
                 .align(Alignment.CenterHorizontally)
-                .clip(CircleShape)
+                .clip(CircleShape),
         )
         Text(
             text = text,
@@ -38,5 +38,4 @@ fun PagerViewOne(text: String) {
             textAlign = TextAlign.Center,
         )
     }
-
 }

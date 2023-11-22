@@ -118,17 +118,17 @@ fun TripDetails(
         AssistChipItem(
             icon = Icons.Default.ImageSearch,
             text = stringResource(R.string.gallery),
-            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
+            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
         ),
         AssistChipItem(
             icon = Icons.Default.Share,
             text = stringResource(R.string.share),
-            onClick = { onClickQR() }
+            onClick = { onClickQR() },
         ),
         AssistChipItem(
             icon = Icons.Default.Delete,
             text = stringResource(id = R.string.delete),
-            onClick = { onDeleteTripButtonClick(routeModel!!.trip!!) }
+            onClick = { onDeleteTripButtonClick(routeModel!!.trip!!) },
         ),
     )
 
@@ -167,11 +167,12 @@ fun TripDetails(
                     modifier = Modifier.align(Alignment.CenterStart),
                     icon = Icons.Default.CalendarMonth,
                     text = "${formatMilisToDateString(
-                            routeModel?.trip!!.startDate,
-                            "dd/MM/yy",
-                        )} - ${formatMilisToDateString(
+                        routeModel?.trip!!.startDate,
+                        "dd/MM/yy",
+                    )} - ${formatMilisToDateString(
                         routeModel.trip.endDate,
-                        "dd/MM/yy",)}"
+                        "dd/MM/yy",
+                    )}",
                 )
                 // Author
                 IconWithText(
@@ -179,8 +180,8 @@ fun TripDetails(
                     icon = Icons.Default.PermIdentity,
                     text = stringResource(
                         R.string.for_,
-                        routeModel.trip.author
-                    )
+                        routeModel.trip.author,
+                    ),
                 )
             }
         }
@@ -264,7 +265,7 @@ fun TripDetails(
             TextWithComposable(
                 title = stringResource(R.string.description),
                 errorMessage = stringResource(R.string.there_is_no_description),
-                isShowComposable = routeModel!!.trip!!.description!!.isNotEmpty()
+                isShowComposable = routeModel!!.trip!!.description!!.isNotEmpty(),
             ) {
                 ElevatedCard(
                     elevation = CardDefaults.cardElevation(
@@ -274,7 +275,7 @@ fun TripDetails(
                         containerColor = MaterialTheme.colorScheme.surface,
                     ),
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
 
                 ) {
                     Row(
@@ -294,7 +295,7 @@ fun TripDetails(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(6.dp)
+                                .padding(6.dp),
                         )
                     }
                 }
@@ -306,7 +307,7 @@ fun TripDetails(
             TextWithComposable(
                 title = stringResource(R.string.images),
                 errorMessage = stringResource(R.string.no_pictures),
-                isShowComposable = !routeModel?.trip?.images.isNullOrEmpty()
+                isShowComposable = !routeModel?.trip?.images.isNullOrEmpty(),
             ) {
                 LazyRow(
                     horizontalArrangement = Arrangement.Center,
@@ -334,7 +335,7 @@ fun TripDetails(
             TextWithComposable(
                 title = stringResource(R.string.member),
                 errorMessage = stringResource(R.string.there_are_no_members),
-                isShowComposable = !routeModel?.trip?.members.isNullOrEmpty()
+                isShowComposable = !routeModel?.trip?.members.isNullOrEmpty(),
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),

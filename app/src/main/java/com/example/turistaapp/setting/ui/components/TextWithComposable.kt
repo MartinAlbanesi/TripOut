@@ -23,10 +23,10 @@ fun TextWithComposable(
     )
     if (isShowComposable) {
         composable()
-    }else{
+    } else {
         PlaceholderElevatedCard(
             text = errorMessage,
-            modifier = Modifier
+            modifier = Modifier,
         )
     }
 //    }

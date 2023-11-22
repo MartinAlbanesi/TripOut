@@ -1,6 +1,6 @@
-package com.example.turistaapp.create_trip.data.database.repository // ktlint-disable package-name
+package com.example.turistaapp.core.data.database // ktlint-disable package-name
 
-import com.example.turistaapp.create_trip.data.database.entities.TripEntity
+import com.example.turistaapp.core.data.database.entities.TripEntity
 import kotlinx.coroutines.flow.Flow
 
 interface TripDBRepository {
