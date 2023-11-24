@@ -166,13 +166,17 @@ fun TripDetails(
                 IconWithText(
                     modifier = Modifier.align(Alignment.CenterStart),
                     icon = Icons.Default.CalendarMonth,
-                    text = "${formatMilisToDateString(
-                        routeModel?.trip!!.startDate,
-                        "dd/MM/yy",
-                    )} - ${formatMilisToDateString(
-                        routeModel.trip.endDate,
-                        "dd/MM/yy",
-                    )}",
+                    text = "${
+                        formatMilisToDateString(
+                            routeModel?.trip!!.startDate,
+                            "dd/MM/yy",
+                        )
+                    } - ${
+                        formatMilisToDateString(
+                            routeModel.trip.endDate,
+                            "dd/MM/yy",
+                        )
+                    }",
                 )
                 // Author
                 IconWithText(
@@ -212,7 +216,8 @@ fun TripDetails(
 
         // Origin and Destination Label with Transport Icon
         item {
-            Box(
+            Row(
+                verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
@@ -220,16 +225,26 @@ fun TripDetails(
                 Text(
                     text = stringResource(R.string.origin_and_destination),
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.align(Alignment.CenterStart),
                 )
-                Icon(
-                    imageVector = transportIcon,
-                    contentDescription = transportIcon.name,
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Bottom,
                     modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterEnd),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                        .fillMaxWidth(),
+                ) {
+                    Text(
+                        text = routeModel!!.distance,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp),
+                    )
+                    Icon(
+                        imageVector = transportIcon,
+                        contentDescription = transportIcon.name,
+                        modifier = Modifier
+                            .size(40.dp),
+                    )
+                }
             }
         }
 
@@ -279,7 +294,9 @@ fun TripDetails(
 
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
