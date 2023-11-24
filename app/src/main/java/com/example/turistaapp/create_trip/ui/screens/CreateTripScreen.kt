@@ -1,7 +1,9 @@
 package com.example.turistaapp.create_trip.ui.screens // ktlint-disable package-name
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,12 +32,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.turistaapp.R
 import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.core.utils.Transport
@@ -46,6 +53,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownM
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -162,6 +170,33 @@ fun CreateTripScreen(
     val goToHome = stringResource(R.string.go_to_home)
     val errorCreateTrip = stringResource(R.string.error_when_creating_the_trip)
 
+    var isCreateTripSuccessful by remember { mutableStateOf(false) }
+
+    val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
+
+    if(isCreateTripSuccessful){
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Dialog(onDismissRequest = { /*TODO*/ }) {
+                LottieAnimation(
+                    composition = lottie.value,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                )
+
+                LaunchedEffect(lottie.isComplete) {
+                    delay(1600)
+                    onClickCreateTrip()
+                }
+            }
+        }
+    }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -184,32 +219,8 @@ fun CreateTripScreen(
 
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
                         createTripViewModel.onCreateTripClick(tripName, description, transport.type)
-                        scope.launch {
-                            val result = snackbarHostState
-                                .showSnackbar(
-                                    message = successMessage,
-                                    actionLabel = goToHome,
-                                    duration = SnackbarDuration.Indefinite,
-                                    withDismissAction = true,
-                                )
-                            when (result) {
-                                SnackbarResult.ActionPerformed -> {
-                                    onClickCreateTrip()
-                                }
-                                SnackbarResult.Dismissed -> {
-                                    /* Handle snackbar dismissed */
-                                }
-                            }
-                        }
-                    } else {
-                        scope.launch {
-                            snackbarHostState
-                                .showSnackbar(
-                                    message = errorCreateTrip,
-                                    duration = SnackbarDuration.Short,
-                                    withDismissAction = true,
-                                )
-                        }
+
+                        isCreateTripSuccessful = true
                     }
                 },
                 modifier = Modifier

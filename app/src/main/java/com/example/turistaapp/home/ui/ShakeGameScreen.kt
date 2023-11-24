@@ -23,12 +23,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +49,9 @@ import com.example.turistaapp.core.ui.components.TopAppBarScreen
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.map.ui.components.TripDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -80,6 +85,8 @@ fun ShakeGameScreen(
 
     var locationSelected: LocationModel? by remember { mutableStateOf(null) }
 
+    val scope = rememberCoroutineScope()
+
     sensorManager.registerListener(
         object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent?) {
@@ -92,10 +99,12 @@ fun ShakeGameScreen(
                     acceleration = sqrt((x * x + y * y + z * z).toDouble())
 
                     // Comprueba si la aceleración supera el umbral de agitación
-                    if (acceleration > 60f && !isShake && selectedLocations.size >= 2) {
-//                    Toast.makeText(LocalContext.current, "Shake detected", Toast.LENGTH_SHORT).show()
+                    if (acceleration > 60f /* && !isShake */ && selectedLocations.size >= 2) {
                         locationSelected = selectedLocations.random()
                         isShake = true
+                        scope.launch(Dispatchers.Main) {
+                            delay(1500)
+                        }
                     }
                 }
             }

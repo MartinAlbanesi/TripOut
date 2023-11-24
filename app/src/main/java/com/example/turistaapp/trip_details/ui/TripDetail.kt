@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -301,18 +300,19 @@ fun TripDetails(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Description,
-                            contentDescription = "Trip Destination",
+                            contentDescription = Icons.Default.Description.name,
                             modifier = Modifier
                                 .size(40.dp)
+                                .align(Alignment.CenterVertically)
                                 .padding(horizontal = 4.dp),
                         )
                         Text(
                             text = routeModel.trip!!.description.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(6.dp),
+                                .padding(8.dp),
                         )
                     }
                 }
