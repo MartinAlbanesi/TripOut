@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -51,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -275,27 +277,30 @@ fun TripDetails(
                         containerColor = MaterialTheme.colorScheme.surface,
                     ),
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
 
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                        ,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = Icons.Default.Description,
-                            contentDescription = "Trip Destination",
+                            contentDescription = Icons.Default.Description.name,
                             modifier = Modifier
                                 .size(40.dp)
+                                .align(Alignment.CenterVertically)
                                 .padding(horizontal = 4.dp),
                         )
                         Text(
                             text = routeModel.trip!!.description.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(6.dp),
+                                .padding(8.dp),
                         )
                     }
                 }
