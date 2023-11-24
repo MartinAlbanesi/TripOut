@@ -4,11 +4,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +23,7 @@ import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import com.example.turistaapp.trip_details.ui.TripDetails
+import com.example.turistaapp.trip_details.ui.components.DialogDeleteTrip
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -134,35 +132,16 @@ fun MapScreen(
             }
 
             if (showDeleteDialog) {
-                AlertDialog(
+                DialogDeleteTrip(
+                    trip = routeModel?.trip!!,
+                    onDeleteTripButtonClick = {
+                        onDeleteTripButtonClick(it)
+                    },
                     onDismissRequest = {
                         showDeleteDialog = false
                     },
-                    title = {
-                        Text(text = "Eliminar viaje")
-                    },
-                    text = {
-                        Text(text = "¿Estas seguro que deseas eliminar este viaje?")
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                onDeleteTripButtonClick(routeModel?.trip!!)
-                                showDeleteDialog = false
-                                onMarkerSelectChange(false)
-                            },
-                        ) {
-                            Text(text = "Aceptar")
-                        }
-                    },
-                    dismissButton = {
-                        Button(
-                            onClick = {
-                                showDeleteDialog = false
-                            },
-                        ) {
-                            Text(text = "Cancelar")
-                        }
+                    onMarkerSelectChange = {
+                        onMarkerSelectChange(it)
                     },
                 )
             }
