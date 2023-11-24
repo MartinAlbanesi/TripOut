@@ -44,7 +44,6 @@ fun ChangeLanguageContent(
         items(languages) {
             FilterChip(
                 onClick = {
-//                    onClick(it.code)
                     selectedLanguage = it.code
                     showDialog = true
                 },
