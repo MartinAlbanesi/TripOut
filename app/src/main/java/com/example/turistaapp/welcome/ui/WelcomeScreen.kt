@@ -108,12 +108,12 @@ fun WelcomeScreen(
             .fillMaxSize(),
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(50.dp))
             AsyncImage(
                 model = R.drawable.logo_name,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(240.dp)
+                    .size(300.dp)
                     .weight(1f)
                     .align(Alignment.CenterHorizontally)
                     .offset(y = offsetY.dp),
@@ -127,7 +127,7 @@ fun WelcomeScreen(
             ) { pager ->
                 when (pager) {
                     0 -> {
-                        PagerViewOne(stringResource(R.string.welcome_message))
+                        PagerViewOne(stringResource(R.string.welcome_message_title), stringResource(R.string.welcome_message_caption))
                     }
 
                     1 -> {
