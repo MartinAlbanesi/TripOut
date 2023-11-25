@@ -23,6 +23,7 @@ import com.example.turistaapp.map.domain.models.RouteModel
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.example.turistaapp.qr_code.ui.QRDialog
 import com.example.turistaapp.trip_details.ui.TripDetails
+import com.example.turistaapp.trip_details.ui.components.DialogDeleteTrip
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -73,6 +74,8 @@ fun MapScreen(
         position = CameraPosition.fromLatLngZoom(unlam, 10f)
     }
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     BottomSheetScaffold(
         sheetContent = {
             if (markerSelect) {
@@ -83,8 +86,7 @@ fun MapScreen(
                         onDataQRSelectedChange(Gson().toJson(routeModel?.trip?.toDataQRModel()))
                     },
                     onDeleteTripButtonClick = {
-                        onDeleteTripButtonClick(routeModel?.trip!!)
-                        onMarkerSelectChange(false)
+                        showDeleteDialog = true
                     },
                 )
             }
@@ -126,6 +128,21 @@ fun MapScreen(
                 QRDialog(
                     onDismiss = { onDismissQRDialog() },
                     data = dataQRSelected,
+                )
+            }
+
+            if (showDeleteDialog) {
+                DialogDeleteTrip(
+                    trip = routeModel?.trip!!,
+                    onDeleteTripButtonClick = {
+                        onDeleteTripButtonClick(it)
+                    },
+                    onDismissRequest = {
+                        showDeleteDialog = false
+                    },
+                    onMarkerSelectChange = {
+                        onMarkerSelectChange(it)
+                    },
                 )
             }
         }
