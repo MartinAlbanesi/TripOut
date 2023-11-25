@@ -17,10 +17,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
@@ -54,7 +52,6 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -174,7 +171,7 @@ fun CreateTripScreen(
 
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
 
-    if(isCreateTripSuccessful){
+    if (isCreateTripSuccessful) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -205,9 +202,8 @@ fun CreateTripScreen(
             TopAppBarScreen(
                 title = stringResource(R.string.create_trip),
                 isMarkerSelected = true,
-            ) {
-                onClickCreateTrip()
-            }
+                onClickNavigationBack = { onClickCreateTrip() },
+            )
         },
         bottomBar = {
             // Botón para guardar
@@ -265,7 +261,7 @@ fun CreateTripScreen(
             item {
                 // Origen
                 PlaceAutocompleteField(
-                    label = "${ stringResource(R.string.origen) } *",
+                    label = "${stringResource(R.string.origen)} *",
                     query = originAutocompleteQuery,
                     onQueryChange = {
                         originAutocompleteQuery = it
@@ -389,7 +385,10 @@ fun CreateTripScreen(
                         isMemberNameValid = true
                     },
                     onAdd = {
-                        if (memberName.isBlank() || memberName.length < 3 || memberName.length > 20 || members.contains(memberName)) {
+                        if (memberName.isBlank() || memberName.length < 3 || memberName.length > 20 || members.contains(
+                                memberName,
+                            )
+                        ) {
                             isMemberNameValid = false
                         } else {
                             createTripViewModel.onAddMember(it)
