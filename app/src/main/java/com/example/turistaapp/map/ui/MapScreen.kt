@@ -1,5 +1,7 @@
 package com.example.turistaapp.map.ui
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -48,6 +50,7 @@ fun MapScreen(
     onClickArrowBack: () -> Unit,
     onMarkerSelected: (Int) -> Unit,
     onClickFinishTutorial: () -> Unit,
+    onNavigateToHome: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     val sheetPeekHeight by animateDpAsState(
@@ -146,5 +149,13 @@ fun MapScreen(
                 )
             }
         }
+    }
+
+    BackHandler(markerSelect) {
+        onClickArrowBack()
+    }
+
+    BackHandler(!markerSelect) {
+        onNavigateToHome()
     }
 }

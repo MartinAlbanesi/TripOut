@@ -1,6 +1,7 @@
 package com.example.turistaapp.setting.ui
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -48,6 +49,7 @@ fun SettingsScreen(
     codeLanguage: String = "es",
     changeName: (String) -> Unit = {},
     setCurrentLanguage: (String) -> Unit,
+    onNavigateToHome: () -> Unit,
     changeTheme: () -> Unit,
 ) {
     // Name
@@ -204,5 +206,9 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+    BackHandler {
+        onNavigateToHome()
     }
 }
