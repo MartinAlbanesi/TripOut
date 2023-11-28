@@ -168,6 +168,7 @@ fun MainScreen(
                     onClickArrowBack = { mapViewModel.getFlowLocationFromDB() },
                     onMarkerSelected = { mapViewModel.getTripById(it) },
                     onClickFinishTutorial = { mapViewModel.setMapTutorial() },
+                    onNavigateToHome = { navController.navigate(Routes.Home.route) },
                     onDeleteTripButtonClick = {
                         myTripsViewModel.deleteTrip(it)
                         Toast.makeText(
@@ -186,6 +187,7 @@ fun MainScreen(
                     codeLanguage = codeLanguage,
                     changeName = { settingViewModel.setUserName(it) },
                     setCurrentLanguage = { settingViewModel.setCurrentLanguage(it) },
+                    onNavigateToHome = { navController.navigate(Routes.Home.route) },
                 ) {
                     onClickChangeTheme()
                 }
