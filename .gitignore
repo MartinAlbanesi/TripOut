@@ -1,4 +1,3 @@
-*.iml
 .gradle
 /local.properties
 /.idea/caches
@@ -31,6 +30,7 @@ captures/
 output.json
 
 # IntelliJ
+*.iml
 .idea/
 misc.xml
 deploymentTargetDropDown.xml
@@ -45,4 +45,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
-
