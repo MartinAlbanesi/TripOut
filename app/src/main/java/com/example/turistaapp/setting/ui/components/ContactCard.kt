@@ -2,6 +2,7 @@ package com.example.turistaapp.setting.ui.components
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.setting.utils.intentGithub
@@ -36,26 +38,20 @@ fun ContactCard(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Image(
+            painter = image,
+            contentDescription = "Contact image",
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(8.dp),
-        ) {
-            Image(
-                painter = image,
-                contentDescription = "Contact image",
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape),
-            )
-        }
+                .padding(8.dp)
+                .size(80.dp)
+                .clip(CircleShape)
+        )
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 8.dp, top = 4.dp, end = 4.dp),
+                .padding(4.dp),
         ) {
             Text(
                 text = name,
@@ -63,17 +59,14 @@ fun ContactCard(
                 modifier = Modifier
                     .fillMaxWidth(),
             )
-            Row(
+
+            Text(
+                text = email,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth(),
-            ) {
-                Text(
-                    text = email,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                )
-            }
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier

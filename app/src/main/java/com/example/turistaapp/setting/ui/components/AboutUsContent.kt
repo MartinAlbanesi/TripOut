@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
@@ -19,40 +21,36 @@ import com.example.turistaapp.R
 fun AboutUsContent(
     context: Context,
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState()),
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp,
+        ),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
     ) {
-        ElevatedCard(
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 6.dp,
-            ),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
-            ),
-        ) {
-            ContactCard(
-                context = context,
-                name = "Albanesi Martín",
-                email = "martinalbanesi89@gmail.com",
-                linkedin = "martin-albanesi",
-                github = "martinalbanesi",
-                image = painterResource(id = R.drawable.martin_albanesi_profile_picture),
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-            Divider()
-            ContactCard(
-                context = context,
-                name = "Gomez Gabriel",
-                email = "gabrielgomezgg1997@gmail.com",
-                linkedin = "gabrielgomezgg",
-                github = "gabrielgomezgg",
-                image = painterResource(id = R.drawable.gabriel_gomez_profile_picture),
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-        }
+        ContactCard(
+            context = context,
+            name = "Albanesi Martín",
+            email = "martinalbanesi89@gmail.com",
+            linkedin = "martin-albanesi",
+            github = "martinalbanesi",
+            image = painterResource(id = R.drawable.martin_albanesi_profile_picture),
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+        Divider()
+        ContactCard(
+            context = context,
+            name = "Gomez Gabriel",
+            email = "gabrielgomezgg1997@gmail.com",
+            linkedin = "gabrielgomezgg",
+            github = "gabrielgomezgg",
+            image = painterResource(id = R.drawable.baseline_person_24),
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
     }
+
 }
