@@ -34,7 +34,7 @@ fun AboutUsContent(
         ) {
             ContactCard(
                 context = context,
-                name = "Martín Albanesi",
+                name = "Albanesi Martín",
                 email = "martinalbanesi89@gmail.com",
                 linkedin = "martin-albanesi",
                 github = "martinalbanesi",
@@ -45,22 +45,11 @@ fun AboutUsContent(
             Divider()
             ContactCard(
                 context = context,
-                name = "Gabriel Gomez",
+                name = "Gomez Gabriel",
                 email = "gabrielgomezgg1997@gmail.com",
                 linkedin = "gabrielgomezgg",
                 github = "gabrielgomezgg",
                 image = painterResource(id = R.drawable.gabriel_gomez_profile_picture),
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-            Divider()
-            ContactCard(
-                context = context,
-                name = "Ariel Nappio",
-                email = "edunappio@icloud.com",
-                linkedin = "ariel-eduardo-nappio-7840071a4",
-                github = "arielnappio",
-                image = painterResource(id = R.drawable.ariel_nappio_profile_picture),
                 modifier = Modifier
                     .fillMaxWidth(),
             )
