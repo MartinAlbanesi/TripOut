@@ -73,7 +73,7 @@ fun MapScreen(
         mutableStateOf(false)
     }
 
-    var zoomMap by remember {
+    val zoomMap by remember {
         mutableFloatStateOf(10f)
     }
 
@@ -101,6 +101,9 @@ fun MapScreen(
                         onIsQRDialogOpenChange(true)
                         onDataQRSelectedChange(Gson().toJson(routeModel?.trip?.toDataQRModel()))
                     },
+                    onClickArrowBack = {
+                        onClickArrowBack()
+                    },
                     onDeleteTripButtonClick = {
                         showDeleteDialog = true
                     },
@@ -108,10 +111,10 @@ fun MapScreen(
             }
         },
         sheetPeekHeight = sheetPeekHeight,
-    ) { paddingValues ->
+    ) {
 
         if (isTutorialComplete == null) {
-            MapTutorial() {
+            MapTutorial {
                 onClickFinishTutorial()
             }
         }
@@ -133,12 +136,12 @@ fun MapScreen(
                     }
                 },
             )
-            TopAppBarScreen(
-                title = stringResource(R.string.my_destinations),
-                isMarkerSelected = markerSelect,
-                color = Color.Black,
-                onClickNavigationBack = { onClickArrowBack() },
-            )
+//            TopAppBarScreen(
+//                title = stringResource(R.string.my_destinations),
+//                isMarkerSelected = markerSelect,
+//                color = Color.Black,
+//                onClickNavigationBack = { onClickArrowBack() },
+//            )
 
             if (isQRDialogOpen) {
                 QRDialog(

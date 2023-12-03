@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.DirectionsBike
@@ -34,6 +37,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.TripOrigin
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
@@ -71,6 +75,7 @@ fun TripDetails(
     routeModel: RouteModel? = null,
     tripDetailsViewModel: TripDetailsViewModel = hiltViewModel(),
     onClickQR: () -> Unit,
+    onClickArrowBack: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
     var selectedImageUris by remember {
@@ -141,17 +146,33 @@ fun TripDetails(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .offset(y = (-24).dp),
     ) {
         // Trip Name
         item {
-            Text(
-                text = routeModel!!.trip!!.name,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-            )
+            Box(
+               Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ){
+                Text(
+                    text = routeModel!!.trip!!.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterStart),
+                )
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.CenterEnd)
+                        .clickable {
+                            onClickArrowBack()
+                        },
+                )
+            }
         }
 
         // Trip Dates and Author
