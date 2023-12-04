@@ -154,7 +154,6 @@ Don't forget to give the project a star! Thanks again!
 
 * Martín Albanesi - [Linkedin](https://www.linkedin.com/in/martin-albanesi/) - [Github](https://github.com/MartinAlbanesi) - martinalbanesi89@gmail.com
 * Gabriel Gomez - [Linkedin](https://www.linkedin.com/in/gabrielgomezgg/) - [Github](https://github.com/GabrielGomezGG) - gabrielgomezgg1997@gmail.com
-* Ariel Nappio - [Linkedin](https://www.linkedin.com/in/ariel-eduardo-nappio-7840071a4/) - [Github](https://github.com/ArielNappio) - edunappio@icloud.com
 
 Project Link: [https://github.com/MartinAlbanesi/TripOut](https://github.com/MartinAlbanesi/TripOut)
 
