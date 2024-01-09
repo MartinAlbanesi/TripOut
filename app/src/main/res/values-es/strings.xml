@@ -101,4 +101,5 @@
     <string name="successfully_created_trip">Viaje creado con éxito</string>
     <string name="go_to_home">Ir al inicio</string>
     <string name="error_when_creating_the_trip">Error al crear el viaje</string>
+    <string name="camera">Camara</string>
 </resources>

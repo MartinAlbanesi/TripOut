@@ -100,5 +100,6 @@
     <string name="successfully_created_trip">Successfully created trip</string>
     <string name="go_to_home">Go to home</string>
     <string name="error_when_creating_the_trip">Error creating trip</string>
+    <string name="camera">Camera</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.turistaapp.trip_details.ui
 
 import android.Manifest
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.DirectionsBike
@@ -66,6 +68,7 @@ import com.example.turistaapp.trip_details.ui.components.DialogShouldShowRationa
 import com.example.turistaapp.trip_details.ui.components.IconWithText
 import com.example.turistaapp.trip_details.ui.components.LocationCard
 import com.example.turistaapp.trip_details.ui.components.TextWithComposable
+import com.example.turistaapp.trip_details.utils.generateUri
 
 @Composable
 fun TripDetails(
@@ -74,41 +77,67 @@ fun TripDetails(
     onClickQR: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
-    var selectedImageUris by remember {
-        mutableStateOf<List<String>>(emptyList())
+
+    //Camera
+    var uri: Uri? by remember {
+        mutableStateOf(null)
     }
-    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(),
-        onResult = { uris ->
-            selectedImageUris += uris.map { it.toString() }
-            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
-        },
+
+    val context = LocalContext.current
+
+    val camera = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = {
+            if (it && uri?.path?.isNotEmpty() == true) {
+                tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, uri!!)
+            }
+        }
     )
 
-    var deniedPermission by remember {
-        mutableStateOf(false)
+    val cameraLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+        if (it) {
+            uri = generateUri(context)
+            camera.launch(uri)
+        }
     }
 
+//    var selectedImageUris by remember {
+//        mutableStateOf<List<String>>(emptyList())
+//    }
+//    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+//        onResult = { uris ->
+////            selectedImageUris += uris.map { it.toString() }
+////            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
+//        },
+//    )
+
+//    var deniedPermission by remember {
+//        mutableStateOf(false)
+//    }
+//
     var isShowDialog by rememberSaveable {
         mutableStateOf(false)
     }
 
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            multiplePhotoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-            )
-        } else {
-            if (!deniedPermission) {
-                deniedPermission = true
-                isShowDialog = true
-            } else {
-//                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-            }
-        }
-    }
+//    val launcher = rememberLauncherForActivityResult(
+//        ActivityResultContracts.RequestPermission(),
+//    ) { isGranted: Boolean ->
+//        if (isGranted) {
+//            multiplePhotoPickerLauncher.launch(
+//                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+//            )
+//        } else {
+//            if (!deniedPermission) {
+//                deniedPermission = true
+//                isShowDialog = true
+//            } else {
+////                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//            }
+//        }
+//    }
 
     DialogShouldShowRationale(isShowDialog = isShowDialog) {
         isShowDialog = !isShowDialog
@@ -116,10 +145,19 @@ fun TripDetails(
 
     val assistChipItems = listOf(
         AssistChipItem(
-            icon = Icons.Default.ImageSearch,
-            text = stringResource(R.string.gallery),
-            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
+            icon = Icons.Default.CameraAlt,
+            text = stringResource(R.string.camera),
+            onClick = {
+//                uri = generateUri(context)
+//                camera.launch(uri)
+                cameraLauncher.launch(Manifest.permission.CAMERA)
+            },
         ),
+//        AssistChipItem(
+//            icon = Icons.Default.ImageSearch,
+//            text = stringResource(R.string.gallery),
+//            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
+//        ),
         AssistChipItem(
             icon = Icons.Default.Share,
             text = stringResource(R.string.share),
