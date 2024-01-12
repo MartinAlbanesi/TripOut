@@ -52,6 +52,12 @@ We want to offer you the best experience to organize all your trips, that's why 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Screenshot
+
+| Home | Map | Setings | Create Trip |
+|-|-|-|-|
+| ![Home](https://github.com/GabrielGomezGG/TripOut/blob/feature/home/img/trip_out_home.gif) | ![Map](https://github.com/GabrielGomezGG/TripOut/blob/feature/home/img/trip_out_map.gif) | ![Settings](https://github.com/GabrielGomezGG/TripOut/blob/feature/home/img/trip_out_config.gif) | ![Create Trip](https://github.com/GabrielGomezGG/TripOut/blob/feature/home/img/trip_out_create_trip.gif) |
+
 ### Built With
 
 <details>

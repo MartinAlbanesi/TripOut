@@ -51,6 +51,7 @@ import coil.compose.AsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.qr_code.ui.QRDialog
+import com.example.turistaapp.trip_details.ui.components.DialogDeleteTrip
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
@@ -69,6 +70,8 @@ fun MyTripsItem(
     onMapButtonClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     Box {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(
@@ -213,7 +216,7 @@ fun MyTripsItem(
                     DropdownMenuItem(
                         text = { Text(text = stringResource(R.string.delete)) },
                         onClick = {
-                            onDeleteButtonClick(trip)
+                            showDeleteDialog = true
                             menuAnchor = false
                         },
                         leadingIcon = {
@@ -232,6 +235,18 @@ fun MyTripsItem(
             QRDialog(
                 onDismiss = { onDismissDialog() },
                 data = selectedDataQR,
+            )
+        }
+
+        if (showDeleteDialog) {
+            DialogDeleteTrip(
+                trip = trip,
+                onDeleteTripButtonClick = {
+                    onDeleteButtonClick(it)
+                },
+                onDismissRequest = {
+                    showDeleteDialog = false
+                },
             )
         }
     }

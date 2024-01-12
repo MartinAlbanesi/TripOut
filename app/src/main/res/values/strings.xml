@@ -1,7 +1,8 @@
 <resources>
     <!-- WELCOME    -->
     <string name="app_name">Trip Out</string>
-    <string name="welcome_message">Una aplicación donde puedes organizar y planificar tus viajes soñados!</string>
+    <string name="welcome_message_title">Bienvenido a Trip Out</string>
+    <string name="welcome_message_caption">Una aplicación donde puedes organizar y planificar tus viajes soñados!</string>
     <string name="next">Siguiente</string>
     <string name="start">Empezar</string>
     <string name="accept">Aceptar</string>

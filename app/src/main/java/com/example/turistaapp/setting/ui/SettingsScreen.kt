@@ -1,14 +1,18 @@
 package com.example.turistaapp.setting.ui
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -48,6 +52,7 @@ fun SettingsScreen(
     codeLanguage: String = "es",
     changeName: (String) -> Unit = {},
     setCurrentLanguage: (String) -> Unit,
+    onNavigateToHome: () -> Unit,
     changeTheme: () -> Unit,
 ) {
     // Name
@@ -79,6 +84,8 @@ fun SettingsScreen(
 
     val context = LocalContext.current
 
+    val verticalScrollState = rememberScrollState()
+
     // --------------------------------------------------------Screen
 
     Box(
@@ -99,7 +106,8 @@ fun SettingsScreen(
             ),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                .verticalScroll(verticalScrollState),
         ) {
             // --------------------------------------------------------Photo and name
             PhotoProfileWithName(name = userName)
@@ -204,5 +212,9 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+    BackHandler {
+        onNavigateToHome()
     }
 }

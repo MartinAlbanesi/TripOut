@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.DirectionsBike
@@ -37,6 +39,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.TripOrigin
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
@@ -75,6 +78,7 @@ fun TripDetails(
     routeModel: RouteModel? = null,
     tripDetailsViewModel: TripDetailsViewModel = hiltViewModel(),
     onClickQR: () -> Unit,
+    onClickArrowBack: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
 
@@ -180,17 +184,33 @@ fun TripDetails(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .offset(y = (-24).dp),
     ) {
         // Trip Name
         item {
-            Text(
-                text = routeModel!!.trip!!.name,
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-            )
+            Box(
+               Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ){
+                Text(
+                    text = routeModel!!.trip!!.name,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .align(Alignment.CenterStart),
+                )
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .align(Alignment.CenterEnd)
+                        .clickable {
+                            onClickArrowBack()
+                        },
+                )
+            }
         }
 
         // Trip Dates and Author
@@ -204,13 +224,17 @@ fun TripDetails(
                 IconWithText(
                     modifier = Modifier.align(Alignment.CenterStart),
                     icon = Icons.Default.CalendarMonth,
-                    text = "${formatMilisToDateString(
-                        routeModel?.trip!!.startDate,
-                        "dd/MM/yy",
-                    )} - ${formatMilisToDateString(
-                        routeModel.trip.endDate,
-                        "dd/MM/yy",
-                    )}",
+                    text = "${
+                        formatMilisToDateString(
+                            routeModel?.trip!!.startDate,
+                            "dd/MM/yy",
+                        )
+                    } - ${
+                        formatMilisToDateString(
+                            routeModel.trip.endDate,
+                            "dd/MM/yy",
+                        )
+                    }",
                 )
                 // Author
                 IconWithText(
@@ -250,7 +274,8 @@ fun TripDetails(
 
         // Origin and Destination Label with Transport Icon
         item {
-            Box(
+            Row(
+                verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
@@ -258,16 +283,26 @@ fun TripDetails(
                 Text(
                     text = stringResource(R.string.origin_and_destination),
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.align(Alignment.CenterStart),
                 )
-                Icon(
-                    imageVector = transportIcon,
-                    contentDescription = transportIcon.name,
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Bottom,
                     modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterEnd),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                        .fillMaxWidth(),
+                ) {
+                    Text(
+                        text = routeModel!!.distance,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp),
+                    )
+                    Icon(
+                        imageVector = transportIcon,
+                        contentDescription = transportIcon.name,
+                        modifier = Modifier
+                            .size(40.dp),
+                    )
+                }
             }
         }
 
@@ -317,23 +352,26 @@ fun TripDetails(
 
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = Icons.Default.Description,
-                            contentDescription = "Trip Destination",
+                            contentDescription = Icons.Default.Description.name,
                             modifier = Modifier
                                 .size(40.dp)
+                                .align(Alignment.CenterVertically)
                                 .padding(horizontal = 4.dp),
                         )
                         Text(
                             text = routeModel.trip!!.description.toString(),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
-                                .fillMaxHeight()
+                                .fillMaxWidth()
                                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .padding(6.dp),
+                                .padding(8.dp),
                         )
                     }
                 }

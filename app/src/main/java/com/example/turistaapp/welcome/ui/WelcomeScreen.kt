@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.turistaapp.R
@@ -108,12 +109,12 @@ fun WelcomeScreen(
             .fillMaxSize(),
     ) {
         Column(Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(50.dp))
             AsyncImage(
                 model = R.drawable.logo_name,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(240.dp)
+                    .size(300.dp)
                     .weight(1f)
                     .align(Alignment.CenterHorizontally)
                     .offset(y = offsetY.dp),
@@ -127,7 +128,7 @@ fun WelcomeScreen(
             ) { pager ->
                 when (pager) {
                     0 -> {
-                        PagerViewOne(stringResource(R.string.welcome_message))
+                        PagerViewOne(stringResource(R.string.welcome_message_title), stringResource(R.string.welcome_message_caption))
                     }
 
                     1 -> {
@@ -171,9 +172,12 @@ fun WelcomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 32.dp, horizontal = 32.dp)
-                    .weight(1f),
+                    .weight(1.1f),
             ) {
-                Text(text = buttonText)
+                Text(
+                    text = buttonText,
+                    style = MaterialTheme.typography.titleLarge,
+                )
             }
         }
     }
@@ -186,7 +190,7 @@ fun CircleBox(
     Box(
         modifier = Modifier
             .clip(CircleShape)
-            .size(40.dp)
+            .size(15.dp)
             .background(color),
     )
 }

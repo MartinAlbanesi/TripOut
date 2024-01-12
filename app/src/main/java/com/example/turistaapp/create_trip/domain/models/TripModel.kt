@@ -1,4 +1,8 @@
-package com.example.turistaapp.create_trip.domain.models // ktlint-disable package-name
+package com.example.turistaapp.create_trip.domain.models
+
+import com.google.android.gms.maps.model.LatLng
+
+// ktlint-disable package-name
 
 data class TripModel(
     val tripId: Int = 0,
@@ -31,5 +35,11 @@ data class TripModel(
 
     fun getLatLngDestination(): String {
         return "${this.destination.lat},${this.destination.lng}"
+    }
+
+    fun getHalfWay(): LatLng {
+        val lat = (this.origin.lat + this.destination.lat) / 2
+        val lng = (this.origin.lng + this.destination.lng) / 2
+        return LatLng(lat, lng)
     }
 }

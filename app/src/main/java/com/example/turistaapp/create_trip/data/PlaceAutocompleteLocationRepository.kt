@@ -17,24 +17,24 @@ class PlaceAutocompleteLocationRepository @Inject constructor(
         val api = placesAutocompleteApiService.getPlaceAutocompletePredictions(location)
 
         if (api.isSuccessful) {
-            val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi?.filter {
-                !it.typesApi.contains("country")
-                !it.typesApi.contains("continent")
-                !it.typesApi.contains("geocode")
-            }?.map {
-                PlaceAutocompletePredictionModel(
-                    placeId = it.placeIdApi,
-                    description = it.descriptionApi,
-                    distanceMeters = it.distanceMetersApi,
-                    types = it.typesApi,
-                    structured_formatting = it.structuredFormattingApi.let { structuredFormattingApi ->
-                        PlaceAutocompleteStructuredFormatModel(
-                            main_text = structuredFormattingApi.mainTextApi,
-                            secondary_text = structuredFormattingApi.secondaryTextApi,
-                        )
-                    },
-                )
-            }
+            val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi
+                ?.filter {
+                !it.typesApi.contains("country") && !it.typesApi.contains("continent") && !it.typesApi.contains("political") && !it.typesApi.contains("locality")
+//                !it.typesApi.contains("geocode")
+                }?.map {
+                    PlaceAutocompletePredictionModel(
+                        placeId = it.placeIdApi,
+                        description = it.descriptionApi,
+                        distanceMeters = it.distanceMetersApi,
+                        types = it.typesApi,
+                        structured_formatting = it.structuredFormattingApi.let { structuredFormattingApi ->
+                            PlaceAutocompleteStructuredFormatModel(
+                                main_text = structuredFormattingApi.mainTextApi,
+                                secondary_text = structuredFormattingApi.secondaryTextApi,
+                            )
+                        },
+                    )
+                }
             return placeAutocompleteLocations
         }
         return null

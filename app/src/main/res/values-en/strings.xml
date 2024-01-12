@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Trip Out</string>
-    <string name="welcome_message">An application where you can organize and plan your dream trips</string>
+    <string name="welcome_message_title">Welcome to TripOut</string>
+    <string name="welcome_message_caption">An application where you can organize and plan your dream trips</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
     <string name="accept">Accept</string>
