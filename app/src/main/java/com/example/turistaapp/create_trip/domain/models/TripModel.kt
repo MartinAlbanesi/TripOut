@@ -2,8 +2,6 @@ package com.example.turistaapp.create_trip.domain.models
 
 import com.google.android.gms.maps.model.LatLng
 
-// ktlint-disable package-name
-
 data class TripModel(
     val tripId: Int = 0,
     val name: String,
