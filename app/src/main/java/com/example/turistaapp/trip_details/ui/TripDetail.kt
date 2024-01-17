@@ -3,7 +3,8 @@ package com.example.turistaapp.trip_details.ui
 import android.Manifest
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,7 @@ import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Flag
+import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.TripOrigin
@@ -87,16 +89,16 @@ fun TripDetails(
     val context = LocalContext.current
 
     val camera = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
+        contract = TakePicture(),
         onResult = {
             if (it && uri?.path?.isNotEmpty() == true) {
-                tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, uri!!)
+                tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, listOf(uri!!))
             }
         }
     )
 
     val cameraLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
+        RequestPermission(),
     ) {
         if (it) {
             uri = generateUri(context)
@@ -104,41 +106,37 @@ fun TripDetails(
         }
     }
 
-//    var selectedImageUris by remember {
-//        mutableStateOf<List<String>>(emptyList())
-//    }
-//    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
-//        contract = ActivityResultContracts.PickMultipleVisualMedia(),
-//        onResult = { uris ->
-////            selectedImageUris += uris.map { it.toString() }
-////            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
-//        },
-//    )
+    val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = PickMultipleVisualMedia(),
+        onResult = { uris ->
+            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, uris)
+        },
+    )
 
-//    var deniedPermission by remember {
-//        mutableStateOf(false)
-//    }
-//
+    var deniedPermission by remember {
+        mutableStateOf(false)
+    }
+
     var isShowDialog by rememberSaveable {
         mutableStateOf(false)
     }
 
-//    val launcher = rememberLauncherForActivityResult(
-//        ActivityResultContracts.RequestPermission(),
-//    ) { isGranted: Boolean ->
-//        if (isGranted) {
-//            multiplePhotoPickerLauncher.launch(
-//                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-//            )
-//        } else {
-//            if (!deniedPermission) {
-//                deniedPermission = true
-//                isShowDialog = true
-//            } else {
-////                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-//            }
-//        }
-//    }
+    val launcher = rememberLauncherForActivityResult(
+        RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            multiplePhotoPickerLauncher.launch(
+                PickVisualMediaRequest(PickVisualMedia.ImageOnly),
+            )
+        } else {
+            if (!deniedPermission) {
+                deniedPermission = true
+                isShowDialog = true
+            } else {
+//                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+        }
+    }
 
     DialogShouldShowRationale(isShowDialog = isShowDialog) {
         isShowDialog = !isShowDialog
@@ -149,16 +147,14 @@ fun TripDetails(
             icon = Icons.Default.CameraAlt,
             text = stringResource(R.string.camera),
             onClick = {
-//                uri = generateUri(context)
-//                camera.launch(uri)
                 cameraLauncher.launch(Manifest.permission.CAMERA)
             },
         ),
-//        AssistChipItem(
-//            icon = Icons.Default.ImageSearch,
-//            text = stringResource(R.string.gallery),
-//            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
-//        ),
+        AssistChipItem(
+            icon = Icons.Default.ImageSearch,
+            text = stringResource(R.string.gallery),
+            onClick = { launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE) },
+        ),
         AssistChipItem(
             icon = Icons.Default.Share,
             text = stringResource(R.string.share),
@@ -187,8 +183,10 @@ fun TripDetails(
         // Trip Name
         item {
             Box(
-               Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ){
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
                 Text(
                     text = routeModel!!.trip!!.name,
                     style = MaterialTheme.typography.headlineLarge,
@@ -228,7 +226,7 @@ fun TripDetails(
                         )
                     } - ${
                         formatMilisToDateString(
-                            routeModel?.trip.endDate,
+                            routeModel.trip.endDate,
                             "dd/MM/yy",
                         )
                     }",
@@ -239,7 +237,7 @@ fun TripDetails(
                     icon = Icons.Default.PermIdentity,
                     text = stringResource(
                         R.string.for_,
-                        routeModel?.trip.author,
+                        routeModel.trip.author,
                     ),
                 )
             }
@@ -347,7 +345,7 @@ fun TripDetails(
                     modifier = Modifier
                         .fillMaxWidth(),
 
-                ) {
+                    ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

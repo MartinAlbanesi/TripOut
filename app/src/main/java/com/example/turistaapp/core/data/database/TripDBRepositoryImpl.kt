@@ -29,9 +29,13 @@ class TripDBRepositoryImpl @Inject constructor(
         tripDao.deleteTrip(trip)
     }
 
-    override suspend fun updateImages(id: Int, images: Uri) {
+    override suspend fun updateImages(id: Int, images: List<Uri>) {
         val tripImages = tripDao.getTripById(id).images?.toMutableList() ?: mutableListOf()
-        tripImages.add(images.toString())
+
+        images.forEach {
+            tripImages.add(it.toString())
+        }
+
         tripDao.updateImages(id, tripImages)
     }
 }

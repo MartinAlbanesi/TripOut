@@ -15,5 +15,5 @@ interface TripDBRepository {
 
     suspend fun deleteTrip(trip: TripEntity)
 
-    suspend fun updateImages(id: Int, images: Uri)
+    suspend fun updateImages(id: Int, images: List<Uri>)
 }

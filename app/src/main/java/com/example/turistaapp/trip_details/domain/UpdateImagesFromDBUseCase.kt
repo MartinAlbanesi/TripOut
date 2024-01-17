@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UpdateImagesFromDBUseCase @Inject constructor(
     private val tripDBRepository: TripDBRepository,
 ) {
-    suspend operator fun invoke(id: Int, images: Uri) {
+    suspend operator fun invoke(id: Int, images: List<Uri>) {
         tripDBRepository.updateImages(id, images)
     }
 }

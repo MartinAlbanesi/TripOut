@@ -15,7 +15,7 @@ class TripDetailsViewModel @Inject constructor(
     private val updateImagesFromDBUseCase: UpdateImagesFromDBUseCase,
 ) : ViewModel() {
 
-    fun updateImages(id: Int, images: Uri) {
+    fun updateImages(id: Int, images: List<Uri>) {
         viewModelScope.launch(dispatcher) {
             updateImagesFromDBUseCase(id, images)
         }
