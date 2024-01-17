@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -8,30 +9,30 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
     <application
+        android:name=".core.TripOutApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:name=".core.TripOutApp"
-        tools:targetApi="33"
-        android:localeConfig="@xml/locales_config"
-        >
+        tools:targetApi="33">
 
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
-            tools:replace="android:screenOrientation"
-            android:stateNotNeeded="true"/>
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -51,12 +52,12 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.turistaapp.provider"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/filepaths" />
-    </provider>
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
