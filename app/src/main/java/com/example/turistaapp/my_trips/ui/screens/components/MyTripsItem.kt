@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -72,6 +73,8 @@ fun MyTripsItem(
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    var menuAnchor by remember { mutableStateOf(false) }
+
     Box {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(
@@ -80,7 +83,10 @@ fun MyTripsItem(
             colors = CardDefaults.elevatedCardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             ),
-            modifier = modifier,
+            modifier = modifier.clickable {
+                menuAnchor = !menuAnchor
+
+            },
         ) {
             ImageWithBrush(
                 name = trip.name,
@@ -156,7 +162,6 @@ fun MyTripsItem(
             )
         }
 
-        var menuAnchor by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             expanded = menuAnchor,
             onExpandedChange = { menuAnchor = !menuAnchor },

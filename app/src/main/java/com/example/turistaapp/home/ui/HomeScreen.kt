@@ -43,61 +43,12 @@ import com.example.turistaapp.core.utils.ResponseUiState
 import com.example.turistaapp.create_trip.domain.models.LocationModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.home.ui.components.LottiePreview
+import com.example.turistaapp.home.ui.components.ShakeDiscover
 import com.example.turistaapp.map.ui.components.NearbySearchView
 import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.MyTripsItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
-
-
-@Composable
-fun ShakeDiscover(
-    onClickShakeGame: () -> Unit
-) {
-
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClickShakeGame() }
-    ) {
-        LottiePreview(
-            title = "",
-            lottieRes = R.raw.world,
-            isBackgroundColored = true,
-            isBottomBrush = true,
-            isClickable = false,
-            modifierLottie = Modifier
-                .fillMaxWidth()
-                .offset(x = 150.dp),
-        ) {}
-
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-                .background(Color(0x46000000))
-        ) {
-            Text(
-                text = stringResource(R.string.shake_n_discover),
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.your_travel_guide) + "\n" + stringResource(R.string.discover_exciting),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        ElevatedButton(
-            onClick = { onClickShakeGame() },
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.BottomStart),
-        ) {
-            Text(text = stringResource(R.string.pick_shake_trevel))
-        }
-
-    }
-
-}
 
 @SuppressLint("NewApi")
 @Composable
@@ -129,15 +80,6 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
-//                LottiePreview(
-//                    title = stringResource(R.string.shake_n_discover),
-//                    lottieRes = R.raw.world,
-//                    isBackgroundColored = true,
-//                    isBottomBrush = true,
-//                    isClickable = true,
-//                ) {
-//                    onClickShakeGame()
-//                }
                 ShakeDiscover() {
                     onClickShakeGame()
                 }
