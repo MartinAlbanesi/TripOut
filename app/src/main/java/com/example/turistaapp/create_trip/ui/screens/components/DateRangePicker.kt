@@ -31,8 +31,10 @@ import java.util.TimeZone
 @Composable
 fun DateRangePickerInput(
     label: String,
-    startDate: Long,
-    endDate: Long,
+//    startDate: Long,
+//    endDate: Long,
+    startDate: String,
+    endDate: String,
     dateRangePickerState: DateRangePickerState,
     showDateRangePicker: Boolean,
     onDismiss: (Boolean) -> Unit,
@@ -43,7 +45,8 @@ fun DateRangePickerInput(
     formatter.timeZone = TimeZone.getTimeZone("South_America/Argentina")
 
     OutlinedTextField(
-        value = "${formatter.format(Date(startDate))} - ${formatter.format(Date(endDate))}",
+//        value = "${formatter.format(Date(startDate))} - ${formatter.format(Date(endDate))}",
+        value = "$startDate - $endDate",
         onValueChange = { dateRangePickerState.displayMode },
         readOnly = true,
         label = { Text(label) },
@@ -103,8 +106,8 @@ fun DateRangePickerInput(
                     endCalenderDate.set(Calendar.DATE, Calendar.DATE + 27)
                     timeInMillis > Calendar.getInstance().timeInMillis - 172799999 && timeInMillis < endCalenderDate.timeInMillis
                 },
-                modifier =
-                Modifier.height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing
+                modifier = Modifier
+                    .height(height = 500.dp), // if I don't set this, dialog's buttons are not appearing
             )
         }
     }

@@ -64,7 +64,6 @@ import coil.request.ImageRequest
 import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
-import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
 import com.example.turistaapp.trip_details.data.AssistChipItem
 import com.example.turistaapp.trip_details.ui.components.DialogShouldShowRationale
 import com.example.turistaapp.trip_details.ui.components.IconWithText
@@ -219,17 +218,18 @@ fun TripDetails(
                 IconWithText(
                     modifier = Modifier.align(Alignment.CenterStart),
                     icon = Icons.Default.CalendarMonth,
-                    text = "${
-                        formatMilisToDateString(
-                            routeModel?.trip!!.startDate,
-                            "dd/MM/yy",
-                        )
-                    } - ${
-                        formatMilisToDateString(
-                            routeModel.trip.endDate,
-                            "dd/MM/yy",
-                        )
-                    }",
+                    text = "${routeModel!!.trip!!.startDate} - ${routeModel.trip!!.endDate}",
+//                    text = "${
+//                        formatMilisToDateString(
+//                            routeModel?.trip!!.startDate,
+//                            "dd/MM/yy",
+//                        )
+//                    } - ${
+//                        formatMilisToDateString(
+//                            routeModel.trip.endDate,
+//                            "dd/MM/yy",
+//                        )
+//                    }",
                 )
                 // Author
                 IconWithText(

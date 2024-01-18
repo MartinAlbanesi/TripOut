@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -85,7 +86,7 @@ fun CreateTripScreen(
     )
 
     LaunchedEffect(true) {
-        if (address != null) {
+        if (!address.isNullOrBlank()) {
             createTripViewModel.setDestination(address)
 
 
@@ -96,19 +97,24 @@ fun CreateTripScreen(
     }
 
     // Fechas
-    val startDate by createTripViewModel.startDate.observeAsState(
-        createTripViewModel.calendar.timeInMillis.minus(
-            86400000,
-        ),
-    )
-    val endDate by createTripViewModel.endDate.observeAsState(
-        createTripViewModel.calendar.timeInMillis.minus(
-            86400000,
-        ),
-    )
+//    val startDate by createTripViewModel.startDate.observeAsState(
+//        createTripViewModel.calendar.timeInMillis.minus(
+//            86400000,
+//        ),
+//    )
+//    val endDate by createTripViewModel.endDate.observeAsState(
+//        createTripViewModel.calendar.timeInMillis.minus(
+//            86400000,
+//        ),
+//    )
+
+    val startDate by createTripViewModel.startDate.collectAsStateWithLifecycle()
+
+    val endDate by createTripViewModel.endDate.collectAsStateWithLifecycle()
+
     val dateRangePickerState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = startDate,
-        initialSelectedEndDateMillis = endDate,
+//        initialSelectedStartDateMillis = startDate,
+//        initialSelectedEndDateMillis = endDate,
     )
     val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
         false,
@@ -341,15 +347,13 @@ fun CreateTripScreen(
                     onDismiss = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
                     onConfirm = {
                         dateRangePickerState.selectedStartDateMillis?.let { long ->
-                            createTripViewModel.onStartDateChange(
-                                long,
-                            )
+                            createTripViewModel.onStartDateChange(long)
                         }
 
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
                             createTripViewModel.onEndDateChange(long)
                         }
-                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
+//                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
                         createTripViewModel.onShowDateRangePickerDialogChange(it)
                     },
                     onClickable = {

@@ -10,10 +10,14 @@ import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.create_trip.utils.dateFormat
+import com.example.turistaapp.create_trip.utils.getCurrentDate
 import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.qr_code.domain.models.toTripModel
 import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -28,22 +32,30 @@ class CreateTripViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Fechas del viaje
-    val calendar: Calendar = Calendar.getInstance()
 
-    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-    val startDate: LiveData<Long> = _startDate
+    private val _startDate = MutableStateFlow(getCurrentDate())
+    val startDate = _startDate.asStateFlow()
+
+    private val _endDate = MutableStateFlow(getCurrentDate())
+    val endDate = _endDate.asStateFlow()
+
+//    val calendar: Calendar = Calendar.getInstance()
+//
+//    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
+//    val startDate: LiveData<Long> = _startDate
     fun onStartDateChange(startDate: Long) {
-        _startDate.value = startDate
+        _startDate.value = dateFormat(startDate)
     }
-
-    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-    val endDate: LiveData<Long> = _endDate
+//
+//    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
+//    val endDate: LiveData<Long> = _endDate
     fun onEndDateChange(endDate: Long) {
-        _endDate.value = endDate
+        _endDate.value = dateFormat(endDate)
     }
-
+//
     private var _showDateRangePickerDialog = MutableLiveData(false)
     val showDateRangePickerDialog: LiveData<Boolean> = _showDateRangePickerDialog
+
     fun onShowDateRangePickerDialogChange(showDateRangePickerDialog: Boolean) {
         _showDateRangePickerDialog.value = showDateRangePickerDialog
     }
