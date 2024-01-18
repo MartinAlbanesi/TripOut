@@ -14,8 +14,7 @@ fun dateFormat(date: Long) : String {
 }
 
 fun getCurrentDate(): String {
-    val currentDate = LocalDate.now(ZoneId.systemDefault()).format(
+    return LocalDate.now(ZoneId.systemDefault()).format(
         DateTimeFormatter.ofPattern("dd-MM-yyyy")
     )
-    return currentDate.toString()
 }

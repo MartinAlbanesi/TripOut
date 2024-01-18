@@ -50,6 +50,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import kotlinx.coroutines.delay
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,8 +114,8 @@ fun CreateTripScreen(
     val endDate by createTripViewModel.endDate.collectAsStateWithLifecycle()
 
     val dateRangePickerState = rememberDateRangePickerState(
-//        initialSelectedStartDateMillis = startDate,
-//        initialSelectedEndDateMillis = endDate,
+        initialSelectedStartDateMillis = Date().time,
+        initialSelectedEndDateMillis = Date().time
     )
     val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
         false,

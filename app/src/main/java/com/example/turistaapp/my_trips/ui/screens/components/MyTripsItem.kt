@@ -120,13 +120,8 @@ fun MyTripsItem(
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically),
                 ) {
-                    val daysLeft = getDaysBetweenDates(trip.startDate, trip.endDate)
-//                        formatMilisToDateString(trip.startDate, "yyyy-MM-dd"),
-//                        formatMilisToDateString(
-//                            Calendar.getInstance().timeInMillis.toString(),
-//                            "yyyy-MM-dd",
-//                        ),
-//                    )
+                    val daysLeft = getDaysBetweenDates(trip.startDate)
+
                     when {
                         daysLeft.toInt() < 0 -> Text(
                             text = stringResource(R.string.trip_is_over),
@@ -344,7 +339,7 @@ fun ItemText(icon: ImageVector, name: String) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getDaysBetweenDates(startDate: String, endDate: String): String {
+fun getDaysBetweenDates(startDate: String): String {
     // Convert the dates from String to LocalDate objects
 
     val df = DateTimeFormatter.ofPattern("dd-MM-yyyy")
