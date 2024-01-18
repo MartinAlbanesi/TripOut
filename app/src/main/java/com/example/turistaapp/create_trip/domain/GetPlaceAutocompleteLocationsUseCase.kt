@@ -8,7 +8,7 @@ class GetPlaceAutocompleteLocationsUseCase @Inject constructor(
     private val placeAutocompleteRepository: IPlaceAutocompleteLocationRepository,
 ) {
 
-    suspend operator fun invoke(location: String): List<PlaceAutocompletePredictionModel>? {
-        return placeAutocompleteRepository.getPlaceAutocompleteLocations(location)
+    suspend operator fun invoke(location: String, type: String): List<PlaceAutocompletePredictionModel>? {
+        return placeAutocompleteRepository.getPlaceAutocompleteLocations(location, type)
     }
 }

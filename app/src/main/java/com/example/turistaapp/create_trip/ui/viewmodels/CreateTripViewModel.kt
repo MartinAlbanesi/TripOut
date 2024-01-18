@@ -103,7 +103,7 @@ class CreateTripViewModel @Inject constructor(
     // Busca predicciones de ubicaciones para el Origen según una query
     fun searchOriginPlaces(query: String) {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "geocode")
             _originPredictions.value = newPredictions
         }
     }
@@ -126,7 +126,7 @@ class CreateTripViewModel @Inject constructor(
     // Busca predicciones de ubicaciones para el Destino según una query
     fun searchDestinationPlaces(query: String) {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "establishment")
             _destinationPredictions.value = newPredictions
         }
     }

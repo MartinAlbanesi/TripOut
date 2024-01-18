@@ -7,21 +7,22 @@ import javax.inject.Inject
 
 interface IPlaceAutocompleteLocationRepository {
 
-    suspend fun getPlaceAutocompleteLocations(location: String): List<PlaceAutocompletePredictionModel>?
+    suspend fun getPlaceAutocompleteLocations(location: String, type: String): List<PlaceAutocompletePredictionModel>?
 }
 
 class PlaceAutocompleteLocationRepository @Inject constructor(
     private val placesAutocompleteApiService: PlacesAutocompleteApiService,
 ) : IPlaceAutocompleteLocationRepository {
-    override suspend fun getPlaceAutocompleteLocations(location: String): List<PlaceAutocompletePredictionModel>? {
-        val api = placesAutocompleteApiService.getPlaceAutocompletePredictions(location)
+    override suspend fun getPlaceAutocompleteLocations(location: String, type: String): List<PlaceAutocompletePredictionModel>? {
+        val api = placesAutocompleteApiService.getPlaceAutocompletePredictions(location, type)
 
         if (api.isSuccessful) {
             val placeAutocompleteLocations = api.body()?.placesAutocompletePredictionsApi
                 ?.filter {
                 !it.typesApi.contains("country") && !it.typesApi.contains("continent") && !it.typesApi.contains("political") && !it.typesApi.contains("locality")
 //                !it.typesApi.contains("geocode")
-                }?.map {
+                }
+                ?.map {
                     PlaceAutocompletePredictionModel(
                         placeId = it.placeIdApi,
                         description = it.descriptionApi,
