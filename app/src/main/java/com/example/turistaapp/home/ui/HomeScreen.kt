@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -32,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.turistaapp.R
@@ -44,6 +48,56 @@ import com.example.turistaapp.map.ui.components.TripDialog
 import com.example.turistaapp.my_trips.ui.screens.components.MyTripsItem
 import com.example.turistaapp.qr_code.domain.models.toDataQRModel
 import com.google.gson.Gson
+
+
+@Composable
+fun ShakeDiscover(
+    onClickShakeGame: () -> Unit
+) {
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onClickShakeGame() }
+    ) {
+        LottiePreview(
+            title = "",
+            lottieRes = R.raw.world,
+            isBackgroundColored = true,
+            isBottomBrush = true,
+            isClickable = false,
+            modifierLottie = Modifier
+                .fillMaxWidth()
+                .offset(x = 150.dp),
+        ) {}
+
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .background(Color(0x46000000))
+        ) {
+            Text(
+                text = stringResource(R.string.shake_n_discover),
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.your_travel_guide) + "\n" + stringResource(R.string.discover_exciting),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        ElevatedButton(
+            onClick = { onClickShakeGame() },
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.BottomStart),
+        ) {
+            Text(text = stringResource(R.string.pick_shake_trevel))
+        }
+
+    }
+
+}
 
 @SuppressLint("NewApi")
 @Composable
@@ -75,13 +129,16 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
-                LottiePreview(
-                    title = stringResource(R.string.shake_n_discover),
-                    lottieRes = R.raw.world,
-                    isBackgroundColored = true,
-                    isBottomBrush = true,
-                    isClickable = true,
-                ) {
+//                LottiePreview(
+//                    title = stringResource(R.string.shake_n_discover),
+//                    lottieRes = R.raw.world,
+//                    isBackgroundColored = true,
+//                    isBottomBrush = true,
+//                    isClickable = true,
+//                ) {
+//                    onClickShakeGame()
+//                }
+                ShakeDiscover() {
                     onClickShakeGame()
                 }
             }

@@ -14,6 +14,9 @@
 
     <!--HOME    -->
     <string name="shake_n_discover">Shake\'n Discover</string>
+    <string name="pick_shake_trevel">Pick, shake and travel!</string>
+    <string name="your_travel_guide">Your travel guide when you shake your phone.</string>
+    <string name="discover_exciting">Discover exciting destinations \nwith just a gesture.</string>
     <string name="discover_more_trips">Discover more trips</string>
     <string name="nearly">Nearly %1$s</string>
     <string name="no_results_found">No results found</string>

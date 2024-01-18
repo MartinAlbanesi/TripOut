@@ -13,7 +13,10 @@
     <string name="error_message_welcome">El nombre debe comenzar con mayúscula y no contener números ni caracteres especiales</string>
 
     <!--HOME    -->
-    <string name="shake_n_discover">Shake\'n Discover</string>
+    <string name="shake_n_discover">Agita y descubre</string>
+    <string name="your_travel_guide">Tu guía de viaje al agitar el móvil.</string>
+    <string name="discover_exciting">Descubre destinos emocionantes \ncon solo un gesto.</string>
+    <string name="pick_shake_trevel">¡Elige, agita y viaja!</string>
     <string name="discover_more_trips">Descubre más viajes</string>
     <string name="nearly">Cerca de %1$s</string>
     <string name="no_results_found">No se encontraron resultados</string>
@@ -93,7 +96,7 @@
     <string name="bicycling">Bicicleta</string>
     <string name="save_trip">Guardar</string>
     <string name="trip_name">Nombre del Viaje *</string>
-    <string name="destination">Destino *</string>
+    <string name="destination">Agita y descubre</string>
     <string name="dates">Fechas</string>
     <string name="transport">Transporte</string>
     <string name="message_dialog_setting">¿Estas seguro de cambiar el idioma?\nAl aceptar se te redirigirá a la pantalla de inicio</string>
@@ -102,5 +105,6 @@
     <string name="go_to_home">Ir al inicio</string>
     <string name="error_when_creating_the_trip">Error al crear el viaje</string>
     <string name="camera">Camera</string>
+
 
 </resources>
