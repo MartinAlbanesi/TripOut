@@ -17,8 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
@@ -27,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,7 +49,6 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import kotlinx.coroutines.delay
-import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,11 +57,7 @@ fun CreateTripScreen(
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
     onClickCreateTrip: () -> Unit,
 ) {
-    LaunchedEffect(true) {
-        if (address != null) {
-            createTripViewModel.setDestination(address)
-        }
-    }
+
 
     // Nombre del Viaje
     var tripName by rememberSaveable {
@@ -91,6 +83,17 @@ fun CreateTripScreen(
     val destinationPredictions by createTripViewModel.destinationPredictions.observeAsState(
         emptyList(),
     )
+
+    LaunchedEffect(true) {
+        if (address != null) {
+            createTripViewModel.setDestination(address)
+
+
+            isDestinationAutocompleteDropdownVisible = false
+            delay(1000)
+            createTripViewModel.onSelectedDestinationLocationChange(destinationPredictions[0])
+        }
+    }
 
     // Fechas
     val startDate by createTripViewModel.startDate.observeAsState(
@@ -160,12 +163,7 @@ fun CreateTripScreen(
         mutableStateOf(true)
     }
 
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    val successMessage = stringResource(R.string.successfully_created_trip)
-    val goToHome = stringResource(R.string.go_to_home)
-    val errorCreateTrip = stringResource(R.string.error_when_creating_the_trip)
+//    val snackbarHostState = remember { SnackbarHostState() }
 
     var isCreateTripSuccessful by remember { mutableStateOf(false) }
 
@@ -178,7 +176,7 @@ fun CreateTripScreen(
                 .height(200.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Dialog(onDismissRequest = { /*TODO*/ }) {
+            Dialog(onDismissRequest = {}) {
                 LottieAnimation(
                     composition = lottie.value,
                     modifier = Modifier
@@ -195,9 +193,9 @@ fun CreateTripScreen(
     }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
+//        snackbarHost = {
+//            SnackbarHost(hostState = snackbarHostState)
+//        },
         topBar = {
             TopAppBarScreen(
                 title = stringResource(R.string.create_trip),

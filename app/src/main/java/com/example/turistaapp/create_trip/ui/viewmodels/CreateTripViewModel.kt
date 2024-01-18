@@ -60,7 +60,7 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun onAddMember(member: String) {
-        if (!member.isBlank()) {
+        if (member.isNotBlank()) {
             val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
             updatedMembers.add(member)
             _members.value = updatedMembers
@@ -74,7 +74,7 @@ class CreateTripViewModel @Inject constructor(
         _members.value = updatedMembers
     }
 
-    fun resetMemberNameValue() {
+    private fun resetMemberNameValue() {
         _memberName.value = ""
     }
 
@@ -140,13 +140,13 @@ class CreateTripViewModel @Inject constructor(
         _selectedDestinationLocation.value = null
     }
 
-    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
-    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
-        _isDestinationAutocompleteDropdownVisible
-
-    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
-        _isDestinationAutocompleteDropdownVisible.value = isVisible
-    }
+//    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
+//    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
+//        _isDestinationAutocompleteDropdownVisible
+//
+//    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
+//        _isDestinationAutocompleteDropdownVisible.value = isVisible
+//    }
 
     private val _selectedDestinationLocation =
         MutableLiveData<PlaceAutocompletePredictionModel?>(null)
@@ -156,24 +156,15 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun validateTripName(tripName: String): Boolean {
-        if (tripName.isBlank() || tripName.length < 3 || tripName.length > 30 || !tripName[0].isUpperCase()) {
-            return false
-        }
-        return true
+        return !(tripName.isBlank() || tripName.length < 3 || tripName.length > 30 || !tripName[0].isUpperCase())
     }
 
     fun validateTripOrigin(): Boolean {
-        if (_selectedOriginLocation.value == null) {
-            return false
-        }
-        return true
+        return _selectedOriginLocation.value != null
     }
 
     fun validateTripDestination(): Boolean {
-        if (_selectedDestinationLocation.value == null) {
-            return false
-        }
-        return true
+        return _selectedDestinationLocation.value != null
     }
 
     // Crear viaje con los datos ingresados
