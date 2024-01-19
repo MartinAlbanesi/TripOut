@@ -1,5 +1,6 @@
 package com.example.turistaapp.core.data.database // ktlint-disable package-name
 
+import android.net.Uri
 import com.example.turistaapp.core.data.database.entities.TripEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -14,5 +15,5 @@ interface TripDBRepository {
 
     suspend fun deleteTrip(trip: TripEntity)
 
-    suspend fun updateImages(id: Int, images: List<String>)
+    suspend fun updateImages(id: Int, images: List<Uri>)
 }

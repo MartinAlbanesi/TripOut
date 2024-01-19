@@ -10,10 +10,14 @@ import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.create_trip.utils.dateFormat
+import com.example.turistaapp.create_trip.utils.getCurrentDate
 import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.qr_code.domain.models.toTripModel
 import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -28,22 +32,30 @@ class CreateTripViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Fechas del viaje
-    val calendar: Calendar = Calendar.getInstance()
 
-    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-    val startDate: LiveData<Long> = _startDate
+    private val _startDate = MutableStateFlow(getCurrentDate())
+    val startDate = _startDate.asStateFlow()
+
+    private val _endDate = MutableStateFlow(getCurrentDate())
+    val endDate = _endDate.asStateFlow()
+
+//    val calendar: Calendar = Calendar.getInstance()
+//
+//    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
+//    val startDate: LiveData<Long> = _startDate
     fun onStartDateChange(startDate: Long) {
-        _startDate.value = startDate
+        _startDate.value = dateFormat(startDate)
     }
-
-    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-    val endDate: LiveData<Long> = _endDate
+//
+//    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
+//    val endDate: LiveData<Long> = _endDate
     fun onEndDateChange(endDate: Long) {
-        _endDate.value = endDate
+        _endDate.value = dateFormat(endDate)
     }
-
+//
     private var _showDateRangePickerDialog = MutableLiveData(false)
     val showDateRangePickerDialog: LiveData<Boolean> = _showDateRangePickerDialog
+
     fun onShowDateRangePickerDialogChange(showDateRangePickerDialog: Boolean) {
         _showDateRangePickerDialog.value = showDateRangePickerDialog
     }
@@ -60,7 +72,7 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun onAddMember(member: String) {
-        if (!member.isBlank()) {
+        if (member.isNotBlank()) {
             val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
             updatedMembers.add(member)
             _members.value = updatedMembers
@@ -74,7 +86,7 @@ class CreateTripViewModel @Inject constructor(
         _members.value = updatedMembers
     }
 
-    fun resetMemberNameValue() {
+    private fun resetMemberNameValue() {
         _memberName.value = ""
     }
 
@@ -103,7 +115,7 @@ class CreateTripViewModel @Inject constructor(
     // Busca predicciones de ubicaciones para el Origen según una query
     fun searchOriginPlaces(query: String) {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "geocode")
             _originPredictions.value = newPredictions
         }
     }
@@ -126,7 +138,7 @@ class CreateTripViewModel @Inject constructor(
     // Busca predicciones de ubicaciones para el Destino según una query
     fun searchDestinationPlaces(query: String) {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "establishment")
             _destinationPredictions.value = newPredictions
         }
     }
@@ -140,13 +152,13 @@ class CreateTripViewModel @Inject constructor(
         _selectedDestinationLocation.value = null
     }
 
-    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
-    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
-        _isDestinationAutocompleteDropdownVisible
-
-    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
-        _isDestinationAutocompleteDropdownVisible.value = isVisible
-    }
+//    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
+//    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
+//        _isDestinationAutocompleteDropdownVisible
+//
+//    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
+//        _isDestinationAutocompleteDropdownVisible.value = isVisible
+//    }
 
     private val _selectedDestinationLocation =
         MutableLiveData<PlaceAutocompletePredictionModel?>(null)
@@ -156,24 +168,15 @@ class CreateTripViewModel @Inject constructor(
     }
 
     fun validateTripName(tripName: String): Boolean {
-        if (tripName.isBlank() || tripName.length < 3 || tripName.length > 30 || !tripName[0].isUpperCase()) {
-            return false
-        }
-        return true
+        return !(tripName.isBlank() || tripName.length < 3 || tripName.length > 30)
     }
 
     fun validateTripOrigin(): Boolean {
-        if (_selectedOriginLocation.value == null) {
-            return false
-        }
-        return true
+        return _selectedOriginLocation.value != null
     }
 
     fun validateTripDestination(): Boolean {
-        if (_selectedDestinationLocation.value == null) {
-            return false
-        }
-        return true
+        return _selectedDestinationLocation.value != null
     }
 
     // Crear viaje con los datos ingresados

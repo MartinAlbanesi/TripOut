@@ -33,4 +33,7 @@ interface TripDao {
 
     @Query("UPDATE trips_table SET images = :images WHERE id = :id")
     fun updateImages(id: Int, images: List<String>)
+
+    @Query("SELECT * FROM trips_table WHERE id = :id")
+    suspend fun getTripById(id: Int): TripEntity
 }

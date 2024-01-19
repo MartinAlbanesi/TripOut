@@ -1,9 +1,10 @@
 package com.example.turistaapp.trip_details.ui
 
 import android.Manifest
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Description
@@ -37,7 +39,6 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.TripOrigin
-import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CardDefaults
@@ -63,12 +64,12 @@ import coil.request.ImageRequest
 import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.map.domain.models.RouteModel
-import com.example.turistaapp.my_trips.ui.screens.components.formatMilisToDateString
 import com.example.turistaapp.trip_details.data.AssistChipItem
 import com.example.turistaapp.trip_details.ui.components.DialogShouldShowRationale
 import com.example.turistaapp.trip_details.ui.components.IconWithText
 import com.example.turistaapp.trip_details.ui.components.LocationCard
 import com.example.turistaapp.trip_details.ui.components.TextWithComposable
+import com.example.turistaapp.trip_details.utils.generateUri
 
 @Composable
 fun TripDetails(
@@ -78,14 +79,36 @@ fun TripDetails(
     onClickArrowBack: () -> Unit,
     onDeleteTripButtonClick: (TripModel) -> Unit,
 ) {
-    var selectedImageUris by remember {
-        mutableStateOf<List<String>>(emptyList())
+
+    //Camera
+    var uri: Uri? by remember {
+        mutableStateOf(null)
     }
+
+    val context = LocalContext.current
+
+    val camera = rememberLauncherForActivityResult(
+        contract = TakePicture(),
+        onResult = {
+            if (it && uri?.path?.isNotEmpty() == true) {
+                tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, listOf(uri!!))
+            }
+        }
+    )
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        RequestPermission(),
+    ) {
+        if (it) {
+            uri = generateUri(context)
+            camera.launch(uri)
+        }
+    }
+
     val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        contract = PickMultipleVisualMedia(),
         onResult = { uris ->
-            selectedImageUris += uris.map { it.toString() }
-            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, selectedImageUris)
+            tripDetailsViewModel.updateImages(routeModel!!.trip!!.tripId, uris)
         },
     )
 
@@ -98,11 +121,11 @@ fun TripDetails(
     }
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
+        RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
             multiplePhotoPickerLauncher.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                PickVisualMediaRequest(PickVisualMedia.ImageOnly),
             )
         } else {
             if (!deniedPermission) {
@@ -119,6 +142,13 @@ fun TripDetails(
     }
 
     val assistChipItems = listOf(
+        AssistChipItem(
+            icon = Icons.Default.CameraAlt,
+            text = stringResource(R.string.camera),
+            onClick = {
+                cameraLauncher.launch(Manifest.permission.CAMERA)
+            },
+        ),
         AssistChipItem(
             icon = Icons.Default.ImageSearch,
             text = stringResource(R.string.gallery),
@@ -152,8 +182,10 @@ fun TripDetails(
         // Trip Name
         item {
             Box(
-               Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ){
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
                 Text(
                     text = routeModel!!.trip!!.name,
                     style = MaterialTheme.typography.headlineLarge,
@@ -186,17 +218,18 @@ fun TripDetails(
                 IconWithText(
                     modifier = Modifier.align(Alignment.CenterStart),
                     icon = Icons.Default.CalendarMonth,
-                    text = "${
-                        formatMilisToDateString(
-                            routeModel?.trip!!.startDate,
-                            "dd/MM/yy",
-                        )
-                    } - ${
-                        formatMilisToDateString(
-                            routeModel.trip.endDate,
-                            "dd/MM/yy",
-                        )
-                    }",
+                    text = "${routeModel!!.trip!!.startDate} - ${routeModel.trip!!.endDate}",
+//                    text = "${
+//                        formatMilisToDateString(
+//                            routeModel?.trip!!.startDate,
+//                            "dd/MM/yy",
+//                        )
+//                    } - ${
+//                        formatMilisToDateString(
+//                            routeModel.trip.endDate,
+//                            "dd/MM/yy",
+//                        )
+//                    }",
                 )
                 // Author
                 IconWithText(
@@ -312,7 +345,7 @@ fun TripDetails(
                     modifier = Modifier
                         .fillMaxWidth(),
 
-                ) {
+                    ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

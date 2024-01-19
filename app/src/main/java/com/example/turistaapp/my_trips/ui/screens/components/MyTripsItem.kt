@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -50,12 +51,15 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.turistaapp.R
 import com.example.turistaapp.create_trip.domain.models.TripModel
+import com.example.turistaapp.create_trip.utils.getCurrentDate
 import com.example.turistaapp.qr_code.ui.QRDialog
 import com.example.turistaapp.trip_details.ui.components.DialogDeleteTrip
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +76,8 @@ fun MyTripsItem(
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    var menuAnchor by remember { mutableStateOf(false) }
+
     Box {
         ElevatedCard(
             elevation = CardDefaults.cardElevation(
@@ -80,7 +86,10 @@ fun MyTripsItem(
             colors = CardDefaults.elevatedCardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             ),
-            modifier = modifier,
+            modifier = modifier.clickable {
+                menuAnchor = !menuAnchor
+
+            },
         ) {
             ImageWithBrush(
                 name = trip.name,
@@ -97,12 +106,13 @@ fun MyTripsItem(
             ) {
                 ItemText(
                     icon = Icons.Default.CalendarMonth,
-                    name = "${
-                        formatMilisToDateString(
-                            trip.startDate,
-                            "dd/MM/yyyy",
-                        )
-                    } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
+                    name = "${trip.startDate} - ${trip.endDate}",
+//                    name = "${
+//                        formatMilisToDateString(
+//                            trip.startDate,
+//                            "dd/MM/yyyy",
+//                        )
+//                    } - ${formatMilisToDateString(trip.endDate, "dd/MM/yyyy")}",
                 )
 
                 Box(
@@ -110,13 +120,8 @@ fun MyTripsItem(
                         .fillMaxWidth()
                         .align(Alignment.CenterVertically),
                 ) {
-                    val daysLeft = getDaysBetweenDates(
-                        formatMilisToDateString(trip.startDate, "yyyy-MM-dd"),
-                        formatMilisToDateString(
-                            Calendar.getInstance().timeInMillis.toString(),
-                            "yyyy-MM-dd",
-                        ),
-                    )
+                    val daysLeft = getDaysBetweenDates(trip.startDate)
+
                     when {
                         daysLeft.toInt() < 0 -> Text(
                             text = stringResource(R.string.trip_is_over),
@@ -156,7 +161,6 @@ fun MyTripsItem(
             )
         }
 
-        var menuAnchor by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             expanded = menuAnchor,
             onExpandedChange = { menuAnchor = !menuAnchor },
@@ -252,12 +256,12 @@ fun MyTripsItem(
     }
 }
 
-fun formatMilisToDateString(milisegundosString: String, formato: String): String {
-    val milisegundos = milisegundosString.toLong()
-    val dateTime = DateTime(milisegundos)
-    val formatter = DateTimeFormat.forPattern(formato)
-    return formatter.print(dateTime.plusDays(1))
-}
+//fun formatMilisToDateString(milisegundosString: String, formato: String): String {
+//    val milisegundos = milisegundosString.toLong()
+//    val dateTime = DateTime(milisegundos)
+//    val formatter = DateTimeFormat.forPattern(formato)
+//    return formatter.print(dateTime.plusDays(1))
+//}
 
 @Composable
 fun <T> ImageWithBrush(
@@ -335,14 +339,16 @@ fun ItemText(icon: ImageVector, name: String) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getDaysBetweenDates(startDate: String, endDate: String): String {
+fun getDaysBetweenDates(startDate: String): String {
     // Convert the dates from String to LocalDate objects
-    val firstDateObj = LocalDate.parse(startDate)
-    val secondDateObj = LocalDate.parse(endDate)
+
+    val df = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val firstDateObj = LocalDate.parse(startDate, df)
+    val secondDateObj = LocalDate.parse(getCurrentDate(), df)
 
     // Calculate the difference in days
     val daysDiff = ChronoUnit.DAYS.between(secondDateObj, firstDateObj)
 
     // Return the difference in days
-    return "${daysDiff + 1}"
+    return daysDiff.absoluteValue.toString()
 }

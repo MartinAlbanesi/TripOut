@@ -1,5 +1,6 @@
 package com.example.turistaapp.core.data.database // ktlint-disable package-name
 
+import android.net.Uri
 import com.example.turistaapp.core.data.database.dao.TripDao
 import com.example.turistaapp.core.data.database.entities.TripEntity
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,13 @@ class TripDBRepositoryImpl @Inject constructor(
         tripDao.deleteTrip(trip)
     }
 
-    override suspend fun updateImages(id: Int, images: List<String>) {
-        tripDao.updateImages(id, images)
+    override suspend fun updateImages(id: Int, images: List<Uri>) {
+        val tripImages = tripDao.getTripById(id).images?.toMutableList() ?: mutableListOf()
+
+        images.forEach {
+            tripImages.add(it.toString())
+        }
+
+        tripDao.updateImages(id, tripImages)
     }
 }

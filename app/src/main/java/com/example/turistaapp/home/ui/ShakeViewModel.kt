@@ -45,7 +45,7 @@ class ShakeViewModel @Inject constructor(
 
     fun searchOriginPlaces(query: String) {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query)
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "establishment")
             _originPredictions.value = newPredictions
         }
     }

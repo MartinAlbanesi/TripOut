@@ -39,6 +39,7 @@ fun LottiePreview(
     isClickable: Boolean = false,
     isBottomBrush: Boolean = false,
     isTopBrush: Boolean = false,
+    modifierLottie: Modifier = Modifier,
     onClickAnimation: () -> Unit = {},
 ) {
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(lottieRes))
@@ -98,7 +99,7 @@ fun LottiePreview(
         LottieAnimation(
             composition = lottie.value,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier
+            modifier = modifierLottie
                 .fillMaxWidth()
                 .align(Alignment.Center),
         )
