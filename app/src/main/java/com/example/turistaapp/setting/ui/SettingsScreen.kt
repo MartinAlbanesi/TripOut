@@ -68,10 +68,10 @@ fun SettingsScreen(
 
     var isClickedLanguageChange by remember { mutableStateOf(false) }
 
-    val languages = listOf(
-        LanguageApp(stringResource(id = R.string.spanish), "es", codeLanguage == "es"),
-        LanguageApp(stringResource(id = R.string.english), "en", codeLanguage == "en"),
-    )
+//    val languages = listOf(
+//        LanguageApp(stringResource(id = R.string.spanish), "es", codeLanguage == "es"),
+//        LanguageApp(stringResource(id = R.string.english), "en", codeLanguage == "en"),
+//    )
 
     // Theme
     var checked by rememberSaveable { mutableStateOf(isDarkTheme) }
@@ -151,23 +151,23 @@ fun SettingsScreen(
             }
 
             // --------------------------------------------------------Language
-            TextWithArrow(
-                text = stringResource(R.string.change_language),
-                isClicked = isClickedLanguageChange,
-                onClick = {
-                    isClickedLanguageChange = !isClickedLanguageChange
-                },
-            ) {
-                ChangeLanguageContent(
-                    languages = languages,
-                    codeLanguage = codeLanguage,
-                ) {
-                    val appLocale: LocaleListCompat =
-                        LocaleListCompat.forLanguageTags(it)
-                    AppCompatDelegate.setApplicationLocales(appLocale)
-                    setCurrentLanguage(it)
-                }
-            }
+//            TextWithArrow(
+//                text = stringResource(R.string.change_language),
+//                isClicked = isClickedLanguageChange,
+//                onClick = {
+//                    isClickedLanguageChange = !isClickedLanguageChange
+//                },
+//            ) {
+//                ChangeLanguageContent(
+//                    languages = languages,
+//                    codeLanguage = codeLanguage,
+//                ) {
+//                    val appLocale: LocaleListCompat =
+//                        LocaleListCompat.forLanguageTags(it)
+//                    AppCompatDelegate.setApplicationLocales(appLocale)
+//                    setCurrentLanguage(it)
+//                }
+//            }
 
             // --------------------------------------------------------Dark mode
             TextWithSwitch(
