@@ -13,6 +13,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.core.ui.NavHostScreen
+import com.example.turistaapp.map.ui.SelectLocationMap
 import com.example.turistaapp.setting.ui.SettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +38,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
+//                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
+                    SelectLocationMap()
                 }
             }
         }
