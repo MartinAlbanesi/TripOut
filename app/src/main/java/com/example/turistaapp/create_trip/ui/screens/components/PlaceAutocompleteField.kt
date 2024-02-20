@@ -58,7 +58,8 @@ fun PlaceAutocompleteField(
         value = query,
         onValueChange = {
             onQueryChange(it)
-            onDropdownVisibilityChange(true)
+            if (!isDropdownVisible) onDropdownVisibilityChange(true)
+
         },
         leadingIcon = {
             if (!isError) {
@@ -114,7 +115,9 @@ fun PlaceAutocompleteField(
                     if (predictions.last() != prediction) {
                         Divider(
                             color = Color.Black,
-                            modifier = Modifier.fillMaxWidth().width(1.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .width(1.dp),
                         )
                     }
                 }
