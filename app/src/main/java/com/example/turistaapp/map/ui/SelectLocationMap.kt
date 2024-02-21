@@ -2,6 +2,7 @@ package com.example.turistaapp.map.ui
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -53,9 +55,7 @@ fun SelectLocationMap(
 ) {
 
     val mapProperties by remember {
-        mutableStateOf(
-            MapProperties(isMyLocationEnabled = true)
-        )
+        mutableStateOf( MapProperties(isMyLocationEnabled = true) )
     }
 
     val originPredictions by shakeViewModel.originPredictions.observeAsState(emptyList())
@@ -68,8 +68,6 @@ fun SelectLocationMap(
 
     var isMenuVisible by remember { mutableStateOf(false) }
 
-    var showOptions by remember { mutableStateOf(true) }
-
     val cameraPositionState = rememberCameraPositionState {}
 
     LaunchedEffect(selectedLocations){
@@ -81,8 +79,10 @@ fun SelectLocationMap(
     }
 
     Scaffold {
-        Column() {
+        Box(Modifier.fillMaxSize()) {
+            ShowMapScreen(mapProperties, cameraPositionState)
             MapTopBar(
+                modifier = Modifier.align(Alignment.TopCenter),
                 value,
                 focusRequest,
                 isMenuVisible,
@@ -92,21 +92,15 @@ fun SelectLocationMap(
                 onClickSelectedLocation = {
                     shakeViewModel.clickSelectedLocation(it)
                 },
-                isMenuVisibleChange = { isMenuVisible = it }
+                isMenuVisibleChange = { isMenuVisible = it },
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            ShowMapScreen(mapProperties, cameraPositionState)
-            BackHandler {
-                showOptions = true
-            }
         }
     }
 }
 
 @Composable
 private fun MapTopBar(
+    modifier: Modifier = Modifier,
     value: String,
     focusRequest: FocusRequester,
     isMenuVisible: Boolean,
@@ -140,7 +134,8 @@ private fun MapTopBar(
             focusRequest.freeFocus()
         },
         leadingIcon = Icons.Default.ArrowBack,
-        shape = CircleShape
+        shape = CircleShape,
+        modifier = modifier
     )
 }
 
