@@ -1,9 +1,9 @@
 package com.example.turistaapp
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,11 +13,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.core.ui.NavHostScreen
+import com.example.turistaapp.map.ui.SelectLocationMap
 import com.example.turistaapp.setting.ui.SettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private val settingViewModel: SettingViewModel by viewModels()
 
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
+//                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
+                    SelectLocationMap()
                 }
             }
         }

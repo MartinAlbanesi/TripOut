@@ -42,13 +42,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
         isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
-        jvmTarget = "18"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -71,8 +71,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.1")
+//    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.media3:media3-common:1.1.1")
 
@@ -130,9 +131,6 @@ dependencies {
     // Mock web Server
     testImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
 
-    // Joda Time
-    implementation("joda-time:joda-time:2.10.12")
-
     // HORIZONTAL PAGER
     implementation("androidx.compose.foundation:foundation:1.5.4")
 
@@ -157,6 +155,8 @@ dependencies {
     implementation ("androidx.appcompat:appcompat-resources:1.6.1")
 
     coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }
 
 kapt {

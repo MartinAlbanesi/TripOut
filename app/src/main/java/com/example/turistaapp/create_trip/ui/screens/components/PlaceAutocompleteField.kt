@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -28,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,6 +40,8 @@ import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredict
 
 @Composable
 fun PlaceAutocompleteField(
+    modifier: Modifier = Modifier,
+    modifierMenuList : Modifier = Modifier,
     label: String,
     query: String,
     onQueryChange: (String) -> Unit,
@@ -47,9 +52,12 @@ fun PlaceAutocompleteField(
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text,
     onClearField: () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: ImageVector,
+    leadingIconOnClick: () -> Unit = {},
+//    leadingIcon: @Composable (() -> Unit)? = null,
     onItemClick: (PlaceAutocompletePredictionModel) -> Unit,
     isError: Boolean = false,
+    shape: Shape = RoundedCornerShape(8.dp),
 ) {
     OutlinedTextField(
         label = { Text(label) },
@@ -58,16 +66,14 @@ fun PlaceAutocompleteField(
         value = query,
         onValueChange = {
             onQueryChange(it)
-            onDropdownVisibilityChange(true)
+            if (!isDropdownVisible) onDropdownVisibilityChange(true)
+
         },
         leadingIcon = {
-            if (!isError) {
-                leadingIcon?.invoke()
-            } else {
+            IconButton(onClick = { leadingIconOnClick() }) {
                 Icon(
-                    imageVector = Icons.Filled.Error,
-                    contentDescription = "Error",
-                    tint = MaterialTheme.colorScheme.error,
+                    imageVector = if(isError) Icons.Filled.Error else leadingIcon,
+                    contentDescription = null
                 )
             }
         },
@@ -90,14 +96,15 @@ fun PlaceAutocompleteField(
             keyboardType = keyboardType,
         ),
         isError = isError,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
+        shape = shape,
     )
 
     if (isDropdownVisible) {
         Column(
-            modifier = Modifier
+            modifier = modifierMenuList
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
@@ -114,7 +121,9 @@ fun PlaceAutocompleteField(
                     if (predictions.last() != prediction) {
                         Divider(
                             color = Color.Black,
-                            modifier = Modifier.fillMaxWidth().width(1.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .width(1.dp),
                         )
                     }
                 }

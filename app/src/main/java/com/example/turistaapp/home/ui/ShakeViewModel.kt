@@ -27,11 +27,21 @@ class ShakeViewModel @Inject constructor(
     private val _selectedLocations = MutableStateFlow<List<LocationModel>>(emptyList())
     val selectedLocations = _selectedLocations.asStateFlow()
 
-    private val _originPredictions =
-        MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
+    private val _originPredictions = MutableLiveData<List<PlaceAutocompletePredictionModel>>(emptyList())
     val originPredictions: LiveData<List<PlaceAutocompletePredictionModel>> get() = _originPredictions
 
-    fun onClickSelectedLocation(placeId: String) {
+    // SelectedLocationMap.kt ---------------------------------------------------------
+    private val _selectedLocation = MutableStateFlow<LocationModel?>(null)
+    val selectedLocation = _selectedLocation.asStateFlow()
+
+    fun clickSelectedLocation(placeId: String)  {
+        viewModelScope.launch {
+            _selectedLocation.value = getPlaceDetailsUseCase(placeId)!!
+        }
+    }
+    // SelectedLocationMap.kt ---------------------------------------------------------
+
+    fun onClickSelectedLocations(placeId: String) {
         viewModelScope.launch {
             _selectedLocations.value += getPlaceDetailsUseCase(placeId)!!
         }
@@ -43,9 +53,9 @@ class ShakeViewModel @Inject constructor(
         }
     }
 
-    fun searchOriginPlaces(query: String) {
+    fun searchOriginPlaces(query: String, type: String = "establishment") {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "establishment")
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, type)
             _originPredictions.value = newPredictions
         }
     }

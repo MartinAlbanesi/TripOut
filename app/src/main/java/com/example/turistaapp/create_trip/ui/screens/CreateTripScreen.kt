@@ -50,6 +50,7 @@ import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocomplet
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
 import kotlinx.coroutines.delay
+import java.time.LocalDateTime
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,7 +115,7 @@ fun CreateTripScreen(
     val endDate by createTripViewModel.endDate.collectAsStateWithLifecycle()
 
     val dateRangePickerState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = Date().time,
+        initialSelectedStartDateMillis = LocalDateTime.now().toEpochSecond(java.time.ZoneOffset.UTC) * 1000,
         initialSelectedEndDateMillis = Date().time
     )
     val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
@@ -284,12 +285,13 @@ fun CreateTripScreen(
                         originAutocompleteQuery = ""
                         createTripViewModel.clearSelectedOriginLocation()
                     },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.TripOrigin,
-                            contentDescription = "Origin",
-                        )
-                    },
+                    leadingIcon = Icons.Default.TripOrigin,
+//                    {
+//                        Icon(
+//                            imageVector = Icons.Default.TripOrigin,
+//                            contentDescription = "Origin",
+//                        )
+//                    },
                     onItemClick = {
                         originAutocompleteQuery = it.description ?: ""
                         isOriginAutocompleteDropdownVisible = false
@@ -321,12 +323,13 @@ fun CreateTripScreen(
                         destinationAutocompleteQuery = ""
                         createTripViewModel.clearSelectedDestinationLocation()
                     },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Flag,
-                            contentDescription = "Destination",
-                        )
-                    },
+                    leadingIcon = Icons.Default.Flag,
+//                    {
+//                        Icon(
+//                            imageVector = Icons.Default.Flag,
+//                            contentDescription = "Destination",
+//                        )
+//                    },
                     onItemClick = {
                         destinationAutocompleteQuery = it.description ?: ""
                         isDestinationAutocompleteDropdownVisible = false

@@ -54,8 +54,6 @@ import com.example.turistaapp.create_trip.domain.models.TripModel
 import com.example.turistaapp.create_trip.utils.getCurrentDate
 import com.example.turistaapp.qr_code.ui.QRDialog
 import com.example.turistaapp.trip_details.ui.components.DialogDeleteTrip
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -99,7 +97,6 @@ fun MyTripsItem(
                     .widthIn(0.dp, 300.dp) // mention max width here
                     .heightIn(0.dp, 120.dp), // mention max height here)
             )
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),

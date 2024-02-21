@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -197,14 +196,15 @@ fun ShakeGameScreen(
                     },
                     onItemClick = {
                         value = it.description ?: ""
-                        shakeViewModel.onClickSelectedLocation(it.placeId)
+                        shakeViewModel.onClickSelectedLocations(it.placeId)
                         value = ""
                         isMenuVisible = false
                         focusRequest.freeFocus()
                     },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Map, contentDescription = null)
-                    },
+                    leadingIcon = Icons.Default.Map,
+//                    {
+//                        Icon(imageVector = Icons.Default.Map, contentDescription = null)
+//                    },
                 )
             }
             LazyColumn(

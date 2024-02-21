@@ -1,6 +1,5 @@
 package com.example.turistaapp.map.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.turistaapp.create_trip.domain.models.LocationModel
@@ -103,7 +102,7 @@ class MapViewModel @Inject constructor(
                     Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))
                 _markerSelect.value = true
             } catch (e: Exception) {
-                Log.i("titi", e.message.toString())
+//                Log.i("titi", e.message.toString())
             }
         }
     }
