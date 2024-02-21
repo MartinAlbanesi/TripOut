@@ -39,12 +39,6 @@ class ShakeViewModel @Inject constructor(
             _selectedLocation.value = getPlaceDetailsUseCase(placeId)!!
         }
     }
-
-//    fun clickSelectedLocation(placeId: String) {
-//        viewModelScope.launch {
-//            _selectedLocation.value = getPlaceDetailsUseCase(placeId)!!
-//        }
-//    }
     // SelectedLocationMap.kt ---------------------------------------------------------
 
     fun onClickSelectedLocations(placeId: String) {
@@ -59,9 +53,9 @@ class ShakeViewModel @Inject constructor(
         }
     }
 
-    fun searchOriginPlaces(query: String) {
+    fun searchOriginPlaces(query: String, type: String = "establishment") {
         viewModelScope.launch {
-            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, "establishment")
+            val newPredictions = getPlaceAutocompleteLocationsUseCase.invoke(query, type)
             _originPredictions.value = newPredictions
         }
     }
