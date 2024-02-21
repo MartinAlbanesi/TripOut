@@ -285,12 +285,13 @@ fun CreateTripScreen(
                         originAutocompleteQuery = ""
                         createTripViewModel.clearSelectedOriginLocation()
                     },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.TripOrigin,
-                            contentDescription = "Origin",
-                        )
-                    },
+                    leadingIcon = Icons.Default.TripOrigin,
+//                    {
+//                        Icon(
+//                            imageVector = Icons.Default.TripOrigin,
+//                            contentDescription = "Origin",
+//                        )
+//                    },
                     onItemClick = {
                         originAutocompleteQuery = it.description ?: ""
                         isOriginAutocompleteDropdownVisible = false
@@ -322,12 +323,13 @@ fun CreateTripScreen(
                         destinationAutocompleteQuery = ""
                         createTripViewModel.clearSelectedDestinationLocation()
                     },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Flag,
-                            contentDescription = "Destination",
-                        )
-                    },
+                    leadingIcon = Icons.Default.Flag,
+//                    {
+//                        Icon(
+//                            imageVector = Icons.Default.Flag,
+//                            contentDescription = "Destination",
+//                        )
+//                    },
                     onItemClick = {
                         destinationAutocompleteQuery = it.description ?: ""
                         isDestinationAutocompleteDropdownVisible = false

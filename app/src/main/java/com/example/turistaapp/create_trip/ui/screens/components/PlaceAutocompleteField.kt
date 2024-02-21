@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -25,9 +27,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,9 +53,12 @@ fun PlaceAutocompleteField(
     imeAction: ImeAction,
     keyboardType: KeyboardType = KeyboardType.Text,
     onClearField: () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: ImageVector,
+    leadingIconOnClick: () -> Unit = {},
+//    leadingIcon: @Composable (() -> Unit)? = null,
     onItemClick: (PlaceAutocompletePredictionModel) -> Unit,
     isError: Boolean = false,
+    shape: Shape = RoundedCornerShape(8.dp),
 ) {
     OutlinedTextField(
         label = { Text(label) },
@@ -62,15 +71,21 @@ fun PlaceAutocompleteField(
 
         },
         leadingIcon = {
-            if (!isError) {
-                leadingIcon?.invoke()
-            } else {
+            IconButton(onClick = { leadingIconOnClick() }) {
                 Icon(
-                    imageVector = Icons.Filled.Error,
-                    contentDescription = "Error",
-                    tint = MaterialTheme.colorScheme.error,
+                    imageVector = if(isError) Icons.Filled.Error else leadingIcon,
+                    contentDescription = null
                 )
             }
+//            if (!isError) {
+//                leadingIcon?.invoke()
+//            } else {
+//                Icon(
+//                    imageVector = Icons.Filled.Error,
+//                    contentDescription = "Error",
+//                    tint = MaterialTheme.colorScheme.error,
+//                )
+//            }
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
@@ -94,6 +109,7 @@ fun PlaceAutocompleteField(
         modifier = Modifier
             .fillMaxWidth()
             .focusRequester(focusRequester),
+        shape = shape,
     )
 
     if (isDropdownVisible) {

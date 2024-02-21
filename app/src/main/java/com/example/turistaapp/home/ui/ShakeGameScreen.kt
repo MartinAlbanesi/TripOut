@@ -201,9 +201,10 @@ fun ShakeGameScreen(
                         isMenuVisible = false
                         focusRequest.freeFocus()
                     },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Map, contentDescription = null)
-                    },
+                    leadingIcon = Icons.Default.Map,
+//                    {
+//                        Icon(imageVector = Icons.Default.Map, contentDescription = null)
+//                    },
                 )
             }
             LazyColumn(
