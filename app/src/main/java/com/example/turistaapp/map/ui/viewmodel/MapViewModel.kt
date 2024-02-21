@@ -103,7 +103,7 @@ class MapViewModel @Inject constructor(
                     Pair(listOf(selectTrip.origin), listOf(selectTrip.destination))
                 _markerSelect.value = true
             } catch (e: Exception) {
-                Log.i("titi", e.message.toString())
+//                Log.i("titi", e.message.toString())
             }
         }
     }
