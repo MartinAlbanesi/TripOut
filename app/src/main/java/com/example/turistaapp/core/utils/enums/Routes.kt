@@ -14,5 +14,8 @@ sealed class Routes(val route: String, val icon: ImageVector? = null) {
     object CreateTrip : Routes("create_trip_screen?address={address}") {
         fun setArgument(address: String) = "create_trip_screen?address=$address"
     }
+    object SelectedLocationMap : Routes("selected_location_map?location={location}") {
+        fun setArgument(location: String) = "selected_location_map?location=$location"
+    }
     object Settings : Routes("Setting", icon = Icons.Default.Settings)
 }

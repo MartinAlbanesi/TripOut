@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddLocationAlt
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -58,6 +62,7 @@ fun PlaceAutocompleteField(
     onItemClick: (PlaceAutocompletePredictionModel) -> Unit,
     isError: Boolean = false,
     shape: Shape = RoundedCornerShape(8.dp),
+    onClickSelectedLocation: () -> Unit = {},
 ) {
     OutlinedTextField(
         label = { Text(label) },
@@ -87,6 +92,18 @@ fun PlaceAutocompleteField(
                     modifier = Modifier.background(Color.Transparent),
                 ) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+                }
+            }else{
+                IconButton(
+                    onClick = {
+                        onClickSelectedLocation()
+                    },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    )
+//                    modifier = Modifier.background(Color.Transparent),
+                ) {
+                    Icon(imageVector = Icons.Default.AddLocationAlt, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         },

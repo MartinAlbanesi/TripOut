@@ -58,6 +58,7 @@ import java.util.Date
 fun CreateTripScreen(
     address: String?,
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
+    navigateToSelectLocationFromMap: (String) -> Unit,
     onClickCreateTrip: () -> Unit,
 ) {
 
@@ -298,6 +299,7 @@ fun CreateTripScreen(
                         createTripViewModel.onSelectedOriginLocationChange(it)
                     },
                     isError = !isOriginValid,
+                    onClickSelectedLocation = { navigateToSelectLocationFromMap("geocode") },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -336,6 +338,7 @@ fun CreateTripScreen(
                         createTripViewModel.onSelectedDestinationLocationChange(it)
                     },
                     isError = !isDestinationValid,
+                    onClickSelectedLocation = { navigateToSelectLocationFromMap("establishment") },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))

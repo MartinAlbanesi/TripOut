@@ -1,4 +1,4 @@
-package com.example.turistaapp
+﻿package com.example.turistaapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -38,8 +38,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-//                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
-                    SelectLocationMap()
+                    NavHostScreen(onClickChangeTheme = { settingViewModel.changeTheme() })
+//                    SelectLocationMap()
                 }
             }
         }

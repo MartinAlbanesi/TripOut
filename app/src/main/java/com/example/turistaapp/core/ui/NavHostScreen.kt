@@ -22,6 +22,7 @@ import com.example.turistaapp.core.utils.enums.Routes
 import com.example.turistaapp.create_trip.ui.screens.CreateTripScreen
 import com.example.turistaapp.home.ui.HomeViewModel
 import com.example.turistaapp.home.ui.ShakeGameScreen
+import com.example.turistaapp.map.ui.SelectLocationMap
 import com.example.turistaapp.welcome.ui.WelcomeScreen
 import com.example.turistaapp.welcome.ui.WelcomeViewModel
 
@@ -49,11 +50,15 @@ fun NavHostScreen(
     val starDestination = if (name != null) Routes.Home.route else Routes.Welcome.route
 
     NavHost(navController = navController, startDestination = starDestination) {
+
+        //HOME -------------------------------------------------------------------------------------
         composable(Routes.Home.route) {
             MainScreen(navController = navController) {
                 onClickChangeTheme()
             }
         }
+
+        //CREATE TRIP ------------------------------------------------------------------------------
         composable(
             Routes.CreateTrip.route,
             arguments = listOf(navArgument("address") { defaultValue = "" }),
@@ -72,17 +77,37 @@ fun NavHostScreen(
                     IntOffset(fullSize.width, fullSize.height)
                 }
             },
-        ) {
-            CreateTripScreen(address = it.arguments?.getString("address")) {
+        ) { navBackStackEntry ->
+            CreateTripScreen(
+                address = navBackStackEntry.arguments?.getString("address"),
+                navigateToSelectLocationFromMap = {
+                    navController.navigate(Routes.SelectedLocationMap.setArgument(it))
+                },
+            ) {
                 navController.navigate(Routes.Home.route)
             }
         }
+
+        //SELECTED LOCATION MAP --------------------------------------------------------------------
+        composable(
+            Routes.SelectedLocationMap.route,
+            arguments = listOf(navArgument("type") { defaultValue = "" }),
+        ) { navBackStackEntry ->
+            SelectLocationMap(
+                type = navBackStackEntry.arguments?.getString("type") ?: "",
+                onConfirmLocation = { navController.navigate(Routes.CreateTrip.setArgument(it)) },
+            )
+        }
+
+        //WELCOME ----------------------------------------------------------------------------------
         composable(Routes.Welcome.route) {
             WelcomeScreen(onClickSaveName = {
                 welcomeViewModel.setNameInDataStore(it)
                 launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
             })
         }
+
+        //SHAKE GAME -------------------------------------------------------------------------------
         composable(
             Routes.ShakeGame.route,
             enterTransition = {
