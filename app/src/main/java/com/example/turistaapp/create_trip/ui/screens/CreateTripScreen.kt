@@ -146,15 +146,9 @@ fun CreateTripScreen(
     }
 
     // Focus Requesters
-    val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
-        FocusRequester(),
-    )
-    val destinationFocusRequester by createTripViewModel.destinationFocusRequester.observeAsState(
-        FocusRequester(),
-    )
-    val descriptionFocusRequester by createTripViewModel.descriptionFocusRequester.observeAsState(
-        FocusRequester(),
-    )
+    val originFocusRequester = remember { FocusRequester() }
+    val destinationFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
 
     // Validaciones
     var isTripNameValid by rememberSaveable {

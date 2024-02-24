@@ -46,16 +46,6 @@ class CreateTripViewModel @Inject constructor(
         _members.value = updatedMembers
     }
 
-    // Focus Requesters
-    private var _originFocusRequester = MutableLiveData(FocusRequester())
-    val originFocusRequester: LiveData<FocusRequester> = _originFocusRequester
-
-    private var _destinationFocusRequester = MutableLiveData(FocusRequester())
-    val destinationFocusRequester: LiveData<FocusRequester> = _destinationFocusRequester
-
-    private var _descriptionFocusRequester = MutableLiveData(FocusRequester())
-    val descriptionFocusRequester: LiveData<FocusRequester> = _descriptionFocusRequester
-
     // Ubicaciones
     // Lista de predicciones del Origen
     private val _originPredictions =
