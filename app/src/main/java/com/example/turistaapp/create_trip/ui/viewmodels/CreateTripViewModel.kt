@@ -33,50 +33,51 @@ class CreateTripViewModel @Inject constructor(
 
     // Fechas del viaje
 
-    private val _startDate = MutableStateFlow(getCurrentDate())
-    val startDate = _startDate.asStateFlow()
-
-    private val _endDate = MutableStateFlow(getCurrentDate())
-    val endDate = _endDate.asStateFlow()
+//    private val _startDate = MutableStateFlow(getCurrentDate())
+//    val startDate = _startDate.asStateFlow()
+//
+//    private val _endDate = MutableStateFlow(getCurrentDate())
+//    val endDate = _endDate.asStateFlow()
 
 //    val calendar: Calendar = Calendar.getInstance()
 //
 //    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
 //    val startDate: LiveData<Long> = _startDate
-    fun onStartDateChange(startDate: Long) {
-        _startDate.value = dateFormat(startDate)
-    }
+//    fun onStartDateChange(startDate: Long) {
+//        _startDate.value = dateFormat(startDate)
+//    }
 //
 //    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
 //    val endDate: LiveData<Long> = _endDate
-    fun onEndDateChange(endDate: Long) {
-        _endDate.value = dateFormat(endDate)
-    }
+//    fun onEndDateChange(endDate: Long) {
+//        _endDate.value = dateFormat(endDate)
+//    }
 //
-    private var _showDateRangePickerDialog = MutableLiveData(false)
-    val showDateRangePickerDialog: LiveData<Boolean> = _showDateRangePickerDialog
+//    private var _showDateRangePickerDialog = MutableLiveData(false)
+//    val showDateRangePickerDialog: LiveData<Boolean> = _showDateRangePickerDialog
 
-    fun onShowDateRangePickerDialogChange(showDateRangePickerDialog: Boolean) {
-        _showDateRangePickerDialog.value = showDateRangePickerDialog
-    }
+//    fun onShowDateRangePickerDialogChange(showDateRangePickerDialog: Boolean) {
+//        _showDateRangePickerDialog.value = showDateRangePickerDialog
+//    }
 
     // Miembros
     private var _members = MutableLiveData(mutableListOf<String>())
     val members: LiveData<MutableList<String>> = _members
 
-    private var _memberName = MutableLiveData("")
-    val memberName: LiveData<String> = _memberName
+//    private var _memberName = MutableLiveData("")
+//    val memberName: LiveData<String> = _memberName
 
-    fun onMemberNameChange(memberName: String) {
-        _memberName.value = memberName
-    }
+//    fun onMemberNameChange(memberName: String) {
+//        _memberName.value = memberName
+//    }
 
     fun onAddMember(member: String) {
         if (member.isNotBlank()) {
             val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
             updatedMembers.add(member)
             _members.value = updatedMembers
-            resetMemberNameValue()
+//            resetMemberNameValue()
+
         }
     }
 
@@ -86,15 +87,15 @@ class CreateTripViewModel @Inject constructor(
         _members.value = updatedMembers
     }
 
-    private fun resetMemberNameValue() {
-        _memberName.value = ""
-    }
+//    private fun resetMemberNameValue() {
+//        _memberName.value = ""
+//    }
 
-    private var _isExpanded = MutableLiveData(false)
-    val isExpanded: LiveData<Boolean> = _isExpanded
-    fun onIsExpandedChange(isExpanded: Boolean) {
-        _isExpanded.value = isExpanded
-    }
+//    private var _isExpanded = MutableLiveData(false)
+//    val isExpanded: LiveData<Boolean> = _isExpanded
+//    fun onIsExpandedChange(isExpanded: Boolean) {
+//        _isExpanded.value = isExpanded
+//    }
 
     // Focus Requesters
     private var _originFocusRequester = MutableLiveData(FocusRequester())
@@ -181,7 +182,13 @@ class CreateTripViewModel @Inject constructor(
 
     // Crear viaje con los datos ingresados
 
-    fun onCreateTripClick(name: String, description: String, transport: String) {
+    fun onCreateTripClick(
+        name: String,
+        description: String,
+        transport: String,
+        startDate: String,
+        endDate: String,
+    ) {
         viewModelScope.launch {
             val origin = getPlaceDetailsUseCase(_selectedOriginLocation.value!!.placeId)
             val destination =
@@ -191,8 +198,8 @@ class CreateTripViewModel @Inject constructor(
                 name = name,
                 origin = origin!!,
                 destination = destination!!,
-                startDate = startDate.value.toString(),
-                endDate = endDate.value.toString(),
+                startDate = startDate,
+                endDate = endDate,
                 transport = transport,
                 members = _members.value,
                 stops = null,
