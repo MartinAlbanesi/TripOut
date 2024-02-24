@@ -10,17 +10,12 @@ import com.example.turistaapp.create_trip.domain.GetPlaceDetailsUseCase
 import com.example.turistaapp.create_trip.domain.InsertTripUseCase
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.domain.models.TripModel
-import com.example.turistaapp.create_trip.utils.dateFormat
-import com.example.turistaapp.create_trip.utils.getCurrentDate
 import com.example.turistaapp.qr_code.domain.models.DataQRModel
 import com.example.turistaapp.qr_code.domain.models.toTripModel
 import com.example.turistaapp.welcome.domain.GetNameFromDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,45 +26,9 @@ class CreateTripViewModel @Inject constructor(
     private val getNameFromDataStore: GetNameFromDataStore,
 ) : ViewModel() {
 
-    // Fechas del viaje
-
-//    private val _startDate = MutableStateFlow(getCurrentDate())
-//    val startDate = _startDate.asStateFlow()
-//
-//    private val _endDate = MutableStateFlow(getCurrentDate())
-//    val endDate = _endDate.asStateFlow()
-
-//    val calendar: Calendar = Calendar.getInstance()
-//
-//    private var _startDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-//    val startDate: LiveData<Long> = _startDate
-//    fun onStartDateChange(startDate: Long) {
-//        _startDate.value = dateFormat(startDate)
-//    }
-//
-//    private var _endDate = MutableLiveData(calendar.timeInMillis.minus(86400000))
-//    val endDate: LiveData<Long> = _endDate
-//    fun onEndDateChange(endDate: Long) {
-//        _endDate.value = dateFormat(endDate)
-//    }
-//
-//    private var _showDateRangePickerDialog = MutableLiveData(false)
-//    val showDateRangePickerDialog: LiveData<Boolean> = _showDateRangePickerDialog
-
-//    fun onShowDateRangePickerDialogChange(showDateRangePickerDialog: Boolean) {
-//        _showDateRangePickerDialog.value = showDateRangePickerDialog
-//    }
-
     // Miembros
     private var _members = MutableLiveData(mutableListOf<String>())
     val members: LiveData<MutableList<String>> = _members
-
-//    private var _memberName = MutableLiveData("")
-//    val memberName: LiveData<String> = _memberName
-
-//    fun onMemberNameChange(memberName: String) {
-//        _memberName.value = memberName
-//    }
 
     fun onAddMember(member: String) {
         if (member.isNotBlank()) {
@@ -86,16 +45,6 @@ class CreateTripViewModel @Inject constructor(
         updatedMembers?.removeAt(index)
         _members.value = updatedMembers
     }
-
-//    private fun resetMemberNameValue() {
-//        _memberName.value = ""
-//    }
-
-//    private var _isExpanded = MutableLiveData(false)
-//    val isExpanded: LiveData<Boolean> = _isExpanded
-//    fun onIsExpandedChange(isExpanded: Boolean) {
-//        _isExpanded.value = isExpanded
-//    }
 
     // Focus Requesters
     private var _originFocusRequester = MutableLiveData(FocusRequester())
@@ -152,14 +101,6 @@ class CreateTripViewModel @Inject constructor(
     fun clearSelectedDestinationLocation() {
         _selectedDestinationLocation.value = null
     }
-
-//    private var _isDestinationAutocompleteDropdownVisible = MutableLiveData(true)
-//    val isDestinationAutocompleteDropdownVisible: LiveData<Boolean> =
-//        _isDestinationAutocompleteDropdownVisible
-//
-//    fun onDestinationAutocompleteDropdownVisibilityChange(isVisible: Boolean) {
-//        _isDestinationAutocompleteDropdownVisible.value = isVisible
-//    }
 
     private val _selectedDestinationLocation =
         MutableLiveData<PlaceAutocompletePredictionModel?>(null)

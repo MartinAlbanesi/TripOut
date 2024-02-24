@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -101,20 +100,6 @@ fun CreateTripScreen(
         }
     }
 
-    // Fechas
-//    val startDate by createTripViewModel.startDate.observeAsState(
-//        createTripViewModel.calendar.timeInMillis.minus(
-//            86400000,
-//        ),
-//    )
-//    val endDate by createTripViewModel.endDate.observeAsState(
-//        createTripViewModel.calendar.timeInMillis.minus(
-//            86400000,
-//        ),
-//    )
-
-//    val startDate by createTripViewModel.startDate.collectAsStateWithLifecycle()
-
     var startDate by rememberSaveable {
         mutableStateOf(getCurrentDate())
     }
@@ -123,16 +108,12 @@ fun CreateTripScreen(
         mutableStateOf(getCurrentDate())
     }
 
-//    val endDate by createTripViewModel.endDate.collectAsStateWithLifecycle()
 
     val dateRangePickerState = rememberDateRangePickerState(
         initialSelectedStartDateMillis = LocalDateTime.now()
             .toEpochSecond(java.time.ZoneOffset.UTC) * 1000,
         initialSelectedEndDateMillis = Date().time
     )
-//    val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
-//        false,
-//    )
 
     var showDateRangePickerDialog by remember {
         mutableStateOf(false)
@@ -140,8 +121,6 @@ fun CreateTripScreen(
 
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
-
-//    val memberName by createTripViewModel.memberName.observeAsState("")
 
     var memberName by rememberSaveable {
         mutableStateOf("")
@@ -152,8 +131,6 @@ fun CreateTripScreen(
         Transport(Transports.Bicycling.type, stringResource(R.string.bicycling)),
         Transport(Transports.Walking.type, stringResource(R.string.walking)),
     )
-
-//    val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
 
     var isExpanded by rememberSaveable {
         mutableStateOf(false)
@@ -196,8 +173,6 @@ fun CreateTripScreen(
         mutableStateOf(true)
     }
 
-//    val snackbarHostState = remember { SnackbarHostState() }
-
     var isCreateTripSuccessful by remember { mutableStateOf(false) }
 
     val lottie = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
@@ -226,9 +201,6 @@ fun CreateTripScreen(
     }
 
     Scaffold(
-//        snackbarHost = {
-//            SnackbarHost(hostState = snackbarHostState)
-//        },
         topBar = {
             TopAppBarScreen(
                 title = stringResource(R.string.create_trip),
@@ -317,12 +289,6 @@ fun CreateTripScreen(
                         createTripViewModel.clearSelectedOriginLocation()
                     },
                     leadingIcon = Icons.Default.TripOrigin,
-//                    {
-//                        Icon(
-//                            imageVector = Icons.Default.TripOrigin,
-//                            contentDescription = "Origin",
-//                        )
-//                    },
                     onItemClick = {
                         originAutocompleteQuery = it.description ?: ""
                         isOriginAutocompleteDropdownVisible = false
@@ -356,12 +322,6 @@ fun CreateTripScreen(
                         createTripViewModel.clearSelectedDestinationLocation()
                     },
                     leadingIcon = Icons.Default.Flag,
-//                    {
-//                        Icon(
-//                            imageVector = Icons.Default.Flag,
-//                            contentDescription = "Destination",
-//                        )
-//                    },
                     onItemClick = {
                         destinationAutocompleteQuery = it.description ?: ""
                         isDestinationAutocompleteDropdownVisible = false
@@ -382,25 +342,19 @@ fun CreateTripScreen(
                     dateRangePickerState = dateRangePickerState,
                     showDateRangePicker = showDateRangePickerDialog,
                     onDismiss = {
-//                        createTripViewModel.onShowDateRangePickerDialogChange(it)
                         showDateRangePickerDialog = it
                     },
                     onConfirm = {
                         dateRangePickerState.selectedStartDateMillis?.let { long ->
-//                            createTripViewModel.onStartDateChange(long)
                             startDate = dateFormat(long)
                         }
 
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
-//                            createTripViewModel.onEndDateChange(long)
                             endDate = dateFormat(long)
                         }
-//                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
-//                        createTripViewModel.onShowDateRangePickerDialogChange(it)
                         showDateRangePickerDialog = it
                     },
                     onClickable = {
-//                        createTripViewModel.onShowDateRangePickerDialogChange(true)
                         showDateRangePickerDialog = true
                     },
                 )
@@ -415,7 +369,6 @@ fun CreateTripScreen(
                     isExpanded = isExpanded,
                     transport = transport,
                     onExpanded = {
-//                        createTripViewModel.onIsExpandedChange(it)
                         isExpanded = it
                     },
                     onClickable = { transport = it },
@@ -430,7 +383,6 @@ fun CreateTripScreen(
                     name = memberName,
                     values = members,
                     onValueNameChange = {
-//                        createTripViewModel.onMemberNameChange(it)
                         memberName = it
                         isMemberNameValid = true
                     },
