@@ -1,6 +1,5 @@
 package com.example.turistaapp.create_trip.ui.viewmodels // ktlint-disable package-name
 
-import androidx.compose.ui.focus.FocusRequester
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,8 +34,6 @@ class CreateTripViewModel @Inject constructor(
             val updatedMembers = _members.value?.toMutableList() ?: mutableListOf()
             updatedMembers.add(member)
             _members.value = updatedMembers
-//            resetMemberNameValue()
-
         }
     }
 
@@ -133,13 +130,8 @@ class CreateTripViewModel @Inject constructor(
                 endDate = endDate,
                 transport = transport,
                 members = _members.value,
-                stops = null,
                 description = description,
                 author = getNameFromDataStore().first()!!,
-                images = null,
-                comments = null,
-                isFavorite = false,
-                isFinished = false,
             )
             insertTripUseCase.execute(trip)
         }

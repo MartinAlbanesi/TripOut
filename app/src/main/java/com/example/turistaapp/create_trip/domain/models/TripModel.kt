@@ -11,13 +11,13 @@ data class TripModel(
     val endDate: String,
     val transport: String,
     val members: MutableList<String>?,
-    val stops: MutableList<LocationModel>?,
+    val stops: MutableList<LocationModel>? = null,
     val description: String?,
     val author: String,
-    val images: List<String>?,
-    val comments: MutableList<String>?,
-    val isFavorite: Boolean,
-    val isFinished: Boolean,
+    val images: List<String>? = null,
+    val comments: MutableList<String>? = null,
+    val isFavorite: Boolean = false,
+    val isFinished: Boolean = false,
 ) {
     fun getDestinationWithTripId(): LocationModel {
         return this.destination.copy(tripId = this.tripId)
