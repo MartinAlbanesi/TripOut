@@ -35,7 +35,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -49,6 +48,8 @@ import com.example.turistaapp.create_trip.ui.screens.components.ExposedDropdownM
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.create_trip.ui.screens.components.TextInputField
 import com.example.turistaapp.create_trip.ui.viewmodels.CreateTripViewModel
+import com.example.turistaapp.create_trip.utils.dateFormat
+import com.example.turistaapp.create_trip.utils.getCurrentDate
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.util.Date
@@ -58,6 +59,7 @@ import java.util.Date
 fun CreateTripScreen(
     address: String?,
     createTripViewModel: CreateTripViewModel = hiltViewModel(),
+    navigateToSelectLocationFromMap: (String) -> Unit,
     onClickCreateTrip: () -> Unit,
 ) {
 
@@ -98,33 +100,31 @@ fun CreateTripScreen(
         }
     }
 
-    // Fechas
-//    val startDate by createTripViewModel.startDate.observeAsState(
-//        createTripViewModel.calendar.timeInMillis.minus(
-//            86400000,
-//        ),
-//    )
-//    val endDate by createTripViewModel.endDate.observeAsState(
-//        createTripViewModel.calendar.timeInMillis.minus(
-//            86400000,
-//        ),
-//    )
+    var startDate by rememberSaveable {
+        mutableStateOf(getCurrentDate())
+    }
 
-    val startDate by createTripViewModel.startDate.collectAsStateWithLifecycle()
+    var endDate by rememberSaveable {
+        mutableStateOf(getCurrentDate())
+    }
 
-    val endDate by createTripViewModel.endDate.collectAsStateWithLifecycle()
 
     val dateRangePickerState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = LocalDateTime.now().toEpochSecond(java.time.ZoneOffset.UTC) * 1000,
+        initialSelectedStartDateMillis = LocalDateTime.now()
+            .toEpochSecond(java.time.ZoneOffset.UTC) * 1000,
         initialSelectedEndDateMillis = Date().time
     )
-    val showDateRangePickerDialog by createTripViewModel.showDateRangePickerDialog.observeAsState(
-        false,
-    )
+
+    var showDateRangePickerDialog by remember {
+        mutableStateOf(false)
+    }
 
     // Acompañantes
     val members by createTripViewModel.members.observeAsState(emptyList())
-    val memberName by createTripViewModel.memberName.observeAsState("")
+
+    var memberName by rememberSaveable {
+        mutableStateOf("")
+    }
 
     val transports = listOf(
         Transport(Transports.Driving.type, stringResource(R.string.driving)),
@@ -132,7 +132,9 @@ fun CreateTripScreen(
         Transport(Transports.Walking.type, stringResource(R.string.walking)),
     )
 
-    val isExpanded by createTripViewModel.isExpanded.observeAsState(false)
+    var isExpanded by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     var transport by remember {
         mutableStateOf(transports[0])
@@ -144,15 +146,9 @@ fun CreateTripScreen(
     }
 
     // Focus Requesters
-    val originFocusRequester by createTripViewModel.originFocusRequester.observeAsState(
-        FocusRequester(),
-    )
-    val destinationFocusRequester by createTripViewModel.destinationFocusRequester.observeAsState(
-        FocusRequester(),
-    )
-    val descriptionFocusRequester by createTripViewModel.descriptionFocusRequester.observeAsState(
-        FocusRequester(),
-    )
+    val originFocusRequester = remember { FocusRequester() }
+    val destinationFocusRequester = remember { FocusRequester() }
+    val descriptionFocusRequester = remember { FocusRequester() }
 
     // Validaciones
     var isTripNameValid by rememberSaveable {
@@ -170,8 +166,6 @@ fun CreateTripScreen(
     var isMemberNameValid by rememberSaveable {
         mutableStateOf(true)
     }
-
-//    val snackbarHostState = remember { SnackbarHostState() }
 
     var isCreateTripSuccessful by remember { mutableStateOf(false) }
 
@@ -201,9 +195,6 @@ fun CreateTripScreen(
     }
 
     Scaffold(
-//        snackbarHost = {
-//            SnackbarHost(hostState = snackbarHostState)
-//        },
         topBar = {
             TopAppBarScreen(
                 title = stringResource(R.string.create_trip),
@@ -220,7 +211,13 @@ fun CreateTripScreen(
                     isDestinationValid = createTripViewModel.validateTripDestination()
 
                     if (isTripNameValid && isOriginValid && isDestinationValid) {
-                        createTripViewModel.onCreateTripClick(tripName, description, transport.type)
+                        createTripViewModel.onCreateTripClick(
+                            tripName,
+                            description,
+                            transport.type,
+                            startDate,
+                            endDate,
+                        )
 
                         isCreateTripSuccessful = true
                     }
@@ -286,18 +283,13 @@ fun CreateTripScreen(
                         createTripViewModel.clearSelectedOriginLocation()
                     },
                     leadingIcon = Icons.Default.TripOrigin,
-//                    {
-//                        Icon(
-//                            imageVector = Icons.Default.TripOrigin,
-//                            contentDescription = "Origin",
-//                        )
-//                    },
                     onItemClick = {
                         originAutocompleteQuery = it.description ?: ""
                         isOriginAutocompleteDropdownVisible = false
                         createTripViewModel.onSelectedOriginLocationChange(it)
                     },
                     isError = !isOriginValid,
+                    onClickSelectedLocation = { navigateToSelectLocationFromMap("geocode") },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -324,18 +316,13 @@ fun CreateTripScreen(
                         createTripViewModel.clearSelectedDestinationLocation()
                     },
                     leadingIcon = Icons.Default.Flag,
-//                    {
-//                        Icon(
-//                            imageVector = Icons.Default.Flag,
-//                            contentDescription = "Destination",
-//                        )
-//                    },
                     onItemClick = {
                         destinationAutocompleteQuery = it.description ?: ""
                         isDestinationAutocompleteDropdownVisible = false
                         createTripViewModel.onSelectedDestinationLocationChange(it)
                     },
                     isError = !isDestinationValid,
+                    onClickSelectedLocation = { navigateToSelectLocationFromMap("establishment") },
                 )
 
                 Spacer(modifier = Modifier.size(8.dp))
@@ -348,20 +335,21 @@ fun CreateTripScreen(
                     endDate = endDate,
                     dateRangePickerState = dateRangePickerState,
                     showDateRangePicker = showDateRangePickerDialog,
-                    onDismiss = { createTripViewModel.onShowDateRangePickerDialogChange(it) },
+                    onDismiss = {
+                        showDateRangePickerDialog = it
+                    },
                     onConfirm = {
                         dateRangePickerState.selectedStartDateMillis?.let { long ->
-                            createTripViewModel.onStartDateChange(long)
+                            startDate = dateFormat(long)
                         }
 
                         dateRangePickerState.selectedEndDateMillis?.let { long ->
-                            createTripViewModel.onEndDateChange(long)
+                            endDate = dateFormat(long)
                         }
-//                            ?: createTripViewModel.onEndDateChange(dateRangePickerState.selectedStartDateMillis!!)
-                        createTripViewModel.onShowDateRangePickerDialogChange(it)
+                        showDateRangePickerDialog = it
                     },
                     onClickable = {
-                        createTripViewModel.onShowDateRangePickerDialogChange(true)
+                        showDateRangePickerDialog = true
                     },
                 )
 
@@ -374,7 +362,9 @@ fun CreateTripScreen(
                     values = transports,
                     isExpanded = isExpanded,
                     transport = transport,
-                    onExpanded = { createTripViewModel.onIsExpandedChange(it) },
+                    onExpanded = {
+                        isExpanded = it
+                    },
                     onClickable = { transport = it },
                 )
 
@@ -387,7 +377,7 @@ fun CreateTripScreen(
                     name = memberName,
                     values = members,
                     onValueNameChange = {
-                        createTripViewModel.onMemberNameChange(it)
+                        memberName = it
                         isMemberNameValid = true
                     },
                     onAdd = {
@@ -398,6 +388,7 @@ fun CreateTripScreen(
                             isMemberNameValid = false
                         } else {
                             createTripViewModel.onAddMember(it)
+                            memberName = ""
                         }
                     },
                     onRemove = { createTripViewModel.onRemoveMember(it) },

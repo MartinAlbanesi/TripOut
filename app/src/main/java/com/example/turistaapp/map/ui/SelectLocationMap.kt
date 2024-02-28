@@ -1,14 +1,13 @@
 package com.example.turistaapp.map.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,14 +18,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.compose.TuristaAppTheme
 import com.example.turistaapp.create_trip.domain.models.PlaceAutocompletePredictionModel
 import com.example.turistaapp.create_trip.ui.screens.components.PlaceAutocompleteField
 import com.example.turistaapp.home.ui.ShakeViewModel
@@ -38,10 +33,11 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SelectLocationMap(
     shakeViewModel: ShakeViewModel = hiltViewModel(),
+    type: String = "geocode",
+    onConfirmLocation: (String) -> Unit,
 ) {
 
     val mapProperties by remember {
@@ -70,7 +66,9 @@ fun SelectLocationMap(
 
     ConstraintLayout(Modifier.fillMaxSize()) {
 
-        val (topBar, mapView, destinationList) = createRefs()
+        val (topBar, mapView, destinationList, buttonConfirm) = createRefs()
+
+        val bottomGuide = createGuidelineFromBottom(0.03f)
 
         ShowMapScreen(
             modifier = Modifier.constrainAs(mapView) {
@@ -101,12 +99,27 @@ fun SelectLocationMap(
             isMenuVisible,
             originPredictions,
             onValueChange = { value = it },
-            onSearchOriginPlaces = { shakeViewModel.searchOriginPlaces(it, "geocode") },
+            onSearchOriginPlaces = { shakeViewModel.searchOriginPlaces(it, type) },
             onClickSelectedLocation = {
                 shakeViewModel.clickSelectedLocation(it)
             },
             isMenuVisibleChange = { isMenuVisible = it },
         )
+
+        Button(
+            onClick = {
+                onConfirmLocation(selectedLocations?.name ?: "")
+            },
+            modifier = Modifier.constrainAs(buttonConfirm) {
+                bottom.linkTo(bottomGuide)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+                .fillMaxWidth(0.9f)
+//                .padding(horizontal = 8.dp)
+        ) {
+            Text(text = "Confirm")
+        }
     }
 
 }
@@ -150,7 +163,7 @@ private fun MapTopBar(
         leadingIcon = Icons.Default.ArrowBack,
         shape = CircleShape,
         modifier = modifier,
-        modifierMenuList = modifierMenuList
+        modifierMenuList = modifierMenuList,
     )
 }
 
@@ -172,17 +185,19 @@ fun ShowMapScreen(
     }
 }
 
-@PreviewScreenSizes
-@Preview
-@PreviewLightDark
-@Composable
-private fun SelectLocationMapPreview() {
-    TuristaAppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            SelectLocationMap()
-        }
-    }
-}
+//@PreviewScreenSizes
+//@Preview
+//@PreviewLightDark
+//@Composable
+//private fun SelectLocationMapPreview() {
+//    TuristaAppTheme {
+//        Surface(
+//            modifier = Modifier.fillMaxSize(),
+//            color = MaterialTheme.colorScheme.background,
+//        ) {
+//            SelectLocationMap(){
+//
+//            }
+//        }
+//    }
+//}
